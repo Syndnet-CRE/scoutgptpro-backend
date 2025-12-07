@@ -1,5 +1,6 @@
 import express from 'express';
 import Anthropic from '@anthropic-ai/sdk';
+import { searchMapServers } from '../services/mapserver-service.js';
 
 const router = express.Router();
 const anthropic = new Anthropic({ 
@@ -25,23 +26,18 @@ router.post('/query', async (req, res) => {
       console.log('📍 Fetching MapServer data...');
       
       try {
-        const baseUrl = process.env.BACKEND_URL || 'http://localhost:3001';
-        const mapResponse = await fetch(`${baseUrl}/api/mapservers/search`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
-            query, 
-            bounds, 
-            maxResults: 10 
-          })
+        // Call service directly instead of HTTP request
+        mapData = await searchMapServers({ 
+          query, 
+          bounds, 
+          maxResults: 10 
         });
         
-        if (mapResponse.ok) {
-          mapData = await mapResponse.json();
-          console.log(`✅ Got ${mapData.servers?.length || 0} MapServers`);
-        }
+        console.log(`✅ Got ${mapData.servers?.length || 0} MapServers with data`);
       } catch (error) {
-        console.warn('⚠️ MapServer fetch failed:', error.message);
+        console.error('❌ MapServer search failed:');
+        console.error('   Error:', error.message);
+        console.error('   Stack:', error.stack);
       }
     }
     
