@@ -1,0 +1,487 @@
+// This is your Prisma schema file
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// USER MANAGEMENT
+// ============================================
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  role          UserRole  @default(AGENT)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  profile       UserProfile?
+  buyBoxes      BuyBox[]
+  deals         Deal[]
+  listings      Listing[]
+  documents     Document[]
+  activities    Activity[]
+  tasks         Task[]
+  mapQueries    MapQuery[]
+
+  @@map("users")
+}
+
+enum UserRole {
+  AGENT
+  BROKER
+  LENDER
+  INVESTOR
+  DEVELOPER
+  WHOLESALER
+}
+
+model UserProfile {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  phone         String?
+  company       String?
+  licenseNumber String?
+  bio           String?  @db.Text
+  avatar        String?
+  
+  preferences   Json?    // UI prefs, notifications, etc.
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("user_profiles")
+}
+
+// ============================================
+// PROPERTIES & LISTINGS
+// ============================================
+
+model Property {
+  id            String   @id @default(cuid())
+  
+  // Location
+  address       String
+  city          String
+  state         String
+  zip           String
+  county        String?
+  
+  lat           Float?
+  lng           Float?
+  
+  // Parcel info
+  apn           String?  // Assessor Parcel Number
+  legalDesc     String?  @db.Text
+  
+  // Property details
+  propertyType  String?  // retail, office, industrial, land, multifamily
+  size          Float?   // sq ft or acres
+  sizeUnit      String?  // sqft, acres
+  
+  zoning        String?
+  yearBuilt     Int?
+  
+  // Valuation
+  assessedValue Float?
+  marketValue   Float?
+  
+  // Ownership
+  ownerName     String?
+  ownerAddress  String?
+  
+  metadata      Json?    // Additional flexible data
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  listings      Listing[]
+  deals         Deal[]
+  comps         Comp[]
+  pins          Pin[]
+
+  @@index([city, state])
+  @@index([lat, lng])
+  @@map("properties")
+}
+
+model Listing {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  
+  propertyId    String
+  property      Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  
+  // Listing details
+  listingType   ListingType
+  price         Float
+  status        ListingStatus @default(ACTIVE)
+  
+  title         String
+  description   String?  @db.Text
+  
+  // Marketing
+  images        Json?    // Array of image URLs
+  documents     Json?    // Array of doc URLs
+  
+  highlights    Json?    // Key features
+  
+  // Timestamps
+  listedAt      DateTime @default(now())
+  expiresAt     DateTime?
+  soldAt        DateTime?
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([status])
+  @@index([listingType])
+  @@map("listings")
+}
+
+enum ListingType {
+  FOR_SALE
+  FOR_LEASE
+  OFF_MARKET
+}
+
+enum ListingStatus {
+  ACTIVE
+  PENDING
+  SOLD
+  EXPIRED
+  WITHDRAWN
+}
+
+// ============================================
+// CRM - DEALS & PIPELINE
+// ============================================
+
+model Deal {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  
+  propertyId    String?
+  property      Property? @relation(fields: [propertyId], references: [id])
+  
+  // Deal info
+  title         String
+  stage         DealStage @default(PIPELINE)
+  dealType      String?   // acquisition, disposition, lease
+  
+  // Financials
+  purchasePrice Float?
+  offerPrice    Float?
+  closingDate   DateTime?
+  
+  // Parties
+  seller        String?
+  buyer         String?
+  
+  // Status
+  probability   Int?      // 0-100
+  lostReason    String?
+  
+  notes         String?   @db.Text
+  metadata      Json?
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  documents     Document[]
+  activities    Activity[]
+  tasks         Task[]
+
+  @@index([userId, stage])
+  @@index([stage])
+  @@map("deals")
+}
+
+enum DealStage {
+  PIPELINE      // Lead/prospect
+  ACTIVE        // In negotiation
+  UNDERWRITING  // Due diligence
+  PENDING       // Under contract
+  CLOSED        // Deal completed
+  HOLD          // Paused/hold
+}
+
+// ============================================
+// BUY BOX
+// ============================================
+
+model BuyBox {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  name          String
+  isActive      Boolean  @default(true)
+  
+  // Location criteria
+  markets       Json?    // ["Dallas", "Austin"]
+  counties      Json?
+  
+  // Property criteria
+  propertyTypes Json?    // ["retail", "office"]
+  minSize       Float?
+  maxSize       Float?
+  sizeUnit      String?  // sqft, acres
+  
+  // Financial criteria
+  minPrice      Float?
+  maxPrice      Float?
+  minCap        Float?   // Cap rate
+  maxCap        Float?
+  
+  // Other criteria
+  zoning        Json?
+  minYearBuilt  Int?
+  
+  filters       Json?    // Additional flexible filters
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([userId])
+  @@map("buy_boxes")
+}
+
+// ============================================
+// DOCUMENTS & FILES
+// ============================================
+
+model Document {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  
+  dealId        String?
+  deal          Deal?    @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  
+  filename      String
+  fileUrl       String
+  fileType      String   // pdf, xlsx, docx, image
+  fileSize      Int      // bytes
+  
+  category      String?  // contract, due_diligence, financial, etc.
+  description   String?
+  
+  uploadedAt    DateTime @default(now())
+
+  @@index([userId])
+  @@index([dealId])
+  @@map("documents")
+}
+
+// ============================================
+// ACTIVITIES & TASKS
+// ============================================
+
+model Activity {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  
+  dealId        String?
+  deal          Deal?    @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  
+  type          String   // call, email, meeting, note
+  subject       String
+  description   String?  @db.Text
+  
+  completedAt   DateTime @default(now())
+
+  @@index([userId])
+  @@index([dealId])
+  @@map("activities")
+}
+
+model Task {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  
+  dealId        String?
+  deal          Deal?     @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  
+  title         String
+  description   String?   @db.Text
+  dueDate       DateTime?
+  priority      Priority  @default(MEDIUM)
+  status        TaskStatus @default(TODO)
+  
+  completedAt   DateTime?
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([userId, status])
+  @@index([dueDate])
+  @@map("tasks")
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+// ============================================
+// COMPS
+// ============================================
+
+model Comp {
+  id            String   @id @default(cuid())
+  
+  propertyId    String?
+  property      Property? @relation(fields: [propertyId], references: [id])
+  
+  address       String
+  city          String
+  state         String
+  
+  propertyType  String
+  size          Float
+  sizeUnit      String
+  
+  salePrice     Float
+  pricePerUnit  Float    // per sqft or acre
+  saleDate      DateTime
+  
+  capRate       Float?
+  noi           Float?   // Net Operating Income
+  
+  distance      Float?   // miles from subject
+  
+  source        String?  // Where comp came from
+  verified      Boolean  @default(false)
+  
+  metadata      Json?
+  
+  createdAt     DateTime @default(now())
+
+  @@index([city, state, propertyType])
+  @@map("comps")
+}
+
+// ============================================
+// MAP LAYERS & PINS
+// ============================================
+
+model GisLayer {
+  id            String   @id @default(cuid())
+  
+  name          String
+  category      String   // parcels, zoning, floodplain, utilities
+  
+  // Layer source
+  sourceType    String   // geojson, vector, arcgis
+  sourceUrl     String?
+  
+  // Display
+  style         Json?
+  minZoom       Float?
+  maxZoom       Float?
+  
+  isActive      Boolean  @default(true)
+  
+  metadata      Json?
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("gis_layers")
+}
+
+model Pin {
+  id            String   @id @default(cuid())
+  
+  propertyId    String?
+  property      Property? @relation(fields: [propertyId], references: [id])
+  
+  title         String
+  lat           Float
+  lng           Float
+  
+  summary       String?  @db.Text
+  tags          Json?    // Array of tags
+  
+  // Pin type/category
+  pinType       String?  // opportunity, watch, alert
+  
+  metadata      Json?
+  
+  createdAt     DateTime @default(now())
+
+  @@index([lat, lng])
+  @@map("pins")
+}
+
+// ============================================
+// MAPSERVER REGISTRY
+// ============================================
+
+model MapServerRegistry {
+  id              String    @id @default(cuid())
+  url             String    @unique
+  category        String    // "Sewer Utilities", "Floodplain", etc.
+  context         String?   @db.Text
+  datasetType     String?
+  datasetCategory String?
+  
+  // Metadata from ArcGIS
+  serviceName     String?
+  layerId         Int?
+  geometryType    String?   // "point", "polyline", "polygon"
+  fields          Json?     // Array of field definitions
+  extent          Json?     // Bounding box
+  
+  // Performance
+  isActive        Boolean   @default(true)
+  lastQueried     DateTime?
+  queryCount      Int       @default(0)
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  @@index([category])
+  @@index([datasetType])
+  @@index([isActive, category])
+  @@map("map_server_registry")
+}
+
+model MapQuery {
+  id              String   @id @default(cuid())
+  userId          String
+  query           String   @db.Text
+  selectedServers Json     // Array of MapServerRegistry IDs
+  bounds          Json?    // Query bounds
+  results         Json?    // Cached results
+  
+  createdAt       DateTime @default(now())
+  
+  user            User     @relation(fields: [userId], references: [id])
+  
+  @@index([userId])
+  @@index([createdAt])
+  @@map("map_queries")
+}
