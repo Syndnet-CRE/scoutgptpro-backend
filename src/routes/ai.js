@@ -1,6 +1,7 @@
 import express from 'express';
 import Anthropic from '@anthropic-ai/sdk';
 import { searchMapServers } from '../services/mapserver-service.js';
+import { extractCategories } from '../services/category-mapper.js';
 
 const router = express.Router();
 const anthropic = new Anthropic({ 
@@ -26,10 +27,14 @@ router.post('/query', async (req, res) => {
       console.log('📍 Fetching MapServer data...');
       
       try {
-        // Call service directly instead of HTTP request
+        // Extract relevant categories from query
+        const categories = extractCategories(query);
+        
+        // Call service with category filter
         mapData = await searchMapServers({ 
           query, 
-          bounds, 
+          bounds,
+          categories: categories.length > 0 ? categories : undefined,
           maxResults: 10 
         });
         
