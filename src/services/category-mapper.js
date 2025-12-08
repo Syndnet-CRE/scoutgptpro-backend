@@ -123,3 +123,4 @@ export function isRegulatoryQuery(query) {
   return regKeywords.some(keyword => queryLower.includes(keyword));
 }
 
+
