@@ -1,0 +1,2737 @@
+{
+  "metadata": {
+    "generatedAt": "2025-12-17T21:54:14.347Z",
+    "source": "layersData_cleaned.json",
+    "consolidationVersion": "1.0"
+  },
+  "layerSets": [
+    {
+      "id": "zoning_districts",
+      "name": "Zoning Districts",
+      "category": "Zoning",
+      "description": "Color-coded zoning district polygons and boundaries",
+      "primaryLayer": {
+        "id": "layer-328",
+        "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_1/MapServer/0",
+        "context": "Zoning\nThis feature class represents the zoning classification boundaries in the City of Austin and surrounding counties.",
+        "featureCount": 22462
+      },
+      "alternativeLayers": [
+        {
+          "id": "layer-324",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_1/MapServer/3",
+          "context": "Zoning Ordinance\nThis feature class is made up of City of Austin zoning ordinance boundaries. Work on this layer began in 2001 with zoning ordinance polygons entered on a day forward basis. Therefore, polygons for old...",
+          "featureCount": 10338
+        },
+        {
+          "id": "layer-311",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/ReviewCases/MapServer/7",
+          "context": "Zoning Review Cases (All)\nThis feature class represents City of Austin Planning and Development Review Dept. zoning case boundaries. This data has been created to support City of Austin Planning and Development Review Departme...",
+          "featureCount": 5619
+        },
+        {
+          "id": "layer-304",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/ReviewCases/MapServer/2",
+          "context": "Zoning Review Cases- IN REVIEW\nThis feature class represents City of Austin Planning and Development Review Dept. zoning case boundaries. This data has been created to support City of Austin Planning and Development Review Departme...",
+          "featureCount": 233
+        },
+        {
+          "id": "layer-295",
+          "url": "https://maps.pape-dawson.com/server2/rest/services/PD_GIS_Webmap/PD_GIS_Webmap__Austin_External/MapServer/187",
+          "context": "Austin Overlay Zoning Districts\nCombining districts alter the use or development standards of a base district.Combining districts can be in geographically specific areas or propertyspecific, as opposed to overlay districts, which ar...",
+          "featureCount": 227
+        },
+        {
+          "id": "layer-314",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_2/MapServer/15",
+          "context": "Green Building Mandatory\nThis shapefile shows the areas of Austin where buildings are required to achieve an Austin Energy Green Building Rating. These areas may be PUDs, zoning cases, development agreements, or other.",
+          "featureCount": 38
+        },
+        {
+          "id": "layer-306",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_3/MapServer/1",
+          "context": "Local Historic Districts\nThis feature class is made up of City of Austin zoning ordinance boundaries. Work on this layer began in 2001 with zoning ordinance polygons entered on a day forward basis. Therefore, polygons for old...",
+          "featureCount": 16
+        },
+        {
+          "id": "layer-316",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_1/MapServer/4",
+          "context": "Zoning Case Managers\nThe zoning case managers of the Planning and Development Review Department are assisgned to areas of the City for zoning case review. The Development Services Manager assigns boundaries.  The Standard...",
+          "featureCount": 5
+        }
+      ],
+      "totalFeatureCount": 38938,
+      "layerCount": 8,
+      "geometryType": "Polygon",
+      "style": {
+        "type": "fill",
+        "paint": {
+          "fill-color": [
+            "match",
+            [
+              "get",
+              "ZONING_ZTYPE"
+            ],
+            [
+              "SF-1",
+              "SF-2",
+              "SF-3",
+              "SF-4A",
+              "SF-5",
+              "SF-6",
+              "SF-1-NP",
+              "SF-2-NP",
+              "SF-3-NP",
+              "SF-4A-NP",
+              "SF-5-NP",
+              "SF-6-NP"
+            ],
+            "#FFFACD",
+            [
+              "MF-1",
+              "MF-2",
+              "MF-3",
+              "MF-4",
+              "MF-5",
+              "MF-6",
+              "MF-1-NP",
+              "MF-2-NP",
+              "MF-3-NP",
+              "MF-4-NP",
+              "MF-5-NP",
+              "MF-6-NP"
+            ],
+            "#FFA07A",
+            [
+              "CS",
+              "CS-1",
+              "CS-NP",
+              "CS-MU",
+              "CS-CO",
+              "CS-MU-NP",
+              "CS-CO-NP",
+              "CS-1-NP",
+              "CS-MU-CO-NP"
+            ],
+            "#DC143C",
+            [
+              "GR",
+              "GR-NP",
+              "GR-MU",
+              "GR-CO",
+              "GR-MU-NP",
+              "GR-CO-NP",
+              "GR-MU-V-NP"
+            ],
+            "#FF6347",
+            [
+              "GO",
+              "GO-NP",
+              "GO-CO",
+              "GO-MU-NP",
+              "GO-MU-CO-NP",
+              "GO-CO-NP"
+            ],
+            "#FFA500",
+            [
+              "LO",
+              "LO-NP",
+              "LO-CO",
+              "LO-MU-NP"
+            ],
+            "#FFD700",
+            [
+              "LI",
+              "LI-NP",
+              "LI-CO",
+              "LI-PDA-NP"
+            ],
+            "#9370DB",
+            [
+              "IP",
+              "IP-NP",
+              "IP-CO"
+            ],
+            "#FF69B4",
+            [
+              "P",
+              "P-NP"
+            ],
+            "#E0FFFF",
+            [
+              "TOD",
+              "TOD-NP",
+              "TOD-H-HD-NP"
+            ],
+            "#8B7355",
+            [
+              "RR",
+              "RR-NP",
+              "RR-CO-NP"
+            ],
+            "#FFB6C1",
+            [
+              "MH",
+              "MH-NP"
+            ],
+            "#FFFF00",
+            [
+              "LR",
+              "LR-NP",
+              "LR-MU-NP"
+            ],
+            "#98FB98",
+            "#CCCCCC"
+          ],
+          "fill-opacity": 0.7,
+          "fill-outline-color": "#333333"
+        }
+      }
+    },
+    {
+      "id": "zoning_labels",
+      "name": "Zoning Labels",
+      "category": "Zoning",
+      "description": "Zoning text labels and annotations",
+      "primaryLayer": {
+        "id": "layer-323",
+        "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_1/MapServer/2",
+        "context": "Land Use Annotation-Old\nThis layer provides descriptive information about the Zoning layer.",
+        "featureCount": 35291
+      },
+      "alternativeLayers": [
+        {
+          "id": "layer-297",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_1/MapServer/1",
+          "context": "Zoning Text\nThis feature class represents the zoning classification boundaries in the City of Austin and surrounding counties.",
+          "featureCount": 22462
+        }
+      ],
+      "totalFeatureCount": 57753,
+      "layerCount": 2,
+      "geometryType": "Point",
+      "style": {
+        "type": "symbol",
+        "layout": {
+          "text-field": [
+            "get",
+            "ZONING_ZTYPE"
+          ],
+          "text-size": 10,
+          "text-anchor": "center"
+        },
+        "paint": {
+          "text-color": "#000000",
+          "text-halo-color": "#ffffff",
+          "text-halo-width": 1
+        }
+      }
+    },
+    {
+      "id": "zoning_overlays",
+      "name": "Zoning Overlays",
+      "category": "Zoning",
+      "description": "Combining districts and overlay zones",
+      "primaryLayer": {
+        "id": "layer-310",
+        "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_2/MapServer/4",
+        "context": "Capitol View Corridors\nCapitol View Corridor Combining District-Are applied in combination with the various base districts to limit the height of structures within selected corridors which represent the remaining significan...",
+        "featureCount": 35
+      },
+      "alternativeLayers": [
+        {
+          "id": "layer-322",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_2/MapServer/23",
+          "context": "Scenic Roadways Overlay\nThe following are scenic roadways: (1) Arterial 8 (Adelaide Drive/Forsythia Drive); (2) Barton Springs Road; (3) Loop 1 (MoPac); (4) Loop 360 (Capital of Texas Highway), south of US 183; (5) RM 620, f...",
+          "featureCount": 26
+        },
+        {
+          "id": "layer-292",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_2/MapServer/19",
+          "context": "Neighborhood Conservation Combining District\nOverlay District The regulatory requirements and procedures for approval are defined in Volume III, Chapter 25-2-371 through 25-2-376 of the Code of the City of Austin. Chapter 25 was adopted by City ...",
+          "featureCount": 16
+        },
+        {
+          "id": "layer-298",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_2/MapServer/14",
+          "context": "ETOD Overlay\nThis layer shows the subdistricts within the ETOD overlay.",
+          "featureCount": 2
+        },
+        {
+          "id": "layer-320",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_2/MapServer/18",
+          "context": "Lake Austin Overlay\nThe boundaries of the Lake Austin (LA) overlay district include land that is located within 1,000 feet of the shoreline of Lake Austin.",
+          "featureCount": 1
+        },
+        {
+          "id": "layer-321",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_2/MapServer/2",
+          "context": "Barton Springs Overlay\nThat portion of the Barton Springs Zone that lies withing Austin's jurisdiction",
+          "featureCount": 1
+        }
+      ],
+      "totalFeatureCount": 81,
+      "layerCount": 6,
+      "geometryType": "Polygon",
+      "style": {
+        "type": "fill",
+        "paint": {
+          "fill-color": "#9370DB",
+          "fill-opacity": 0.5,
+          "fill-outline-color": "#7f5cc7"
+        }
+      }
+    },
+    {
+      "id": "zoning_historic",
+      "name": "Historic Districts",
+      "category": "Zoning",
+      "description": "Historic landmarks and districts",
+      "primaryLayer": {
+        "id": "layer-303",
+        "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_3/MapServer/0",
+        "context": "City of Austin Historic Landmarks\nHistorical landmarks of the City of Austin and landmarks in the National Registery",
+        "featureCount": 667
+      },
+      "alternativeLayers": [
+        {
+          "id": "layer-301",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_3/MapServer/2",
+          "context": "National Register of Historic Districts\nThis feature defines the geographic area of National Register Historic Districts within the City of Austin.",
+          "featureCount": 20
+        }
+      ],
+      "totalFeatureCount": 687,
+      "layerCount": 2,
+      "geometryType": "Polygon",
+      "style": {
+        "type": "fill",
+        "paint": {
+          "fill-color": "#9370DB",
+          "fill-opacity": 0.5,
+          "fill-outline-color": "#7f5cc7"
+        }
+      }
+    },
+    {
+      "id": "zoning_infill",
+      "name": "Zoning Infill Options",
+      "category": "Zoning",
+      "description": "Residential infill and design options",
+      "primaryLayer": {
+        "id": "layer-319",
+        "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_4/MapServer/0",
+        "context": "Mixed Use Building Infill Option",
+        "featureCount": 2464
+      },
+      "alternativeLayers": [
+        {
+          "id": "layer-296",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_4/MapServer/1",
+          "context": "Neighborhood Urban Center Infill Option",
+          "featureCount": 609
+        },
+        {
+          "id": "layer-300",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_4/MapServer/2",
+          "context": "Residential Infill Option",
+          "featureCount": 79
+        },
+        {
+          "id": "layer-305",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_4/MapServer/5",
+          "context": "Small Lot Amnesty Infill Option",
+          "featureCount": 65
+        },
+        {
+          "id": "layer-313",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_4/MapServer/8",
+          "context": "Parking Placement/Imp Cover Design Option",
+          "featureCount": 48
+        },
+        {
+          "id": "layer-299",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_4/MapServer/10",
+          "context": "Garage Placement Design Option",
+          "featureCount": 42
+        },
+        {
+          "id": "layer-307",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_4/MapServer/9",
+          "context": "Front Porch Design Option",
+          "featureCount": 38
+        },
+        {
+          "id": "layer-308",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_4/MapServer/4",
+          "context": "Secondary Apartment Infill Option",
+          "featureCount": 30
+        },
+        {
+          "id": "layer-317",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_4/MapServer/3",
+          "context": "Urban Home Infill Option",
+          "featureCount": 13
+        },
+        {
+          "id": "layer-315",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_4/MapServer/6",
+          "context": "Cottage Lot Infill Option",
+          "featureCount": 12
+        },
+        {
+          "id": "layer-312",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_4/MapServer/7",
+          "context": "Corner Store Infill Option",
+          "featureCount": 4
+        }
+      ],
+      "totalFeatureCount": 3404,
+      "layerCount": 11,
+      "geometryType": "Polygon",
+      "style": {
+        "type": "fill",
+        "paint": {
+          "fill-color": "#9370DB",
+          "fill-opacity": 0.5,
+          "fill-outline-color": "#7f5cc7"
+        }
+      }
+    },
+    {
+      "id": "flood_fema_zones",
+      "name": "FEMA Flood Zones",
+      "category": "Floodplain",
+      "description": "FEMA flood zone boundaries and classifications",
+      "primaryLayer": {
+        "id": "layer-731",
+        "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Environmental_2/MapServer/1",
+        "context": "FEMA Floodplain",
+        "featureCount": 7067
+      },
+      "alternativeLayers": [
+        {
+          "id": "layer-740",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Floodplain/MapServer/1",
+          "context": "FEMA Floodplain",
+          "featureCount": 7067
+        },
+        {
+          "id": "layer-741",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/FloodPro/FloodPro/MapServer/8",
+          "context": "FEMA Floodplain",
+          "featureCount": 7067
+        },
+        {
+          "id": "layer-896",
+          "url": "https://maps.pape-dawson.com/server1/rest/services/LandDevelopment/LANDDEVELOPMENT__Chesmar_SiteSelection/MapServer/167",
+          "context": "FEMA Floodplain\nFEMA Flood Map Layer, updated 7/9/2021. Downloaded on 7/21/2021 by Sara Dunlap from FEMA Flood Map Service Center: https://msc.fema.gov/portal/advanceSearch",
+          "featureCount": 6598
+        },
+        {
+          "id": "layer-913",
+          "url": "https://egis.hud.gov/arcgis/rest/services/cpdmaps/HudEnvFemaFlood/MapServer/1",
+          "context": "100 Year DFIRM flood zone\nThe Federal Emergency Management Agency's (FEMA), Flood Hazard Mapping Program, has created a new flood hazard information product. The Standard DFIRM Database is a digital version of the FEMA flood i...",
+          "featureCount": 1658
+        },
+        {
+          "id": "layer-827",
+          "url": "https://cbdnet.info/arcgis/rest/services/FEMAFloodHazard_CH/MapServer/0",
+          "context": "FEMA Flood Hazard Zones",
+          "featureCount": 62
+        }
+      ],
+      "totalFeatureCount": 29519,
+      "layerCount": 6,
+      "geometryType": "Polygon",
+      "style": {
+        "type": "fill",
+        "paint": {
+          "fill-color": "#4682B4",
+          "fill-opacity": 0.5,
+          "fill-outline-color": "#326ea0"
+        }
+      }
+    },
+    {
+      "id": "flood_developed",
+      "name": "Fully Developed Floodplain",
+      "category": "Floodplain",
+      "description": "Fully developed floodplain boundaries",
+      "primaryLayer": {
+        "id": "layer-739",
+        "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Floodplain/MapServer/0",
+        "context": "Fully Developed Floodplain",
+        "featureCount": 10991
+      },
+      "alternativeLayers": [
+        {
+          "id": "layer-742",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Environmental_2/MapServer/0",
+          "context": "Fully Developed Floodplain",
+          "featureCount": 10991
+        },
+        {
+          "id": "layer-744",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/FloodPro/FloodPro/MapServer/9",
+          "context": "Fully Developed Floodplain",
+          "featureCount": 10991
+        }
+      ],
+      "totalFeatureCount": 32973,
+      "layerCount": 3,
+      "geometryType": "Polygon",
+      "style": {
+        "type": "fill",
+        "paint": {
+          "fill-color": "#4682B4",
+          "fill-opacity": 0.5,
+          "fill-outline-color": "#326ea0"
+        }
+      }
+    },
+    {
+      "id": "flood_floodway",
+      "name": "Floodway Boundaries",
+      "category": "Floodplain",
+      "description": "Floodway boundaries and regulations",
+      "primaryLayer": {
+        "id": "layer-716",
+        "url": "https://maps.pflugervilletx.gov/arcgis/rest/services/Engineering/Floodway/MapServer/0",
+        "context": "Floodway",
+        "featureCount": 56
+      },
+      "alternativeLayers": [
+        {
+          "id": "layer-725",
+          "url": "https://maps.pflugervilletx.gov/arcgisadmin/rest/services/Engineering/Floodway/MapServer/0",
+          "context": "Floodway",
+          "featureCount": 56
+        }
+      ],
+      "totalFeatureCount": 112,
+      "layerCount": 2,
+      "geometryType": "LineString",
+      "style": {
+        "type": "line",
+        "paint": {
+          "line-color": "#4682B4",
+          "line-width": 2,
+          "line-opacity": 0.8
+        }
+      }
+    },
+    {
+      "id": "flood_complaints",
+      "name": "Flood Complaints",
+      "category": "Floodplain",
+      "description": "Localized flood complaints and reports",
+      "primaryLayer": {
+        "id": "layer-717",
+        "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Environmental_2/MapServer/2",
+        "context": "Localized Flood Complaints\nFlooding complaints are submitted through multiple sources. After an investigation that confirms the complaint is a localized flooding issue, it is added to the dataset. The complaints are categorized...",
+        "featureCount": 6660
+      },
+      "alternativeLayers": [],
+      "totalFeatureCount": 6660,
+      "layerCount": 1,
+      "geometryType": "Point",
+      "style": {
+        "type": "circle",
+        "paint": {
+          "circle-radius": 6,
+          "circle-color": "#4682B4",
+          "circle-stroke-width": 1,
+          "circle-stroke-color": "#ffffff"
+        }
+      }
+    },
+    {
+      "id": "flood_risk",
+      "name": "Flood Risk Areas",
+      "category": "Floodplain",
+      "description": "Flood risk and hazard assessment areas",
+      "primaryLayer": {
+        "id": "layer-852",
+        "url": "https://gis2.twdb.texas.gov/server/rest/services/OOP_FP_SFPV/Existing_Flood_Risk_Map/MapServer/12",
+        "context": "Existing Flood Hazard\nPerform existing condition flood hazard analyses to determine the location and magnitude of both 1.0% annual chance and 0.2% annual chance flood events",
+        "featureCount": 18754
+      },
+      "alternativeLayers": [
+        {
+          "id": "layer-888",
+          "url": "https://maps3.hdrgateway.com/arcgis/rest/services/Texas/Data_Download/MapServer/6",
+          "context": "Existing Flood Hazard\n<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN>Perform existing condition flood hazard analyses to determine the location and magnitude of both 1.0% annual chance and 0.2% annual chance flood events...",
+          "featureCount": 18754
+        },
+        {
+          "id": "layer-926",
+          "url": "https://gis2.twdb.texas.gov/server/rest/services/OOP_FP_SFPV/Data_Download/MapServer/6",
+          "context": "Existing Flood Hazard\nPerform existing condition flood hazard analyses to determine the location and magnitude of both 1.0% annual chance and 0.2% annual chance flood events",
+          "featureCount": 18754
+        },
+        {
+          "id": "layer-940",
+          "url": "https://gisserver.scarborough.me.us/arcgis/rest/services/GC_Eng/NationalFloodHazardLayer/MapServer/0",
+          "context": "Flood Hazard Area",
+          "featureCount": 6598
+        },
+        {
+          "id": "layer-886",
+          "url": "https://server6.tplgis.org/arcgis6/rest/services/Central/Texas_Healthy_Parks_Plan/MapServer/42",
+          "context": "USA Flood Hazard Reduced Set Texas",
+          "featureCount": 6021
+        },
+        {
+          "id": "layer-790",
+          "url": "https://egis.hud.gov/arcgis/rest/services/cpdmaps/HudEnvFemaFlood/MapServer/0",
+          "context": "500 Year Q3 flood zone\nThe Federal Emergency Management Agency (FEMA) digital Q3 Flood Data are developed by scanning the existing FIRM hardcopy and  vectorizing a thematic overlay of flood risks. Vector Q3 Flood Data files...",
+          "featureCount": 1976
+        },
+        {
+          "id": "layer-906",
+          "url": "https://egis.hud.gov/arcgis/rest/services/cpdmaps/HudEnvFemaFlood/MapServer/2",
+          "context": "100 Year Q3 flood zone\nThe Federal Emergency Management Agency (FEMA) digital Q3 Flood Data are developed by scanning the existing FIRM hardcopy and  vectorizing a thematic overlay of flood risks. Vector Q3 Flood Data files...",
+          "featureCount": 1415
+        },
+        {
+          "id": "layer-930",
+          "url": "https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Future_Flood_Risk_Map/MapServer/12",
+          "context": "Future Flood Hazard\n<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN>Perform future condition flood hazard analyses to determine the location and magnitude of both 1.0% annual chance and 0.2% annual chance flood events</...",
+          "featureCount": 530
+        },
+        {
+          "id": "layer-937",
+          "url": "https://gis2.twdb.texas.gov/server/rest/services/OOP_FP_SFPV/Future_Flood_Risk_Map/MapServer/12",
+          "context": "Future Flood Hazard\nPerform future condition flood hazard analyses to determine the location and magnitude of both 1.0% annual chance and 0.2% annual chance flood events",
+          "featureCount": 530
+        },
+        {
+          "id": "layer-939",
+          "url": "https://gis2.twdb.texas.gov/server/rest/services/OOP_FP_SFPV/Data_Download/MapServer/20",
+          "context": "Future Flood Hazard\nPerform future condition flood hazard analyses to determine the location and magnitude of both 1.0% annual chance and 0.2% annual chance flood events",
+          "featureCount": 530
+        },
+        {
+          "id": "layer-879",
+          "url": "https://gis2.twdb.texas.gov/server/rest/services/OOP_FP_FloodPlanningHub/Texas_Flood_Social_Vulnerability_Index/MapServer/0",
+          "context": "Texas_Flood_Social_Vulnerability_Index\nTexas Water Development Board (TWDB) and other agencies in Texas utilize SocialVulnerability Indices (SVIs) for a variety of flood risk management purposes including,but not limited to, flood planning...",
+          "featureCount": 355
+        },
+        {
+          "id": "layer-754",
+          "url": "https://maps.nccs.nasa.gov/mapping/rest/services/hifld_open/national_flood_hazard/MapServer/6",
+          "context": "nfhl_s_lomr\nThe National Flood Hazard Layer (NFHL) is a compilation of GIS data that comprises a nationwide digital Flood Insurance Rate Map. The GIS data and services are designed to provide the user with the ab...",
+          "featureCount": 110
+        },
+        {
+          "id": "layer-837",
+          "url": "https://harcags.harcresearch.org/arcgisserver/rest/services/Hazards/FEMA_SRLP_ZipCode/MapServer/0",
+          "context": "FEMA_SRLP_ZipCode\nThe National Flood Insurance Program (NFIP) was created in 1968 to provide affordable insurance against flood risk. This data shows properties have met the criteria to become what the program refers t...",
+          "featureCount": 103
+        },
+        {
+          "id": "layer-808",
+          "url": "https://gis2.twdb.texas.gov/server/rest/services/OOP_FP_SFPV/Data_Download/MapServer/11",
+          "context": "Flood Management Evaluation\nFlood Management Evaluations will identify areas requiring flood risk evaluation. ",
+          "featureCount": 89
+        },
+        {
+          "id": "layer-812",
+          "url": "https://maps3.hdrgateway.com/arcgis/rest/services/Texas/Data_Download/MapServer/11",
+          "context": "Flood Management Evaluation\n<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN>Flood Management Evaluations will identify areas requiring flood risk evaluation. </SPAN></P></DIV></DIV></DIV>",
+          "featureCount": 89
+        },
+        {
+          "id": "layer-828",
+          "url": "https://gis2.twdb.texas.gov/server/rest/services/OOP_FP_SFPV/Recommended_Solutions_Map/MapServer/0",
+          "context": "Flood Management Evaluations (FME) - Recommended\nFlood Management Evaluations will identify areas requiring flood risk evaluation. ",
+          "featureCount": 64
+        },
+        {
+          "id": "layer-861",
+          "url": "https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Recommended_Solutions_Map/MapServer/0",
+          "context": "Flood Management Evaluations (FME) - Recommended\n<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN>Flood Management Evaluations will identify areas requiring flood risk evaluation. </SPAN></P></DIV></DIV></DIV>",
+          "featureCount": 64
+        },
+        {
+          "id": "layer-774",
+          "url": "https://gis2.twdb.texas.gov/server/rest/services/OOP_FP_SFPV/Recommended_Solutions_Map/MapServer/2",
+          "context": "Flood Mitigation Projects (FMP) - Recommended\nFlood Mitigation Projects reduce flood risk through a variety of approaches. The service area is the region impacted by the project.",
+          "featureCount": 24
+        },
+        {
+          "id": "layer-799",
+          "url": "https://gis2.twdb.texas.gov/server/rest/services/OOP_FP_SFPV/Data_Download/MapServer/12",
+          "context": "Flood Mitigation Project\nFlood Mitigation Projects reduce flood risk through a variety of approaches. The service area is the region impacted by the project.",
+          "featureCount": 24
+        },
+        {
+          "id": "layer-887",
+          "url": "https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Recommended_Solutions_Map/MapServer/2",
+          "context": "Flood Mitigation Projects (FMP) - Recommended\n<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN>Flood Mitigation Projects reduce flood risk through a variety of approaches. The service area is the region impacted by the project.</SPAN></P></DIV></...",
+          "featureCount": 24
+        },
+        {
+          "id": "layer-912",
+          "url": "https://maps3.hdrgateway.com/arcgis/rest/services/Texas/Data_Download/MapServer/12",
+          "context": "Flood Mitigation Project\n<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN>Flood Mitigation Projects reduce flood risk through a variety of approaches. The service area is the region impacted by the project.</SPAN></P></DIV></...",
+          "featureCount": 24
+        },
+        {
+          "id": "layer-776",
+          "url": "https://cbdnet.info/arcgis/rest/services/FEMAFloodHazard_CH/MapServer/2",
+          "context": "Critical habitat polygons overlapping flood hazard zones",
+          "featureCount": 2
+        },
+        {
+          "id": "layer-871",
+          "url": "https://cbdnet.info/arcgis/rest/services/FEMAFloodHazard_CH/MapServer/4",
+          "context": "Critical habitat polygons (clipped to flood hazard zones)",
+          "featureCount": 2
+        },
+        {
+          "id": "layer-743",
+          "url": "https://gis.nri.tamu.edu/arcgis/rest/services/HCA_Map_Image_Layer/MapServer/96",
+          "context": "100-Year Flood Event Risk\n<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN>The Floodplain Quilt consists of multiple layers of data from different sources available throughout the state to ‘quilt’ together a dataset that can m...",
+          "featureCount": 1
+        }
+      ],
+      "totalFeatureCount": 74837,
+      "layerCount": 24,
+      "geometryType": "Polygon",
+      "style": {
+        "type": "fill",
+        "paint": {
+          "fill-color": "#4682B4",
+          "fill-opacity": 0.5,
+          "fill-outline-color": "#326ea0"
+        }
+      }
+    },
+    {
+      "id": "flood_other",
+      "name": "Other Floodplain Data",
+      "category": "Floodplain",
+      "description": "Additional floodplain-related layers",
+      "primaryLayer": {
+        "id": "layer-726",
+        "url": "https://gis.wilco.org/ags/rest/services/rb/rb_fema_floodplain/MapServer/1",
+        "context": "River24k NHD",
+        "featureCount": 8588
+      },
+      "alternativeLayers": [
+        {
+          "id": "layer-820",
+          "url": "https://gis2.twdb.texas.gov/server/rest/services/OOP_FP_SFPV/Floodplain_Management_Map/MapServer/0",
+          "context": "Streams\nShows the streams to be studied by FMEs, and those relevant to FMS and FMPs, when applicable.",
+          "featureCount": 8103
+        },
+        {
+          "id": "layer-845",
+          "url": "https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Floodplain_Management_Map/MapServer/0",
+          "context": "Streams\n<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN>Shows the streams to be studied by FMEs, and those relevant to FMS and FMPs, when applicable.</SPAN></P></DIV></DIV></DIV>",
+          "featureCount": 8103
+        },
+        {
+          "id": "layer-867",
+          "url": "https://maps.pape-dawson.com/server2/rest/services/PD_GIS_Webmap/PD_GIS_Webmap__Austin_External/MapServer/356",
+          "context": "Floodplain",
+          "featureCount": 6598
+        },
+        {
+          "id": "layer-714",
+          "url": "https://gis.wilco.org/ags/rest/services/rb/rb_fema_floodplain/MapServer/0",
+          "context": "Lake24k NHD",
+          "featureCount": 6454
+        },
+        {
+          "id": "layer-720",
+          "url": "https://maps.pape-dawson.com/server1/rest/services/Office_Austin/TRAVIS__MF_Sites_MS/MapServer/37",
+          "context": "Floodplain",
+          "featureCount": 4961
+        },
+        {
+          "id": "layer-737",
+          "url": "https://maps.pape-dawson.com/server1/rest/services/Office_Austin/TRAVIS__SF_Sites/MapServer/23",
+          "context": "Floodplain",
+          "featureCount": 4961
+        },
+        {
+          "id": "layer-801",
+          "url": "https://gis2.twdb.texas.gov/server/rest/services/OOP_FP_SFPV/Data_Download/MapServer/8",
+          "context": "Existing Flood Infrastructure - Polygon\nA general description of the location, condition, and functionality of existing natural flood mitigation features and constructed major flood infrastructure within the FPR. ",
+          "featureCount": 2171
+        },
+        {
+          "id": "layer-900",
+          "url": "https://gis2.twdb.texas.gov/server/rest/services/OOP_FP_SFPV/Existing_Infrastructure_Map/MapServer/3",
+          "context": "Major Flood Infrastructure (Polygon)\nA general description of the location, condition, and functionality of existing natural flood mitigation features and constructed major flood infrastructure within the FPR. ",
+          "featureCount": 2171
+        },
+        {
+          "id": "layer-911",
+          "url": "https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Existing_Infrastructure_Map/MapServer/3",
+          "context": "Major Flood Infrastructure (Polygon)\n<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN>A general description of the location, condition, and functionality of existing natural flood mitigation features and constructed major flood infrastru...",
+          "featureCount": 2171
+        },
+        {
+          "id": "layer-920",
+          "url": "https://maps3.hdrgateway.com/arcgis/rest/services/Texas/Data_Download/MapServer/8",
+          "context": "Existing Flood Infrastructure - Polygon\n<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN>A general description of the location, condition, and functionality of existing natural flood mitigation features and constructed major flood infrastru...",
+          "featureCount": 2171
+        },
+        {
+          "id": "layer-865",
+          "url": "https://gis.nri.tamu.edu/arcgis/rest/services/TxMap/Water/MapServer/5",
+          "context": "100-year Flood Zone",
+          "featureCount": 1623
+        },
+        {
+          "id": "layer-760",
+          "url": "https://maps.nccs.nasa.gov/mapping/rest/services/hifld_open/communications/MapServer/8",
+          "context": "microwave_service_towers\nThis file is an extract of the Universal Licensing System (ULS) licensed by the Wireless Telecommunications Bureau (WTB). It consists of Microwave Transmitters (see Rule Part: Fixed Microwave Service ...",
+          "featureCount": 1170
+        },
+        {
+          "id": "layer-876",
+          "url": "https://maps.psc.wi.gov/server/rest/services/Electric/HighNoon_9814CE100/MapServer/10",
+          "context": "HighNoon_MicrowaveServiceTowers_220516",
+          "featureCount": 1074
+        },
+        {
+          "id": "layer-818",
+          "url": "https://gisweb.hendersoncountync.gov/arcgis/rest/services/GISWeb/Primary_GISWeb_Layers/MapServer/187",
+          "context": "FEMA Letters of Map Amendment",
+          "featureCount": 1057
+        },
+        {
+          "id": "layer-893",
+          "url": "https://gis.glo.texas.gov/arcgis/rest/services/cdbg/Harvey_Qualification_Data2020/MapServer/3",
+          "context": "Minority Concentrations by Block Group",
+          "featureCount": 696
+        },
+        {
+          "id": "layer-909",
+          "url": "https://gis.lja.com/arcgis/rest/services/NTX_Transportation/Environmental_Constraints/MapServer/16",
+          "context": "Floodplain",
+          "featureCount": 662
+        },
+        {
+          "id": "layer-763",
+          "url": "http://minemaps.pasda.psu.edu/server/rest/services/pasda/HIFLD_FEMA/MapServer/83",
+          "context": "Microwave_Service_Towers_HIFLD\nThis file is an extract of the Universal Licensing System (ULS) licensed by the Wireless Telecommunications Bureau (WTB). It consists of Microwave Transmitters (see Rule Part: Fixed Microwave Service ...",
+          "featureCount": 645
+        },
+        {
+          "id": "layer-789",
+          "url": "https://mapservices.pasda.psu.edu/server/rest/services/pasda/HIFLD_FEMA/MapServer/83",
+          "context": "Microwave_Service_Towers_HIFLD\nThis file is an extract of the Universal Licensing System (ULS) licensed by the Wireless Telecommunications Bureau (WTB). It consists of Microwave Transmitters (see Rule Part: Fixed Microwave Service ...",
+          "featureCount": 645
+        },
+        {
+          "id": "layer-807",
+          "url": "https://gis2.twdb.texas.gov/server/rest/services/OOP_FP_SFPV/Data_Download/MapServer/9",
+          "context": "Existing Flood Infrastructure - Point\nA general description of the location, condition, and functionality of existing natural flood mitigation features and constructed major flood infrastructure within the FPR.",
+          "featureCount": 571
+        },
+        {
+          "id": "layer-830",
+          "url": "https://maps3.hdrgateway.com/arcgis/rest/services/Texas/Data_Download/MapServer/9",
+          "context": "Existing Flood Infrastructure - Point\n<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN>A general description of the location, condition, and functionality of existing natural flood mitigation features and constructed major flood infrastru...",
+          "featureCount": 571
+        },
+        {
+          "id": "layer-873",
+          "url": "https://gis2.twdb.texas.gov/server/rest/services/OOP_FP_SFPV/Existing_Infrastructure_Map/MapServer/1",
+          "context": "Major Flood Infrastructure (Point)\nA general description of the location, condition, and functionality of existing natural flood mitigation features and constructed major flood infrastructure within the FPR.",
+          "featureCount": 571
+        },
+        {
+          "id": "layer-917",
+          "url": "https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Existing_Infrastructure_Map/MapServer/1",
+          "context": "Major Flood Infrastructure (Point)\n<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN>A general description of the location, condition, and functionality of existing natural flood mitigation features and constructed major flood infrastru...",
+          "featureCount": 571
+        },
+        {
+          "id": "layer-771",
+          "url": "https://onemap.cdc.gov/OneMapServices/rest/services/EJI/CBM_ExtremeEvents_RiverineFloodFrequency_2024/MapServer/0",
+          "context": "Extreme Events: Riverine Flooding Frequency\n<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN>The </SPAN><SPAN STYLE=\"font-weight:bold;\">Environmental Justice Index (EJI)</SPAN><SPAN> is the first national, place-based tool designed to measure t...",
+          "featureCount": 355
+        },
+        {
+          "id": "layer-798",
+          "url": "https://onemap.cdc.gov/OneMapServices/rest/services/EJI/CBM_ExtremeEvents_CoastalFloodFrequency_2024/MapServer/0",
+          "context": "Extreme Events: Coastal Flooding Frequency\n<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN>The </SPAN><SPAN STYLE=\"font-weight:bold;\">Environmental Justice Index (EJI)</SPAN><SPAN> is the first national, place-based tool designed to measure t...",
+          "featureCount": 355
+        },
+        {
+          "id": "layer-764",
+          "url": "https://maps.housingcenter.com/arcgis/rest/services/Maps/Disaster_Spotlight_Maps_Final/MapServer/100",
+          "context": "Riverine Flooding Individual Hazard Risk Rating",
+          "featureCount": 266
+        },
+        {
+          "id": "layer-797",
+          "url": "https://maps.housingcenter.com/arcgis/rest/services/Maps/Disaster_Spotlight_Maps/MapServer/81",
+          "context": "Riverine Flooding Individual Hazard Risk Rating",
+          "featureCount": 266
+        },
+        {
+          "id": "layer-826",
+          "url": "https://maps.housingcenter.com/arcgis/rest/services/Maps/Disaster_Spotlight_Maps_July_2021/MapServer/100",
+          "context": "Riverine Flooding Individual Hazard Risk Rating",
+          "featureCount": 266
+        },
+        {
+          "id": "layer-713",
+          "url": "https://gisservices.halff.com/ags/rest/services/TravisCoViewer/Travis_County_Viewer/MapServer/45",
+          "context": "ATL_NFHL_Flood_Extent",
+          "featureCount": 261
+        },
+        {
+          "id": "layer-905",
+          "url": "https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Floodplain_Management_Map/MapServer/10",
+          "context": "Entities - Identified\n<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN>Entities with flood-related authority and whether they are actively engaged in flood planning, floodplain management, and flood mitigation activities</...",
+          "featureCount": 192
+        },
+        {
+          "id": "layer-932",
+          "url": "https://gis2.twdb.texas.gov/server/rest/services/OOP_FP_SFPV/Floodplain_Management_Map/MapServer/10",
+          "context": "Entities - Identified\nEntities with flood-related authority and whether they are actively engaged in flood planning, floodplain management, and flood mitigation activities",
+          "featureCount": 192
+        },
+        {
+          "id": "layer-756",
+          "url": "https://mapsweb.lib.purdue.edu/arcgis/rest/services/Purdue/floodplainUS/MapServer/0",
+          "context": "PuGeoDB.DBO.FloodplainUSALLstatesWM\nUS national wide gSSUGRO based floodplain maps are developed by using Gridded Soil Survey Geographic (gSSURGO) database. Specifically, the SSURGO map units are joined to certain key attributes in the ...",
+          "featureCount": 116
+        },
+        {
+          "id": "layer-779",
+          "url": "https://maps3.hdrgateway.com/arcgis/rest/services/Texas/Data_Download/MapServer/1",
+          "context": "Existing Flood Mapping Gaps\n<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN>A polygon feature class identifying existing gaps in inundation boundary mapping.</SPAN></P><P><SPAN /></P></DIV></DIV></DIV>",
+          "featureCount": 73
+        },
+        {
+          "id": "layer-843",
+          "url": "https://gis2.twdb.texas.gov/server/rest/services/OOP_FP_SFPV/Data_Download/MapServer/1",
+          "context": "Existing Flood Mapping Gaps\nA polygon feature class identifying existing gaps in inundation boundary mapping.",
+          "featureCount": 73
+        },
+        {
+          "id": "layer-897",
+          "url": "https://gis2.twdb.texas.gov/server/rest/services/OOP_FP_SFPV/Existing_Flood_Risk_Map/MapServer/11",
+          "context": "Existing Flood Mapping Gaps",
+          "featureCount": 73
+        },
+        {
+          "id": "layer-922",
+          "url": "https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Existing_Flood_Risk_Map/MapServer/11",
+          "context": "Existing Flood Mapping Gaps",
+          "featureCount": 73
+        },
+        {
+          "id": "layer-835",
+          "url": "https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Floodplain_Management_Map/MapServer/2",
+          "context": "Entities - Adopted Minimum Regulations",
+          "featureCount": 51
+        },
+        {
+          "id": "layer-839",
+          "url": "https://gis2.twdb.texas.gov/server/rest/services/OOP_FP_SFPV/Floodplain_Management_Map/MapServer/2",
+          "context": "Entities - Adopted Minimum Regulations",
+          "featureCount": 51
+        },
+        {
+          "id": "layer-898",
+          "url": "https://gis2.twdb.texas.gov/server/rest/services/OOP_FP_SFPV/Floodplain_Management_Map/MapServer/4",
+          "context": "Entities - Higher Standards Adopted",
+          "featureCount": 51
+        },
+        {
+          "id": "layer-918",
+          "url": "https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Floodplain_Management_Map/MapServer/3",
+          "context": "Entities - NFIP Participant",
+          "featureCount": 51
+        },
+        {
+          "id": "layer-919",
+          "url": "https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Floodplain_Management_Map/MapServer/4",
+          "context": "Entities - Higher Standards Adopted",
+          "featureCount": 51
+        },
+        {
+          "id": "layer-923",
+          "url": "https://gis2.twdb.texas.gov/server/rest/services/OOP_FP_SFPV/Floodplain_Management_Map/MapServer/3",
+          "context": "Entities - NFIP Participant",
+          "featureCount": 51
+        },
+        {
+          "id": "layer-823",
+          "url": "https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Floodplain_Management_Map/MapServer/11",
+          "context": "Watersheds\n<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN>The spatial layer for watersheds with associated FME, FMS, and FMPs</SPAN></P></DIV></DIV></DIV>",
+          "featureCount": 44
+        },
+        {
+          "id": "layer-868",
+          "url": "https://gis2.twdb.texas.gov/server/rest/services/OOP_FP_SFPV/Floodplain_Management_Map/MapServer/11",
+          "context": "Watersheds\nThe spatial layer for watersheds with associated FME, FMS, and FMPs",
+          "featureCount": 44
+        },
+        {
+          "id": "layer-746",
+          "url": "https://harcags.harcresearch.org/arcgisserver/rest/services/Hazards/FEMA_SRLP_ZipCode_Summary/MapServer/0",
+          "context": "FEMA_SRLP_ZipCode_Summary\nSummary of Severe Repetitive Flooding Properties by Zip Code. Disclaimer: This product is for informational purposes only and may not be suitable for legal, engineering, or surveying purposes. It does...",
+          "featureCount": 31
+        },
+        {
+          "id": "layer-772",
+          "url": "https://zportalpub.zayo.com/zayoportalpubap/rest/services/External/EsriWavesVisualization/MapServer/0",
+          "context": "Waves Visualization",
+          "featureCount": 28
+        },
+        {
+          "id": "layer-796",
+          "url": "https://zportalpub.zayo.com/zayoportalpubap/rest/services/Internal/EsriWavesVisualization/MapServer/0",
+          "context": "Waves Visualization",
+          "featureCount": 28
+        },
+        {
+          "id": "layer-878",
+          "url": "https://gis2.twdb.texas.gov/server/rest/services/OOP_FP_SFPV/Floodplain_Management_Map/MapServer/5",
+          "context": "Municipalities  - Level of Floodplain Management Practices",
+          "featureCount": 27
+        },
+        {
+          "id": "layer-880",
+          "url": "https://gis2.twdb.texas.gov/server/rest/services/OOP_FP_SFPV/Floodplain_Management_Map/MapServer/7",
+          "context": "Municipalities - Level of Enforcement",
+          "featureCount": 27
+        },
+        {
+          "id": "layer-889",
+          "url": "https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Floodplain_Management_Map/MapServer/5",
+          "context": "Municipalities  - Level of Floodplain Management Practices",
+          "featureCount": 27
+        },
+        {
+          "id": "layer-901",
+          "url": "https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Floodplain_Management_Map/MapServer/7",
+          "context": "Municipalities - Level of Enforcement",
+          "featureCount": 27
+        },
+        {
+          "id": "layer-735",
+          "url": "https://gis.wilco.org/ags/rest/services/rb/rb_fema_floodplain/MapServer/3",
+          "context": "Edwards Aquifer Regulatory Zones",
+          "featureCount": 16
+        },
+        {
+          "id": "layer-775",
+          "url": "https://mapit.fortworthtexas.gov/ags/rest/services/Basemaps/FloodplainModel/MapServer/18",
+          "context": "Lakes",
+          "featureCount": 16
+        },
+        {
+          "id": "layer-848",
+          "url": "https://iserver5.surdex.com/arcgis/rest/services/TX_Flood/TX_PROVISIONAL_ACQDATE_2025/MapServer/0",
+          "context": "TX_Flood_EAWS_Seamlines",
+          "featureCount": 13
+        },
+        {
+          "id": "layer-838",
+          "url": "https://pcrdgis.agriculture.purdue.edu/arcgis/rest/services/MFRI/Financial/MapServer/8",
+          "context": "Veteran Female Food Stamps",
+          "featureCount": 7
+        },
+        {
+          "id": "layer-842",
+          "url": "https://pcrdgis.agriculture.purdue.edu/arcgis/rest/services/MFRI_MeasuringCommunities3/Financial/MapServer/4",
+          "context": "Veteran Female on SNAP - CD",
+          "featureCount": 7
+        },
+        {
+          "id": "layer-762",
+          "url": "https://pcrdgis.agriculture.purdue.edu/arcgis/rest/services/MFRI/Demographics/MapServer/4",
+          "context": "Veterans Female",
+          "featureCount": 5
+        },
+        {
+          "id": "layer-817",
+          "url": "https://pcrdgis.agriculture.purdue.edu/arcgis/rest/services/MFRI/Demographics/MapServer/13",
+          "context": "Veterans Female",
+          "featureCount": 5
+        },
+        {
+          "id": "layer-869",
+          "url": "https://gis.lja.com/arcgis/rest/services/lja/surveyabstracts/MapServer/6",
+          "context": "No Floodplain Data\nU.S. Counties represents the counties of the United States in the 50 states, the District of Columbia, and Puerto Rico.",
+          "featureCount": 5
+        },
+        {
+          "id": "layer-890",
+          "url": "https://gis.lja.com/arcgis/rest/services/lja/gismap/MapServer/23",
+          "context": "No Floodplain Data\nU.S. Counties represents the counties of the United States in the 50 states, the District of Columbia, and Puerto Rico.",
+          "featureCount": 5
+        },
+        {
+          "id": "layer-734",
+          "url": "https://cceo.co.comal.tx.us/arcgissrv/rest/services/Internal/FloodplainBaseMap/MapServer/149",
+          "context": "Recharge Zone\nThis dataset represents the geographic areas identified in TCEQ rules as being subject to regulation under theEdwards Aquifer Protection Program. The coverage was derived from existing official hard c...",
+          "featureCount": 4
+        },
+        {
+          "id": "layer-750",
+          "url": "https://mapservices.weather.noaa.gov/vector/rest/services/obs/surface_obs/MapServer/60",
+          "context": "Station ID, Air Temperature (deg F), Dew Point Temperature (deg F), Wind Gust (kt), Mean Sea-Level Pressure (mb), 3-Hour Pressure Change (mb), Visibility (mi), Sea Surface Temperature (deg F), Significant Wave Height (ft) - Scale Level 6",
+          "featureCount": 4
+        },
+        {
+          "id": "layer-785",
+          "url": "https://pcrdgis.agriculture.purdue.edu/arcgis/rest/services/MFRI/Demographics/MapServer/27",
+          "context": "Active Duty Females",
+          "featureCount": 4
+        },
+        {
+          "id": "layer-786",
+          "url": "https://pcrdgis.agriculture.purdue.edu/arcgis/rest/services/MFRI/Demographics/MapServer/37",
+          "context": "Selected Reserve Females",
+          "featureCount": 4
+        },
+        {
+          "id": "layer-836",
+          "url": "https://rdgdwe.sc.egov.usda.gov/arcgis/rest/services/eConnect/DominantFlood/MapServer/0",
+          "context": "DominantFlood\nDominant Flood data from NRCS Soil Data Access https://sdmdataaccess.nrcs.usda.gov/Query.aspx",
+          "featureCount": 4
+        },
+        {
+          "id": "layer-752",
+          "url": "https://txgeo.usgs.gov/arcgis/rest/services/FDST/FDST/MapServer/0",
+          "context": "Flood map limit",
+          "featureCount": 3
+        },
+        {
+          "id": "layer-758",
+          "url": "https://gis.h-gac.com/arcgis/rest/services/Open_Data/Hazards/MapServer/0",
+          "context": "HGAC_Historical_Major_Tropical_Storm_Tracks",
+          "featureCount": 3
+        },
+        {
+          "id": "layer-811",
+          "url": "https://maps.co.bastrop.tx.us/server/rest/services/Viewers/DevelopmentServicesViewerService/MapServer/42",
+          "context": "TCEQ Water District",
+          "featureCount": 3
+        },
+        {
+          "id": "layer-824",
+          "url": "https://maps.pape-dawson.com/server1/rest/services/Hydrology/HYDROLOGY__TWDB_FIF_Projects/MapServer/2",
+          "context": "Flood Planning Region Boundaries",
+          "featureCount": 3
+        },
+        {
+          "id": "layer-727",
+          "url": "https://cceo.co.comal.tx.us/arcgissrv/rest/services/Internal/FloodplainBaseMap/MapServer/148",
+          "context": "Contributing Zone\nThis dataset represents the geographic areas identified in TCEQ rules as being subject to regulation under theEdwards Aquifer Protection Program. The coverage was derived from existing official hard c...",
+          "featureCount": 2
+        },
+        {
+          "id": "layer-809",
+          "url": "https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Floodplain_Management_Map/MapServer/9",
+          "context": "Entities - Existing Stormwater or Drainage Fee",
+          "featureCount": 2
+        },
+        {
+          "id": "layer-859",
+          "url": "https://gis2.twdb.texas.gov/server/rest/services/OOP_FP_SFPV/Floodplain_Management_Map/MapServer/9",
+          "context": "Entities - Existing Stormwater or Drainage Fee",
+          "featureCount": 2
+        },
+        {
+          "id": "layer-751",
+          "url": "https://geodata.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer/7",
+          "context": "Heat Wave Season in 50 Large U.S. Cities, 1961–2023 (Statistically Significant)\nThis map shows changes in the number of days between the first and last heat wave of the year (season length). These data were analyzed from 1961 to 2023 for 50 large metropolitan areas. The size of e...",
+          "featureCount": 1
+        },
+        {
+          "id": "layer-753",
+          "url": "https://geodata.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer/1",
+          "context": "Heat Wave Frequency in 50 Large U.S. Cities, 1961–2023 (Statistically Significant)\nThis map shows changes in the number of heat waves per year (frequency). These data were analyzed from 1961 to 2023 for 50 large metropolitan areas. The size of each circle indicates the absolute chan...",
+          "featureCount": 1
+        },
+        {
+          "id": "layer-782",
+          "url": "https://gispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer/1",
+          "context": "Heat Wave Frequency in 50 Large U.S. Cities, 1961–2023 (Statistically Significant)\nThis map shows changes in the number of heat waves per year (frequency). These data were analyzed from 1961 to 2023 for 50 large metropolitan areas. The size of each circle indicates the absolute chan...",
+          "featureCount": 1
+        },
+        {
+          "id": "layer-784",
+          "url": "https://gispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer/7",
+          "context": "Heat Wave Season in 50 Large U.S. Cities, 1961–2023 (Statistically Significant)\nThis map shows changes in the number of days between the first and last heat wave of the year (season length). These data were analyzed from 1961 to 2023 for 50 large metropolitan areas. The size of e...",
+          "featureCount": 1
+        },
+        {
+          "id": "layer-804",
+          "url": "https://awsgispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer/7",
+          "context": "Heat Wave Season in 50 Large U.S. Cities, 1961–2023 (Statistically Significant)\nThis map shows changes in the number of days between the first and last heat wave of the year (season length). These data were analyzed from 1961 to 2023 for 50 large metropolitan areas. The size of e...",
+          "featureCount": 1
+        },
+        {
+          "id": "layer-819",
+          "url": "https://awsgispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer/1",
+          "context": "Heat Wave Frequency in 50 Large U.S. Cities, 1961–2023 (Statistically Significant)\nThis map shows changes in the number of heat waves per year (frequency). These data were analyzed from 1961 to 2023 for 50 large metropolitan areas. The size of each circle indicates the absolute chan...",
+          "featureCount": 1
+        }
+      ],
+      "totalFeatureCount": 69581,
+      "layerCount": 78,
+      "geometryType": "Polygon",
+      "style": {
+        "type": "fill",
+        "paint": {
+          "fill-color": "#4682B4",
+          "fill-opacity": 0.5,
+          "fill-outline-color": "#326ea0"
+        }
+      }
+    },
+    {
+      "id": "sewer_mains",
+      "name": "Sewer Mains",
+      "category": "Sewer Utilities",
+      "description": "Sewer and wastewater main lines",
+      "primaryLayer": {
+        "id": "layer-17",
+        "url": "https://maps.pape-dawson.com/server1/rest/services/LandDevelopment/LANDDEVELOPMENT__Chesmar_SiteSelection/MapServer/55",
+        "context": "Austin Sewer Mains 8\"+",
+        "featureCount": 78193
+      },
+      "alternativeLayers": [],
+      "totalFeatureCount": 78193,
+      "layerCount": 1,
+      "geometryType": "LineString",
+      "style": {
+        "type": "line",
+        "paint": {
+          "line-color": "#8B4513",
+          "line-width": 2,
+          "line-opacity": 0.8
+        }
+      }
+    },
+    {
+      "id": "sewer_manholes",
+      "name": "Sewer Manholes",
+      "category": "Sewer Utilities",
+      "description": "Sewer manhole locations and data",
+      "primaryLayer": {
+        "id": "layer-10",
+        "url": "https://gis.horrocks.com/arcgis/rest/services/TX_9706_24_General/MapServer/22",
+        "context": "WWManhole",
+        "featureCount": 70534
+      },
+      "alternativeLayers": [
+        {
+          "id": "layer-9",
+          "url": "https://gis.traviscountytx.gov/server1/rest/services/MS4/MS4_Map_Supporting_Layers/MapServer/12",
+          "context": "Manhole",
+          "featureCount": 55554
+        },
+        {
+          "id": "layer-5",
+          "url": "https://gis.horrocks.com/arcgis/rest/services/TX_9706_24_General/MapServer/12",
+          "context": "InspectionManhole",
+          "featureCount": 545
+        }
+      ],
+      "totalFeatureCount": 126633,
+      "layerCount": 3,
+      "geometryType": "Point",
+      "style": {
+        "type": "circle",
+        "paint": {
+          "circle-radius": 6,
+          "circle-color": "#8B4513",
+          "circle-stroke-width": 1,
+          "circle-stroke-color": "#ffffff"
+        }
+      }
+    },
+    {
+      "id": "sewer_lift_stations",
+      "name": "Lift Stations",
+      "category": "Sewer Utilities",
+      "description": "Wastewater lift station locations",
+      "primaryLayer": {
+        "id": "layer-4",
+        "url": "https://gis.traviscountytx.gov/server1/rest/services/MS4/MS4_Map_Supporting_Layers/MapServer/15",
+        "context": "Lift Station",
+        "featureCount": 320
+      },
+      "alternativeLayers": [],
+      "totalFeatureCount": 320,
+      "layerCount": 1,
+      "geometryType": "Point",
+      "style": {
+        "type": "circle",
+        "paint": {
+          "circle-radius": 6,
+          "circle-color": "#8B4513",
+          "circle-stroke-width": 1,
+          "circle-stroke-color": "#ffffff"
+        }
+      }
+    },
+    {
+      "id": "sewer_service_lines",
+      "name": "Sewer Service Lines",
+      "category": "Sewer Utilities",
+      "description": "Sewer service connection lines",
+      "primaryLayer": {
+        "id": "layer-81",
+        "url": "https://coagiswebadaptor.austintexas.gov/awgisago/rest/services/Klir_Service/MapServer/2",
+        "context": "Wastewater Service Connections CCB IPS",
+        "featureCount": 245302
+      },
+      "alternativeLayers": [],
+      "totalFeatureCount": 245302,
+      "layerCount": 1,
+      "geometryType": "LineString",
+      "style": {
+        "type": "line",
+        "paint": {
+          "line-color": "#8B4513",
+          "line-width": 2,
+          "line-opacity": 0.8
+        }
+      }
+    },
+    {
+      "id": "sewer_facilities",
+      "name": "Sewer Facilities",
+      "category": "Sewer Utilities",
+      "description": "Wastewater treatment facilities and plants",
+      "primaryLayer": {
+        "id": "layer-20",
+        "url": "https://awgisadaptor.austintexas.gov/awgisago/rest/services/RAAS/RAAS_Wastewater_Network/MapServer/4",
+        "context": "Wastewater Facility",
+        "featureCount": 237
+      },
+      "alternativeLayers": [
+        {
+          "id": "layer-19",
+          "url": "https://coagiswebadaptor.austintexas.gov/awgisago/rest/services/GraniteXP/GraniteCloud_Wastewater_Version_Test/MapServer/3",
+          "context": "Wastewater Facility",
+          "featureCount": 236
+        },
+        {
+          "id": "layer-41",
+          "url": "https://arcgis.netl.doe.gov/server/rest/services/CO2Locate_GOGI/MapServer/14",
+          "context": "Pipelines\nLong pipes used for transporting oil, gas, and petroleum products over long distances from onshore/offshore sources (gathering lines) to power plants, refineries, and municipalities (transmission line...",
+          "featureCount": 6
+        },
+        {
+          "id": "layer-47",
+          "url": "https://arcgis.netl.doe.gov/server/rest/services/EDXSpatialCaches_Pipelines_223_remake/MapServer/6",
+          "context": "EDXSpatialCaches_Pipelines_223_remake\nLong pipes used for transporting oil, gas, and petroleum products over long distances from onshore/offshore sources (gathering lines) to power plants, refineries, and municipalities (transmission line...",
+          "featureCount": 6
+        },
+        {
+          "id": "layer-71",
+          "url": "https://arcgis.netl.doe.gov/server/rest/services/EDXSpatialCaches/Pipelines_223_2025/MapServer/6",
+          "context": "Pipelines_223\nLong pipes used for transporting oil, gas, and petroleum products over long distances from onshore/offshore sources (gathering lines) to power plants, refineries, and municipalities (transmission line...",
+          "featureCount": 6
+        }
+      ],
+      "totalFeatureCount": 491,
+      "layerCount": 5,
+      "geometryType": "Point",
+      "style": {
+        "type": "circle",
+        "paint": {
+          "circle-radius": 6,
+          "circle-color": "#8B4513",
+          "circle-stroke-width": 1,
+          "circle-stroke-color": "#ffffff"
+        }
+      }
+    },
+    {
+      "id": "water_mains",
+      "name": "Water Mains",
+      "category": "Water Utilities",
+      "description": "Water main distribution lines",
+      "primaryLayer": {
+        "id": "layer-100",
+        "url": "https://maps.pape-dawson.com/server1/rest/services/LandDevelopment/LANDDEVELOPMENT__Chesmar_SiteSelection/MapServer/32",
+        "context": "Austin Water Mains 8\"+",
+        "featureCount": 145015
+      },
+      "alternativeLayers": [
+        {
+          "id": "layer-93",
+          "url": "https://coagiswebadaptor.austintexas.gov/awgisago/rest/services/RAAS/RAAS_Water_Service/MapServer/0",
+          "context": "Major Water Main",
+          "featureCount": 15683
+        },
+        {
+          "id": "layer-101",
+          "url": "https://awgisadaptor.austintexas.gov/awgisago/rest/services/SER/LRP/MapServer/2",
+          "context": "Future Water Pipes",
+          "featureCount": 247
+        },
+        {
+          "id": "layer-209",
+          "url": "https://gis.rrc.texas.gov/server/rest/services/rrc_public/RRC_Public_Viewer_Srvs/MapServer/18",
+          "context": "Water Lines",
+          "featureCount": 11
+        }
+      ],
+      "totalFeatureCount": 160956,
+      "layerCount": 4,
+      "geometryType": "LineString",
+      "style": {
+        "type": "line",
+        "paint": {
+          "line-color": "#1E90FF",
+          "line-width": 2,
+          "line-opacity": 0.8
+        }
+      }
+    },
+    {
+      "id": "water_meters",
+      "name": "Water Meters",
+      "category": "Water Utilities",
+      "description": "Water meter locations",
+      "primaryLayer": {
+        "id": "layer-142",
+        "url": "https://awsgispub.epa.gov/arcgis/rest/services/OA/SmartLocationDatabase/MapServer/11",
+        "context": "Distance to transit (meters)\nDistance from block group population weighted centroi to nearest transit stop, in meters. Includes all fixed guideway stops (rail, streetcar, BRT, ferry) as well as bus stops in areas where GTFS data ...",
+        "featureCount": 696
+      },
+      "alternativeLayers": [
+        {
+          "id": "layer-143",
+          "url": "https://awsgispub.epa.gov/arcgis/rest/services/OA/WalkabilityIndex/MapServer/2",
+          "context": "Proximity to Transit Stops (Meters)\nProximity to transit stops (SLD variable D4a, measured in meters from population-weighted centroid of block group to nearest transit stop): Distance from population center to nearest transit stop in m...",
+          "featureCount": 696
+        },
+        {
+          "id": "layer-161",
+          "url": "https://geodata.epa.gov/arcgis/rest/services/OA/WalkabilityIndex/MapServer/2",
+          "context": "Proximity to Transit Stops (Meters)\nProximity to transit stops (SLD variable D4a, measured in meters from population-weighted centroid of block group to nearest transit stop): Distance from population center to nearest transit stop in m...",
+          "featureCount": 696
+        },
+        {
+          "id": "layer-163",
+          "url": "https://gispub.epa.gov/arcgis/rest/services/OA/WalkabilityIndex/MapServer/2",
+          "context": "Proximity to Transit Stops (Meters)\nProximity to transit stops (SLD variable D4a, measured in meters from population-weighted centroid of block group to nearest transit stop): Distance from population center to nearest transit stop in m...",
+          "featureCount": 696
+        },
+        {
+          "id": "layer-175",
+          "url": "https://gispub.epa.gov/arcgis/rest/services/OA/SmartLocationDatabase/MapServer/11",
+          "context": "Distance to transit (meters)\nDistance from block group population weighted centroi to nearest transit stop, in meters. Includes all fixed guideway stops (rail, streetcar, BRT, ferry) as well as bus stops in areas where GTFS data ...",
+          "featureCount": 696
+        },
+        {
+          "id": "layer-194",
+          "url": "https://geodata.epa.gov/arcgis/rest/services/OA/SmartLocationDatabase/MapServer/11",
+          "context": "Distance to transit (meters)\nDistance from block group population weighted centroi to nearest transit stop, in meters. Includes all fixed guideway stops (rail, streetcar, BRT, ferry) as well as bus stops in areas where GTFS data ...",
+          "featureCount": 696
+        },
+        {
+          "id": "layer-182",
+          "url": "https://gis.thc.texas.gov/arcgis/rest/services/Historical/MapServer/5",
+          "context": "Cemetery",
+          "featureCount": 211
+        },
+        {
+          "id": "layer-205",
+          "url": "https://gis.thc.texas.gov/arcgis/rest/services/atlas-open/cemeteries_polygon/MapServer/0",
+          "context": "cemeteries-polygon",
+          "featureCount": 211
+        },
+        {
+          "id": "layer-94",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Environmental_1/MapServer/10",
+          "context": "Landfill Perimeters\nThe perimeter was made due to the Cities Land Development Code Requiring Site plans to be a certain distance from a landfill to meet requirements for development. The landfills perimeter layer represe...",
+          "featureCount": 44
+        },
+        {
+          "id": "layer-208",
+          "url": "https://arcgis.netl.doe.gov/server/rest/services/CO2Locate_Total_Well_Count/MapServer/0",
+          "context": "Well Count\nOil and gas well data from Enverus summarized within a 20 kilometer-squared area multivariate grid. Summarized values include total number of wells, wells by status, wells by age using 10 year bins, a...",
+          "featureCount": 16
+        },
+        {
+          "id": "layer-91",
+          "url": "https://gis.horrocks.com/arcgis/rest/services/TX_9706_24_General/MapServer/8",
+          "context": "FlowMeter",
+          "featureCount": 7
+        },
+        {
+          "id": "layer-199",
+          "url": "https://gisportal.hrsa.gov/server/rest/services/Shortage/MedicallyUnderservedAreas_FS/MapServer/0",
+          "context": "Medically Underserved Areas /Populations – perimeter polygons\nNote: To export from ArcMap or ArcCatalog, limit the dataset to 1000 features or less. To download the full dataset, download the Shapefile data from the Data Download (https://datawarehouse.hrsa.gov/...",
+          "featureCount": 2
+        },
+        {
+          "id": "layer-135",
+          "url": "https://pcrdgis.agriculture.purdue.edu/arcgis/rest/services/RDM/RDM_TransportationResources2022_Railroads2/MapServer/12",
+          "context": "Transit stop buffer 250 meters\nThe National Transit Map - Stops dataset was compiled on July 21, 2022 from the Bureau of Transportation Statistics (BTS), and is part of the U.S. Department of Transportation (USDOT)/Bureau of Transp...",
+          "featureCount": 1
+        },
+        {
+          "id": "layer-145",
+          "url": "https://pcrdgis.agriculture.purdue.edu/arcgis/rest/services/RDM/RDM_TransportationResources2022_Railroads2/MapServer/13",
+          "context": "Transit line buffer 200 meters",
+          "featureCount": 1
+        },
+        {
+          "id": "layer-218",
+          "url": "https://pcrdgis.agriculture.purdue.edu/arcgis/rest/services/RDM/RDM_TransportationResources2022_Railroads2/MapServer/14",
+          "context": "Transit line buffer 400 meters",
+          "featureCount": 1
+        }
+      ],
+      "totalFeatureCount": 4670,
+      "layerCount": 15,
+      "geometryType": "Point",
+      "style": {
+        "type": "circle",
+        "paint": {
+          "circle-radius": 6,
+          "circle-color": "#1E90FF",
+          "circle-stroke-width": 1,
+          "circle-stroke-color": "#ffffff"
+        }
+      }
+    },
+    {
+      "id": "water_hydrants",
+      "name": "Fire Hydrants",
+      "category": "Water Utilities",
+      "description": "Fire hydrant locations",
+      "primaryLayer": {
+        "id": "layer-113",
+        "url": "https://gis.wilco.org/ags/rest/services/ossi/OSSI_FireHydrants/MapServer/0",
+        "context": "county.GIS.fire_hydrant",
+        "featureCount": 59927
+      },
+      "alternativeLayers": [
+        {
+          "id": "layer-97",
+          "url": "https://gis.horrocks.com/arcgis/rest/services/TX_9706_24_General/MapServer/14",
+          "context": "Hydrant",
+          "featureCount": 46877
+        },
+        {
+          "id": "layer-110",
+          "url": "https://gis.traviscountytx.gov/server1/rest/services/Public_Works/Fire_Hydrants/MapServer/0",
+          "context": "Fire Hydrants",
+          "featureCount": 5430
+        }
+      ],
+      "totalFeatureCount": 112234,
+      "layerCount": 3,
+      "geometryType": "Point",
+      "style": {
+        "type": "circle",
+        "paint": {
+          "circle-radius": 6,
+          "circle-color": "#1E90FF",
+          "circle-stroke-width": 1,
+          "circle-stroke-color": "#ffffff"
+        }
+      }
+    },
+    {
+      "id": "water_service_lines",
+      "name": "Water Service Lines",
+      "category": "Water Utilities",
+      "description": "Water service connection lines",
+      "primaryLayer": {
+        "id": "layer-215",
+        "url": "https://awgisadaptor.austintexas.gov/awgisago/rest/services/Klir_Service/MapServer/2",
+        "context": "Wastewater Service Connections CCB IPS",
+        "featureCount": 245302
+      },
+      "alternativeLayers": [
+        {
+          "id": "layer-217",
+          "url": "https://coagiswebadaptor.austintexas.gov/awgisago/rest/services/Test/KLIR_Service_TEST/MapServer/2",
+          "context": "Wastewater Service Connections CCB IPS",
+          "featureCount": 245302
+        }
+      ],
+      "totalFeatureCount": 490604,
+      "layerCount": 2,
+      "geometryType": "LineString",
+      "style": {
+        "type": "line",
+        "paint": {
+          "line-color": "#1E90FF",
+          "line-width": 2,
+          "line-opacity": 0.8
+        }
+      }
+    },
+    {
+      "id": "building_footprints",
+      "name": "Building Footprints",
+      "category": "Buildings",
+      "description": "Building footprint polygons",
+      "primaryLayer": {
+        "id": "layer-364",
+        "url": "https://services5.integritygis.com/arcgis/rest/services/US/Building_Foot_Prints/MapServer/0",
+        "context": "Building Footprints",
+        "featureCount": 421675
+      },
+      "alternativeLayers": [
+        {
+          "id": "layer-351",
+          "url": "https://gis.traviscountytx.gov/server1/rest/services/Basemap_Reference/Building_Footprints_2024/MapServer/0",
+          "context": "BuildingFootprints_2024",
+          "featureCount": 374696
+        },
+        {
+          "id": "layer-349",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/PropertyProfile/PlanimetricSurveyHistoric/MapServer/11",
+          "context": "Building Footprints 1987\n1987 Planimetric Building Footprints",
+          "featureCount": 240075
+        },
+        {
+          "id": "layer-395",
+          "url": "https://maps.pape-dawson.com/server1/rest/services/LandDevelopment/LANDDEVELOPMENT__WestpointeEast/MapServer/52",
+          "context": "Fiber Lit Buildings",
+          "featureCount": 72341
+        },
+        {
+          "id": "layer-453",
+          "url": "https://maps.pape-dawson.com/server1/rest/services/LandDevelopment/LANDDEVELOPMENT__StevensRanch/MapServer/53",
+          "context": "Fiber Lit Buildings",
+          "featureCount": 72341
+        },
+        {
+          "id": "layer-469",
+          "url": "https://maps.pape-dawson.com/server1/rest/services/LandDevelopment/LANDDEVELOPMENT__Orchard/MapServer/18",
+          "context": "Fiber Lit Buildings",
+          "featureCount": 72341
+        },
+        {
+          "id": "layer-482",
+          "url": "https://maps.pape-dawson.com/server1/rest/services/LandDevelopment/LANDDEVELOPMENT__BriggsRanchEast/MapServer/53",
+          "context": "Fiber Lit Buildings",
+          "featureCount": 72341
+        },
+        {
+          "id": "layer-484",
+          "url": "https://maps.pape-dawson.com/server1/rest/services/LandDevelopment/LANDDEVELOPMENT__WestpointeWest/MapServer/18",
+          "context": "Fiber Lit Buildings",
+          "featureCount": 72341
+        },
+        {
+          "id": "layer-332",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/PropertyProfile/PlanimetricSurveyHistoric/MapServer/8",
+          "context": "Building Points 2003\nThis coverage contains the building point symbols as of the Spring of 2003.",
+          "featureCount": 40716
+        },
+        {
+          "id": "layer-406",
+          "url": "https://geospatial.rti.org/server/rest/services/NSDUH/nsduhWebmap_geospatial_2025_SI/MapServer/8",
+          "context": "Building Footprints\nThis data is freely available for download and use. Downloaded from https://github.com/Microsoft/USBuildingFootprintsThe building extraction is done in two stages:Semantic Segmentation – Recognizing b...",
+          "featureCount": 13445
+        },
+        {
+          "id": "layer-432",
+          "url": "https://geospatial.rti.org/server/rest/services/NSDUH/nsduhWebmap_geospatial_2025_SI_2026_CL/MapServer/8",
+          "context": "Building Footprints\nThis data is freely available for download and use. Downloaded from https://github.com/Microsoft/USBuildingFootprintsThe building extraction is done in two stages:Semantic Segmentation – Recognizing b...",
+          "featureCount": 13445
+        },
+        {
+          "id": "layer-379",
+          "url": "https://gis-server.beans.ai/arcgis/rest/services/Prod_Beans_version_6_webmap_MIL1/MapServer/2",
+          "context": "building_extent_polygon",
+          "featureCount": 3315
+        },
+        {
+          "id": "layer-436",
+          "url": "https://egis.hud.gov/arcgis/rest/services/cart/CARTMapService/MapServer/20",
+          "context": "Public Housing Building",
+          "featureCount": 2307
+        },
+        {
+          "id": "layer-384",
+          "url": "https://maps.nccs.nasa.gov/mapping/rest/services/nga/nga_footprint_archive_v2/MapServer/0",
+          "context": "nga_footprint_archive_v2",
+          "featureCount": 1828
+        },
+        {
+          "id": "layer-420",
+          "url": "https://harcags.harcresearch.org/arcgisserver/rest/services/Energy/Texas_LEED_Buildings/MapServer/0",
+          "context": "Texas_LEED_Buildings\nLEED green buildings in Texas. Disclaimer: This product is for informational purposes only and may not be suitable for legal, engineering, or surveying purposes. It does not represent an official surv...",
+          "featureCount": 1286
+        },
+        {
+          "id": "layer-343",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/FloodPro/FloodPro/MapServer/7",
+          "context": "Model Footprint\nModel footprints that depict both the hydraulic and hydrologic models that are available for the selected watershed.",
+          "featureCount": 1110
+        },
+        {
+          "id": "layer-333",
+          "url": "https://maps.austintexas.gov/image/rest/services/MapTiled/AerialImagery/MapServer/6",
+          "context": "Footprint",
+          "featureCount": 1011
+        },
+        {
+          "id": "layer-335",
+          "url": "https://maps.austintexas.gov/image/rest/services/MapTiled/AerialImagery_WebMercator/MapServer/6",
+          "context": "Footprint",
+          "featureCount": 961
+        },
+        {
+          "id": "layer-334",
+          "url": "https://maps.austintexas.gov/image/rest/services/MapTiled/AerialImagery/MapServer/2",
+          "context": "Footprint",
+          "featureCount": 843
+        },
+        {
+          "id": "layer-340",
+          "url": "https://maps.austintexas.gov/image/rest/services/MapTiled/AerialImagery_WebMercator/MapServer/2",
+          "context": "Footprint",
+          "featureCount": 843
+        },
+        {
+          "id": "layer-445",
+          "url": "https://harcags.harcresearch.org/arcgisserver/rest/services/Energy/Texas_EnergyStar_Buildings/MapServer/0",
+          "context": "Texas_EnergyStar_Buildings\nENERGY STAR Labeled Facilities in Texas. Disclaimer: This product is for informational purposes only and may not be suitable for legal, engineering, or surveying purposes. It does not represent an off...",
+          "featureCount": 364
+        },
+        {
+          "id": "layer-468",
+          "url": "https://egimpgis.tylertech.com/server/rest/services/HUD/HUD/MapServer/0",
+          "context": "PHBuildings",
+          "featureCount": 292
+        },
+        {
+          "id": "layer-414",
+          "url": "https://egis.hud.gov/arcgis/rest/services/gotit/PublicHousing/MapServer/1",
+          "context": "Public Housing Buildings\nPublic Housing was established to provide decent and safe rental housing for eligible low-income families, the elderly, and persons with disabilities. Public housing comes in all sizes and types, from...",
+          "featureCount": 196
+        },
+        {
+          "id": "layer-365",
+          "url": "https://txgeo.usgs.gov/arcgis/rest/services/FDST/FDST/MapServer/3",
+          "context": "Footprint",
+          "featureCount": 119
+        },
+        {
+          "id": "layer-338",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/PropertyProfile/Inspector_Territories/MapServer/0",
+          "context": "Building Inspector Territories\nThis layer depicts the boundaries for the building inspectors.",
+          "featureCount": 93
+        },
+        {
+          "id": "layer-348",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/AmandaGIS/InspectorAreas/MapServer/0",
+          "context": "Building Inspector Areas\nThis layer depicts the boundaries for the building inspectors.",
+          "featureCount": 93
+        },
+        {
+          "id": "layer-373",
+          "url": "https://maps.nccs.nasa.gov/mapping/rest/services/hifld_open/government/MapServer/5",
+          "context": "major_state_government_buildings\nState Government Buildings in the United States This dataset is comprised of buildings or properties that are owned or leased by state level governments. It includes buildings occupied by the headquar...",
+          "featureCount": 44
+        },
+        {
+          "id": "layer-400",
+          "url": "https://maps.nccs.nasa.gov/mapping/rest/services/hifld_open/government/MapServer/3",
+          "context": "gsa_iolp_buildings\nThe Inventory of Owned and Leased Properties (IOLP) allows users to search properties owned and leased by the General Services Administration (GSA) across the United States, Puerto Rico, Guam and Amer...",
+          "featureCount": 35
+        },
+        {
+          "id": "layer-458",
+          "url": "https://server6.tplgis.org/arcgis6/rest/services/National_UHI_Severity2023/MapServer/2",
+          "context": "Footprint",
+          "featureCount": 33
+        },
+        {
+          "id": "layer-380",
+          "url": "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/4",
+          "context": "City/Town Halls\nA building that contains the offices of the public officials of a city, town, or community.",
+          "featureCount": 20
+        },
+        {
+          "id": "layer-413",
+          "url": "https://nces.ed.gov/arcgis/rest/services/storymaps/TRIO_22_23/MapServer/1",
+          "context": "TRIO Footprint 2022-23",
+          "featureCount": 8
+        },
+        {
+          "id": "layer-461",
+          "url": "https://nimbus.cr.usgs.gov/arcgis/rest/services/Outlines/USGS_EDC_Ortho_NAIP_Outlines/MapServer/0",
+          "context": "Footprint_Dissolve",
+          "featureCount": 1
+        }
+      ],
+      "totalFeatureCount": 1480559,
+      "layerCount": 32,
+      "geometryType": "Polygon",
+      "style": {
+        "type": "fill",
+        "paint": {
+          "fill-color": "#808080",
+          "fill-opacity": 0.5,
+          "fill-outline-color": "#6c6c6c"
+        }
+      }
+    },
+    {
+      "id": "building_heights",
+      "name": "Building Heights",
+      "category": "Buildings",
+      "description": "Building height data",
+      "primaryLayer": {
+        "id": "layer-399",
+        "url": "https://maps.nccs.nasa.gov/mapping/rest/services/hifld_open/communications/MapServer/1",
+        "context": "antenna_structure_registrate\nThis file is an extract of the Antenna Structure Registrate (ASR). The ASR consists of antenna structures that are more than 60.96 meters (200 feet) in height or located near an airport.",
+        "featureCount": 319
+      },
+      "alternativeLayers": [],
+      "totalFeatureCount": 319,
+      "layerCount": 1,
+      "geometryType": "Polygon",
+      "style": {
+        "type": "fill",
+        "paint": {
+          "fill-color": "#808080",
+          "fill-opacity": 0.5,
+          "fill-outline-color": "#6c6c6c"
+        }
+      }
+    },
+    {
+      "id": "building_permits",
+      "name": "Building Permits",
+      "category": "Buildings",
+      "description": "Building permit data",
+      "primaryLayer": {
+        "id": "layer-355",
+        "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Permits/MapServer/0",
+        "context": "Building Permits\nThis point shapefile contains data regarding building permits issued by the Development Services Department in the City of Austin jurisdiction from 2006 onwards. This information is updated quarterly....",
+        "featureCount": 278274
+      },
+      "alternativeLayers": [],
+      "totalFeatureCount": 278274,
+      "layerCount": 1,
+      "geometryType": "Point",
+      "style": {
+        "type": "circle",
+        "paint": {
+          "circle-radius": 6,
+          "circle-color": "#808080",
+          "circle-stroke-width": 1,
+          "circle-stroke-color": "#ffffff"
+        }
+      }
+    },
+    {
+      "id": "building_other",
+      "name": "Other Building Data",
+      "category": "Buildings",
+      "description": "Additional building-related layers",
+      "primaryLayer": {
+        "id": "layer-485",
+        "url": "https://hydro.nationalmap.gov/arcgis/rest/services/NHDPlus_HR/MapServer/5",
+        "context": "FlowDirection",
+        "featureCount": 8093
+      },
+      "alternativeLayers": [
+        {
+          "id": "layer-377",
+          "url": "https://gisdev.sanacloud.com/arcgis/rest/services/EDGE_Structures/EDGE_Structures/MapServer/2",
+          "context": "MatchedStructures_appendedEducation",
+          "featureCount": 3468
+        },
+        {
+          "id": "layer-403",
+          "url": "https://sanagisdev.sanacloud.com/arcgis/rest/services/EDGE_Structures/EDGE_Structures/MapServer/2",
+          "context": "MatchedStructures_appendedEducation",
+          "featureCount": 3468
+        },
+        {
+          "id": "layer-376",
+          "url": "https://gisdev.sanacloud.com/arcgis/rest/services/EDGE_Structures/EDGE_Structures/MapServer/3",
+          "context": "Education_Structures",
+          "featureCount": 3151
+        },
+        {
+          "id": "layer-401",
+          "url": "https://sanagisdev.sanacloud.com/arcgis/rest/services/EDGE_Structures/EDGE_Structures/MapServer/3",
+          "context": "Education_Structures",
+          "featureCount": 3151
+        },
+        {
+          "id": "layer-486",
+          "url": "https://websrv31.clallamcountywa.gov/server/rest/services/Cell_tower_data_comparison/MapServer/1",
+          "context": "FCC_ASR_Dec_2016 (from TowerMaps.com)",
+          "featureCount": 900
+        },
+        {
+          "id": "layer-442",
+          "url": "https://carto-wfs.nationalmap.gov/arcgis/rest/services/structures/MapServer/0",
+          "context": "USGS TNM Structures",
+          "featureCount": 666
+        },
+        {
+          "id": "layer-454",
+          "url": "https://cartowfs.nationalmap.gov/arcgis/rest/services/structures/MapServer/0",
+          "context": "USGS TNM Structures",
+          "featureCount": 666
+        },
+        {
+          "id": "layer-337",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/AmandaGIS/InfrastructureOther/MapServer/0",
+          "context": "Cell Towers\nThis feature class represents cell tower locations in the City of Austin and surrounding counties.",
+          "featureCount": 531
+        },
+        {
+          "id": "layer-412",
+          "url": "https://onemap.cdc.gov/OneMapServices/rest/services/EJI/EBM_TransportationInfrastructure_2024/MapServer/0",
+          "context": "EBM: Transportation Infrastructure\n<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN>The </SPAN><SPAN STYLE=\"font-weight:bold;\">Environmental Justice Index (EJI)</SPAN><SPAN> is the first national, place-based tool designed to measure t...",
+          "featureCount": 355
+        },
+        {
+          "id": "layer-431",
+          "url": "https://onemap.cdc.gov/OneMapServices/rest/services/EJI/EBM_TransportationInfrastructure_Railways_2024/MapServer/0",
+          "context": "Transportation Infrastructure: Railways\n<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN>The </SPAN><SPAN STYLE=\"font-weight:bold;\">Environmental Justice Index (EJI)</SPAN><SPAN> is the first national, place-based tool designed to measure t...",
+          "featureCount": 355
+        },
+        {
+          "id": "layer-450",
+          "url": "https://onemap.cdc.gov/OneMapServices/rest/services/EJI/EBM_TransportationInfrastructure_Airports_2024/MapServer/0",
+          "context": "Transportation Infrastructure: Airports\n<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN>The </SPAN><SPAN STYLE=\"font-weight:bold;\">Environmental Justice Index (EJI)</SPAN><SPAN> is the first national, place-based tool designed to measure t...",
+          "featureCount": 355
+        },
+        {
+          "id": "layer-462",
+          "url": "https://onemap.cdc.gov/OneMapServices/rest/services/EJI/EBM_TransportationInfrastructure_HighVolumeRoads_2024/MapServer/0",
+          "context": "Transportation Infrastructure: High-Volume Roads\n<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN>The </SPAN><SPAN STYLE=\"font-weight:bold;\">Environmental Justice Index (EJI)</SPAN><SPAN> is the first national, place-based tool designed to measure t...",
+          "featureCount": 355
+        },
+        {
+          "id": "layer-370",
+          "url": "https://pcrdgis.agriculture.purdue.edu/arcgis/rest/services/DDI/Digital_Divide_Index_TRACT_2020/MapServer/11",
+          "context": "Infrastructure Score",
+          "featureCount": 350
+        },
+        {
+          "id": "layer-459",
+          "url": "https://gistest1.odot.state.or.us/arcgis1006/rest/services/basemaps/Basemap_Streets_WM/MapServer/135",
+          "context": "ESRI Large Area Landmarks",
+          "featureCount": 309
+        },
+        {
+          "id": "layer-336",
+          "url": "https://maps-stg.hdrgateway.com/arcgis/rest/services/Texas/ATP_ROW_MapService_All/MapServer/3",
+          "context": "Proposed Track Alignment",
+          "featureCount": 233
+        },
+        {
+          "id": "layer-408",
+          "url": "https://onemap.cdc.gov/OneMapServices/rest/services/SVI/SVI2000_National_GDB_Household/MapServer/1",
+          "context": "Household Structure/Disability",
+          "featureCount": 210
+        },
+        {
+          "id": "layer-427",
+          "url": "https://onemap.cdc.gov/OneMapServices/rest/services/SVI/SVI2000_States_GDB/MapServer/5",
+          "context": "Household Structure/Disability",
+          "featureCount": 210
+        },
+        {
+          "id": "layer-344",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/ImmpactActivities/MapServer/2",
+          "context": "Mobility Infrastructure",
+          "featureCount": 195
+        },
+        {
+          "id": "layer-480",
+          "url": "https://carto.nationalmap.gov/arcgis/rest/services/geonames/MapServer/6",
+          "context": "Streams (Mouth)",
+          "featureCount": 150
+        },
+        {
+          "id": "layer-358",
+          "url": "https://services.twdb.texas.gov/arcgis/rest/services/Base/BaseLayerQueryService/MapServer/13",
+          "context": "Structure",
+          "featureCount": 146
+        },
+        {
+          "id": "layer-437",
+          "url": "https://hydro.nationalmap.gov/arcgis/rest/services/NHDPlus_HR/MapServer/6",
+          "context": "NHDPlusWall",
+          "featureCount": 112
+        },
+        {
+          "id": "layer-474",
+          "url": "https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer/60",
+          "context": "Predicted_surface_basement_crosscutting_SFD_score_GC_Basin",
+          "featureCount": 101
+        },
+        {
+          "id": "layer-422",
+          "url": "https://oasisprod.houstonairportsystem.net/arcgis/rest/services/IAH/IAH_Buildings_and_Properties/MapServer/17",
+          "context": "Texas Zip Codes",
+          "featureCount": 70
+        },
+        {
+          "id": "layer-481",
+          "url": "https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer/52",
+          "context": "Predicted_basement_SFD_score_GC_Basin",
+          "featureCount": 66
+        },
+        {
+          "id": "layer-374",
+          "url": "http://minemaps.pasda.psu.edu/server/rest/services/pasda/HIFLD_FEMA/MapServer/12",
+          "context": "Antenna_Structure_Registration_ASR_HIFLD\nThe FCC Rules define the term \"antenna structure\" to include \"[T]he radiating and/or receive system, its supporting structures and any appurtenances mounted thereon.\" In practical terms, an antenna st...",
+          "featureCount": 41
+        },
+        {
+          "id": "layer-402",
+          "url": "https://maps.nccs.nasa.gov/mapping/rest/services/hifld_open/communications/MapServer/5",
+          "context": "land_mobile_broadcast_towers\nThis dataset represents the Land Mobile Broadcast tower locations as recorded by the Federal Communications Commission. Serve as base information for use in GIS systems for general planning, analytica...",
+          "featureCount": 35
+        },
+        {
+          "id": "layer-368",
+          "url": "http://minemaps.pasda.psu.edu/server/rest/services/pasda/HIFLD_FEMA/MapServer/62",
+          "context": "Land_Mobile_Broadcast_Towers_HIFLD\nThis dataset represents the Land Mobile Broadcast tower locations as recorded by the Federal Communications Commission. Serve as base information for use in GIS systems for general planning, analytica...",
+          "featureCount": 31
+        },
+        {
+          "id": "layer-429",
+          "url": "https://mapservices.pasda.psu.edu/server/rest/services/pasda/HIFLD_FEMA/MapServer/62",
+          "context": "Land_Mobile_Broadcast_Towers_HIFLD\nThis dataset represents the Land Mobile Broadcast tower locations as recorded by the Federal Communications Commission. Serve as base information for use in GIS systems for general planning, analytica...",
+          "featureCount": 31
+        },
+        {
+          "id": "layer-385",
+          "url": "https://mapservices.sbasite.com/arcgis/rest/services/SiteLocator/Internal4/MapServer/7",
+          "context": "Wayside Structures",
+          "featureCount": 14
+        },
+        {
+          "id": "layer-410",
+          "url": "https://mapservices.sbasite.com/public/rest/services/SiteLocator/External5/MapServer/5",
+          "context": "Wayside Structures",
+          "featureCount": 14
+        },
+        {
+          "id": "layer-435",
+          "url": "https://mapservices.sbasite.com/public/rest/services/SiteLocator/Internal4/MapServer/7",
+          "context": "Wayside Structures",
+          "featureCount": 14
+        },
+        {
+          "id": "layer-451",
+          "url": "https://mapservices.sbasite.com/arcgis/rest/services/SiteLocator/External5/MapServer/5",
+          "context": "Wayside Structures",
+          "featureCount": 14
+        },
+        {
+          "id": "layer-487",
+          "url": "https://arcgis.netl.doe.gov/server/rest/services/New_updated_category_3_DA_results/MapServer/8",
+          "context": "Infrastructure Hazards",
+          "featureCount": 12
+        },
+        {
+          "id": "layer-407",
+          "url": "https://pcrdgis.agriculture.purdue.edu/arcgis/rest/services/DDI/Digital_Divide_Index_CongressionalDistricts/MapServer/11",
+          "context": "Infrastructure Score",
+          "featureCount": 7
+        }
+      ],
+      "totalFeatureCount": 27879,
+      "layerCount": 35,
+      "geometryType": "Polygon",
+      "style": {
+        "type": "fill",
+        "paint": {
+          "fill-color": "#808080",
+          "fill-opacity": 0.5,
+          "fill-outline-color": "#6c6c6c"
+        }
+      }
+    },
+    {
+      "id": "gas_mains",
+      "name": "Gas Mains",
+      "category": "Gas Utilities",
+      "description": "Gas main distribution lines",
+      "primaryLayer": {
+        "id": "layer-602",
+        "url": "https://tagis.dep.wv.gov/arcgis/rest/services/Hosted/amdmap2/MapServer/5",
+        "context": "Natural Gas Pipelines\n<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN>This is a polyline dataset representing the major natural gas transmission pipelines in the U.S. including interstate, intrastate, and gathering pipeli...",
+        "featureCount": 40
+      },
+      "alternativeLayers": [
+        {
+          "id": "layer-548",
+          "url": "https://tagis.dep.wv.gov/arcgis/rest/services/Hosted/Apples_and_Solar_MIL1/MapServer/12",
+          "context": "Natural Gas Pipelines\n<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN>This is a polyline dataset representing the major natural gas transmission pipelines in the U.S. including interstate, intrastate, and gathering pipeli...",
+          "featureCount": 38
+        },
+        {
+          "id": "layer-561",
+          "url": "https://gis.elpasotexas.gov/dev/rest/services/source_HIFLD_Open/MapServer/6",
+          "context": "natural_gas_pipelines",
+          "featureCount": 38
+        },
+        {
+          "id": "layer-564",
+          "url": "https://maps.nccs.nasa.gov/mapping/rest/services/hifld_open/energy/MapServer/22",
+          "context": "natural_gas_liquid_pipelines\nNatural gas interstate and intrastate pipelines in the United States. Based on a variety of sources with varying scales and levels of accuracy and therefore accuracy is directly affected.",
+          "featureCount": 38
+        },
+        {
+          "id": "layer-578",
+          "url": "https://gisccapps.charlestoncounty.org/arcgis/rest/services/EMD/Natural_Gas_Pipelines/MapServer/0",
+          "context": "Natural Gas Pipelines\n<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P STYLE=\"margin:0 0 11 0;\"><SPAN><SPAN>The U.S. natural gas pipeline network is a highly integrated network that moves natural gas throughout the continental U...",
+          "featureCount": 38
+        },
+        {
+          "id": "layer-592",
+          "url": "https://tagis.dep.wv.gov/arcgis/rest/services/Hosted/Map_MIL1/MapServer/56",
+          "context": "Natural Gas Pipelines\n<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN>This is a polyline dataset representing the major natural gas transmission pipelines in the U.S. including interstate, intrastate, and gathering pipeli...",
+          "featureCount": 38
+        },
+        {
+          "id": "layer-596",
+          "url": "https://tagis.dep.wv.gov/arcgis/rest/services/Hosted/Apples_and_Solar/MapServer/4",
+          "context": "Natural Gas Pipelines\n<DIV STYLE=\"text-align:Left;\"><DIV><DIV><P><SPAN>This is a polyline dataset representing the major natural gas transmission pipelines in the U.S. including interstate, intrastate, and gathering pipeli...",
+          "featureCount": 38
+        },
+        {
+          "id": "layer-600",
+          "url": "https://geo.dot.gov/server/rest/services/BTS/NaturalGas_Pipelines_US_202001/MapServer/0",
+          "context": "NaturalGas_Pipelines_US_202001\nNaturalGas_Pipelines_US_202001",
+          "featureCount": 38
+        },
+        {
+          "id": "layer-577",
+          "url": "https://gulfpub-gisstg.esriemcs.com/server/rest/services/Customer_Data/EWA_Global_Assets_NATO/MapServer/18",
+          "context": "Natural Gas Pipelines - US",
+          "featureCount": 5
+        },
+        {
+          "id": "layer-607",
+          "url": "https://gulfpub-gisstg.esriemcs.com/server/rest/services/Open_Data/EWA_Dashboards/MapServer/9",
+          "context": "Natural Gas Pipelines - US",
+          "featureCount": 5
+        },
+        {
+          "id": "layer-624",
+          "url": "https://gulfpub-gisstg.esriemcs.com/server/rest/services/Open_Data/World_Gas_Map_PE/MapServer/6",
+          "context": "Existing Gas Pipelines - US",
+          "featureCount": 5
+        }
+      ],
+      "totalFeatureCount": 321,
+      "layerCount": 11,
+      "geometryType": "LineString",
+      "style": {
+        "type": "line",
+        "paint": {
+          "line-color": "#FFD700",
+          "line-width": 2,
+          "line-opacity": 0.8
+        }
+      }
+    },
+    {
+      "id": "gas_facilities",
+      "name": "Gas Facilities",
+      "category": "Gas Utilities",
+      "description": "Gas facilities and stations",
+      "primaryLayer": {
+        "id": "layer-559",
+        "url": "https://maps.nccs.nasa.gov/mapping/rest/services/hifld_open/energy/MapServer/11",
+        "context": "gasoline_alternative_fueling_stations\nTo download the data, go to: https://afdc.energy.gov/data_downloadThrough a nationwide network of local coalitions, Clean Cities provides project assistance to help stakeholders in the public and priv...",
+        "featureCount": 290
+      },
+      "alternativeLayers": [
+        {
+          "id": "layer-554",
+          "url": "https://geoappext.nrcan.gc.ca/arcgis/rest/services/NACEI/energy_infrastructure_of_north_america_en/MapServer/21",
+          "context": "Natural Gas\nStations containing prime movers, electric generators, and auxiliary equipment for converting mechanical, chemical, and/or fission energy into electric energy with an installed capacity of 100 megawat...",
+          "featureCount": 4
+        }
+      ],
+      "totalFeatureCount": 294,
+      "layerCount": 2,
+      "geometryType": "Point",
+      "style": {
+        "type": "circle",
+        "paint": {
+          "circle-radius": 6,
+          "circle-color": "#FFD700",
+          "circle-stroke-width": 1,
+          "circle-stroke-color": "#ffffff"
+        }
+      }
+    },
+    {
+      "id": "wetlands_boundaries",
+      "name": "Wetland Boundaries",
+      "category": "Wetlands",
+      "description": "Wetland boundary polygons",
+      "primaryLayer": {
+        "id": "layer-230",
+        "url": "https://fwsprimary.wim.usgs.gov/server/rest/services/Test/Wetlands_gdb_split/MapServer/2",
+        "context": "Wetlands_CONUS_West",
+        "featureCount": 10474
+      },
+      "alternativeLayers": [
+        {
+          "id": "layer-268",
+          "url": "https://fwspublicservices.wim.usgs.gov/wetlandsmapservice/rest/services/Wetlands/MapServer/0",
+          "context": "Wetlands",
+          "featureCount": 10474
+        },
+        {
+          "id": "layer-271",
+          "url": "https://www.fws.gov/wetlandsmapservice/rest/services/Wetlands/MapServer/0",
+          "context": "Wetlands",
+          "featureCount": 10474
+        },
+        {
+          "id": "layer-251",
+          "url": "https://gis.lja.com/arcgis/rest/services/twinwood2/twinwood2/MapServer/7",
+          "context": "Potential Wetland Area",
+          "featureCount": 10472
+        },
+        {
+          "id": "layer-254",
+          "url": "https://gis.lja.com/arcgis/rest/services/lja/gismap/MapServer/35",
+          "context": "Potential Wetlands",
+          "featureCount": 10472
+        },
+        {
+          "id": "layer-269",
+          "url": "https://gis.lja.com/arcgis/rest/services/Jasper/CityOfJasper/MapServer/3",
+          "context": "Potential Wetlands",
+          "featureCount": 10472
+        },
+        {
+          "id": "layer-228",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Environmental_1/MapServer/2",
+          "context": "Wetland\nThis dataset represents wetland CEFs identified during the development review process since 1995. Prior to 1995, data is either unavailable or lost.Wetland CEFs were digitized from construction plans,...",
+          "featureCount": 2325
+        },
+        {
+          "id": "layer-242",
+          "url": "https://enviroatlas.epa.gov/arcgis/rest/services/Communities/Community_BGmetrics/MapServer/46",
+          "context": "Percent wetlands\n<DIV STYLE=\"text-align:Left;font-size:12pt\"><DIV><P><SPAN>This map illustrates the percent of total land within each census block group that is covered by wetlands. For specific information about each...",
+          "featureCount": 625
+        },
+        {
+          "id": "layer-239",
+          "url": "https://fwspublicservices.wim.usgs.gov/wetlandsmapservice/rest/services/WetlandsTopo/WetlandsTopoService/MapServer/4",
+          "context": "Wetlands Symbol Service\nThis service cartographically renders vegetated wetlands with blue wetland map symbology with no polygon fill or outline.  This service was developed to provide base map wetland information as an over...",
+          "featureCount": 384
+        },
+        {
+          "id": "layer-270",
+          "url": "https://www.fws.gov/wetlandsmapservice/rest/services/WetlandsTopo/WetlandsTopoService/MapServer/4",
+          "context": "Wetlands Symbol Service\nThis service cartographically renders vegetated wetlands with blue wetland map symbology with no polygon fill or outline.  This service was developed to provide base map wetland information as an over...",
+          "featureCount": 384
+        },
+        {
+          "id": "layer-241",
+          "url": "https://fwspublicservices.wim.usgs.gov/wetlandsmapservice/rest/services/WetlandsTopo/WetlandsTopoService/MapServer/2",
+          "context": "Emergent Wetlands Topo Service\nThis service cartographically renders emergent wetlands with blue wetland map symbology and white polygon fill, without a polygon outline at greater or equal to 1:100,000 scale.  The wetlands depicted...",
+          "featureCount": 378
+        },
+        {
+          "id": "layer-267",
+          "url": "https://www.fws.gov/wetlandsmapservice/rest/services/WetlandsTopo/WetlandsTopoService/MapServer/2",
+          "context": "Emergent Wetlands Topo Service\nThis service cartographically renders emergent wetlands with blue wetland map symbology and white polygon fill, without a polygon outline at greater or equal to 1:100,000 scale.  The wetlands depicted...",
+          "featureCount": 378
+        },
+        {
+          "id": "layer-229",
+          "url": "https://fwsprimary.wim.usgs.gov/server/rest/services/Test/Wetlands_gdb_split/MapServer/6",
+          "context": "Wetlands_Project_Metadata",
+          "featureCount": 21
+        },
+        {
+          "id": "layer-231",
+          "url": "https://fwspublicservices.wim.usgs.gov/wetlandsmapservice/rest/services/Wetlands/MapServer/1",
+          "context": "Wetlands_Project_Metadata",
+          "featureCount": 21
+        },
+        {
+          "id": "layer-240",
+          "url": "https://www.fws.gov/wetlandsmapservice/rest/services/Wetlands/MapServer/1",
+          "context": "Wetlands_Project_Metadata",
+          "featureCount": 21
+        }
+      ],
+      "totalFeatureCount": 67375,
+      "layerCount": 15,
+      "geometryType": "Polygon",
+      "style": {
+        "type": "fill",
+        "paint": {
+          "fill-color": "#228B22",
+          "fill-opacity": 0.5,
+          "fill-outline-color": "#0e770e"
+        }
+      }
+    },
+    {
+      "id": "wetlands_types",
+      "name": "Wetland Types",
+      "category": "Wetlands",
+      "description": "Wetland classification and types",
+      "primaryLayer": {
+        "id": "layer-234",
+        "url": "https://maps.pape-dawson.com/server1/rest/services/LandDevelopment/LANDDEVELOPMENT__StevensRanch/MapServer/43",
+        "context": "NWI Wetlands\nThis data set represents the extent, approximate location and type of wetlands and deepwater habitats in the conterminous United States. These data delineate the areal extent of wetlands and surface w...",
+        "featureCount": 10472
+      },
+      "alternativeLayers": [
+        {
+          "id": "layer-237",
+          "url": "https://maps.pape-dawson.com/server1/rest/services/LandDevelopment/LANDDEVELOPMENT__WestpointeEast/MapServer/263",
+          "context": "NWI Wetlands\nThis data set represents the extent, approximate location and type of wetlands and deepwater habitats in the conterminous United States. These data delineate the areal extent of wetlands and surface w...",
+          "featureCount": 10472
+        },
+        {
+          "id": "layer-245",
+          "url": "https://maps.pape-dawson.com/server2/rest/services/PD_GIS_Webmap/PD_GIS_Webmap__Austin_External/MapServer/351",
+          "context": "NWI Wetlands\nThis data set represents the extent, approximate location and type of wetlands and deepwater habitats in the conterminous United States. These data delineate the areal extent of wetlands and surface w...",
+          "featureCount": 10472
+        },
+        {
+          "id": "layer-248",
+          "url": "https://maps.pape-dawson.com/server2/rest/services/PD_GIS_Webmap/PD_GIS_WebMap__DFW_External/MapServer/263",
+          "context": "NWI Wetlands\nThis data set represents the extent, approximate location and type of wetlands and deepwater habitats in the conterminous United States. These data delineate the areal extent of wetlands and surface w...",
+          "featureCount": 10472
+        },
+        {
+          "id": "layer-250",
+          "url": "https://maps.pape-dawson.com/server2/rest/services/PD_GIS_Webmap/PD_GIS_WebMap__SanAntonio_External/MapServer/263",
+          "context": "NWI Wetlands\nThis data set represents the extent, approximate location and type of wetlands and deepwater habitats in the conterminous United States. These data delineate the areal extent of wetlands and surface w...",
+          "featureCount": 10472
+        },
+        {
+          "id": "layer-253",
+          "url": "https://maps.pape-dawson.com/server2/rest/services/PD_GIS_Webmap/PD_GIS_WebMap__CorpusChristi_External/MapServer/1660",
+          "context": "NWI Wetlands\nThis data set represents the extent, approximate location and type of wetlands and deepwater habitats in the conterminous United States. These data delineate the areal extent of wetlands and surface w...",
+          "featureCount": 10472
+        },
+        {
+          "id": "layer-255",
+          "url": "https://maps.pape-dawson.com/server1/rest/services/LandDevelopment/LANDDEVELOPMENT__Hines_Kendall_SiteSelection/MapServer/263",
+          "context": "NWI Wetlands\nThis data set represents the extent, approximate location and type of wetlands and deepwater habitats in the conterminous United States. These data delineate the areal extent of wetlands and surface w...",
+          "featureCount": 10472
+        },
+        {
+          "id": "layer-258",
+          "url": "https://maps.pape-dawson.com/server1/rest/services/LandDevelopment/LANDDEVELOPMENT__Hines_SiteSelection/MapServer/263",
+          "context": "NWI Wetlands (USFWS)\nThis data set represents the extent, approximate location and type of wetlands and deepwater habitats in the conterminous United States. These data delineate the areal extent of wetlands and surface w...",
+          "featureCount": 10472
+        },
+        {
+          "id": "layer-259",
+          "url": "https://maps.pape-dawson.com/server2/rest/services/PD_GIS_Webmap/PD_GIS_WebMap__Houston_External/MapServer/400",
+          "context": "NWI Wetlands\nThis data set represents the extent, approximate location and type of wetlands and deepwater habitats in the conterminous United States. These data delineate the areal extent of wetlands and surface w...",
+          "featureCount": 10472
+        },
+        {
+          "id": "layer-260",
+          "url": "https://maps.pape-dawson.com/server1/rest/services/LandDevelopment/LANDDEVELOPMENT__BriggsRanchEast/MapServer/43",
+          "context": "NWI Wetlands\nThis data set represents the extent, approximate location and type of wetlands and deepwater habitats in the conterminous United States. These data delineate the areal extent of wetlands and surface w...",
+          "featureCount": 10472
+        },
+        {
+          "id": "layer-236",
+          "url": "https://maps.pape-dawson.com/server1/rest/services/LandDevelopment/LANDDEVELOPMENT__LaredoEDC_SiteSelection/MapServer/263",
+          "context": "NWI Wetlands\nThis data set represents the extent, approximate location and type of wetlands and deepwater habitats in the conterminous United States. These data delineate the areal extent of wetlands and surface w...",
+          "featureCount": 10471
+        }
+      ],
+      "totalFeatureCount": 115191,
+      "layerCount": 11,
+      "geometryType": "Polygon",
+      "style": {
+        "type": "fill",
+        "paint": {
+          "fill-color": "#228B22",
+          "fill-opacity": 0.5,
+          "fill-outline-color": "#0e770e"
+        }
+      }
+    },
+    {
+      "id": "wetlands_other",
+      "name": "Other Wetland Data",
+      "category": "Wetlands",
+      "description": "Additional wetland-related layers",
+      "primaryLayer": {
+        "id": "layer-235",
+        "url": "https://fwspublicservices.wim.usgs.gov/wetlandsmapservice/rest/services/WetlandsTopo/WetlandsTopoService/MapServer/1",
+        "context": "Inland Water Topo Service\nThis service cartographically renders lakes, rivers, open water ponds, open water estuarine features with a light blue polygon fill, without a polygon outline at greater or equal to 1:100,000 scale. T...",
+        "featureCount": 9474
+      },
+      "alternativeLayers": [
+        {
+          "id": "layer-265",
+          "url": "https://www.fws.gov/wetlandsmapservice/rest/services/WetlandsTopo/WetlandsTopoService/MapServer/1",
+          "context": "Inland Water Topo Service\nThis service cartographically renders lakes, rivers, open water ponds, open water estuarine features with a light blue polygon fill, without a polygon outline at greater or equal to 1:100,000 scale. T...",
+          "featureCount": 9474
+        }
+      ],
+      "totalFeatureCount": 18948,
+      "layerCount": 2,
+      "geometryType": "Polygon",
+      "style": {
+        "type": "fill",
+        "paint": {
+          "fill-color": "#228B22",
+          "fill-opacity": 0.5,
+          "fill-outline-color": "#0e770e"
+        }
+      }
+    },
+    {
+      "id": "parcels_boundaries",
+      "name": "Parcel Boundaries",
+      "category": "Parcels",
+      "description": "Parcel boundary polygons",
+      "primaryLayer": {
+        "id": "layer-704",
+        "url": "https://feature.tnris.org/arcgis/rest/services/Parcels/stratmap25_land_parcels_48/MapServer/0",
+        "context": "StratMap 2025 Land Parcels 48",
+        "featureCount": 748306
+      },
+      "alternativeLayers": [
+        {
+          "id": "layer-675",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/AppraisalDistricts/MapServer/0",
+          "context": "TCAD Parcels",
+          "featureCount": 349213
+        },
+        {
+          "id": "layer-691",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/ContactCouncilMember/contactcouncilmember_parcels/MapServer/0",
+          "context": "TCAD Parcels",
+          "featureCount": 348828
+        },
+        {
+          "id": "layer-686",
+          "url": "https://maps.pape-dawson.com/server2/rest/services/Transportation/TRANSPORTATION__Burnet_Corridor/MapServer/5",
+          "context": "TCAD Parcels (All)",
+          "featureCount": 343413
+        },
+        {
+          "id": "layer-684",
+          "url": "https://gis.traviscountytx.gov/server1/rest/services/Boundaries_and_Jurisdictions/TCAD_public/MapServer/0",
+          "context": "TCAD Parcels\nObtained from Travis Central Appraisal District (TCAD) and assembled and updated monthly by Travis County Transportation &amp; Natural Resources Department (TNR).",
+          "featureCount": 343335
+        },
+        {
+          "id": "layer-685",
+          "url": "https://taxmaps.traviscountytx.gov/arcgis/rest/services/Parcels/MapServer/0",
+          "context": "DBO.Parcels",
+          "featureCount": 341371
+        },
+        {
+          "id": "layer-678",
+          "url": "https://services.evari.io/evari/rest/services/ClantonAustinTX/Lighting_Levels/MapServer/1",
+          "context": "Light Trespass on Parcels",
+          "featureCount": 286125
+        },
+        {
+          "id": "layer-673",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/ROWPACT/CoordinatePermitParcels/MapServer/19",
+          "context": "ROW Permit Parcels",
+          "featureCount": 107197
+        },
+        {
+          "id": "layer-679",
+          "url": "https://maps.pape-dawson.com/server1/rest/services/LandDevelopment/LANDDEVELOPMENT__Chesmar_SiteSelection/MapServer/13",
+          "context": "Travis Parcels",
+          "featureCount": 6110
+        },
+        {
+          "id": "layer-676",
+          "url": "https://maps-stg.hdrgateway.com/arcgis/rest/services/Texas/ATP_ROW_MapService_Recommended/MapServer/71",
+          "context": "Parcel ROE Status",
+          "featureCount": 5895
+        },
+        {
+          "id": "layer-670",
+          "url": "https://maps2.hdrgateway.com/arcgis/rest/services/California/ROWM_ROW_MapService_All/MapServer/4",
+          "context": "Parcel",
+          "featureCount": 796
+        },
+        {
+          "id": "layer-671",
+          "url": "https://maps2.hdrgateway.com/arcgis/rest/services/California/ROWM_ROW_MapService_All/MapServer/2",
+          "context": "Parcel Acquisition Status",
+          "featureCount": 796
+        },
+        {
+          "id": "layer-674",
+          "url": "https://maps-stg.hdrgateway.com/arcgis/rest/services/Texas/ATP_ROW_MapService_All/MapServer/69",
+          "context": "Parcel by Risk Level",
+          "featureCount": 454
+        },
+        {
+          "id": "layer-682",
+          "url": "https://maps.hdrgateway.com/arcgis/rest/services/Texas/ATP_ROW_MapService_Recommended/MapServer/17",
+          "context": "Parcel Boundary",
+          "featureCount": 439
+        },
+        {
+          "id": "layer-697",
+          "url": "https://maps.dot.state.tx.us/arcgis/rest/services/ROW/RPAM_TxDOTCONNECT/MapServer/4",
+          "context": "VW_ROW_PROPOSED_PARCELS",
+          "featureCount": 394
+        },
+        {
+          "id": "layer-677",
+          "url": "https://maps2.hdrgateway.com/arcgis/rest/services/California/ROWM_ROW_MapService_OL/MapServer/2",
+          "context": "Parcel Acquisition Status",
+          "featureCount": 382
+        },
+        {
+          "id": "layer-694",
+          "url": "https://coagiswebadaptor.austintexas.gov/awgisago/rest/services/AGO/AustinWaterNetwork/MapServer/5",
+          "context": "Critical TCAD Parcels",
+          "featureCount": 51
+        },
+        {
+          "id": "layer-688",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/LongRangeCIP/CityInitiatives/MapServer/22",
+          "context": "City Owned Parcels\nA Strategic Initiative is a plan or strategy designed to address a specific problem. Initiatives can take many forms, but a common thread is a formal and/or commonly recognized initiation, completion,...",
+          "featureCount": 1
+        }
+      ],
+      "totalFeatureCount": 2883106,
+      "layerCount": 18,
+      "geometryType": "Polygon",
+      "style": {
+        "type": "fill",
+        "paint": {
+          "fill-color": "#FF6347",
+          "fill-opacity": 0.5,
+          "fill-outline-color": "#eb4f33"
+        }
+      }
+    },
+    {
+      "id": "permits_building",
+      "name": "Building Permits",
+      "category": "Permits",
+      "description": "Building permit data",
+      "primaryLayer": {
+        "id": "layer-543",
+        "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Permits/MapServer/6",
+        "context": "Plumbing Permits\nThis point shapefile contains data regarding building permits issued by the Development Services Department in the City of Austin jurisdiction from 2006 onwards. Data in this dataset has been retrieve...",
+        "featureCount": 308106
+      },
+      "alternativeLayers": [
+        {
+          "id": "layer-528",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Permits/MapServer/2",
+          "context": "Demolition Permits\nThis point shapefile contains data regarding building permits issued by the Development Services Department in the City of Austin jurisdiction from 2006 onwards. This information is updated quarterly....",
+          "featureCount": 16121
+        }
+      ],
+      "totalFeatureCount": 324227,
+      "layerCount": 2,
+      "geometryType": "Point",
+      "style": {
+        "type": "circle",
+        "paint": {
+          "circle-radius": 6,
+          "circle-color": "#FF8C00",
+          "circle-stroke-width": 1,
+          "circle-stroke-color": "#ffffff"
+        }
+      }
+    },
+    {
+      "id": "permits_other",
+      "name": "Other Permits",
+      "category": "Permits",
+      "description": "Additional permit types",
+      "primaryLayer": {
+        "id": "layer-529",
+        "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Permits/MapServer/9",
+        "context": "Plan Review Cases\nThis point dataset contains information retrieved from the City's Application MANagement and Data Automation (AMANDA) database and includes information on location, proposed variances, applicants, own...",
+        "featureCount": 138609
+      },
+      "alternativeLayers": [
+        {
+          "id": "layer-520",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/ImmpactActivities/MapServer/12",
+          "context": "Street Excavation Permit",
+          "featureCount": 85551
+        },
+        {
+          "id": "layer-527",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Permits/MapServer/8",
+          "context": "Tree Permits\nThe point dataset contains information regarding active tree permits that were created throughout the City of Austin's review process. Information in this dataset has been retrieved from the City's Ap...",
+          "featureCount": 51155
+        },
+        {
+          "id": "layer-518",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Permits/MapServer/3",
+          "context": "Driveway and Sidewalk Permits\nThis point shapefile contains data regarding driveway/sidewalk permits issued by the Development Services Department in the City of Austin jurisdiction from 2006 onwards. Data in this dataset has been...",
+          "featureCount": 46471
+        },
+        {
+          "id": "layer-519",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/ROWPermits/MapServer/9",
+          "context": "Street Excavation Permit - Expired",
+          "featureCount": 36295
+        },
+        {
+          "id": "layer-510",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Permits/MapServer/1",
+          "context": "Demolition Plan Review Cases (In Review)\nThis point dataset contains information retrieved from the City's Application MANagement and Data Automation (AMANDA) database and includes information on location, proposed variances, applicants, own...",
+          "featureCount": 9915
+        },
+        {
+          "id": "layer-523",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/Permits/MapServer/7",
+          "context": "Sound Ordinance Permits\nThis dataset shows the location of Sound Ordinance Permits in Austin. ",
+          "featureCount": 6770
+        },
+        {
+          "id": "layer-533",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/ROWPermits/MapServer/12",
+          "context": "Temporary Use of Right-of-Way Expired",
+          "featureCount": 5388
+        },
+        {
+          "id": "layer-516",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/ImmpactActivities/MapServer/15",
+          "context": "UCC Permit",
+          "featureCount": 4099
+        },
+        {
+          "id": "layer-531",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/ROWPermits/MapServer/0",
+          "context": "ROW Pending",
+          "featureCount": 3614
+        },
+        {
+          "id": "layer-534",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/ROWPermits/MapServer/13",
+          "context": "UCC Permit",
+          "featureCount": 1934
+        },
+        {
+          "id": "layer-515",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/ROWPermits/MapServer/16",
+          "context": "Transportation Code Violation",
+          "featureCount": 1097
+        },
+        {
+          "id": "layer-525",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/ROWPermits/MapServer/11",
+          "context": "Temporary Use of Right-of-Way",
+          "featureCount": 974
+        },
+        {
+          "id": "layer-524",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/ImmpactActivities/MapServer/16",
+          "context": "Small Cell Permits\nAmanda ROW Permits are polygon features created from Parcel boundaries and/or buffered Street Segment features assigned to Amanda ROW Permits.",
+          "featureCount": 369
+        },
+        {
+          "id": "layer-512",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/LandManagementPermits/MapServer/0",
+          "context": "Land Management Permits in Review\nAmanda ROW Permits are polygon features created from Parcel boundaries and/or buffered Street Segment features assigned to Amanda ROW Permits.",
+          "featureCount": 341
+        },
+        {
+          "id": "layer-517",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/ROWPermits/MapServer/2",
+          "context": "ROW Driveway-Sidewalk Permits",
+          "featureCount": 281
+        },
+        {
+          "id": "layer-536",
+          "url": "https://www.gis.hctx.net/arcgishcpid/rest/services/Environmental/TCEQ_Pollution/MapServer/3",
+          "context": "Permitted Industrial Hazardous Waste\nThis layer contains point locations for operating Permitted Industrial and Hazardous Waste Locations in Texas. Facilities which store, process, or dispose of hazardous waste (except where such storage...",
+          "featureCount": 194
+        },
+        {
+          "id": "layer-526",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/ROWPermits/MapServer/18",
+          "context": "General Permits",
+          "featureCount": 155
+        },
+        {
+          "id": "layer-530",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/ROWPermits/MapServer/15",
+          "context": "Special Event",
+          "featureCount": 121
+        },
+        {
+          "id": "layer-522",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/ROWPermits/MapServer/14",
+          "context": "Small Cell Permits",
+          "featureCount": 99
+        },
+        {
+          "id": "layer-513",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/ROWPermits/MapServer/7",
+          "context": "Street Event",
+          "featureCount": 75
+        },
+        {
+          "id": "layer-511",
+          "url": "https://maps.austintexas.gov/arcgis/rest/services/Shared/ROWPermits/MapServer/1",
+          "context": "ROW Parking Permits",
+          "featureCount": 35
+        },
+        {
+          "id": "layer-538",
+          "url": "https://maps.loadpasspermits.com/arcgis/rest/services/SampleWorldCities/MapServer/1",
+          "context": "Continent",
+          "featureCount": 1
+        },
+        {
+          "id": "layer-539",
+          "url": "https://maps.calagpermits.org/arcgis/rest/services/SampleWorldCities/MapServer/1",
+          "context": "Continent",
+          "featureCount": 1
+        }
+      ],
+      "totalFeatureCount": 393544,
+      "layerCount": 24,
+      "geometryType": "Point",
+      "style": {
+        "type": "circle",
+        "paint": {
+          "circle-radius": 6,
+          "circle-color": "#FF8C00",
+          "circle-stroke-width": 1,
+          "circle-stroke-color": "#ffffff"
+        }
+      }
+    }
+  ]
+}

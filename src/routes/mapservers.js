@@ -27,6 +27,74 @@ router.get('/categories', async (req, res) => {
   }
 });
 
+// Get all layer sets grouped by category
+router.get('/layer-sets', async (req, res) => {
+  try {
+    const layerSets = await prisma.layerSet.findMany({
+      where: { isActive: true },
+      orderBy: [{ category: 'asc' }, { name: 'asc' }]
+    });
+    
+    // Group by category for frontend
+    const grouped = {};
+    layerSets.forEach(layer => {
+      if (!grouped[layer.category]) {
+        grouped[layer.category] = [];
+      }
+      grouped[layer.category].push({
+        id: layer.layerSetId,
+        name: layer.name,
+        description: layer.description,
+        geometryType: layer.geometryType,
+        style: layer.style,
+        url: layer.primaryLayerUrl,
+        featureCount: layer.totalFeatureCount,
+        layerCount: layer.layerCount
+      });
+    });
+    
+    res.json({
+      success: true,
+      data: grouped,
+      total: layerSets.length
+    });
+  } catch (error) {
+    console.error('Error fetching layer sets:', error);
+    res.status(500).json({ success: false, error: 'Failed to fetch layer sets' });
+  }
+});
+
+// Get single layer set by ID
+router.get('/layer-sets/:id', async (req, res) => {
+  try {
+    const layerSet = await prisma.layerSet.findUnique({
+      where: { layerSetId: req.params.id }
+    });
+    
+    if (!layerSet) {
+      return res.status(404).json({ success: false, error: 'Layer set not found' });
+    }
+    
+    res.json({
+      success: true,
+      data: {
+        id: layerSet.layerSetId,
+        name: layerSet.name,
+        category: layerSet.category,
+        description: layerSet.description,
+        geometryType: layerSet.geometryType,
+        style: layerSet.style,
+        url: layerSet.primaryLayerUrl,
+        alternativeLayers: layerSet.alternativeLayers,
+        featureCount: layerSet.totalFeatureCount,
+        layerCount: layerSet.layerCount
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 // GET /api/mapservers/search (for frontend layer loading)
 router.get('/search', async (req, res) => {
   try {

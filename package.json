@@ -10,7 +10,8 @@
     "build": "echo 'No build needed'",
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push",
-    "seed": "node scripts/seed-mapservers.js"
+    "seed": "node scripts/seed-mapservers.js",
+    "seed:layersets": "node scripts/seed-layer-sets.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.1",

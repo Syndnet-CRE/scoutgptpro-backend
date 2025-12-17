@@ -469,6 +469,35 @@ model MapServerRegistry {
   @@map("map_server_registry")
 }
 
+// ============================================
+// LAYER SETS (CONSOLIDATED LAYERS)
+// ============================================
+
+model LayerSet {
+  id              String   @id @default(cuid())
+  layerSetId      String   @unique  // "sewer_mains", "zoning_districts"
+  name            String              // "Sewer Mains", "Zoning Districts"
+  category        String              // "Sewer Utilities", "Zoning"
+  description     String?  @db.Text
+  geometryType    String              // "LineString", "Point", "Polygon"
+  style           Json                // Mapbox style object
+  primaryLayerUrl String              // Primary MapServer URL
+  primaryLayerId  String?             // Original layer ID
+  alternativeLayers Json?             // Array of fallback layers
+  totalFeatureCount Int     @default(0)
+  layerCount      Int       @default(1)
+  isActive        Boolean   @default(true)
+  queryCount      Int       @default(0)
+  lastQueried     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([category])
+  @@index([geometryType])
+  @@index([isActive, category])
+  @@map("layer_sets")
+}
+
 model MapQuery {
   id              String   @id @default(cuid())
   userId          String
