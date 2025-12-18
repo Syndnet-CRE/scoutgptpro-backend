@@ -70,24 +70,61 @@ router.get('/stats', (req, res) => {
 });
 
 // GET /api/parcels/centroids - Returns all parcel centroids for clustering
-router.get('/centroids', (req, res) => {
+router.get('/centroids', async (req, res) => {
   try {
-    const centroidsPath = path.join(PARCELS_DIR, 'parcels_centroids.geojson');
+    const chunksDir = path.join(PARCELS_DIR, 'chunks');
     
-    if (!fs.existsSync(centroidsPath)) {
-      return res.status(404).json({ error: 'Centroids not found' });
+    if (!fs.existsSync(chunksDir)) {
+      return res.status(404).json({ error: 'Parcel data not found' });
     }
     
-    // Set cache headers
-    res.set('Cache-Control', 'public, max-age=86400');
-    res.set('Content-Type', 'application/json');
+    console.log('Building centroids from chunks...');
     
-    // Stream the file
-    const stream = fs.createReadStream(centroidsPath);
-    stream.pipe(res);
+    const files = fs.readdirSync(chunksDir).filter(f => f.endsWith('.geojson'));
+    const allCentroids = [];
+    
+    for (const file of files) {
+      const chunkPath = path.join(chunksDir, file);
+      const data = JSON.parse(fs.readFileSync(chunkPath, 'utf8'));
+      
+      for (const feature of data.features) {
+        const props = feature.properties;
+        const centroid = props.centroid;
+        
+        if (centroid) {
+          allCentroids.push({
+            type: 'Feature',
+            properties: {
+              id: props.id,
+              owner: props.owner,
+              address: props.address,
+              acres: props.acres,
+              totalTax: props.totalTax,
+              taxYear: props.taxYear
+            },
+            geometry: {
+              type: 'Point',
+              coordinates: centroid
+            }
+          });
+        }
+      }
+    }
+    
+    console.log(`Built ${allCentroids.length} centroids`);
+    
+    const geojson = {
+      type: 'FeatureCollection',
+      features: allCentroids
+    };
+    
+    // Cache for 1 hour
+    res.set('Cache-Control', 'public, max-age=3600');
+    res.json(geojson);
+    
   } catch (error) {
-    console.error('Error loading centroids:', error);
-    res.status(500).json({ error: 'Failed to load centroids' });
+    console.error('Error building centroids:', error);
+    res.status(500).json({ error: 'Failed to build centroids' });
   }
 });
 
