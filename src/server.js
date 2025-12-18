@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import mapserverRoutes from './routes/mapservers.js';
+import parcelRoutes from './routes/parcels.js';
 import aiRoutes from './routes/ai.js';
 
 dotenv.config();
@@ -28,6 +29,7 @@ app.get('/health', (req, res) => {
 // API Routes
 app.use('/api/mapservers', mapserverRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/parcels', parcelRoutes);
 
 // 404 handler
 app.use((req, res) => {

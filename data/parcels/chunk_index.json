@@ -1,0 +1,1437 @@
+{
+  "totalParcels": 374868,
+  "totalChunks": 130,
+  "chunkSize": 0.05,
+  "chunks": [
+    {
+      "key": "-97.35_30.35",
+      "file": "chunks/chunk_-97.35_30.35.geojson",
+      "bounds": {
+        "minLng": -97.35,
+        "minLat": 30.35,
+        "maxLng": -97.3,
+        "maxLat": 30.400000000000002
+      },
+      "count": 262
+    },
+    {
+      "key": "-97.35_30.4",
+      "file": "chunks/chunk_-97.35_30.4.geojson",
+      "bounds": {
+        "minLng": -97.35,
+        "minLat": 30.4,
+        "maxLng": -97.3,
+        "maxLat": 30.45
+      },
+      "count": 95
+    },
+    {
+      "key": "-97.45_30.2",
+      "file": "chunks/chunk_-97.45_30.2.geojson",
+      "bounds": {
+        "minLng": -97.45,
+        "minLat": 30.2,
+        "maxLng": -97.4,
+        "maxLat": 30.25
+      },
+      "count": 245
+    },
+    {
+      "key": "-97.45_30.25",
+      "file": "chunks/chunk_-97.45_30.25.geojson",
+      "bounds": {
+        "minLng": -97.45,
+        "minLat": 30.25,
+        "maxLng": -97.4,
+        "maxLat": 30.3
+      },
+      "count": 876
+    },
+    {
+      "key": "-97.45_30.3",
+      "file": "chunks/chunk_-97.45_30.3.geojson",
+      "bounds": {
+        "minLng": -97.45,
+        "minLat": 30.3,
+        "maxLng": -97.4,
+        "maxLat": 30.35
+      },
+      "count": 303
+    },
+    {
+      "key": "-97.45_30.35",
+      "file": "chunks/chunk_-97.45_30.35.geojson",
+      "bounds": {
+        "minLng": -97.45,
+        "minLat": 30.35,
+        "maxLng": -97.4,
+        "maxLat": 30.400000000000002
+      },
+      "count": 920
+    },
+    {
+      "key": "-97.45_30.4",
+      "file": "chunks/chunk_-97.45_30.4.geojson",
+      "bounds": {
+        "minLng": -97.45,
+        "minLat": 30.4,
+        "maxLng": -97.4,
+        "maxLat": 30.45
+      },
+      "count": 298
+    },
+    {
+      "key": "-97.45_30.45",
+      "file": "chunks/chunk_-97.45_30.45.geojson",
+      "bounds": {
+        "minLng": -97.45,
+        "minLat": 30.45,
+        "maxLng": -97.4,
+        "maxLat": 30.5
+      },
+      "count": 208
+    },
+    {
+      "key": "-97.4_30.25",
+      "file": "chunks/chunk_-97.4_30.25.geojson",
+      "bounds": {
+        "minLng": -97.4,
+        "minLat": 30.25,
+        "maxLng": -97.35000000000001,
+        "maxLat": 30.3
+      },
+      "count": 14
+    },
+    {
+      "key": "-97.4_30.3",
+      "file": "chunks/chunk_-97.4_30.3.geojson",
+      "bounds": {
+        "minLng": -97.4,
+        "minLat": 30.3,
+        "maxLng": -97.35000000000001,
+        "maxLat": 30.35
+      },
+      "count": 688
+    },
+    {
+      "key": "-97.4_30.35",
+      "file": "chunks/chunk_-97.4_30.35.geojson",
+      "bounds": {
+        "minLng": -97.4,
+        "minLat": 30.35,
+        "maxLng": -97.35000000000001,
+        "maxLat": 30.400000000000002
+      },
+      "count": 2142
+    },
+    {
+      "key": "-97.4_30.4",
+      "file": "chunks/chunk_-97.4_30.4.geojson",
+      "bounds": {
+        "minLng": -97.4,
+        "minLat": 30.4,
+        "maxLng": -97.35000000000001,
+        "maxLat": 30.45
+      },
+      "count": 171
+    },
+    {
+      "key": "-97.4_30.45",
+      "file": "chunks/chunk_-97.4_30.45.geojson",
+      "bounds": {
+        "minLng": -97.4,
+        "minLat": 30.45,
+        "maxLng": -97.35000000000001,
+        "maxLat": 30.5
+      },
+      "count": 9
+    },
+    {
+      "key": "-97.55_30.1",
+      "file": "chunks/chunk_-97.55_30.1.geojson",
+      "bounds": {
+        "minLng": -97.55,
+        "minLat": 30.1,
+        "maxLng": -97.5,
+        "maxLat": 30.150000000000002
+      },
+      "count": 746
+    },
+    {
+      "key": "-97.55_30.15",
+      "file": "chunks/chunk_-97.55_30.15.geojson",
+      "bounds": {
+        "minLng": -97.55,
+        "minLat": 30.15,
+        "maxLng": -97.5,
+        "maxLat": 30.2
+      },
+      "count": 391
+    },
+    {
+      "key": "-97.55_30.2",
+      "file": "chunks/chunk_-97.55_30.2.geojson",
+      "bounds": {
+        "minLng": -97.55,
+        "minLat": 30.2,
+        "maxLng": -97.5,
+        "maxLat": 30.25
+      },
+      "count": 2515
+    },
+    {
+      "key": "-97.55_30.25",
+      "file": "chunks/chunk_-97.55_30.25.geojson",
+      "bounds": {
+        "minLng": -97.55,
+        "minLat": 30.25,
+        "maxLng": -97.5,
+        "maxLat": 30.3
+      },
+      "count": 2470
+    },
+    {
+      "key": "-97.55_30.3",
+      "file": "chunks/chunk_-97.55_30.3.geojson",
+      "bounds": {
+        "minLng": -97.55,
+        "minLat": 30.3,
+        "maxLng": -97.5,
+        "maxLat": 30.35
+      },
+      "count": 2671
+    },
+    {
+      "key": "-97.55_30.35",
+      "file": "chunks/chunk_-97.55_30.35.geojson",
+      "bounds": {
+        "minLng": -97.55,
+        "minLat": 30.35,
+        "maxLng": -97.5,
+        "maxLat": 30.400000000000002
+      },
+      "count": 477
+    },
+    {
+      "key": "-97.55_30.4",
+      "file": "chunks/chunk_-97.55_30.4.geojson",
+      "bounds": {
+        "minLng": -97.55,
+        "minLat": 30.4,
+        "maxLng": -97.5,
+        "maxLat": 30.45
+      },
+      "count": 3300
+    },
+    {
+      "key": "-97.55_30.45",
+      "file": "chunks/chunk_-97.55_30.45.geojson",
+      "bounds": {
+        "minLng": -97.55,
+        "minLat": 30.45,
+        "maxLng": -97.5,
+        "maxLat": 30.5
+      },
+      "count": 9874
+    },
+    {
+      "key": "-97.55_30.5",
+      "file": "chunks/chunk_-97.55_30.5.geojson",
+      "bounds": {
+        "minLng": -97.55,
+        "minLat": 30.5,
+        "maxLng": -97.5,
+        "maxLat": 30.55
+      },
+      "count": 69
+    },
+    {
+      "key": "-97.5_30.15",
+      "file": "chunks/chunk_-97.5_30.15.geojson",
+      "bounds": {
+        "minLng": -97.5,
+        "minLat": 30.15,
+        "maxLng": -97.45,
+        "maxLat": 30.2
+      },
+      "count": 258
+    },
+    {
+      "key": "-97.5_30.2",
+      "file": "chunks/chunk_-97.5_30.2.geojson",
+      "bounds": {
+        "minLng": -97.5,
+        "minLat": 30.2,
+        "maxLng": -97.45,
+        "maxLat": 30.25
+      },
+      "count": 474
+    },
+    {
+      "key": "-97.5_30.25",
+      "file": "chunks/chunk_-97.5_30.25.geojson",
+      "bounds": {
+        "minLng": -97.5,
+        "minLat": 30.25,
+        "maxLng": -97.45,
+        "maxLat": 30.3
+      },
+      "count": 733
+    },
+    {
+      "key": "-97.5_30.3",
+      "file": "chunks/chunk_-97.5_30.3.geojson",
+      "bounds": {
+        "minLng": -97.5,
+        "minLat": 30.3,
+        "maxLng": -97.45,
+        "maxLat": 30.35
+      },
+      "count": 2584
+    },
+    {
+      "key": "-97.5_30.35",
+      "file": "chunks/chunk_-97.5_30.35.geojson",
+      "bounds": {
+        "minLng": -97.5,
+        "minLat": 30.35,
+        "maxLng": -97.45,
+        "maxLat": 30.400000000000002
+      },
+      "count": 7587
+    },
+    {
+      "key": "-97.5_30.4",
+      "file": "chunks/chunk_-97.5_30.4.geojson",
+      "bounds": {
+        "minLng": -97.5,
+        "minLat": 30.4,
+        "maxLng": -97.45,
+        "maxLat": 30.45
+      },
+      "count": 814
+    },
+    {
+      "key": "-97.5_30.45",
+      "file": "chunks/chunk_-97.5_30.45.geojson",
+      "bounds": {
+        "minLng": -97.5,
+        "minLat": 30.45,
+        "maxLng": -97.45,
+        "maxLat": 30.5
+      },
+      "count": 1380
+    },
+    {
+      "key": "-97.65_30.0",
+      "file": "chunks/chunk_-97.65_30.0.geojson",
+      "bounds": {
+        "minLng": -97.65,
+        "minLat": 30.0,
+        "maxLng": -97.60000000000001,
+        "maxLat": 30.05
+      },
+      "count": 34
+    },
+    {
+      "key": "-97.65_30.05",
+      "file": "chunks/chunk_-97.65_30.05.geojson",
+      "bounds": {
+        "minLng": -97.65,
+        "minLat": 30.05,
+        "maxLng": -97.60000000000001,
+        "maxLat": 30.1
+      },
+      "count": 523
+    },
+    {
+      "key": "-97.65_30.1",
+      "file": "chunks/chunk_-97.65_30.1.geojson",
+      "bounds": {
+        "minLng": -97.65,
+        "minLat": 30.1,
+        "maxLng": -97.60000000000001,
+        "maxLat": 30.150000000000002
+      },
+      "count": 650
+    },
+    {
+      "key": "-97.65_30.15",
+      "file": "chunks/chunk_-97.65_30.15.geojson",
+      "bounds": {
+        "minLng": -97.65,
+        "minLat": 30.15,
+        "maxLng": -97.60000000000001,
+        "maxLat": 30.2
+      },
+      "count": 1605
+    },
+    {
+      "key": "-97.65_30.2",
+      "file": "chunks/chunk_-97.65_30.2.geojson",
+      "bounds": {
+        "minLng": -97.65,
+        "minLat": 30.2,
+        "maxLng": -97.60000000000001,
+        "maxLat": 30.25
+      },
+      "count": 3086
+    },
+    {
+      "key": "-97.65_30.25",
+      "file": "chunks/chunk_-97.65_30.25.geojson",
+      "bounds": {
+        "minLng": -97.65,
+        "minLat": 30.25,
+        "maxLng": -97.60000000000001,
+        "maxLat": 30.3
+      },
+      "count": 7789
+    },
+    {
+      "key": "-97.65_30.3",
+      "file": "chunks/chunk_-97.65_30.3.geojson",
+      "bounds": {
+        "minLng": -97.65,
+        "minLat": 30.3,
+        "maxLng": -97.60000000000001,
+        "maxLat": 30.35
+      },
+      "count": 7986
+    },
+    {
+      "key": "-97.65_30.35",
+      "file": "chunks/chunk_-97.65_30.35.geojson",
+      "bounds": {
+        "minLng": -97.65,
+        "minLat": 30.35,
+        "maxLng": -97.60000000000001,
+        "maxLat": 30.400000000000002
+      },
+      "count": 11356
+    },
+    {
+      "key": "-97.65_30.4",
+      "file": "chunks/chunk_-97.65_30.4.geojson",
+      "bounds": {
+        "minLng": -97.65,
+        "minLat": 30.4,
+        "maxLng": -97.60000000000001,
+        "maxLat": 30.45
+      },
+      "count": 8970
+    },
+    {
+      "key": "-97.65_30.45",
+      "file": "chunks/chunk_-97.65_30.45.geojson",
+      "bounds": {
+        "minLng": -97.65,
+        "minLat": 30.45,
+        "maxLng": -97.60000000000001,
+        "maxLat": 30.5
+      },
+      "count": 3788
+    },
+    {
+      "key": "-97.6_30.05",
+      "file": "chunks/chunk_-97.6_30.05.geojson",
+      "bounds": {
+        "minLng": -97.6,
+        "minLat": 30.05,
+        "maxLng": -97.55,
+        "maxLat": 30.1
+      },
+      "count": 152
+    },
+    {
+      "key": "-97.6_30.1",
+      "file": "chunks/chunk_-97.6_30.1.geojson",
+      "bounds": {
+        "minLng": -97.6,
+        "minLat": 30.1,
+        "maxLng": -97.55,
+        "maxLat": 30.150000000000002
+      },
+      "count": 729
+    },
+    {
+      "key": "-97.6_30.15",
+      "file": "chunks/chunk_-97.6_30.15.geojson",
+      "bounds": {
+        "minLng": -97.6,
+        "minLat": 30.15,
+        "maxLng": -97.55,
+        "maxLat": 30.2
+      },
+      "count": 3610
+    },
+    {
+      "key": "-97.6_30.2",
+      "file": "chunks/chunk_-97.6_30.2.geojson",
+      "bounds": {
+        "minLng": -97.6,
+        "minLat": 30.2,
+        "maxLng": -97.55,
+        "maxLat": 30.25
+      },
+      "count": 992
+    },
+    {
+      "key": "-97.6_30.25",
+      "file": "chunks/chunk_-97.6_30.25.geojson",
+      "bounds": {
+        "minLng": -97.6,
+        "minLat": 30.25,
+        "maxLng": -97.55,
+        "maxLat": 30.3
+      },
+      "count": 2795
+    },
+    {
+      "key": "-97.6_30.3",
+      "file": "chunks/chunk_-97.6_30.3.geojson",
+      "bounds": {
+        "minLng": -97.6,
+        "minLat": 30.3,
+        "maxLng": -97.55,
+        "maxLat": 30.35
+      },
+      "count": 2743
+    },
+    {
+      "key": "-97.6_30.35",
+      "file": "chunks/chunk_-97.6_30.35.geojson",
+      "bounds": {
+        "minLng": -97.6,
+        "minLat": 30.35,
+        "maxLng": -97.55,
+        "maxLat": 30.400000000000002
+      },
+      "count": 5928
+    },
+    {
+      "key": "-97.6_30.4",
+      "file": "chunks/chunk_-97.6_30.4.geojson",
+      "bounds": {
+        "minLng": -97.6,
+        "minLat": 30.4,
+        "maxLng": -97.55,
+        "maxLat": 30.45
+      },
+      "count": 9944
+    },
+    {
+      "key": "-97.6_30.45",
+      "file": "chunks/chunk_-97.6_30.45.geojson",
+      "bounds": {
+        "minLng": -97.6,
+        "minLat": 30.45,
+        "maxLng": -97.55,
+        "maxLat": 30.5
+      },
+      "count": 9231
+    },
+    {
+      "key": "-97.75_30.05",
+      "file": "chunks/chunk_-97.75_30.05.geojson",
+      "bounds": {
+        "minLng": -97.75,
+        "minLat": 30.05,
+        "maxLng": -97.7,
+        "maxLat": 30.1
+      },
+      "count": 192
+    },
+    {
+      "key": "-97.75_30.1",
+      "file": "chunks/chunk_-97.75_30.1.geojson",
+      "bounds": {
+        "minLng": -97.75,
+        "minLat": 30.1,
+        "maxLng": -97.7,
+        "maxLat": 30.150000000000002
+      },
+      "count": 5005
+    },
+    {
+      "key": "-97.75_30.15",
+      "file": "chunks/chunk_-97.75_30.15.geojson",
+      "bounds": {
+        "minLng": -97.75,
+        "minLat": 30.15,
+        "maxLng": -97.7,
+        "maxLat": 30.2
+      },
+      "count": 8946
+    },
+    {
+      "key": "-97.75_30.2",
+      "file": "chunks/chunk_-97.75_30.2.geojson",
+      "bounds": {
+        "minLng": -97.75,
+        "minLat": 30.2,
+        "maxLng": -97.7,
+        "maxLat": 30.25
+      },
+      "count": 12090
+    },
+    {
+      "key": "-97.75_30.25",
+      "file": "chunks/chunk_-97.75_30.25.geojson",
+      "bounds": {
+        "minLng": -97.75,
+        "minLat": 30.25,
+        "maxLng": -97.7,
+        "maxLat": 30.3
+      },
+      "count": 9597
+    },
+    {
+      "key": "-97.75_30.3",
+      "file": "chunks/chunk_-97.75_30.3.geojson",
+      "bounds": {
+        "minLng": -97.75,
+        "minLat": 30.3,
+        "maxLng": -97.7,
+        "maxLat": 30.35
+      },
+      "count": 7344
+    },
+    {
+      "key": "-97.75_30.35",
+      "file": "chunks/chunk_-97.75_30.35.geojson",
+      "bounds": {
+        "minLng": -97.75,
+        "minLat": 30.35,
+        "maxLng": -97.7,
+        "maxLat": 30.400000000000002
+      },
+      "count": 6774
+    },
+    {
+      "key": "-97.75_30.4",
+      "file": "chunks/chunk_-97.75_30.4.geojson",
+      "bounds": {
+        "minLng": -97.75,
+        "minLat": 30.4,
+        "maxLng": -97.7,
+        "maxLat": 30.45
+      },
+      "count": 6834
+    },
+    {
+      "key": "-97.7_30.0",
+      "file": "chunks/chunk_-97.7_30.0.geojson",
+      "bounds": {
+        "minLng": -97.7,
+        "minLat": 30.0,
+        "maxLng": -97.65,
+        "maxLat": 30.05
+      },
+      "count": 126
+    },
+    {
+      "key": "-97.7_30.05",
+      "file": "chunks/chunk_-97.7_30.05.geojson",
+      "bounds": {
+        "minLng": -97.7,
+        "minLat": 30.05,
+        "maxLng": -97.65,
+        "maxLat": 30.1
+      },
+      "count": 817
+    },
+    {
+      "key": "-97.7_30.1",
+      "file": "chunks/chunk_-97.7_30.1.geojson",
+      "bounds": {
+        "minLng": -97.7,
+        "minLat": 30.1,
+        "maxLng": -97.65,
+        "maxLat": 30.150000000000002
+      },
+      "count": 2785
+    },
+    {
+      "key": "-97.7_30.15",
+      "file": "chunks/chunk_-97.7_30.15.geojson",
+      "bounds": {
+        "minLng": -97.7,
+        "minLat": 30.15,
+        "maxLng": -97.65,
+        "maxLat": 30.2
+      },
+      "count": 7705
+    },
+    {
+      "key": "-97.7_30.2",
+      "file": "chunks/chunk_-97.7_30.2.geojson",
+      "bounds": {
+        "minLng": -97.7,
+        "minLat": 30.2,
+        "maxLng": -97.65,
+        "maxLat": 30.25
+      },
+      "count": 4594
+    },
+    {
+      "key": "-97.7_30.25",
+      "file": "chunks/chunk_-97.7_30.25.geojson",
+      "bounds": {
+        "minLng": -97.7,
+        "minLat": 30.25,
+        "maxLng": -97.65,
+        "maxLat": 30.3
+      },
+      "count": 14060
+    },
+    {
+      "key": "-97.7_30.3",
+      "file": "chunks/chunk_-97.7_30.3.geojson",
+      "bounds": {
+        "minLng": -97.7,
+        "minLat": 30.3,
+        "maxLng": -97.65,
+        "maxLat": 30.35
+      },
+      "count": 14532
+    },
+    {
+      "key": "-97.7_30.35",
+      "file": "chunks/chunk_-97.7_30.35.geojson",
+      "bounds": {
+        "minLng": -97.7,
+        "minLat": 30.35,
+        "maxLng": -97.65,
+        "maxLat": 30.400000000000002
+      },
+      "count": 9049
+    },
+    {
+      "key": "-97.7_30.4",
+      "file": "chunks/chunk_-97.7_30.4.geojson",
+      "bounds": {
+        "minLng": -97.7,
+        "minLat": 30.4,
+        "maxLng": -97.65,
+        "maxLat": 30.45
+      },
+      "count": 6662
+    },
+    {
+      "key": "-97.7_30.45",
+      "file": "chunks/chunk_-97.7_30.45.geojson",
+      "bounds": {
+        "minLng": -97.7,
+        "minLat": 30.45,
+        "maxLng": -97.65,
+        "maxLat": 30.5
+      },
+      "count": 22
+    },
+    {
+      "key": "-97.85_30.1",
+      "file": "chunks/chunk_-97.85_30.1.geojson",
+      "bounds": {
+        "minLng": -97.85,
+        "minLat": 30.1,
+        "maxLng": -97.8,
+        "maxLat": 30.150000000000002
+      },
+      "count": 441
+    },
+    {
+      "key": "-97.85_30.15",
+      "file": "chunks/chunk_-97.85_30.15.geojson",
+      "bounds": {
+        "minLng": -97.85,
+        "minLat": 30.15,
+        "maxLng": -97.8,
+        "maxLat": 30.2
+      },
+      "count": 6610
+    },
+    {
+      "key": "-97.85_30.2",
+      "file": "chunks/chunk_-97.85_30.2.geojson",
+      "bounds": {
+        "minLng": -97.85,
+        "minLat": 30.2,
+        "maxLng": -97.8,
+        "maxLat": 30.25
+      },
+      "count": 9284
+    },
+    {
+      "key": "-97.85_30.25",
+      "file": "chunks/chunk_-97.85_30.25.geojson",
+      "bounds": {
+        "minLng": -97.85,
+        "minLat": 30.25,
+        "maxLng": -97.8,
+        "maxLat": 30.3
+      },
+      "count": 1863
+    },
+    {
+      "key": "-97.85_30.3",
+      "file": "chunks/chunk_-97.85_30.3.geojson",
+      "bounds": {
+        "minLng": -97.85,
+        "minLat": 30.3,
+        "maxLng": -97.8,
+        "maxLat": 30.35
+      },
+      "count": 3104
+    },
+    {
+      "key": "-97.85_30.35",
+      "file": "chunks/chunk_-97.85_30.35.geojson",
+      "bounds": {
+        "minLng": -97.85,
+        "minLat": 30.35,
+        "maxLng": -97.8,
+        "maxLat": 30.400000000000002
+      },
+      "count": 3211
+    },
+    {
+      "key": "-97.85_30.4",
+      "file": "chunks/chunk_-97.85_30.4.geojson",
+      "bounds": {
+        "minLng": -97.85,
+        "minLat": 30.4,
+        "maxLng": -97.8,
+        "maxLat": 30.45
+      },
+      "count": 1357
+    },
+    {
+      "key": "-97.85_30.45",
+      "file": "chunks/chunk_-97.85_30.45.geojson",
+      "bounds": {
+        "minLng": -97.85,
+        "minLat": 30.45,
+        "maxLng": -97.8,
+        "maxLat": 30.5
+      },
+      "count": 1880
+    },
+    {
+      "key": "-97.85_30.5",
+      "file": "chunks/chunk_-97.85_30.5.geojson",
+      "bounds": {
+        "minLng": -97.85,
+        "minLat": 30.5,
+        "maxLng": -97.8,
+        "maxLat": 30.55
+      },
+      "count": 2946
+    },
+    {
+      "key": "-97.85_30.55",
+      "file": "chunks/chunk_-97.85_30.55.geojson",
+      "bounds": {
+        "minLng": -97.85,
+        "minLat": 30.55,
+        "maxLng": -97.8,
+        "maxLat": 30.6
+      },
+      "count": 102
+    },
+    {
+      "key": "-97.8_29.8",
+      "file": "chunks/chunk_-97.8_29.8.geojson",
+      "bounds": {
+        "minLng": -97.8,
+        "minLat": 29.8,
+        "maxLng": -97.75,
+        "maxLat": 29.85
+      },
+      "count": 1
+    },
+    {
+      "key": "-97.8_30.05",
+      "file": "chunks/chunk_-97.8_30.05.geojson",
+      "bounds": {
+        "minLng": -97.8,
+        "minLat": 30.05,
+        "maxLng": -97.75,
+        "maxLat": 30.1
+      },
+      "count": 5
+    },
+    {
+      "key": "-97.8_30.1",
+      "file": "chunks/chunk_-97.8_30.1.geojson",
+      "bounds": {
+        "minLng": -97.8,
+        "minLat": 30.1,
+        "maxLng": -97.75,
+        "maxLat": 30.150000000000002
+      },
+      "count": 3474
+    },
+    {
+      "key": "-97.8_30.15",
+      "file": "chunks/chunk_-97.8_30.15.geojson",
+      "bounds": {
+        "minLng": -97.8,
+        "minLat": 30.15,
+        "maxLng": -97.75,
+        "maxLat": 30.2
+      },
+      "count": 12791
+    },
+    {
+      "key": "-97.8_30.2",
+      "file": "chunks/chunk_-97.8_30.2.geojson",
+      "bounds": {
+        "minLng": -97.8,
+        "minLat": 30.2,
+        "maxLng": -97.75,
+        "maxLat": 30.25
+      },
+      "count": 7947
+    },
+    {
+      "key": "-97.8_30.25",
+      "file": "chunks/chunk_-97.8_30.25.geojson",
+      "bounds": {
+        "minLng": -97.8,
+        "minLat": 30.25,
+        "maxLng": -97.75,
+        "maxLat": 30.3
+      },
+      "count": 4826
+    },
+    {
+      "key": "-97.8_30.3",
+      "file": "chunks/chunk_-97.8_30.3.geojson",
+      "bounds": {
+        "minLng": -97.8,
+        "minLat": 30.3,
+        "maxLng": -97.75,
+        "maxLat": 30.35
+      },
+      "count": 2402
+    },
+    {
+      "key": "-97.8_30.35",
+      "file": "chunks/chunk_-97.8_30.35.geojson",
+      "bounds": {
+        "minLng": -97.8,
+        "minLat": 30.35,
+        "maxLng": -97.75,
+        "maxLat": 30.400000000000002
+      },
+      "count": 1730
+    },
+    {
+      "key": "-97.8_30.4",
+      "file": "chunks/chunk_-97.8_30.4.geojson",
+      "bounds": {
+        "minLng": -97.8,
+        "minLat": 30.4,
+        "maxLng": -97.75,
+        "maxLat": 30.45
+      },
+      "count": 3403
+    },
+    {
+      "key": "-97.8_30.45",
+      "file": "chunks/chunk_-97.8_30.45.geojson",
+      "bounds": {
+        "minLng": -97.8,
+        "minLat": 30.45,
+        "maxLng": -97.75,
+        "maxLat": 30.5
+      },
+      "count": 1395
+    },
+    {
+      "key": "-97.95_30.15",
+      "file": "chunks/chunk_-97.95_30.15.geojson",
+      "bounds": {
+        "minLng": -97.95,
+        "minLat": 30.15,
+        "maxLng": -97.9,
+        "maxLat": 30.2
+      },
+      "count": 1
+    },
+    {
+      "key": "-97.95_30.2",
+      "file": "chunks/chunk_-97.95_30.2.geojson",
+      "bounds": {
+        "minLng": -97.95,
+        "minLat": 30.2,
+        "maxLng": -97.9,
+        "maxLat": 30.25
+      },
+      "count": 602
+    },
+    {
+      "key": "-97.95_30.25",
+      "file": "chunks/chunk_-97.95_30.25.geojson",
+      "bounds": {
+        "minLng": -97.95,
+        "minLat": 30.25,
+        "maxLng": -97.9,
+        "maxLat": 30.3
+      },
+      "count": 244
+    },
+    {
+      "key": "-97.95_30.3",
+      "file": "chunks/chunk_-97.95_30.3.geojson",
+      "bounds": {
+        "minLng": -97.95,
+        "minLat": 30.3,
+        "maxLng": -97.9,
+        "maxLat": 30.35
+      },
+      "count": 4307
+    },
+    {
+      "key": "-97.95_30.35",
+      "file": "chunks/chunk_-97.95_30.35.geojson",
+      "bounds": {
+        "minLng": -97.95,
+        "minLat": 30.35,
+        "maxLng": -97.9,
+        "maxLat": 30.400000000000002
+      },
+      "count": 6272
+    },
+    {
+      "key": "-97.95_30.4",
+      "file": "chunks/chunk_-97.95_30.4.geojson",
+      "bounds": {
+        "minLng": -97.95,
+        "minLat": 30.4,
+        "maxLng": -97.9,
+        "maxLat": 30.45
+      },
+      "count": 2973
+    },
+    {
+      "key": "-97.95_30.45",
+      "file": "chunks/chunk_-97.95_30.45.geojson",
+      "bounds": {
+        "minLng": -97.95,
+        "minLat": 30.45,
+        "maxLng": -97.9,
+        "maxLat": 30.5
+      },
+      "count": 6095
+    },
+    {
+      "key": "-97.95_30.5",
+      "file": "chunks/chunk_-97.95_30.5.geojson",
+      "bounds": {
+        "minLng": -97.95,
+        "minLat": 30.5,
+        "maxLng": -97.9,
+        "maxLat": 30.55
+      },
+      "count": 488
+    },
+    {
+      "key": "-97.95_30.55",
+      "file": "chunks/chunk_-97.95_30.55.geojson",
+      "bounds": {
+        "minLng": -97.95,
+        "minLat": 30.55,
+        "maxLng": -97.9,
+        "maxLat": 30.6
+      },
+      "count": 806
+    },
+    {
+      "key": "-97.95_30.6",
+      "file": "chunks/chunk_-97.95_30.6.geojson",
+      "bounds": {
+        "minLng": -97.95,
+        "minLat": 30.6,
+        "maxLng": -97.9,
+        "maxLat": 30.650000000000002
+      },
+      "count": 74
+    },
+    {
+      "key": "-97.9_30.15",
+      "file": "chunks/chunk_-97.9_30.15.geojson",
+      "bounds": {
+        "minLng": -97.9,
+        "minLat": 30.15,
+        "maxLng": -97.85000000000001,
+        "maxLat": 30.2
+      },
+      "count": 2771
+    },
+    {
+      "key": "-97.9_30.2",
+      "file": "chunks/chunk_-97.9_30.2.geojson",
+      "bounds": {
+        "minLng": -97.9,
+        "minLat": 30.2,
+        "maxLng": -97.85000000000001,
+        "maxLat": 30.25
+      },
+      "count": 2498
+    },
+    {
+      "key": "-97.9_30.25",
+      "file": "chunks/chunk_-97.9_30.25.geojson",
+      "bounds": {
+        "minLng": -97.9,
+        "minLat": 30.25,
+        "maxLng": -97.85000000000001,
+        "maxLat": 30.3
+      },
+      "count": 960
+    },
+    {
+      "key": "-97.9_30.3",
+      "file": "chunks/chunk_-97.9_30.3.geojson",
+      "bounds": {
+        "minLng": -97.9,
+        "minLat": 30.3,
+        "maxLng": -97.85000000000001,
+        "maxLat": 30.35
+      },
+      "count": 2886
+    },
+    {
+      "key": "-97.9_30.35",
+      "file": "chunks/chunk_-97.9_30.35.geojson",
+      "bounds": {
+        "minLng": -97.9,
+        "minLat": 30.35,
+        "maxLng": -97.85000000000001,
+        "maxLat": 30.400000000000002
+      },
+      "count": 5124
+    },
+    {
+      "key": "-97.9_30.4",
+      "file": "chunks/chunk_-97.9_30.4.geojson",
+      "bounds": {
+        "minLng": -97.9,
+        "minLat": 30.4,
+        "maxLng": -97.85000000000001,
+        "maxLat": 30.45
+      },
+      "count": 2080
+    },
+    {
+      "key": "-97.9_30.45",
+      "file": "chunks/chunk_-97.9_30.45.geojson",
+      "bounds": {
+        "minLng": -97.9,
+        "minLat": 30.45,
+        "maxLng": -97.85000000000001,
+        "maxLat": 30.5
+      },
+      "count": 2498
+    },
+    {
+      "key": "-97.9_30.5",
+      "file": "chunks/chunk_-97.9_30.5.geojson",
+      "bounds": {
+        "minLng": -97.9,
+        "minLat": 30.5,
+        "maxLng": -97.85000000000001,
+        "maxLat": 30.55
+      },
+      "count": 2528
+    },
+    {
+      "key": "-97.9_30.55",
+      "file": "chunks/chunk_-97.9_30.55.geojson",
+      "bounds": {
+        "minLng": -97.9,
+        "minLat": 30.55,
+        "maxLng": -97.85000000000001,
+        "maxLat": 30.6
+      },
+      "count": 593
+    },
+    {
+      "key": "-97.9_30.6",
+      "file": "chunks/chunk_-97.9_30.6.geojson",
+      "bounds": {
+        "minLng": -97.9,
+        "minLat": 30.6,
+        "maxLng": -97.85000000000001,
+        "maxLat": 30.650000000000002
+      },
+      "count": 90
+    },
+    {
+      "key": "-98.05_30.25",
+      "file": "chunks/chunk_-98.05_30.25.geojson",
+      "bounds": {
+        "minLng": -98.05,
+        "minLat": 30.25,
+        "maxLng": -98.0,
+        "maxLat": 30.3
+      },
+      "count": 752
+    },
+    {
+      "key": "-98.05_30.3",
+      "file": "chunks/chunk_-98.05_30.3.geojson",
+      "bounds": {
+        "minLng": -98.05,
+        "minLat": 30.3,
+        "maxLng": -98.0,
+        "maxLat": 30.35
+      },
+      "count": 324
+    },
+    {
+      "key": "-98.05_30.35",
+      "file": "chunks/chunk_-98.05_30.35.geojson",
+      "bounds": {
+        "minLng": -98.05,
+        "minLat": 30.35,
+        "maxLng": -98.0,
+        "maxLat": 30.400000000000002
+      },
+      "count": 1651
+    },
+    {
+      "key": "-98.05_30.4",
+      "file": "chunks/chunk_-98.05_30.4.geojson",
+      "bounds": {
+        "minLng": -98.05,
+        "minLat": 30.4,
+        "maxLng": -98.0,
+        "maxLat": 30.45
+      },
+      "count": 1379
+    },
+    {
+      "key": "-98.05_30.45",
+      "file": "chunks/chunk_-98.05_30.45.geojson",
+      "bounds": {
+        "minLng": -98.05,
+        "minLat": 30.45,
+        "maxLng": -98.0,
+        "maxLat": 30.5
+      },
+      "count": 884
+    },
+    {
+      "key": "-98.05_30.5",
+      "file": "chunks/chunk_-98.05_30.5.geojson",
+      "bounds": {
+        "minLng": -98.05,
+        "minLat": 30.5,
+        "maxLng": -98.0,
+        "maxLat": 30.55
+      },
+      "count": 291
+    },
+    {
+      "key": "-98.05_30.55",
+      "file": "chunks/chunk_-98.05_30.55.geojson",
+      "bounds": {
+        "minLng": -98.05,
+        "minLat": 30.55,
+        "maxLng": -98.0,
+        "maxLat": 30.6
+      },
+      "count": 77
+    },
+    {
+      "key": "-98.05_30.6",
+      "file": "chunks/chunk_-98.05_30.6.geojson",
+      "bounds": {
+        "minLng": -98.05,
+        "minLat": 30.6,
+        "maxLng": -98.0,
+        "maxLat": 30.650000000000002
+      },
+      "count": 6
+    },
+    {
+      "key": "-98.0_30.2",
+      "file": "chunks/chunk_-98.0_30.2.geojson",
+      "bounds": {
+        "minLng": -98.0,
+        "minLat": 30.2,
+        "maxLng": -97.95,
+        "maxLat": 30.25
+      },
+      "count": 35
+    },
+    {
+      "key": "-98.0_30.25",
+      "file": "chunks/chunk_-98.0_30.25.geojson",
+      "bounds": {
+        "minLng": -98.0,
+        "minLat": 30.25,
+        "maxLng": -97.95,
+        "maxLat": 30.3
+      },
+      "count": 1680
+    },
+    {
+      "key": "-98.0_30.3",
+      "file": "chunks/chunk_-98.0_30.3.geojson",
+      "bounds": {
+        "minLng": -98.0,
+        "minLat": 30.3,
+        "maxLng": -97.95,
+        "maxLat": 30.35
+      },
+      "count": 3585
+    },
+    {
+      "key": "-98.0_30.35",
+      "file": "chunks/chunk_-98.0_30.35.geojson",
+      "bounds": {
+        "minLng": -98.0,
+        "minLat": 30.35,
+        "maxLng": -97.95,
+        "maxLat": 30.400000000000002
+      },
+      "count": 2905
+    },
+    {
+      "key": "-98.0_30.4",
+      "file": "chunks/chunk_-98.0_30.4.geojson",
+      "bounds": {
+        "minLng": -98.0,
+        "minLat": 30.4,
+        "maxLng": -97.95,
+        "maxLat": 30.45
+      },
+      "count": 5792
+    },
+    {
+      "key": "-98.0_30.45",
+      "file": "chunks/chunk_-98.0_30.45.geojson",
+      "bounds": {
+        "minLng": -98.0,
+        "minLat": 30.45,
+        "maxLng": -97.95,
+        "maxLat": 30.5
+      },
+      "count": 663
+    },
+    {
+      "key": "-98.0_30.5",
+      "file": "chunks/chunk_-98.0_30.5.geojson",
+      "bounds": {
+        "minLng": -98.0,
+        "minLat": 30.5,
+        "maxLng": -97.95,
+        "maxLat": 30.55
+      },
+      "count": 55
+    },
+    {
+      "key": "-98.0_30.55",
+      "file": "chunks/chunk_-98.0_30.55.geojson",
+      "bounds": {
+        "minLng": -98.0,
+        "minLat": 30.55,
+        "maxLng": -97.95,
+        "maxLat": 30.6
+      },
+      "count": 20
+    },
+    {
+      "key": "-98.0_30.6",
+      "file": "chunks/chunk_-98.0_30.6.geojson",
+      "bounds": {
+        "minLng": -98.0,
+        "minLat": 30.6,
+        "maxLng": -97.95,
+        "maxLat": 30.650000000000002
+      },
+      "count": 14
+    },
+    {
+      "key": "-98.15_30.3",
+      "file": "chunks/chunk_-98.15_30.3.geojson",
+      "bounds": {
+        "minLng": -98.15,
+        "minLat": 30.3,
+        "maxLng": -98.10000000000001,
+        "maxLat": 30.35
+      },
+      "count": 9
+    },
+    {
+      "key": "-98.15_30.35",
+      "file": "chunks/chunk_-98.15_30.35.geojson",
+      "bounds": {
+        "minLng": -98.15,
+        "minLat": 30.35,
+        "maxLng": -98.10000000000001,
+        "maxLat": 30.400000000000002
+      },
+      "count": 18
+    },
+    {
+      "key": "-98.1_30.3",
+      "file": "chunks/chunk_-98.1_30.3.geojson",
+      "bounds": {
+        "minLng": -98.1,
+        "minLat": 30.3,
+        "maxLng": -98.05,
+        "maxLat": 30.35
+      },
+      "count": 100
+    },
+    {
+      "key": "-98.1_30.35",
+      "file": "chunks/chunk_-98.1_30.35.geojson",
+      "bounds": {
+        "minLng": -98.1,
+        "minLat": 30.35,
+        "maxLng": -98.05,
+        "maxLat": 30.400000000000002
+      },
+      "count": 62
+    },
+    {
+      "key": "-98.1_30.4",
+      "file": "chunks/chunk_-98.1_30.4.geojson",
+      "bounds": {
+        "minLng": -98.1,
+        "minLat": 30.4,
+        "maxLng": -98.05,
+        "maxLat": 30.45
+      },
+      "count": 130
+    },
+    {
+      "key": "-98.1_30.45",
+      "file": "chunks/chunk_-98.1_30.45.geojson",
+      "bounds": {
+        "minLng": -98.1,
+        "minLat": 30.45,
+        "maxLng": -98.05,
+        "maxLat": 30.5
+      },
+      "count": 74
+    },
+    {
+      "key": "-98.1_30.5",
+      "file": "chunks/chunk_-98.1_30.5.geojson",
+      "bounds": {
+        "minLng": -98.1,
+        "minLat": 30.5,
+        "maxLng": -98.05,
+        "maxLat": 30.55
+      },
+      "count": 81
+    }
+  ]
+}
