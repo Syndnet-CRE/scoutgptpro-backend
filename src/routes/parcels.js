@@ -161,4 +161,93 @@ router.get('/parcel/:id', async (req, res) => {
   }
 });
 
+// GET /api/parcels/viewport - Load parcels for current map viewport (zoom 15+)
+router.get('/viewport', async (req, res) => {
+  try {
+    const { bbox, limit = 500 } = req.query;
+    
+    if (!bbox) {
+      return res.status(400).json({ error: 'bbox parameter required (west,south,east,north)' });
+    }
+    
+    const [west, south, east, north] = bbox.split(',').map(Number);
+    
+    // Validate bbox
+    if (isNaN(west) || isNaN(south) || isNaN(east) || isNaN(north)) {
+      return res.status(400).json({ error: 'Invalid bbox format' });
+    }
+    
+    // Read chunk index
+    const indexPath = path.join(PARCELS_DIR, 'chunk_index.json');
+    
+    if (!fs.existsSync(indexPath)) {
+      return res.json({ type: 'FeatureCollection', features: [], meta: { count: 0, message: 'No parcel data available' } });
+    }
+    
+    const chunkIndex = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
+    
+    const features = [];
+    let count = 0;
+    const maxLimit = Math.min(parseInt(limit) || 500, 1000);
+    
+    // Find chunks that intersect with bbox
+    for (const chunk of chunkIndex.chunks || []) {
+      if (count >= maxLimit) break;
+      
+      const [cWest, cSouth, cEast, cNorth] = chunk.bbox || [];
+      
+      // Check if chunk bbox intersects with request bbox
+      const intersects = !(cEast < west || cWest > east || cNorth < south || cSouth > north);
+      
+      if (intersects) {
+        const chunkPath = path.join(PARCELS_DIR, 'chunks', chunk.file);
+        
+        if (fs.existsSync(chunkPath)) {
+          try {
+            const chunkData = JSON.parse(fs.readFileSync(chunkPath, 'utf8'));
+            
+            // Filter features within bbox
+            for (const feature of chunkData.features || []) {
+              if (count >= maxLimit) break;
+              
+              // Check if feature centroid is within bbox
+              const centroid = feature.properties?.centroid;
+              if (centroid) {
+                const [lng, lat] = Array.isArray(centroid) ? centroid : [centroid.lng, centroid.lat];
+                if (lng >= west && lng <= east && lat >= south && lat <= north) {
+                  features.push(feature);
+                  count++;
+                }
+              } else if (feature.geometry) {
+                // If no centroid, try to use geometry center
+                features.push(feature);
+                count++;
+              }
+            }
+          } catch (e) {
+            console.error(`Error reading chunk ${chunk.file}:`, e.message);
+          }
+        }
+      }
+    }
+    
+    console.log(`Viewport query: bbox=[${west},${south},${east},${north}], found ${features.length} parcels`);
+    
+    res.set('Cache-Control', 'public, max-age=300');
+    res.json({
+      type: 'FeatureCollection',
+      features,
+      meta: { 
+        count: features.length, 
+        limit: maxLimit,
+        bbox: [west, south, east, north]
+      }
+    });
+    
+  } catch (error) {
+    console.error('Viewport parcels error:', error);
+    res.status(500).json({ error: 'Failed to load parcels', details: error.message });
+  }
+});
+
 export default router;
