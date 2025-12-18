@@ -30,7 +30,6 @@ app.get('/health', (req, res) => {
 app.use('/api/mapservers', mapserverRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/parcels', parcelRoutes);
-app.use('/api/parcels', parcelRoutes);
 
 // 404 handler
 app.use((req, res) => {
