@@ -187,38 +187,35 @@ router.get('/parcel/:id', async (req, res) => {
   }
 });
 
-// GET /api/parcels/viewport - Load parcels for current map viewport
+// GET /api/parcels/viewport - Load parcels for map viewport
 router.get('/viewport', async (req, res) => {
   try {
-    const { bbox, limit = 500 } = req.query;
+    const { bbox, limit = 3000 } = req.query;
     
-    console.log('📡 Viewport request received:', { bbox, limit });
+    console.log('📡 Viewport request:', { bbox, limit });
     
     if (!bbox) {
-      console.log('❌ No bbox provided');
       return res.status(400).json({ error: 'bbox required (west,south,east,north)' });
     }
     
     const [west, south, east, north] = bbox.split(',').map(Number);
-    console.log('📍 Parsed bbox:', { west, south, east, north });
     
-    // Validate bbox
     if (isNaN(west) || isNaN(south) || isNaN(east) || isNaN(north)) {
-      console.log('❌ Invalid bbox numbers');
       return res.status(400).json({ error: 'Invalid bbox format' });
     }
     
-    // Try multiple possible paths for chunk_index.json (for Render deployment)
+    console.log('📍 Parsed bbox:', { west, south, east, north });
+    
+    // Find chunk index
     const possiblePaths = [
-      path.join(__dirname, '../../data/parcels/chunk_index.json'), // Standard path
-      path.join(__dirname, '../data/parcels/chunk_index.json'),   // Alternative
-      path.join(process.cwd(), 'data/parcels/chunk_index.json'),  // From working dir
-      '/opt/render/project/src/data/parcels/chunk_index.json'      // Render path
+      path.join(__dirname, '../../data/parcels/chunk_index.json'),
+      path.join(__dirname, '../data/parcels/chunk_index.json'),
+      path.join(process.cwd(), 'data/parcels/chunk_index.json'),
+      '/opt/render/project/src/data/parcels/chunk_index.json'
     ];
     
     let indexPath = null;
     for (const p of possiblePaths) {
-      console.log('🔍 Checking path:', p, 'exists:', fs.existsSync(p));
       if (fs.existsSync(p)) {
         indexPath = p;
         break;
@@ -226,179 +223,133 @@ router.get('/viewport', async (req, res) => {
     }
     
     if (!indexPath) {
-      console.log('❌ chunk_index.json not found in any location');
-      console.log('📁 Current directory:', process.cwd());
-      console.log('📁 __dirname:', __dirname);
-      
-      // List what's in data directory for debugging
-      const dataDir = path.join(process.cwd(), 'data');
-      if (fs.existsSync(dataDir)) {
-        console.log('📁 Contents of data/:', fs.readdirSync(dataDir));
-        const parcelsDir = path.join(dataDir, 'parcels');
-        if (fs.existsSync(parcelsDir)) {
-          console.log('📁 Contents of data/parcels/:', fs.readdirSync(parcelsDir));
-        }
-      }
-      
-      return res.json({ 
-        type: 'FeatureCollection', 
-        features: [], 
-        meta: { 
-          error: 'No parcel data available', 
-          paths_checked: possiblePaths,
-          cwd: process.cwd(),
-          __dirname: __dirname
-        }
-      });
+      console.log('❌ chunk_index.json not found');
+      return res.json({ type: 'FeatureCollection', features: [], meta: { error: 'No index' } });
     }
-    
-    console.log('✅ Using index path:', indexPath);
     
     const chunkIndex = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
-    console.log('📦 Loaded chunk index, chunks:', chunkIndex.chunks?.length || 0);
+    const chunks = chunkIndex.chunks || [];
+    const baseDir = path.dirname(indexPath);
     
-    if (!chunkIndex.chunks || chunkIndex.chunks.length === 0) {
-      console.log('❌ No chunks in index');
-      return res.json({ type: 'FeatureCollection', features: [], meta: { error: 'No chunks in index' } });
-    }
+    console.log('📦 Total chunks in index:', chunks.length);
+    
+    // FIXED: Proper limit handling - allow up to 50000
+    const maxLimit = Math.min(parseInt(limit) || 3000, 50000);
     
     const features = [];
-    const maxLimit = Math.min(parseInt(limit) || 500, 10000);
     let chunksChecked = 0;
     let chunksIntersected = 0;
     let chunksLoaded = 0;
+    let totalParcelsInChunks = 0;
     
-    const baseDir = path.dirname(indexPath);
-    
-    for (const chunk of chunkIndex.chunks) {
+    for (const chunk of chunks) {
       if (features.length >= maxLimit) break;
       chunksChecked++;
       
-      // Handle different bbox formats
+      // Get chunk bounds - handle different formats
       let cWest, cSouth, cEast, cNorth;
       
       if (chunk.bounds) {
-        cWest = chunk.bounds.minLng;
-        cSouth = chunk.bounds.minLat;
-        cEast = chunk.bounds.maxLng;
-        cNorth = chunk.bounds.maxLat;
-      } else if (chunk.bbox && Array.isArray(chunk.bbox)) {
-        [cWest, cSouth, cEast, cNorth] = chunk.bbox;
-      } else {
-        console.log('⚠️ Chunk has no bounds:', chunk.key || chunk.file);
+        // Object format: { minLng, minLat, maxLng, maxLat }
+        cWest = chunk.bounds.minLng ?? chunk.bounds.west ?? chunk.bounds.min_lng;
+        cSouth = chunk.bounds.minLat ?? chunk.bounds.south ?? chunk.bounds.min_lat;
+        cEast = chunk.bounds.maxLng ?? chunk.bounds.east ?? chunk.bounds.max_lng;
+        cNorth = chunk.bounds.maxLat ?? chunk.bounds.north ?? chunk.bounds.max_lat;
+      } else if (chunk.bbox) {
+        // Array format: [west, south, east, north]
+        if (Array.isArray(chunk.bbox)) {
+          [cWest, cSouth, cEast, cNorth] = chunk.bbox;
+        }
+      }
+      
+      // Skip if no valid bounds
+      if (cWest === undefined || cSouth === undefined || cEast === undefined || cNorth === undefined) {
+        console.log('⚠️ Chunk missing bounds:', chunk.file || chunk.key);
         continue;
       }
       
-      // Check intersection
-      const intersects = !(cEast < west || cWest > east || cNorth < south || cSouth > north);
+      // FIXED: Proper bbox intersection check
+      // Two boxes intersect if they overlap on both axes
+      const intersects = !(
+        cEast < west ||   // chunk is entirely left of bbox
+        cWest > east ||   // chunk is entirely right of bbox
+        cNorth < south || // chunk is entirely below bbox
+        cSouth > north    // chunk is entirely above bbox
+      );
       
-      if (intersects) {
-        chunksIntersected++;
-        
-        // Handle file path - may or may not include 'chunks/'
-        let chunkFile = chunk.file || chunk.filename || chunk.path;
-        
-        // Build full path
-        let chunkPath;
-        if (chunkFile.startsWith('chunks/')) {
-          chunkPath = path.join(baseDir, chunkFile);
+      if (!intersects) continue;
+      
+      chunksIntersected++;
+      
+      // Build chunk file path
+      let chunkFile = chunk.file || chunk.filename || chunk.path;
+      if (!chunkFile) {
+        console.log('⚠️ Chunk missing file path:', chunk);
+        continue;
+      }
+      
+      // Handle different path formats
+      let chunkPath;
+      if (chunkFile.startsWith('chunks/')) {
+        chunkPath = path.join(baseDir, chunkFile);
+      } else if (chunkFile.startsWith('/')) {
+        chunkPath = chunkFile;
+      } else {
+        chunkPath = path.join(baseDir, 'chunks', chunkFile);
+      }
+      
+      // Try alternate path if not found
+      if (!fs.existsSync(chunkPath)) {
+        const altPath = path.join(baseDir, chunkFile);
+        if (fs.existsSync(altPath)) {
+          chunkPath = altPath;
         } else {
-          chunkPath = path.join(baseDir, 'chunks', chunkFile);
+          console.log('⚠️ Chunk file not found:', chunkPath);
+          continue;
         }
+      }
+      
+      try {
+        const chunkData = JSON.parse(fs.readFileSync(chunkPath, 'utf8'));
+        const chunkFeatures = chunkData.features || [];
+        chunksLoaded++;
+        totalParcelsInChunks += chunkFeatures.length;
         
-        // Also try without 'chunks/' prefix if file already has it
-        if (!fs.existsSync(chunkPath) && chunkFile.includes('chunks/')) {
-          chunkPath = path.join(baseDir, chunkFile.replace('chunks/', ''));
-        }
-        
-        console.log('📂 Loading chunk:', chunkFile, 'path:', chunkPath, 'exists:', fs.existsSync(chunkPath));
-        
-        if (fs.existsSync(chunkPath)) {
-          try {
-            const chunkData = JSON.parse(fs.readFileSync(chunkPath, 'utf8'));
-            chunksLoaded++;
-            
-            const chunkFeatures = chunkData.features || [];
-            console.log('📂 Chunk has', chunkFeatures.length, 'features');
-            
-            for (const feature of chunkFeatures) {
-              if (features.length >= maxLimit) break;
-              
-              // Calculate viewport size to determine filtering strategy
-              const viewportWidth = east - west;
-              const viewportHeight = north - south;
-              const isSmallViewport = viewportWidth < 0.05 || viewportHeight < 0.05; // Less than ~5.5km
-              
-              let includeFeature = false;
-              
-              if (isSmallViewport) {
-                // For small viewports, use geometry intersection instead of centroid
-                const geom = feature.geometry;
-                if (geom && geom.type === 'Polygon' && geom.coordinates?.[0]) {
-                  const ring = geom.coordinates[0];
-                  // Check if any point of the polygon is in the viewport
-                  for (const point of ring) {
-                    const [lng, lat] = point;
-                    if (lng >= west && lng <= east && lat >= south && lat <= north) {
-                      includeFeature = true;
-                      break;
-                    }
-                  }
-                  // Also check if polygon might overlap viewport (bounding box check)
-                  if (!includeFeature) {
-                    const ringLngs = ring.map(p => p[0]);
-                    const ringLats = ring.map(p => p[1]);
-                    const ringWest = Math.min(...ringLngs);
-                    const ringEast = Math.max(...ringLngs);
-                    const ringSouth = Math.min(...ringLats);
-                    const ringNorth = Math.max(...ringLats);
-                    
-                    // Check if polygon bbox overlaps viewport
-                    if (!(ringEast < west || ringWest > east || ringNorth < south || ringSouth > north)) {
-                      includeFeature = true;
-                    }
-                  }
-                }
-              }
-              
-              // Fallback to centroid filtering for larger viewports or if geometry check didn't work
-              if (!includeFeature) {
-                // Get centroid
-                let lng, lat;
-                const centroid = feature.properties?.centroid;
-                
-                if (Array.isArray(centroid)) {
-                  [lng, lat] = centroid;
-                } else if (centroid && typeof centroid === 'object') {
-                  lng = centroid.lng || centroid.lon || centroid.x;
-                  lat = centroid.lat || centroid.y;
-                } else if (feature.geometry?.type === 'Point') {
-                  [lng, lat] = feature.geometry.coordinates;
-                } else if (feature.geometry?.type === 'Polygon' && feature.geometry.coordinates?.[0]) {
-                  // Calculate centroid from polygon
-                  const ring = feature.geometry.coordinates[0];
-                  lng = ring.reduce((s, c) => s + c[0], 0) / ring.length;
-                  lat = ring.reduce((s, c) => s + c[1], 0) / ring.length;
-                }
-                
-                // Add small buffer for centroid filtering (0.001° ≈ 111m)
-                const buffer = 0.001;
-                if (lng !== undefined && lat !== undefined) {
-                  if (lng >= (west - buffer) && lng <= (east + buffer) && 
-                      lat >= (south - buffer) && lat <= (north + buffer)) {
-                    includeFeature = true;
-                  }
-                }
-              }
-              
-              if (includeFeature) {
-                features.push(feature);
-              }
+        // Add features that have centroids within the bbox
+        for (const feature of chunkFeatures) {
+          if (features.length >= maxLimit) break;
+          
+          // Get centroid
+          let lng, lat;
+          const centroid = feature.properties?.centroid;
+          
+          if (Array.isArray(centroid)) {
+            [lng, lat] = centroid;
+          } else if (centroid && typeof centroid === 'object') {
+            lng = centroid.lng ?? centroid.lon ?? centroid.x;
+            lat = centroid.lat ?? centroid.y;
+          } else if (feature.geometry?.type === 'Point') {
+            [lng, lat] = feature.geometry.coordinates;
+          } else if (feature.geometry?.type === 'Polygon' && feature.geometry.coordinates?.[0]) {
+            // Calculate centroid from polygon
+            const ring = feature.geometry.coordinates[0];
+            if (ring.length > 0) {
+              lng = ring.reduce((s, c) => s + c[0], 0) / ring.length;
+              lat = ring.reduce((s, c) => s + c[1], 0) / ring.length;
             }
-          } catch (e) {
-            console.error('❌ Error reading chunk:', chunkFile, e.message);
+          }
+          
+          // Check if centroid is within bbox (with small buffer for edge cases)
+          const buffer = 0.001; // ~100m buffer
+          if (lng !== undefined && lat !== undefined) {
+            if (lng >= (west - buffer) && lng <= (east + buffer) && 
+                lat >= (south - buffer) && lat <= (north + buffer)) {
+              features.push(feature);
+            }
           }
         }
+      } catch (err) {
+        console.error('❌ Error reading chunk:', chunkPath, err.message);
       }
     }
     
@@ -406,7 +357,9 @@ router.get('/viewport', async (req, res) => {
       chunksChecked,
       chunksIntersected,
       chunksLoaded,
-      featuresFound: features.length
+      totalParcelsInChunks,
+      featuresReturned: features.length,
+      limit: maxLimit
     });
     
     res.set('Cache-Control', 'public, max-age=60');
@@ -419,13 +372,14 @@ router.get('/viewport', async (req, res) => {
         bbox: [west, south, east, north],
         chunksChecked,
         chunksIntersected,
-        chunksLoaded
+        chunksLoaded,
+        totalParcelsInChunks
       }
     });
     
   } catch (error) {
     console.error('❌ Viewport error:', error);
-    res.status(500).json({ error: error.message, stack: error.stack });
+    res.status(500).json({ error: error.message });
   }
 });
 
