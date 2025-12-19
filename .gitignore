@@ -6,3 +6,4 @@ dist/
 build/
 .vscode/
 .idea/
+data/parcels/parcels_centroids.geojson
