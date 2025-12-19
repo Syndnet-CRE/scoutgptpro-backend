@@ -132,32 +132,58 @@ router.get('/centroids', async (req, res) => {
 router.get('/parcel/:id', async (req, res) => {
   try {
     const { id } = req.params;
+    console.log('📍 Fetching parcel:', id);
     
-    // Search through chunks to find the parcel
-    const chunksDir = path.join(PARCELS_DIR, 'chunks');
-    const files = fs.readdirSync(chunksDir);
+    // Read chunk index to find which chunks might contain this parcel
+    const indexPath = path.join(PARCELS_DIR, 'chunk_index.json');
     
-    for (const file of files) {
-      if (!file.endsWith('.geojson')) continue;
+    if (!fs.existsSync(indexPath)) {
+      return res.status(404).json({ error: 'Parcel data not available' });
+    }
+    
+    const chunkIndex = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
+    
+    // Search through chunks for the parcel
+    for (const chunk of chunkIndex.chunks || []) {
+      let chunkFile = chunk.file || chunk.filename;
+      if (!chunkFile.includes('chunks/')) {
+        chunkFile = path.join('chunks', chunkFile);
+      }
       
-      const chunkPath = path.join(chunksDir, file);
-      const data = JSON.parse(fs.readFileSync(chunkPath, 'utf8'));
+      const chunkPath = path.join(PARCELS_DIR, chunkFile);
       
-      const parcel = data.features.find(f => 
-        f.properties.id == id || 
-        f.properties.Prop_ID == id
-      );
-      
-      if (parcel) {
-        res.set('Cache-Control', 'public, max-age=3600');
-        return res.json(parcel);
+      if (fs.existsSync(chunkPath)) {
+        try {
+          const chunkData = JSON.parse(fs.readFileSync(chunkPath, 'utf8'));
+          
+          const feature = chunkData.features?.find(f => 
+            f.properties?.id === id || 
+            f.id === id || 
+            String(f.properties?.id) === String(id) ||
+            String(f.properties?.Prop_ID) === String(id)
+          );
+          
+          if (feature) {
+            console.log('✅ Found parcel:', id);
+            res.set('Cache-Control', 'public, max-age=3600');
+            return res.json({
+              id,
+              properties: feature.properties,
+              geometry: feature.geometry
+            });
+          }
+        } catch (e) {
+          console.error(`Error reading chunk ${chunkFile}:`, e.message);
+        }
       }
     }
     
+    console.log('❌ Parcel not found:', id);
     res.status(404).json({ error: 'Parcel not found' });
+    
   } catch (error) {
-    console.error('Error finding parcel:', error);
-    res.status(500).json({ error: 'Failed to find parcel' });
+    console.error('❌ Error fetching parcel:', error);
+    res.status(500).json({ error: error.message });
   }
 });
 
