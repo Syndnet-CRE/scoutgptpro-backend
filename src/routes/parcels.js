@@ -324,29 +324,75 @@ router.get('/viewport', async (req, res) => {
             for (const feature of chunkFeatures) {
               if (features.length >= maxLimit) break;
               
-              // Get centroid
-              let lng, lat;
-              const centroid = feature.properties?.centroid;
+              // Calculate viewport size to determine filtering strategy
+              const viewportWidth = east - west;
+              const viewportHeight = north - south;
+              const isSmallViewport = viewportWidth < 0.05 || viewportHeight < 0.05; // Less than ~5.5km
               
-              if (Array.isArray(centroid)) {
-                [lng, lat] = centroid;
-              } else if (centroid && typeof centroid === 'object') {
-                lng = centroid.lng || centroid.lon || centroid.x;
-                lat = centroid.lat || centroid.y;
-              } else if (feature.geometry?.type === 'Point') {
-                [lng, lat] = feature.geometry.coordinates;
-              } else if (feature.geometry?.type === 'Polygon' && feature.geometry.coordinates?.[0]) {
-                // Calculate centroid from polygon
-                const ring = feature.geometry.coordinates[0];
-                lng = ring.reduce((s, c) => s + c[0], 0) / ring.length;
-                lat = ring.reduce((s, c) => s + c[1], 0) / ring.length;
+              let includeFeature = false;
+              
+              if (isSmallViewport) {
+                // For small viewports, use geometry intersection instead of centroid
+                const geom = feature.geometry;
+                if (geom && geom.type === 'Polygon' && geom.coordinates?.[0]) {
+                  const ring = geom.coordinates[0];
+                  // Check if any point of the polygon is in the viewport
+                  for (const point of ring) {
+                    const [lng, lat] = point;
+                    if (lng >= west && lng <= east && lat >= south && lat <= north) {
+                      includeFeature = true;
+                      break;
+                    }
+                  }
+                  // Also check if polygon might overlap viewport (bounding box check)
+                  if (!includeFeature) {
+                    const ringLngs = ring.map(p => p[0]);
+                    const ringLats = ring.map(p => p[1]);
+                    const ringWest = Math.min(...ringLngs);
+                    const ringEast = Math.max(...ringLngs);
+                    const ringSouth = Math.min(...ringLats);
+                    const ringNorth = Math.max(...ringLats);
+                    
+                    // Check if polygon bbox overlaps viewport
+                    if (!(ringEast < west || ringWest > east || ringNorth < south || ringSouth > north)) {
+                      includeFeature = true;
+                    }
+                  }
+                }
               }
               
-              // Check if within bbox
-              if (lng !== undefined && lat !== undefined) {
-                if (lng >= west && lng <= east && lat >= south && lat <= north) {
-                  features.push(feature);
+              // Fallback to centroid filtering for larger viewports or if geometry check didn't work
+              if (!includeFeature) {
+                // Get centroid
+                let lng, lat;
+                const centroid = feature.properties?.centroid;
+                
+                if (Array.isArray(centroid)) {
+                  [lng, lat] = centroid;
+                } else if (centroid && typeof centroid === 'object') {
+                  lng = centroid.lng || centroid.lon || centroid.x;
+                  lat = centroid.lat || centroid.y;
+                } else if (feature.geometry?.type === 'Point') {
+                  [lng, lat] = feature.geometry.coordinates;
+                } else if (feature.geometry?.type === 'Polygon' && feature.geometry.coordinates?.[0]) {
+                  // Calculate centroid from polygon
+                  const ring = feature.geometry.coordinates[0];
+                  lng = ring.reduce((s, c) => s + c[0], 0) / ring.length;
+                  lat = ring.reduce((s, c) => s + c[1], 0) / ring.length;
                 }
+                
+                // Add small buffer for centroid filtering (0.001° ≈ 111m)
+                const buffer = 0.001;
+                if (lng !== undefined && lat !== undefined) {
+                  if (lng >= (west - buffer) && lng <= (east + buffer) && 
+                      lat >= (south - buffer) && lat <= (north + buffer)) {
+                    includeFeature = true;
+                  }
+                }
+              }
+              
+              if (includeFeature) {
+                features.push(feature);
               }
             }
           } catch (e) {
