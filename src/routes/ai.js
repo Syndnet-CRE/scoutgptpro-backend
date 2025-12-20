@@ -2,6 +2,7 @@ import express from 'express';
 import Anthropic from '@anthropic-ai/sdk';
 import { searchMapServers } from '../services/mapserver-service.js';
 import { extractCategories } from '../services/category-mapper.js';
+import { queryProperties, needsPropertyData } from '../services/property-service.js';
 
 const router = express.Router();
 const anthropic = new Anthropic({ 
@@ -46,9 +47,31 @@ router.post('/query', async (req, res) => {
       }
     }
     
+    // Query properties if needed
+    let propertyResults = [];
+    if (needsPropertyData(query, mode)) {
+      try {
+        console.log('🏠 Querying properties...');
+        propertyResults = await queryProperties({
+          bounds: bounds ? {
+            north: bounds.north,
+            south: bounds.south,
+            east: bounds.east,
+            west: bounds.west
+          } : null,
+          query,
+          mode,
+          limit: 100  // Get more, we'll paginate on frontend
+        });
+        console.log(`✅ Property query returned ${propertyResults.length} results`);
+      } catch (error) {
+        console.error('❌ Property query failed:', error);
+      }
+    }
+    
     // Build prompts
-    const systemPrompt = buildSystemPrompt(mode, mapData);
-    const userPrompt = buildUserPrompt(query, subject, mapData);
+    const systemPrompt = buildSystemPrompt(mode, mapData, propertyResults);
+    const userPrompt = buildUserPrompt(query, subject, mapData, propertyResults);
     
     // Call Claude
     console.log('🧠 Calling Claude API...');
@@ -71,9 +94,22 @@ router.post('/query', async (req, res) => {
         role: 'assistant', 
         text 
       }],
+      properties: propertyResults.slice(0, 25),  // First 25 for initial load
+      totalCount: propertyResults.length,
       overlays: [],
-      pins: [],
-      insights: []
+      pins: propertyResults.slice(0, 25).map(prop => ({
+        id: prop.id,
+        lat: prop.lat,
+        lng: prop.lng,
+        address: prop.address,
+        propertyType: prop.propertyType,
+        motivationScore: prop.motivationScore
+      })),
+      insights: propertyResults.length > 0 ? [
+        `Found ${propertyResults.length} properties`,
+        `Average motivation score: ${propertyResults.length > 0 ? Math.round(propertyResults.reduce((a, b) => a + b.motivationScore, 0) / propertyResults.length) : 0}`,
+        `Property types: ${[...new Set(propertyResults.map(p => p.propertyType))].join(', ')}`
+      ] : []
     };
     
     // Add MapServer overlays
@@ -95,7 +131,7 @@ router.post('/query', async (req, res) => {
       });
     }
     
-    console.log(`✅ Response ready (${result.overlays.length} overlays)`);
+    console.log(`✅ Response ready (${result.overlays.length} overlays, ${result.properties.length} properties)`);
     res.json(result);
     
   } catch (error) {
@@ -119,7 +155,7 @@ function shouldFetchGIS(query, mode) {
   return gisKeywords.some(kw => query.toLowerCase().includes(kw));
 }
 
-function buildSystemPrompt(mode, mapData) {
+function buildSystemPrompt(mode, mapData, propertyResults = []) {
   let prompt = `You are ScoutGPT, an AI assistant for commercial real estate analysis. You have access to comprehensive GIS data from 948+ ArcGIS MapServers covering Texas markets.`;
   
   if (mapData?.servers) {
@@ -129,9 +165,13 @@ function buildSystemPrompt(mode, mapData) {
     });
   }
   
+  if (propertyResults.length > 0) {
+    prompt += `\n\nProperty Data: I found ${propertyResults.length} properties matching the query criteria.`;
+  }
+  
   switch (mode) {
     case 'scout':
-      prompt += `\n\nMode: Scout - Provide general property intelligence and opportunities.`;
+      prompt += `\n\nMode: Scout - Provide general property intelligence and opportunities. Highlight the most promising properties based on motivation scores and opportunity flags.`;
       break;
     case 'zoning':
       prompt += `\n\nMode: Zoning-GIS - Focus on due diligence, zoning, utilities, and regulatory analysis.`;
@@ -147,7 +187,7 @@ function buildSystemPrompt(mode, mapData) {
   return prompt;
 }
 
-function buildUserPrompt(query, subject, mapData) {
+function buildUserPrompt(query, subject, mapData, propertyResults = []) {
   let prompt = query;
   
   if (subject) {
@@ -173,6 +213,21 @@ function buildUserPrompt(query, subject, mapData) {
         }
       }
     });
+  }
+  
+  // Add property context
+  if (propertyResults.length > 0) {
+    prompt += `\n\nI found ${propertyResults.length} properties matching your query. Here are the top results:\n`;
+    propertyResults.slice(0, 10).forEach((prop, i) => {
+      prompt += `\n${i + 1}. ${prop.address}`;
+      prompt += `\n   - Type: ${prop.propertyType}, Acres: ${prop.acres}`;
+      prompt += `\n   - Tax Value: $${prop.taxValue?.toLocaleString() || 'N/A'}, Market Value: $${prop.marketValue?.toLocaleString() || 'N/A'}`;
+      prompt += `\n   - Motivation Score: ${prop.motivationScore}/100`;
+      if (prop.opportunityFlags.length > 0) {
+        prompt += `\n   - Flags: ${prop.opportunityFlags.join(', ')}`;
+      }
+    });
+    prompt += `\n\nPlease summarize these findings for the user, highlighting the most promising opportunities based on motivation scores and opportunity flags.`;
   }
   
   return prompt;
