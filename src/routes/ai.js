@@ -167,34 +167,56 @@ function shouldFetchGIS(query, mode) {
 }
 
 function buildSystemPrompt(mode, mapData, propertyResults = []) {
-  let prompt = `You are ScoutGPT, an AI assistant for commercial real estate analysis. You have access to comprehensive GIS data from 948+ ArcGIS MapServers covering Texas markets.`;
-  
+  let prompt = `You are ScoutGPT, an AI-powered commercial real estate acquisition assistant. You help investors, developers, and brokers find and analyze properties.
+
+Your role is to:
+1. Analyze property data intelligently to find opportunities
+2. Identify patterns that indicate motivated sellers or investment potential
+3. Provide actionable insights for real estate professionals
+4. Think like an experienced acquisition analyst
+
+When analyzing properties, consider:
+- Tax delinquency indicates financial distress (motivated seller)
+- Absentee owners (mailing address ≠ property address) may be more willing to sell
+- Vacant land with low tax values may be undervalued
+- Long-term ownership without improvements suggests potential motivation
+- Properties with multiple opportunity flags are higher priority targets
+
+IMPORTANT: 
+- Always reference specific properties from the data provided
+- Rank properties by investment potential (motivation score)
+- Highlight the BEST opportunities first
+- Explain WHY each property is interesting
+- Be specific with numbers (acres, tax values, scores)
+
+`;
+
   if (mapData?.servers) {
     prompt += `\n\nAvailable GIS Data for this query:`;
     mapData.servers.forEach(server => {
       prompt += `\n- ${server.category}: ${server.features.length} features found`;
     });
   }
-  
-  if (propertyResults.length > 0) {
-    prompt += `\n\nProperty Data: I found ${propertyResults.length} properties matching the query criteria.`;
-  }
-  
+
   switch (mode) {
     case 'scout':
-      prompt += `\n\nMode: Scout - Provide general property intelligence and opportunities. Highlight the most promising properties based on motivation scores and opportunity flags.`;
+      prompt += `\n\nMode: Scout - Help find investment opportunities based on user criteria. Focus on identifying motivated sellers and undervalued properties.`;
       break;
     case 'zoning':
-      prompt += `\n\nMode: Zoning-GIS - Focus on due diligence, zoning, utilities, and regulatory analysis.`;
+      prompt += `\n\nMode: Zoning - Analyze zoning regulations, permitted uses, and development potential.`;
       break;
     case 'comps':
-      prompt += `\n\nMode: Comps - Analyze comparable properties and valuations.`;
+      prompt += `\n\nMode: Comps - Find comparable sales and market analysis.`;
       break;
     case 'site':
-      prompt += `\n\nMode: Site Analysis - Evaluate highest and best use and development potential.`;
+      prompt += `\n\nMode: Site Analysis - Evaluate site characteristics, utilities, and development feasibility.`;
       break;
   }
-  
+
+  if (propertyResults.length > 0) {
+    prompt += `\n\nYou have access to ${propertyResults.length} properties matching the query. Analyze them and present the best opportunities.`;
+  }
+
   return prompt;
 }
 
@@ -226,19 +248,28 @@ function buildUserPrompt(query, subject, mapData, propertyResults = []) {
     });
   }
   
-  // Add property context
+  // Build property context for Claude
   if (propertyResults.length > 0) {
-    prompt += `\n\nI found ${propertyResults.length} properties matching your query. Here are the top results:\n`;
-    propertyResults.slice(0, 10).forEach((prop, i) => {
-      prompt += `\n${i + 1}. ${prop.address}`;
-      prompt += `\n   - Type: ${prop.propertyType}, Acres: ${prop.acres}`;
-      prompt += `\n   - Tax Value: $${prop.taxValue?.toLocaleString() || 'N/A'}, Market Value: $${prop.marketValue?.toLocaleString() || 'N/A'}`;
-      prompt += `\n   - Motivation Score: ${prop.motivationScore}/100`;
-      if (prop.opportunityFlags.length > 0) {
-        prompt += `\n   - Flags: ${prop.opportunityFlags.join(', ')}`;
+    prompt += `\n\n## PROPERTY DATA (${propertyResults.length} properties found)\n`;
+    prompt += `Top opportunities ranked by motivation score:\n\n`;
+    
+    propertyResults.slice(0, 15).forEach((prop, i) => {
+      prompt += `### ${i + 1}. ${prop.address}\n`;
+      prompt += `- Owner: ${prop.owner}\n`;
+      prompt += `- Type: ${prop.propertyType} | Acres: ${prop.acres || 'N/A'}\n`;
+      prompt += `- Tax Value: $${(prop.taxValue || 0).toLocaleString()} | Market Value: $${(prop.marketValue || 0).toLocaleString()}\n`;
+      prompt += `- Motivation Score: ${prop.motivationScore}/100\n`;
+      if (prop.opportunityFlags && prop.opportunityFlags.length > 0) {
+        prompt += `- Opportunity Flags: ${prop.opportunityFlags.join(', ')}\n`;
       }
+      prompt += '\n';
     });
-    prompt += `\n\nPlease summarize these findings for the user, highlighting the most promising opportunities based on motivation scores and opportunity flags.`;
+    
+    if (propertyResults.length > 15) {
+      prompt += `\n... and ${propertyResults.length - 15} more properties.\n`;
+    }
+    
+    prompt += `\nProvide analysis highlighting the BEST opportunities and explain WHY they stand out.`;
   }
   
   return prompt;

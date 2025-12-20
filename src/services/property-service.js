@@ -52,8 +52,13 @@ function parseQueryCriteria(query, mode) {
     minAcres: null,
     maxAcres: null,
     city: null,
+    zipCode: null,
+    county: null,
     zoning: null,
     taxDelinquent: null,
+    absenteeOwner: null,
+    vacantLand: null,
+    distressed: null,
     keywords: []
   };
 
@@ -62,57 +67,107 @@ function parseQueryCriteria(query, mode) {
   // Property type detection
   if (queryLower.includes('vacant') || queryLower.includes('land') || queryLower.includes('lot')) {
     criteria.propertyType = 'land';
+    criteria.vacantLand = true;
   } else if (queryLower.includes('commercial') || queryLower.includes('retail') || queryLower.includes('office')) {
     criteria.propertyType = 'commercial';
-  } else if (queryLower.includes('residential') || queryLower.includes('house') || queryLower.includes('home')) {
+  } else if (queryLower.includes('residential') || queryLower.includes('house') || queryLower.includes('home') || queryLower.includes('sfr') || queryLower.includes('single family')) {
     criteria.propertyType = 'residential';
   } else if (queryLower.includes('industrial') || queryLower.includes('warehouse')) {
     criteria.propertyType = 'industrial';
-  } else if (queryLower.includes('mixed')) {
+  } else if (queryLower.includes('mixed') || queryLower.includes('multi')) {
     criteria.propertyType = 'mixed';
+  } else if (queryLower.includes('multifamily') || queryLower.includes('apartment') || queryLower.includes('multi-family')) {
+    criteria.propertyType = 'multifamily';
   }
 
-  // Price extraction
-  const priceUnderMatch = queryLower.match(/under\s*\$?([\d,]+)k?/i);
-  const priceBelowMatch = queryLower.match(/below\s*\$?([\d,]+)k?/i);
-  const priceMaxMatch = queryLower.match(/max\s*\$?([\d,]+)k?/i);
-  if (priceUnderMatch || priceBelowMatch || priceMaxMatch) {
-    const match = priceUnderMatch || priceBelowMatch || priceMaxMatch;
-    let price = parseFloat(match[1].replace(/,/g, ''));
-    if (queryLower.includes('k')) price *= 1000;
-    if (price < 1000) price *= 1000; // Assume "50" means $50,000
-    criteria.maxPrice = price;
+  // Motivated seller / distressed indicators
+  if (queryLower.includes('motivated') || queryLower.includes('distressed') || queryLower.includes('urgent') || queryLower.includes('must sell')) {
+    criteria.distressed = true;
   }
-
-  const priceOverMatch = queryLower.match(/over\s*\$?([\d,]+)k?/i);
-  const priceAboveMatch = queryLower.match(/above\s*\$?([\d,]+)k?/i);
-  const priceMinMatch = queryLower.match(/min\s*\$?([\d,]+)k?/i);
-  if (priceOverMatch || priceAboveMatch || priceMinMatch) {
-    const match = priceOverMatch || priceAboveMatch || priceMinMatch;
-    let price = parseFloat(match[1].replace(/,/g, ''));
-    if (queryLower.includes('k')) price *= 1000;
-    if (price < 1000) price *= 1000;
-    criteria.minPrice = price;
-  }
-
-  // Acreage extraction
-  const acresMinMatch = queryLower.match(/(\d+\.?\d*)\+?\s*acres?/i);
-  const acresOverMatch = queryLower.match(/over\s*(\d+\.?\d*)\s*acres?/i);
-  if (acresOverMatch) {
-    criteria.minAcres = parseFloat(acresOverMatch[1]);
-  } else if (acresMinMatch) {
-    criteria.minAcres = parseFloat(acresMinMatch[1]);
-  }
-
-  // City detection
-  if (queryLower.includes('austin')) criteria.city = 'austin';
-  if (queryLower.includes('dallas')) criteria.city = 'dallas';
-  if (queryLower.includes('houston')) criteria.city = 'houston';
-  if (queryLower.includes('san antonio')) criteria.city = 'san antonio';
 
   // Tax delinquent
-  if (queryLower.includes('delinquent') || queryLower.includes('tax lien')) {
+  if (queryLower.includes('delinquent') || queryLower.includes('tax lien') || queryLower.includes('back taxes') || queryLower.includes('tax debt')) {
     criteria.taxDelinquent = true;
+  }
+
+  // Absentee owner
+  if (queryLower.includes('absentee') || queryLower.includes('out of state') || queryLower.includes('out-of-state') || queryLower.includes('non-local') || queryLower.includes('investor owned')) {
+    criteria.absenteeOwner = true;
+  }
+
+  // Price extraction (improved)
+  const pricePatterns = [
+    /under\s*\$?([\d,]+)\s*k?/i,
+    /below\s*\$?([\d,]+)\s*k?/i,
+    /less\s+than\s*\$?([\d,]+)\s*k?/i,
+    /max\s*\$?([\d,]+)\s*k?/i,
+    /up\s+to\s*\$?([\d,]+)\s*k?/i,
+    /\$?([\d,]+)\s*k?\s+or\s+less/i
+  ];
+  
+  for (const pattern of pricePatterns) {
+    const match = queryLower.match(pattern);
+    if (match) {
+      let price = parseFloat(match[1].replace(/,/g, ''));
+      if (queryLower.includes('k') || price < 1000) price *= 1000;
+      criteria.maxPrice = price;
+      break;
+    }
+  }
+
+  const minPricePatterns = [
+    /over\s*\$?([\d,]+)\s*k?/i,
+    /above\s*\$?([\d,]+)\s*k?/i,
+    /more\s+than\s*\$?([\d,]+)\s*k?/i,
+    /min\s*\$?([\d,]+)\s*k?/i,
+    /at\s+least\s*\$?([\d,]+)\s*k?/i
+  ];
+  
+  for (const pattern of minPricePatterns) {
+    const match = queryLower.match(pattern);
+    if (match) {
+      let price = parseFloat(match[1].replace(/,/g, ''));
+      if (queryLower.includes('k') || price < 1000) price *= 1000;
+      criteria.minPrice = price;
+      break;
+    }
+  }
+
+  // Acreage extraction (improved)
+  const acresMatch = queryLower.match(/(\d+\.?\d*)\+?\s*(?:acres?|ac)/i);
+  const acresOverMatch = queryLower.match(/over\s*(\d+\.?\d*)\s*(?:acres?|ac)/i);
+  const acresUnderMatch = queryLower.match(/under\s*(\d+\.?\d*)\s*(?:acres?|ac)/i);
+  
+  if (acresOverMatch) {
+    criteria.minAcres = parseFloat(acresOverMatch[1]);
+  } else if (acresUnderMatch) {
+    criteria.maxAcres = parseFloat(acresUnderMatch[1]);
+  } else if (acresMatch) {
+    criteria.minAcres = parseFloat(acresMatch[1]);
+  }
+
+  // ZIP code extraction
+  const zipMatch = query.match(/\b(7\d{4})\b/);
+  if (zipMatch) {
+    criteria.zipCode = zipMatch[1];
+  }
+
+  // City detection (Texas focus)
+  const cities = ['austin', 'dallas', 'houston', 'san antonio', 'fort worth', 'el paso', 'arlington', 'plano', 'round rock', 'georgetown', 'cedar park', 'pflugerville', 'leander', 'bee cave', 'lakeway', 'dripping springs'];
+  for (const city of cities) {
+    if (queryLower.includes(city)) {
+      criteria.city = city;
+      break;
+    }
+  }
+
+  // County detection
+  const counties = ['travis', 'williamson', 'hays', 'bastrop', 'caldwell', 'dallas', 'tarrant', 'harris', 'bexar'];
+  for (const county of counties) {
+    if (queryLower.includes(county + ' county') || queryLower.includes(county)) {
+      criteria.county = county;
+      break;
+    }
   }
 
   // Zoning
@@ -127,33 +182,70 @@ function parseQueryCriteria(query, mode) {
 // Calculate motivation score based on property attributes
 function calculateMotivationScore(property) {
   let score = 50; // Base score
+  const factors = [];
 
-  // Tax delinquency is a strong indicator
+  // Tax delinquency (strong indicator) +25
   if (property.taxDelinquent || (property.totalDue && property.totalDue > property.totalTax)) {
     score += 25;
+    factors.push('tax-delinquent');
   }
 
-  // Absentee owner (mailing address different from property)
-  if (property.mailingAddr && property.address) {
-    const mailingCity = (property.mailingAddr || '').toLowerCase();
-    const propCity = (property.address || '').toLowerCase();
-    if (!mailingCity.includes('austin') && propCity.includes('austin')) {
-      score += 15; // Out of area owner
+  // Absentee owner +15
+  const mailingCity = (property.mailingCity || property.mailingAddr || '').toLowerCase();
+  const propCity = (property.city || property.address || 'austin').toLowerCase();
+  if (mailingCity && mailingCity !== propCity && mailingCity.length > 0) {
+    score += 15;
+    factors.push('absentee-owner');
+  }
+
+  // Vacant land (no improvements) +10
+  if (!property.impValue || property.impValue === 0) {
+    score += 10;
+    factors.push('vacant-land');
+  }
+
+  // Long-term ownership +5
+  if (property.saleDate) {
+    try {
+      const saleDate = new Date(property.saleDate);
+      if (!isNaN(saleDate.getTime())) {
+        const yearsOwned = (Date.now() - saleDate.getTime()) / (1000 * 60 * 60 * 24 * 365);
+        if (yearsOwned > 10) {
+          score += 5;
+          factors.push('long-term-owner');
+        }
+      }
+    } catch (e) {
+      // Ignore date parsing errors
     }
   }
 
-  // Long-term ownership (older tax year data suggests long hold)
-  if (property.yearBuilt && property.yearBuilt < 1980) {
+  // Low value per acre (potentially undervalued) +10
+  if (property.acres && property.mktValue) {
+    const valuePerAcre = property.mktValue / property.acres;
+    if (valuePerAcre < 30000) {
+      score += 10;
+      factors.push('potentially-undervalued');
+    }
+  }
+
+  // Large lot +5
+  if (property.acres && property.acres > 1) {
     score += 5;
+    factors.push('large-lot');
   }
 
-  // Vacant land often more motivated
-  if (!property.impValue || property.impValue === 0) {
-    score += 10;
+  // Corporate/trust ownership (often more motivated) +5
+  const ownerLower = (property.owner || '').toLowerCase();
+  if (ownerLower.includes('llc') || ownerLower.includes('trust') || ownerLower.includes('corp') || ownerLower.includes('inc') || ownerLower.includes('estate')) {
+    score += 5;
+    factors.push('entity-owned');
   }
 
-  // Cap at 100
-  return Math.min(score, 100);
+  return {
+    score: Math.min(score, 100),
+    factors
+  };
 }
 
 // Determine opportunity flags
@@ -315,10 +407,47 @@ export async function queryProperties({ bounds, query, mode, limit = 50 }) {
             if (!criteria.taxDelinquent && isDelinquent) continue;
           }
 
+          // Absentee owner detection (mailing address different from property)
+          if (criteria.absenteeOwner) {
+            const mailingAddr = (props.mailingAddr || props.mailAddr || '').toLowerCase();
+            const propertyAddr = (props.address || '').toLowerCase();
+            const mailingCity = (props.mailingCity || '').toLowerCase();
+            const propertyCity = (props.city || '').toLowerCase();
+            
+            // Check if mailing address differs from property address
+            const isAbsentee = (mailingCity && propertyCity && mailingCity !== propertyCity) ||
+                               (mailingAddr && propertyAddr && !mailingAddr.includes(propertyAddr.slice(0, 10)));
+            
+            if (!isAbsentee) continue;
+          }
+
+          // Distressed property detection (multiple indicators)
+          if (criteria.distressed) {
+            const isDelinquent = (props.totalDue && props.totalDue > props.totalTax) || false;
+            const isDistressed = 
+              isDelinquent ||
+              (props.foreclosure) ||
+              (props.bankOwned) ||
+              (!props.impValue || props.impValue === 0); // Vacant land often distressed
+            
+            if (!isDistressed) continue;
+          }
+
+          // ZIP code filtering
+          if (criteria.zipCode) {
+            const propZip = (props.zip || props.zipCode || props.address || '').toString();
+            if (!propZip.includes(criteria.zipCode)) continue;
+          }
+
           // Build property object
           const propertyType = determinePropertyType(props);
           const isDelinquent = (props.totalDue && props.totalDue > props.totalTax) || false;
-          const motivationScore = calculateMotivationScore({ ...props, taxDelinquent: isDelinquent });
+          const { score: motivationScore, factors: scoreFactors } = calculateMotivationScore({ 
+            ...props, 
+            taxDelinquent: isDelinquent,
+            mailingCity: props.mailingCity || props.mailingAddr,
+            city: props.city || props.address
+          });
           const opportunityFlags = getOpportunityFlags({ ...props, taxDelinquent: isDelinquent });
 
           // Get centroid for lat/lng
