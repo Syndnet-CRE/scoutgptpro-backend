@@ -8,9 +8,10 @@ const __dirname = path.dirname(__filename);
 // Load parcel chunk index
 const CHUNKS_DIR = path.join(__dirname, '../../data/parcels/chunks');
 let chunkIndex = null;
+let indexBaseDir = null;
 
 function loadChunkIndex() {
-  if (chunkIndex) return chunkIndex;
+  if (chunkIndex && indexBaseDir) return { index: chunkIndex, baseDir: indexBaseDir };
   try {
     // Try multiple possible paths
     const possiblePaths = [
@@ -30,14 +31,15 @@ function loadChunkIndex() {
     
     if (!indexPath) {
       console.error('❌ chunk_index.json not found in any expected location');
-      return { chunks: [] };
+      return { index: { chunks: [] }, baseDir: null };
     }
     
+    indexBaseDir = path.dirname(indexPath);
     chunkIndex = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
-    return chunkIndex;
+    return { index: chunkIndex, baseDir: indexBaseDir };
   } catch (error) {
     console.error('Failed to load chunk index:', error);
-    return { chunks: [] };
+    return { index: { chunks: [] }, baseDir: null };
   }
 }
 
@@ -345,17 +347,24 @@ export async function queryProperties({ bounds, query, mode, limit = 50 }) {
           // Skip if no coordinates
           if (!lat || !lng) continue;
 
+          // Convert string numbers to actual numbers
+          const parseNumber = (val) => {
+            if (val === null || val === undefined) return 0;
+            const num = typeof val === 'string' ? parseFloat(val) : val;
+            return isNaN(num) ? 0 : num;
+          };
+
           results.push({
             id: props.id || feature.id || `parcel_${results.length}`,
             address: props.address || 'Unknown Address',
             owner: props.owner || 'Unknown Owner',
             propertyType: propertyType,
             assetClass: propertyType === 'land' ? 'vacant_land' : propertyType,
-            taxValue: props.totalTax || 0,
-            landValue: props.landValue || 0,
-            improvementValue: props.impValue || 0,
-            marketValue: props.mktValue || 0,
-            acres: props.acres || 0,
+            taxValue: parseNumber(props.totalTax),
+            landValue: parseNumber(props.landValue),
+            improvementValue: parseNumber(props.impValue),
+            marketValue: parseNumber(props.mktValue),
+            acres: parseNumber(props.acres),
             zoning: props.zoning || null,
             floodZone: props.floodZone || null,
             taxDelinquent: isDelinquent,
@@ -365,7 +374,7 @@ export async function queryProperties({ bounds, query, mode, limit = 50 }) {
             lat: lat,
             lng: lng,
             centroid: props.centroid || [lng, lat],
-            yearBuilt: props.yearBuilt || null,
+            yearBuilt: props.yearBuilt ? parseNumber(props.yearBuilt) : null,
             legalDesc: props.legalDesc || null
           });
         }

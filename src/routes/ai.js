@@ -74,19 +74,30 @@ router.post('/query', async (req, res) => {
     const userPrompt = buildUserPrompt(query, subject, mapData, propertyResults);
     
     // Call Claude
-    console.log('🧠 Calling Claude API...');
-    const response = await anthropic.messages.create({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 4000,
-      system: systemPrompt,
-      messages: [{ 
-        role: 'user', 
-        content: userPrompt 
-      }]
-    });
-    
-    const content = response.content[0];
-    const text = content.type === 'text' ? content.text : '';
+    let text = '';
+    try {
+      console.log('🧠 Calling Claude API...');
+      const response = await anthropic.messages.create({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4000,
+        system: systemPrompt,
+        messages: [{ 
+          role: 'user', 
+          content: userPrompt 
+        }]
+      });
+      
+      const content = response.content[0];
+      text = content.type === 'text' ? content.text : '';
+    } catch (claudeError) {
+      console.error('⚠️ Claude API error (continuing with property results):', claudeError.message);
+      // Generate a basic message if Claude fails
+      if (propertyResults.length > 0) {
+        text = `I found ${propertyResults.length} properties matching your criteria. Here are the top results based on motivation scores.`;
+      } else {
+        text = 'I searched for properties but did not find any matching your criteria.';
+      }
+    }
     
     // Build response
     const result = {
