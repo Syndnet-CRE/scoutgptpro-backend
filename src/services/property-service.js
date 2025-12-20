@@ -204,21 +204,8 @@ function calculateMotivationScore(property) {
     factors.push('vacant-land');
   }
 
-  // Long-term ownership +5
-  if (property.saleDate) {
-    try {
-      const saleDate = new Date(property.saleDate);
-      if (!isNaN(saleDate.getTime())) {
-        const yearsOwned = (Date.now() - saleDate.getTime()) / (1000 * 60 * 60 * 24 * 365);
-        if (yearsOwned > 10) {
-          score += 5;
-          factors.push('long-term-owner');
-        }
-      }
-    } catch (e) {
-      // Ignore date parsing errors
-    }
-  }
+  // Long-term ownership +5 (skip - saleDate not available in data)
+  // Note: saleDate field is not present in parcel data
 
   // Low value per acre (potentially undervalued) +10
   if (property.acres && property.mktValue) {
@@ -275,12 +262,16 @@ function getOpportunityFlags(property) {
     flags.push('large-lot');
   }
 
-  // Absentee owner
-  if (property.mailingAddr && property.address) {
-    const mailingLower = (property.mailingAddr || '').toLowerCase();
-    const addressLower = (property.address || '').toLowerCase();
-    if (!mailingLower.includes('austin') && addressLower.includes('austin')) {
-      flags.push('absentee-owner');
+  // Absentee owner (address state is NOT Texas)
+  const address = (property.address || '').toLowerCase();
+  if (address) {
+    const parts = address.split(',');
+    if (parts.length >= 2) {
+      const statePart = parts[parts.length - 1].trim().split()[0].toLowerCase();
+      // Check if state is NOT Texas
+      if (statePart && statePart !== 'tx' && statePart !== 'texas') {
+        flags.push('absentee-owner');
+      }
     }
   }
 
@@ -407,28 +398,33 @@ export async function queryProperties({ bounds, query, mode, limit = 50 }) {
             if (!criteria.taxDelinquent && isDelinquent) continue;
           }
 
-          // Absentee owner detection (mailing address different from property)
+          // Absentee owner detection (address state is NOT Texas)
           if (criteria.absenteeOwner) {
-            const mailingAddr = (props.mailingAddr || props.mailAddr || '').toLowerCase();
-            const propertyAddr = (props.address || '').toLowerCase();
-            const mailingCity = (props.mailingCity || '').toLowerCase();
-            const propertyCity = (props.city || '').toLowerCase();
+            const address = (props.address || '').toLowerCase();
+            let isAbsentee = false;
             
-            // Check if mailing address differs from property address
-            const isAbsentee = (mailingCity && propertyCity && mailingCity !== propertyCity) ||
-                               (mailingAddr && propertyAddr && !mailingAddr.includes(propertyAddr.slice(0, 10)));
+            if (address) {
+              const parts = address.split(',');
+              if (parts.length >= 2) {
+                const statePart = parts[parts.length - 1].trim().split()[0].toLowerCase();
+                // Check if state is NOT Texas
+                if (statePart && statePart !== 'tx' && statePart !== 'texas') {
+                  isAbsentee = true;
+                }
+              }
+            }
             
             if (!isAbsentee) continue;
           }
 
           // Distressed property detection (multiple indicators)
           if (criteria.distressed) {
-            const isDelinquent = (props.totalDue && props.totalDue > props.totalTax) || false;
+            const isDelinquent = (props.totalDue && props.totalTax && 
+              parseFloat(String(props.totalDue).replace(/,/g, '')) > parseFloat(String(props.totalTax).replace(/,/g, ''))) || false;
             const isDistressed = 
               isDelinquent ||
-              (props.foreclosure) ||
-              (props.bankOwned) ||
               (!props.impValue || props.impValue === 0); // Vacant land often distressed
+            // Note: foreclosure and bankOwned fields not available in data
             
             if (!isDistressed) continue;
           }
@@ -445,8 +441,7 @@ export async function queryProperties({ bounds, query, mode, limit = 50 }) {
           const { score: motivationScore, factors: scoreFactors } = calculateMotivationScore({ 
             ...props, 
             taxDelinquent: isDelinquent,
-            mailingCity: props.mailingCity || props.mailingAddr,
-            city: props.city || props.address
+            address: props.address
           });
           const opportunityFlags = getOpportunityFlags({ ...props, taxDelinquent: isDelinquent });
 
