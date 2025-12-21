@@ -122,7 +122,7 @@ router.post('/polygon', async (req, res) => {
       )
       ${whereClause}
       ORDER BY "motivationScore" DESC NULLS LAST, "mktValue" DESC NULLS LAST
-      LIMIT $${paramIndex}
+      LIMIT $${paramIndex}::int
     `;
     
     const queryParams = [geojsonString, ...filterParams, limitValue];
