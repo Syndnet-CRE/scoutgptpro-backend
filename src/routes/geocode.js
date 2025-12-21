@@ -32,22 +32,58 @@ router.get('/geocode/reverse', async (req, res) => {
       });
     }
     
-    // Call Nominatim reverse geocoding API
+    // Call Nominatim reverse geocoding API with timeout
     // Note: Nominatim requires a User-Agent header and has rate limits
-    const response = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?lat=${latNum}&lon=${lngNum}&format=json&zoom=14&addressdetails=1`,
-      {
-        headers: {
-          'User-Agent': 'ScoutGPT/1.0 (contact@scoutgpt.com)' // Required by Nominatim
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+    
+    let response;
+    let data;
+    
+    try {
+      response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?lat=${latNum}&lon=${lngNum}&format=json&zoom=14&addressdetails=1`,
+        {
+          headers: {
+            'User-Agent': 'ScoutGPT/1.0 (contact@scoutgpt.com)' // Required by Nominatim
+          },
+          signal: controller.signal
         }
+      );
+      
+      clearTimeout(timeout);
+      
+      if (!response.ok) {
+        // Return fallback instead of throwing error
+        console.warn(`Nominatim API returned ${response.status}, using fallback`);
+        return res.json({
+          success: true,
+          locationName: 'Custom Area',
+          displayName: `${latNum.toFixed(4)}, ${lngNum.toFixed(4)}`,
+          address: {},
+          coordinates: { lat: latNum, lng: lngNum }
+        });
       }
-    );
-    
-    if (!response.ok) {
-      throw new Error(`Nominatim API error: ${response.status}`);
+      
+      data = await response.json();
+    } catch (fetchError) {
+      clearTimeout(timeout);
+      
+      // Return fallback on network/timeout errors
+      if (fetchError.name === 'AbortError') {
+        console.warn('Geocoding request timed out, using fallback');
+      } else {
+        console.warn('Geocoding request failed:', fetchError.message);
+      }
+      
+      return res.json({
+        success: true,
+        locationName: 'Custom Area',
+        displayName: `${latNum.toFixed(4)}, ${lngNum.toFixed(4)}`,
+        address: {},
+        coordinates: { lat: latNum, lng: lngNum }
+      });
     }
-    
-    const data = await response.json();
     
     // Extract useful location parts
     const address = data.address || {};
@@ -86,9 +122,18 @@ router.get('/geocode/reverse', async (req, res) => {
     
   } catch (error) {
     console.error('Reverse geocoding error:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: error.message 
+    
+    // Return fallback instead of 500 error
+    const { lat, lng } = req.query;
+    const latNum = parseFloat(lat) || 0;
+    const lngNum = parseFloat(lng) || 0;
+    
+    return res.json({
+      success: true,
+      locationName: 'Custom Area',
+      displayName: `${latNum.toFixed(4)}, ${lngNum.toFixed(4)}`,
+      address: {},
+      coordinates: { lat: latNum, lng: lngNum }
     });
   }
 });
