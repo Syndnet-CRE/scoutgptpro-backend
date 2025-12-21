@@ -17,10 +17,14 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.1",
     "@prisma/client": "^6.1.0",
+    "@turf/turf": "^7.3.1",
     "cors": "^2.8.5",
+    "csv-parse": "^6.1.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "papaparse": "^5.4.1"
+    "papaparse": "^5.4.1",
+    "proj4": "^2.20.2",
+    "shapefile": "^0.6.6"
   },
   "devDependencies": {
     "prisma": "^6.1.0"

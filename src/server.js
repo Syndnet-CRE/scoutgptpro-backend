@@ -4,6 +4,9 @@ import dotenv from 'dotenv';
 import mapserverRoutes from './routes/mapservers.js';
 import parcelRoutes from './routes/parcels.js';
 import aiRoutes from './routes/ai.js';
+import queryRoutes from './routes/query.js';
+import polygonSearchRoutes from './routes/polygonSearches.js';
+import geocodeRoutes from './routes/geocode.js';
 
 dotenv.config();
 
@@ -30,6 +33,9 @@ app.get('/health', (req, res) => {
 app.use('/api/mapservers', mapserverRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/parcels', parcelRoutes);
+app.use('/api/query', queryRoutes);
+app.use('/api', polygonSearchRoutes);
+app.use('/api', geocodeRoutes);
 
 // 404 handler
 app.use((req, res) => {

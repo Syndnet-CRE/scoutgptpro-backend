@@ -67,38 +67,62 @@ model UserProfile {
 
 model Property {
   id            String   @id @default(cuid())
+  parcelId      String   @unique  // Original parcel ID from TCAD
   
   // Location
-  address       String
-  city          String
-  state         String
-  zip           String
+  address       String?  // Mailing address (current data)
+  siteAddress   String?  // Physical/Site address (ADDRESS1 from TCAD)
+  siteCity      String?  // Site city (CITY from TCAD)
+  siteState     String?  // Site state (STATE from TCAD)
+  siteZip       String?  // Site ZIP (ZIPCODE from TCAD)
+  city          String?
+  state         String?
+  zip           String?
   county        String?
   
-  lat           Float?
-  lng           Float?
+  // Coordinates
+  latitude      Float?
+  longitude     Float?
+  centroid      Json?    // [lng, lat] array
   
   // Parcel info
   apn           String?  // Assessor Parcel Number
   legalDesc     String?  @db.Text
   
   // Property details
-  propertyType  String?  // retail, office, industrial, land, multifamily
-  size          Float?   // sq ft or acres
-  sizeUnit      String?  // sqft, acres
+  propertyType  String?  // land, residential, commercial, industrial, mixed, multifamily
+  acres         Float?
+  size          Float?   // sq ft or acres (legacy)
+  sizeUnit      String?  // sqft, acres (legacy)
   
   zoning        String?
   yearBuilt     Int?
   
   // Valuation
-  assessedValue Float?
-  marketValue   Float?
+  totalTax      Float?
+  totalDue      Float?
+  assessedValue Float?   // Legacy
+  marketValue   Float?   // Legacy
+  impValue      Float?   // Improvement value
+  landValue     Float?   // Land value
+  mktValue      Float?   // Market value
   
   // Ownership
-  ownerName     String?
-  ownerAddress  String?
+  owner         String?
+  ownerName     String?  // Legacy
+  ownerAddress  String?  // Legacy
+  mailingAddr   String?
   
+  // Calculated fields
+  motivationScore    Int?
+  opportunityFlags   String[]  // Array of flags
+  isAbsentee         Boolean   @default(false)
+  isTaxDelinquent    Boolean   @default(false)
+  isVacantLand       Boolean   @default(false)
+  
+  // Metadata
   metadata      Json?    // Additional flexible data
+  taxYear       Int?
   
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -108,8 +132,15 @@ model Property {
   comps         Comp[]
   pins          Pin[]
 
+  @@index([propertyType])
+  @@index([latitude, longitude])
+  @@index([isAbsentee])
+  @@index([isTaxDelinquent])
+  @@index([motivationScore])
+  @@index([acres])
+  @@index([totalTax])
   @@index([city, state])
-  @@index([lat, lng])
+  @@index([parcelId])
   @@map("properties")
 }
 
@@ -513,4 +544,39 @@ model MapQuery {
   @@index([userId])
   @@index([createdAt])
   @@map("map_queries")
+}
+
+// ============================================
+// POLYGON SEARCHES
+// ============================================
+
+model PolygonSearch {
+  id            String   @id @default(cuid())
+  userId        String?  // Optional for now, will link to auth later
+  
+  name          String   // Auto-generated or user-provided name
+  description   String?
+  
+  // Polygon data (stored as JSON since Prisma doesn't support PostGIS geometry)
+  polygonGeoJSON Json    // The GeoJSON polygon
+  areaAcres      Float?
+  centroidLat    Float?
+  centroidLng    Float?
+  
+  // Chat history
+  messages      Json     @default("[]") // Array of chat messages
+  
+  // Filters that were applied
+  filters       Json?    // Saved filter state
+  
+  // Metadata
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  lastAccessedAt DateTime @default(now())
+  isArchived    Boolean  @default(false)
+  
+  @@index([userId])
+  @@index([updatedAt])
+  @@index([lastAccessedAt])
+  @@map("polygon_searches")
 }
