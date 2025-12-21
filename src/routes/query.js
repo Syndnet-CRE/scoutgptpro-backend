@@ -79,7 +79,7 @@ router.post('/polygon', async (req, res) => {
     const limitValue = Math.min(parseInt(limit) || 500, 10000); // Max 10k
     
     // Query properties within polygon using PostGIS
-    // Build parameterized query
+    // Build parameterized query (limit embedded directly since it's validated)
     let query = `
       SELECT 
         id,
@@ -122,10 +122,10 @@ router.post('/polygon', async (req, res) => {
       )
       ${whereClause}
       ORDER BY "motivationScore" DESC NULLS LAST, "mktValue" DESC NULLS LAST
-      LIMIT $${paramIndex}::int
+      LIMIT ${limitValue}
     `;
     
-    const queryParams = [geojsonString, ...filterParams, limitValue];
+    const queryParams = [geojsonString, ...filterParams];
     
     const properties = await prisma.$queryRawUnsafe(query, ...queryParams);
     
