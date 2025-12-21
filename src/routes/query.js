@@ -28,9 +28,10 @@ router.post('/polygon', async (req, res) => {
     const geojsonString = JSON.stringify(geometry);
     
     // Build filter conditions
+    // Note: GeoJSON is $1, so filter params start at $2
     const filterConditions = [];
     const filterParams = [];
-    let paramIndex = 1;
+    let paramIndex = 2; // Start at 2 because $1 is GeoJSON
     
     if (filters.minValue !== undefined && filters.minValue !== null) {
       filterConditions.push(`"mktValue" >= $${paramIndex}`);
