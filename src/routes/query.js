@@ -118,14 +118,14 @@ router.post('/polygon', async (req, res) => {
       FROM properties
       WHERE ST_Within(
         geom,
-        ST_SetSRID(ST_GeomFromGeoJSON($1), 4326)
+        ST_SetSRID(ST_GeomFromGeoJSON($1::text), 4326)
       )
       ${whereClause}
       ORDER BY "motivationScore" DESC NULLS LAST, "mktValue" DESC NULLS LAST
-      LIMIT $${paramIndex}::int
+      LIMIT $${paramIndex}
     `;
     
-    const queryParams = [geojsonString, ...filterParams, limitValue];
+    const queryParams = [geojsonString, ...filterParams, parseInt(limitValue)];
     
     const properties = await prisma.$queryRawUnsafe(query, ...queryParams);
     
