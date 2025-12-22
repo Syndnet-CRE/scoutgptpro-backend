@@ -10,71 +10,112 @@ router.get('/layers', async (req, res) => {
     const { name } = req.query;
     
     if (name) {
-      // Find layer with flexible matching - try multiple strategies
-      // Strategy 1: Exact match on category (most reliable since serviceName is often null)
+      // PRIORITY: First try to find Austin/Texas/Travis specific layer
+      // This ensures we get local data, not random international layers
       let layer = await prisma.mapServerRegistry.findFirst({
         where: {
-          category: { equals: name, mode: 'insensitive' },
-          isActive: true
+          AND: [
+            {
+              OR: [
+                { category: { equals: name, mode: 'insensitive' } },
+                { category: { contains: name, mode: 'insensitive' } },
+                { serviceName: { equals: name, mode: 'insensitive' } },
+                { serviceName: { contains: name, mode: 'insensitive' } }
+              ]
+            },
+            {
+              OR: [
+                { url: { contains: 'austin', mode: 'insensitive' } },
+                { url: { contains: 'texas', mode: 'insensitive' } },
+                { url: { contains: 'travis', mode: 'insensitive' } }
+              ]
+            },
+            { isActive: true }
+          ]
         }
       });
       
-      // Strategy 2: Exact match on serviceName
-      if (!layer) {
-        layer = await prisma.mapServerRegistry.findFirst({
-          where: {
-            serviceName: { equals: name, mode: 'insensitive' },
-            isActive: true
-          }
-        });
-      }
-      
-      // Strategy 3: Try matching first word before underscore/space (e.g., "Zoning_Districts" -> "Zoning")
-      // This handles cases where queryClassifier uses "Zoning_Districts" but DB has "Zoning"
+      // If no Austin/Texas layer found, try first word extraction with Austin/Texas filter
       if (!layer) {
         const firstWord = name.split(/[_\s]/)[0];
         if (firstWord && firstWord.length > 0 && firstWord !== name) {
           layer = await prisma.mapServerRegistry.findFirst({
             where: {
-              category: { equals: firstWord, mode: 'insensitive' },
-              isActive: true
+              AND: [
+                {
+                  OR: [
+                    { category: { equals: firstWord, mode: 'insensitive' } },
+                    { category: { contains: firstWord, mode: 'insensitive' } }
+                  ]
+                },
+                {
+                  OR: [
+                    { url: { contains: 'austin', mode: 'insensitive' } },
+                    { url: { contains: 'texas', mode: 'insensitive' } },
+                    { url: { contains: 'travis', mode: 'insensitive' } }
+                  ]
+                },
+                { isActive: true }
+              ]
             }
           });
         }
       }
       
-      // Strategy 4: Partial match on category (handles "Zoning" matching "Zoning Districts")
+      // Fallback: If no Austin/Texas layer found, use any matching layer
       if (!layer) {
+        console.log(`No Austin/Texas layer found for "${name}", falling back to any match`);
+        
+        // Strategy 1: Exact match on category
         layer = await prisma.mapServerRegistry.findFirst({
           where: {
-            category: { contains: name, mode: 'insensitive' },
+            category: { equals: name, mode: 'insensitive' },
             isActive: true
           }
         });
-      }
-      
-      // Strategy 5: Partial match on serviceName
-      if (!layer) {
-        layer = await prisma.mapServerRegistry.findFirst({
-          where: {
-            serviceName: { contains: name, mode: 'insensitive' },
-            isActive: true
+        
+        // Strategy 2: Exact match on serviceName
+        if (!layer) {
+          layer = await prisma.mapServerRegistry.findFirst({
+            where: {
+              serviceName: { equals: name, mode: 'insensitive' },
+              isActive: true
+            }
+          });
+        }
+        
+        // Strategy 3: Try matching first word before underscore/space
+        if (!layer) {
+          const firstWord = name.split(/[_\s]/)[0];
+          if (firstWord && firstWord.length > 0 && firstWord !== name) {
+            layer = await prisma.mapServerRegistry.findFirst({
+              where: {
+                category: { equals: firstWord, mode: 'insensitive' },
+                isActive: true
+              }
+            });
           }
-        });
-      }
-      
-      // Strategy 6: Try matching name without underscores/spaces
-      if (!layer) {
-        const normalizedName = name.replace(/[_\s]/g, '');
-        layer = await prisma.mapServerRegistry.findFirst({
-          where: {
-            OR: [
-              { category: { contains: normalizedName, mode: 'insensitive' } },
-              { serviceName: { contains: normalizedName, mode: 'insensitive' } }
-            ],
-            isActive: true
-          }
-        });
+        }
+        
+        // Strategy 4: Partial match on category
+        if (!layer) {
+          layer = await prisma.mapServerRegistry.findFirst({
+            where: {
+              category: { contains: name, mode: 'insensitive' },
+              isActive: true
+            }
+          });
+        }
+        
+        // Strategy 5: Partial match on serviceName
+        if (!layer) {
+          layer = await prisma.mapServerRegistry.findFirst({
+            where: {
+              serviceName: { contains: name, mode: 'insensitive' },
+              isActive: true
+            }
+          });
+        }
       }
       
       if (layer) {
@@ -88,6 +129,12 @@ router.get('/layers', async (req, res) => {
           // If URL doesn't end with a number, assume layer 0
           endpoint = `${endpoint.replace(/\/$/, '')}/0`;
         }
+        
+        const isAustinLayer = endpoint.toLowerCase().includes('austin') || 
+                              endpoint.toLowerCase().includes('texas') || 
+                              endpoint.toLowerCase().includes('travis');
+        
+        console.log(`Found layer for "${name}": ${endpoint} ${isAustinLayer ? '(Austin/Texas)' : '(Other)'}`);
         
         return res.json({ 
           success: true, 
