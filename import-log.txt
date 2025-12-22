@@ -1,0 +1,665 @@
+=== PARCEL IMPORT TO NEON DATABASE ===
+
+Existing properties in database: 0
+
+Found 130 chunk files to import
+
+Processing chunk 1/130: chunk_-97.35_30.35.geojson
+  Found 262 parcels
+  Inserted: 129/262 (skipped: 133)
+  ✅ Completed: 129 inserted, 133 skipped
+
+Processing chunk 2/130: chunk_-97.35_30.4.geojson
+  Found 95 parcels
+  Inserted: 90/95 (skipped: 5)
+  ✅ Completed: 90 inserted, 5 skipped
+
+Processing chunk 3/130: chunk_-97.45_30.2.geojson
+  Found 245 parcels
+  Inserted: 238/245 (skipped: 7)
+  ✅ Completed: 238 inserted, 7 skipped
+
+Processing chunk 4/130: chunk_-97.45_30.25.geojson
+  Found 876 parcels
+  Inserted: 489/876 (skipped: 11)  Inserted: 856/876 (skipped: 20)
+  ✅ Completed: 856 inserted, 20 skipped
+
+Processing chunk 5/130: chunk_-97.45_30.3.geojson
+  Found 303 parcels
+  Inserted: 277/303 (skipped: 26)
+  ✅ Completed: 277 inserted, 26 skipped
+
+Processing chunk 6/130: chunk_-97.45_30.35.geojson
+  Found 920 parcels
+  Inserted: 486/920 (skipped: 14)  Inserted: 905/920 (skipped: 15)
+  ✅ Completed: 905 inserted, 15 skipped
+
+Processing chunk 7/130: chunk_-97.45_30.4.geojson
+  Found 298 parcels
+  Inserted: 287/298 (skipped: 11)
+  ✅ Completed: 287 inserted, 11 skipped
+
+Processing chunk 8/130: chunk_-97.45_30.45.geojson
+  Found 208 parcels
+  Inserted: 201/208 (skipped: 7)
+  ✅ Completed: 201 inserted, 7 skipped
+
+Processing chunk 9/130: chunk_-97.4_30.25.geojson
+  Found 14 parcels
+  Inserted: 14/14 (skipped: 0)
+  ✅ Completed: 14 inserted, 0 skipped
+
+Processing chunk 10/130: chunk_-97.4_30.3.geojson
+  Found 688 parcels
+  Inserted: 496/688 (skipped: 4)  Inserted: 683/688 (skipped: 5)
+  ✅ Completed: 683 inserted, 5 skipped
+
+Processing chunk 11/130: chunk_-97.4_30.35.geojson
+  Found 2142 parcels
+  Inserted: 484/2142 (skipped: 16)  Inserted: 983/2142 (skipped: 17)  Inserted: 1483/2142 (skipped: 17)  Inserted: 1983/2142 (skipped: 17)  Inserted: 2091/2142 (skipped: 51)
+  ✅ Completed: 2091 inserted, 51 skipped
+
+Processing chunk 12/130: chunk_-97.4_30.4.geojson
+  Found 171 parcels
+  Inserted: 162/171 (skipped: 9)
+  ✅ Completed: 162 inserted, 9 skipped
+
+Processing chunk 13/130: chunk_-97.4_30.45.geojson
+  Found 9 parcels
+  Inserted: 8/9 (skipped: 1)
+  ✅ Completed: 8 inserted, 1 skipped
+
+Processing chunk 14/130: chunk_-97.55_30.1.geojson
+  Found 746 parcels
+  Inserted: 493/746 (skipped: 7)  Inserted: 737/746 (skipped: 9)
+  ✅ Completed: 737 inserted, 9 skipped
+
+Processing chunk 15/130: chunk_-97.55_30.15.geojson
+  Found 391 parcels
+  Inserted: 377/391 (skipped: 14)
+  ✅ Completed: 377 inserted, 14 skipped
+
+Processing chunk 16/130: chunk_-97.55_30.2.geojson
+  Found 2515 parcels
+  Inserted: 494/2515 (skipped: 6)  Inserted: 987/2515 (skipped: 13)  Inserted: 1487/2515 (skipped: 13)  Inserted: 1987/2515 (skipped: 13)  Inserted: 2487/2515 (skipped: 13)  Inserted: 2502/2515 (skipped: 13)
+  ✅ Completed: 2502 inserted, 13 skipped
+
+Processing chunk 17/130: chunk_-97.55_30.25.geojson
+  Found 2470 parcels
+  Inserted: 492/2470 (skipped: 8)  Inserted: 989/2470 (skipped: 11)  Inserted: 1487/2470 (skipped: 13)  Inserted: 1987/2470 (skipped: 13)  Inserted: 2457/2470 (skipped: 13)
+  ✅ Completed: 2457 inserted, 13 skipped
+
+Processing chunk 18/130: chunk_-97.55_30.3.geojson
+  Found 2671 parcels
+  Inserted: 496/2671 (skipped: 4)  Inserted: 990/2671 (skipped: 10)  Inserted: 1490/2671 (skipped: 10)  Inserted: 1990/2671 (skipped: 10)  Inserted: 2490/2671 (skipped: 10)  Inserted: 2660/2671 (skipped: 11)
+  ✅ Completed: 2660 inserted, 11 skipped
+
+Processing chunk 19/130: chunk_-97.55_30.35.geojson
+  Found 477 parcels
+  Inserted: 469/477 (skipped: 8)
+  ✅ Completed: 469 inserted, 8 skipped
+
+Processing chunk 20/130: chunk_-97.55_30.4.geojson
+  Found 3300 parcels
+  Inserted: 486/3300 (skipped: 14)  Inserted: 986/3300 (skipped: 14)  Inserted: 1486/3300 (skipped: 14)  Inserted: 1986/3300 (skipped: 14)  Inserted: 2486/3300 (skipped: 14)  Inserted: 2986/3300 (skipped: 14)  Inserted: 3280/3300 (skipped: 20)
+  ✅ Completed: 3280 inserted, 20 skipped
+
+Processing chunk 21/130: chunk_-97.55_30.45.geojson
+  Found 9874 parcels
+  Inserted: 499/9874 (skipped: 1)  Inserted: 998/9874 (skipped: 2)  Inserted: 1498/9874 (skipped: 2)  Inserted: 1997/9874 (skipped: 3)  Inserted: 2497/9874 (skipped: 3)  Inserted: 2997/9874 (skipped: 3)  Inserted: 3497/9874 (skipped: 3)  Inserted: 3997/9874 (skipped: 3)  Inserted: 4497/9874 (skipped: 3)  Inserted: 4996/9874 (skipped: 4)  Inserted: 5496/9874 (skipped: 4)  Inserted: 5996/9874 (skipped: 4)  Inserted: 6496/9874 (skipped: 4)  Inserted: 6996/9874 (skipped: 4)  Inserted: 7496/9874 (skipped: 4)  Inserted: 7996/9874 (skipped: 4)  Inserted: 8496/9874 (skipped: 4)  Inserted: 8995/9874 (skipped: 5)  Inserted: 9495/9874 (skipped: 5)  Inserted: 9865/9874 (skipped: 9)
+  ✅ Completed: 9865 inserted, 9 skipped
+
+Processing chunk 22/130: chunk_-97.55_30.5.geojson
+  Found 69 parcels
+  Inserted: 67/69 (skipped: 2)
+  ✅ Completed: 67 inserted, 2 skipped
+
+Processing chunk 23/130: chunk_-97.5_30.15.geojson
+  Found 258 parcels
+  Inserted: 240/258 (skipped: 18)
+  ✅ Completed: 240 inserted, 18 skipped
+
+Processing chunk 24/130: chunk_-97.5_30.2.geojson
+  Found 474 parcels
+  Inserted: 463/474 (skipped: 11)
+  ✅ Completed: 463 inserted, 11 skipped
+
+Processing chunk 25/130: chunk_-97.5_30.25.geojson
+  Found 733 parcels
+  Inserted: 478/733 (skipped: 22)  Inserted: 710/733 (skipped: 23)
+  ✅ Completed: 710 inserted, 23 skipped
+
+Processing chunk 26/130: chunk_-97.5_30.3.geojson
+  Found 2584 parcels
+  Inserted: 483/2584 (skipped: 17)  Inserted: 981/2584 (skipped: 19)  Inserted: 1481/2584 (skipped: 19)  Inserted: 1980/2584 (skipped: 20)  Inserted: 2480/2584 (skipped: 20)  Inserted: 2561/2584 (skipped: 23)
+  ✅ Completed: 2561 inserted, 23 skipped
+
+Processing chunk 27/130: chunk_-97.5_30.35.geojson
+  Found 7587 parcels
+  Inserted: 479/7587 (skipped: 21)  Inserted: 978/7587 (skipped: 22)  Inserted: 1478/7587 (skipped: 22)  Inserted: 1978/7587 (skipped: 22)  Inserted: 2478/7587 (skipped: 22)  Inserted: 2978/7587 (skipped: 22)  Inserted: 3478/7587 (skipped: 22)  Inserted: 3977/7587 (skipped: 23)  Inserted: 4476/7587 (skipped: 24)  Inserted: 4976/7587 (skipped: 24)  Inserted: 5476/7587 (skipped: 24)  Inserted: 5976/7587 (skipped: 24)  Inserted: 6476/7587 (skipped: 24)  Inserted: 6976/7587 (skipped: 24)  Inserted: 7471/7587 (skipped: 29)  Inserted: 7552/7587 (skipped: 35)
+  ✅ Completed: 7552 inserted, 35 skipped
+
+Processing chunk 28/130: chunk_-97.5_30.4.geojson
+  Found 814 parcels
+  Inserted: 469/814 (skipped: 31)  Inserted: 781/814 (skipped: 33)
+  ✅ Completed: 781 inserted, 33 skipped
+
+Processing chunk 29/130: chunk_-97.5_30.45.geojson
+  Found 1380 parcels
+  Inserted: 483/1380 (skipped: 17)  Inserted: 982/1380 (skipped: 18)  Inserted: 1258/1380 (skipped: 122)
+  ✅ Completed: 1258 inserted, 122 skipped
+
+Processing chunk 30/130: chunk_-97.65_30.0.geojson
+  Found 34 parcels
+  Inserted: 33/34 (skipped: 1)
+  ✅ Completed: 33 inserted, 1 skipped
+
+Processing chunk 31/130: chunk_-97.65_30.05.geojson
+  Found 523 parcels
+  Inserted: 485/523 (skipped: 15)  Inserted: 506/523 (skipped: 17)
+  ✅ Completed: 506 inserted, 17 skipped
+
+Processing chunk 32/130: chunk_-97.65_30.1.geojson
+  Found 650 parcels
+  Inserted: 483/650 (skipped: 17)  Inserted: 632/650 (skipped: 18)
+  ✅ Completed: 632 inserted, 18 skipped
+
+Processing chunk 33/130: chunk_-97.65_30.15.geojson
+  Found 1605 parcels
+  Inserted: 494/1605 (skipped: 6)  Inserted: 993/1605 (skipped: 7)  Inserted: 1493/1605 (skipped: 7)  Inserted: 1596/1605 (skipped: 9)
+  ✅ Completed: 1596 inserted, 9 skipped
+
+Processing chunk 34/130: chunk_-97.65_30.2.geojson
+  Found 3086 parcels
+  Inserted: 499/3086 (skipped: 1)  Inserted: 997/3086 (skipped: 3)  Inserted: 1496/3086 (skipped: 4)  Inserted: 1996/3086 (skipped: 4)  Inserted: 2494/3086 (skipped: 6)  Inserted: 2992/3086 (skipped: 8)  Inserted: 3074/3086 (skipped: 12)
+  ✅ Completed: 3074 inserted, 12 skipped
+
+Processing chunk 35/130: chunk_-97.65_30.25.geojson
+  Found 7789 parcels
+  Inserted: 499/7789 (skipped: 1)  Inserted: 998/7789 (skipped: 2)  Inserted: 1498/7789 (skipped: 2)  Inserted: 1998/7789 (skipped: 2)  Inserted: 2497/7789 (skipped: 3)  Inserted: 2997/7789 (skipped: 3)  Inserted: 3497/7789 (skipped: 3)  Inserted: 3997/7789 (skipped: 3)  Inserted: 4497/7789 (skipped: 3)  Inserted: 4993/7789 (skipped: 7)  Inserted: 5493/7789 (skipped: 7)  Inserted: 5993/7789 (skipped: 7)  Inserted: 6493/7789 (skipped: 7)  Inserted: 6993/7789 (skipped: 7)  Inserted: 7486/7789 (skipped: 14)  Inserted: 7773/7789 (skipped: 16)
+  ✅ Completed: 7773 inserted, 16 skipped
+
+Processing chunk 36/130: chunk_-97.65_30.3.geojson
+  Found 7986 parcels
+  Inserted: 498/7986 (skipped: 2)  Inserted: 997/7986 (skipped: 3)  Inserted: 1493/7986 (skipped: 7)  Inserted: 1993/7986 (skipped: 7)  Inserted: 2493/7986 (skipped: 7)  Inserted: 2993/7986 (skipped: 7)  Inserted: 3492/7986 (skipped: 8)  Inserted: 3992/7986 (skipped: 8)  Inserted: 4492/7986 (skipped: 8)  Inserted: 4986/7986 (skipped: 14)  Inserted: 5484/7986 (skipped: 16)  Inserted: 5983/7986 (skipped: 17)  Inserted: 6483/7986 (skipped: 17)  Inserted: 6983/7986 (skipped: 17)  Inserted: 7482/7986 (skipped: 18)  Inserted: 7966/7986 (skipped: 20)
+  ✅ Completed: 7966 inserted, 20 skipped
+
+Processing chunk 37/130: chunk_-97.65_30.35.geojson
+  Found 11356 parcels
+  Inserted: 499/11356 (skipped: 1)  Inserted: 999/11356 (skipped: 1)  Inserted: 1499/11356 (skipped: 1)  Inserted: 1999/11356 (skipped: 1)  Inserted: 2499/11356 (skipped: 1)  Inserted: 2999/11356 (skipped: 1)  Inserted: 3499/11356 (skipped: 1)  Inserted: 3999/11356 (skipped: 1)  Inserted: 4499/11356 (skipped: 1)  Inserted: 4998/11356 (skipped: 2)  Inserted: 5498/11356 (skipped: 2)  Inserted: 5997/11356 (skipped: 3)  Inserted: 6497/11356 (skipped: 3)  Inserted: 6997/11356 (skipped: 3)  Inserted: 7497/11356 (skipped: 3)  Inserted: 7996/11356 (skipped: 4)  Inserted: 8496/11356 (skipped: 4)  Inserted: 8996/11356 (skipped: 4)  Inserted: 9491/11356 (skipped: 9)  Inserted: 9989/11356 (skipped: 11)  Inserted: 10488/11356 (skipped: 12)  Inserted: 10988/11356 (skipped: 12)  Inserted: 11337/11356 (skipped: 19)
+  ✅ Completed: 11337 inserted, 19 skipped
+
+Processing chunk 38/130: chunk_-97.65_30.4.geojson
+  Found 8970 parcels
+  Inserted: 498/8970 (skipped: 2)  Inserted: 998/8970 (skipped: 2)  Inserted: 1498/8970 (skipped: 2)  Inserted: 1997/8970 (skipped: 3)  Inserted: 2496/8970 (skipped: 4)  Inserted: 2996/8970 (skipped: 4)  Inserted: 3496/8970 (skipped: 4)  Inserted: 3995/8970 (skipped: 5)  Inserted: 4490/8970 (skipped: 10)  Inserted: 4990/8970 (skipped: 10)  Inserted: 5486/8970 (skipped: 14)  Inserted: 5981/8970 (skipped: 19)  Inserted: 6477/8970 (skipped: 23)  Inserted: 6969/8970 (skipped: 31)  Inserted: 7467/8970 (skipped: 33)  Inserted: 7959/8970 (skipped: 41)  Inserted: 8459/8970 (skipped: 41)  Inserted: 8926/8970 (skipped: 44)
+  ✅ Completed: 8926 inserted, 44 skipped
+
+Processing chunk 39/130: chunk_-97.65_30.45.geojson
+  Found 3788 parcels
+  Inserted: 497/3788 (skipped: 3)  Inserted: 996/3788 (skipped: 4)  Inserted: 1491/3788 (skipped: 9)  Inserted: 1991/3788 (skipped: 9)  Inserted: 2488/3788 (skipped: 12)  Inserted: 2988/3788 (skipped: 12)  Inserted: 3487/3788 (skipped: 13)  Inserted: 3635/3788 (skipped: 153)
+  ✅ Completed: 3635 inserted, 153 skipped
+
+Processing chunk 40/130: chunk_-97.6_30.05.geojson
+  Found 152 parcels
+  Inserted: 148/152 (skipped: 4)
+  ✅ Completed: 148 inserted, 4 skipped
+
+Processing chunk 41/130: chunk_-97.6_30.1.geojson
+  Found 729 parcels
+  Inserted: 487/729 (skipped: 13)  Inserted: 706/729 (skipped: 23)
+  ✅ Completed: 706 inserted, 23 skipped
+
+Processing chunk 42/130: chunk_-97.6_30.15.geojson
+  Found 3610 parcels
+  Inserted: 496/3610 (skipped: 4)  Inserted: 996/3610 (skipped: 4)  Inserted: 1496/3610 (skipped: 4)  Inserted: 1996/3610 (skipped: 4)  Inserted: 2496/3610 (skipped: 4)  Inserted: 2996/3610 (skipped: 4)  Inserted: 3496/3610 (skipped: 4)  Inserted: 3605/3610 (skipped: 5)
+  ✅ Completed: 3605 inserted, 5 skipped
+
+Processing chunk 43/130: chunk_-97.6_30.2.geojson
+  Found 992 parcels
+  Inserted: 497/992 (skipped: 3)  Inserted: 989/992 (skipped: 3)
+  ✅ Completed: 989 inserted, 3 skipped
+
+Processing chunk 44/130: chunk_-97.6_30.25.geojson
+  Found 2795 parcels
+  Inserted: 496/2795 (skipped: 4)  Inserted: 994/2795 (skipped: 6)  Inserted: 1493/2795 (skipped: 7)  Inserted: 1993/2795 (skipped: 7)  Inserted: 2493/2795 (skipped: 7)  Inserted: 2785/2795 (skipped: 10)
+  ✅ Completed: 2785 inserted, 10 skipped
+
+Processing chunk 45/130: chunk_-97.6_30.3.geojson
+  Found 2743 parcels
+  Inserted: 497/2743 (skipped: 3)  Inserted: 995/2743 (skipped: 5)  Inserted: 1495/2743 (skipped: 5)  Inserted: 1995/2743 (skipped: 5)  Inserted: 2494/2743 (skipped: 6)  Inserted: 2736/2743 (skipped: 7)
+  ✅ Completed: 2736 inserted, 7 skipped
+
+Processing chunk 46/130: chunk_-97.6_30.35.geojson
+  Found 5928 parcels
+  Inserted: 494/5928 (skipped: 6)  Inserted: 993/5928 (skipped: 7)  Inserted: 1493/5928 (skipped: 7)  Inserted: 1993/5928 (skipped: 7)  Inserted: 2493/5928 (skipped: 7)  Inserted: 2993/5928 (skipped: 7)  Inserted: 3493/5928 (skipped: 7)  Inserted: 3993/5928 (skipped: 7)  Inserted: 4493/5928 (skipped: 7)  Inserted: 4993/5928 (skipped: 7)  Inserted: 5493/5928 (skipped: 7)  Inserted: 5918/5928 (skipped: 10)
+  ✅ Completed: 5918 inserted, 10 skipped
+
+Processing chunk 47/130: chunk_-97.6_30.4.geojson
+  Found 9944 parcels
+  Inserted: 500/9944 (skipped: 0)  Inserted: 1000/9944 (skipped: 0)  Inserted: 1500/9944 (skipped: 0)  Inserted: 2000/9944 (skipped: 0)  Inserted: 2499/9944 (skipped: 1)  Inserted: 2993/9944 (skipped: 7)  Inserted: 3493/9944 (skipped: 7)  Inserted: 3990/9944 (skipped: 10)  Inserted: 4487/9944 (skipped: 13)  Inserted: 4983/9944 (skipped: 17)  Inserted: 5480/9944 (skipped: 20)  Inserted: 5980/9944 (skipped: 20)  Inserted: 6479/9944 (skipped: 21)  Inserted: 6979/9944 (skipped: 21)  Inserted: 7478/9944 (skipped: 22)  Inserted: 7977/9944 (skipped: 23)  Inserted: 8477/9944 (skipped: 23)  Inserted: 8977/9944 (skipped: 23)  Inserted: 9477/9944 (skipped: 23)  Inserted: 9916/9944 (skipped: 28)
+  ✅ Completed: 9916 inserted, 28 skipped
+
+Processing chunk 48/130: chunk_-97.6_30.45.geojson
+  Found 9231 parcels
+  Inserted: 498/9231 (skipped: 2)  Inserted: 998/9231 (skipped: 2)  Inserted: 1497/9231 (skipped: 3)  Inserted: 1994/9231 (skipped: 6)  Inserted: 2493/9231 (skipped: 7)  Inserted: 2987/9231 (skipped: 13)  Inserted: 3487/9231 (skipped: 13)  Inserted: 3986/9231 (skipped: 14)  Inserted: 4482/9231 (skipped: 18)  Inserted: 4981/9231 (skipped: 19)  Inserted: 5480/9231 (skipped: 20)  Inserted: 5980/9231 (skipped: 20)  Inserted: 6480/9231 (skipped: 20)  Inserted: 6979/9231 (skipped: 21)  Inserted: 7479/9231 (skipped: 21)  Inserted: 7979/9231 (skipped: 21)  Inserted: 8479/9231 (skipped: 21)  Inserted: 8979/9231 (skipped: 21)  Inserted: 9190/9231 (skipped: 41)
+  ✅ Completed: 9190 inserted, 41 skipped
+
+Processing chunk 49/130: chunk_-97.75_30.05.geojson
+  Found 192 parcels
+  Inserted: 183/192 (skipped: 9)
+  ✅ Completed: 183 inserted, 9 skipped
+
+Processing chunk 50/130: chunk_-97.75_30.1.geojson
+  Found 5005 parcels
+  Inserted: 498/5005 (skipped: 2)  Inserted: 998/5005 (skipped: 2)  Inserted: 1498/5005 (skipped: 2)  Inserted: 1998/5005 (skipped: 2)  Inserted: 2498/5005 (skipped: 2)  Inserted: 2998/5005 (skipped: 2)  Inserted: 3498/5005 (skipped: 2)  Inserted: 3998/5005 (skipped: 2)  Inserted: 4498/5005 (skipped: 2)  Inserted: 4996/5005 (skipped: 4)  Inserted: 5001/5005 (skipped: 4)
+  ✅ Completed: 5001 inserted, 4 skipped
+
+Processing chunk 51/130: chunk_-97.75_30.15.geojson
+  Found 8946 parcels
+  Inserted: 500/8946 (skipped: 0)  Inserted: 1000/8946 (skipped: 0)  Inserted: 1500/8946 (skipped: 0)  Inserted: 2000/8946 (skipped: 0)  Inserted: 2500/8946 (skipped: 0)  Inserted: 3000/8946 (skipped: 0)  Inserted: 3500/8946 (skipped: 0)  Inserted: 3999/8946 (skipped: 1)  Inserted: 4499/8946 (skipped: 1)  Inserted: 4995/8946 (skipped: 5)  Inserted: 5490/8946 (skipped: 10)  Inserted: 5990/8946 (skipped: 10)  Inserted: 6490/8946 (skipped: 10)  Inserted: 6989/8946 (skipped: 11)  Inserted: 7489/8946 (skipped: 11)  Inserted: 7989/8946 (skipped: 11)  Inserted: 8489/8946 (skipped: 11)  Inserted: 8933/8946 (skipped: 13)
+  ✅ Completed: 8933 inserted, 13 skipped
+
+Processing chunk 52/130: chunk_-97.75_30.2.geojson
+  Found 12090 parcels
+  Inserted: 500/12090 (skipped: 0)  Inserted: 1000/12090 (skipped: 0)  Inserted: 1500/12090 (skipped: 0)  Inserted: 2000/12090 (skipped: 0)  Inserted: 2499/12090 (skipped: 1)  Inserted: 2999/12090 (skipped: 1)  Inserted: 3499/12090 (skipped: 1)  Inserted: 3999/12090 (skipped: 1)  Inserted: 4498/12090 (skipped: 2)  Inserted: 4998/12090 (skipped: 2)  Inserted: 5497/12090 (skipped: 3)  Inserted: 5996/12090 (skipped: 4)  Inserted: 6496/12090 (skipped: 4)  Inserted: 6996/12090 (skipped: 4)  Inserted: 7496/12090 (skipped: 4)  Inserted: 7996/12090 (skipped: 4)  Inserted: 8496/12090 (skipped: 4)  Inserted: 8996/12090 (skipped: 4)  Inserted: 9496/12090 (skipped: 4)  Inserted: 9996/12090 (skipped: 4)  Inserted: 10496/12090 (skipped: 4)  Inserted: 10996/12090 (skipped: 4)  Inserted: 11487/12090 (skipped: 13)  Inserted: 11987/12090 (skipped: 13)  Inserted: 12077/12090 (skipped: 13)
+  ✅ Completed: 12077 inserted, 13 skipped
+
+Processing chunk 53/130: chunk_-97.75_30.25.geojson
+  Found 9597 parcels
+  Inserted: 498/9597 (skipped: 2)  Inserted: 998/9597 (skipped: 2)  Inserted: 1497/9597 (skipped: 3)  Inserted: 1997/9597 (skipped: 3)  Inserted: 2497/9597 (skipped: 3)  Inserted: 2997/9597 (skipped: 3)  Inserted: 3497/9597 (skipped: 3)  Inserted: 3995/9597 (skipped: 5)  Inserted: 4493/9597 (skipped: 7)  Inserted: 4993/9597 (skipped: 7)  Inserted: 5493/9597 (skipped: 7)  Inserted: 5992/9597 (skipped: 8)  Inserted: 6492/9597 (skipped: 8)  Inserted: 6991/9597 (skipped: 9)  Inserted: 7490/9597 (skipped: 10)  Inserted: 7990/9597 (skipped: 10)  Inserted: 8486/9597 (skipped: 14)  Inserted: 8983/9597 (skipped: 17)  Inserted: 9458/9597 (skipped: 42)  Inserted: 9555/9597 (skipped: 42)
+  ✅ Completed: 9555 inserted, 42 skipped
+
+Processing chunk 54/130: chunk_-97.75_30.3.geojson
+  Found 7344 parcels
+  Inserted: 493/7344 (skipped: 7)  Inserted: 987/7344 (skipped: 13)  Inserted: 1483/7344 (skipped: 17)  Inserted: 1983/7344 (skipped: 17)  Inserted: 2483/7344 (skipped: 17)  Inserted: 2980/7344 (skipped: 20)  Inserted: 3480/7344 (skipped: 20)  Inserted: 3980/7344 (skipped: 20)  Inserted: 4480/7344 (skipped: 20)  Inserted: 4979/7344 (skipped: 21)  Inserted: 5478/7344 (skipped: 22)  Inserted: 5977/7344 (skipped: 23)  Inserted: 6476/7344 (skipped: 24)  Inserted: 6976/7344 (skipped: 24)  Inserted: 7296/7344 (skipped: 48)
+  ✅ Completed: 7296 inserted, 48 skipped
+
+Processing chunk 55/130: chunk_-97.75_30.35.geojson
+  Found 6774 parcels
+  Inserted: 498/6774 (skipped: 2)  Inserted: 989/6774 (skipped: 11)  Inserted: 1489/6774 (skipped: 11)  Inserted: 1988/6774 (skipped: 12)  Inserted: 2487/6774 (skipped: 13)  Inserted: 2987/6774 (skipped: 13)  Inserted: 3487/6774 (skipped: 13)  Inserted: 3987/6774 (skipped: 13)  Inserted: 4483/6774 (skipped: 17)  Inserted: 4982/6774 (skipped: 18)  Inserted: 5480/6774 (skipped: 20)  Inserted: 5980/6774 (skipped: 20)  Inserted: 6480/6774 (skipped: 20)  Inserted: 6721/6774 (skipped: 53)
+  ✅ Completed: 6721 inserted, 53 skipped
+
+Processing chunk 56/130: chunk_-97.75_30.4.geojson
+  Found 6834 parcels
+  Inserted: 499/6834 (skipped: 1)  Inserted: 999/6834 (skipped: 1)  Inserted: 1499/6834 (skipped: 1)  Inserted: 1998/6834 (skipped: 2)  Inserted: 2498/6834 (skipped: 2)  Inserted: 2998/6834 (skipped: 2)  Inserted: 3498/6834 (skipped: 2)  Inserted: 3998/6834 (skipped: 2)  Inserted: 4498/6834 (skipped: 2)  Inserted: 4998/6834 (skipped: 2)  Inserted: 5498/6834 (skipped: 2)  Inserted: 5997/6834 (skipped: 3)  Inserted: 6494/6834 (skipped: 6)  Inserted: 6827/6834 (skipped: 7)
+  ✅ Completed: 6827 inserted, 7 skipped
+
+Processing chunk 57/130: chunk_-97.7_30.0.geojson
+  Found 126 parcels
+  Inserted: 104/126 (skipped: 22)
+  ✅ Completed: 104 inserted, 22 skipped
+
+Processing chunk 58/130: chunk_-97.7_30.05.geojson
+  Found 817 parcels
+  Inserted: 489/817 (skipped: 11)  Inserted: 801/817 (skipped: 16)
+  ✅ Completed: 801 inserted, 16 skipped
+
+Processing chunk 59/130: chunk_-97.7_30.1.geojson
+  Found 2785 parcels
+  Inserted: 490/2785 (skipped: 10)  Inserted: 990/2785 (skipped: 10)  Inserted: 1490/2785 (skipped: 10)  Inserted: 1990/2785 (skipped: 10)  Inserted: 2490/2785 (skipped: 10)  Inserted: 2774/2785 (skipped: 11)
+  ✅ Completed: 2774 inserted, 11 skipped
+
+Processing chunk 60/130: chunk_-97.7_30.15.geojson
+  Found 7705 parcels
+  Inserted: 500/7705 (skipped: 0)  Inserted: 999/7705 (skipped: 1)  Inserted: 1499/7705 (skipped: 1)  Inserted: 1997/7705 (skipped: 3)  Inserted: 2496/7705 (skipped: 4)  Inserted: 2995/7705 (skipped: 5)  Inserted: 3495/7705 (skipped: 5)  Inserted: 3995/7705 (skipped: 5)  Inserted: 4495/7705 (skipped: 5)  Inserted: 4995/7705 (skipped: 5)  Inserted: 5495/7705 (skipped: 5)  Inserted: 5995/7705 (skipped: 5)  Inserted: 6495/7705 (skipped: 5)  Inserted: 6995/7705 (skipped: 5)  Inserted: 7495/7705 (skipped: 5)  Inserted: 7698/7705 (skipped: 7)
+  ✅ Completed: 7698 inserted, 7 skipped
+
+Processing chunk 61/130: chunk_-97.7_30.2.geojson
+  Found 4594 parcels
+  Inserted: 498/4594 (skipped: 2)  Inserted: 997/4594 (skipped: 3)  Inserted: 1497/4594 (skipped: 3)  Inserted: 1997/4594 (skipped: 3)  Inserted: 2497/4594 (skipped: 3)  Inserted: 2997/4594 (skipped: 3)  Inserted: 3497/4594 (skipped: 3)  Inserted: 3995/4594 (skipped: 5)  Inserted: 4494/4594 (skipped: 6)  Inserted: 4588/4594 (skipped: 6)
+  ✅ Completed: 4588 inserted, 6 skipped
+
+Processing chunk 62/130: chunk_-97.7_30.25.geojson
+  Found 14060 parcels
+  Inserted: 499/14060 (skipped: 1)  Inserted: 995/14060 (skipped: 5)  Inserted: 1492/14060 (skipped: 8)  Inserted: 1991/14060 (skipped: 9)  Inserted: 2491/14060 (skipped: 9)  Inserted: 2990/14060 (skipped: 10)  Inserted: 3490/14060 (skipped: 10)  Inserted: 3990/14060 (skipped: 10)  Inserted: 4488/14060 (skipped: 12)  Inserted: 4988/14060 (skipped: 12)  Inserted: 5488/14060 (skipped: 12)  Inserted: 5988/14060 (skipped: 12)  Inserted: 6487/14060 (skipped: 13)  Inserted: 6986/14060 (skipped: 14)  Inserted: 7484/14060 (skipped: 16)  Inserted: 7984/14060 (skipped: 16)  Inserted: 8484/14060 (skipped: 16)  Inserted: 8983/14060 (skipped: 17)  Inserted: 9483/14060 (skipped: 17)  Inserted: 9981/14060 (skipped: 19)  Inserted: 10481/14060 (skipped: 19)  Inserted: 10981/14060 (skipped: 19)  Inserted: 11477/14060 (skipped: 23)  Inserted: 11976/14060 (skipped: 24)  Inserted: 12476/14060 (skipped: 24)  Inserted: 12976/14060 (skipped: 24)  Inserted: 13446/14060 (skipped: 54)  Inserted: 13943/14060 (skipped: 57)  Inserted: 14003/14060 (skipped: 57)
+  ✅ Completed: 14003 inserted, 57 skipped
+
+Processing chunk 63/130: chunk_-97.7_30.3.geojson
+  Found 14532 parcels
+  Inserted: 500/14532 (skipped: 0)  Inserted: 999/14532 (skipped: 1)  Inserted: 1499/14532 (skipped: 1)  Inserted: 1994/14532 (skipped: 6)  Inserted: 2494/14532 (skipped: 6)  Inserted: 2992/14532 (skipped: 8)  Inserted: 3492/14532 (skipped: 8)  Inserted: 3990/14532 (skipped: 10)  Inserted: 4490/14532 (skipped: 10)  Inserted: 4990/14532 (skipped: 10)  Inserted: 5489/14532 (skipped: 11)  Inserted: 5989/14532 (skipped: 11)  Inserted: 6489/14532 (skipped: 11)  Inserted: 6989/14532 (skipped: 11)  Inserted: 7489/14532 (skipped: 11)  Inserted: 7988/14532 (skipped: 12)  Inserted: 8488/14532 (skipped: 12)  Inserted: 8988/14532 (skipped: 12)  Inserted: 9488/14532 (skipped: 12)  Inserted: 9988/14532 (skipped: 12)  Inserted: 10488/14532 (skipped: 12)  Inserted: 10986/14532 (skipped: 14)  Inserted: 11486/14532 (skipped: 14)  Inserted: 11986/14532 (skipped: 14)  Inserted: 12486/14532 (skipped: 14)  Inserted: 12985/14532 (skipped: 15)  Inserted: 13484/14532 (skipped: 16)  Inserted: 13965/14532 (skipped: 35)  Inserted: 14463/14532 (skipped: 37)  Inserted: 14495/14532 (skipped: 37)
+  ✅ Completed: 14495 inserted, 37 skipped
+
+Processing chunk 64/130: chunk_-97.7_30.35.geojson
+  Found 9049 parcels
+  Inserted: 500/9049 (skipped: 0)  Inserted: 1000/9049 (skipped: 0)  Inserted: 1500/9049 (skipped: 0)  Inserted: 2000/9049 (skipped: 0)  Inserted: 2499/9049 (skipped: 1)  Inserted: 2999/9049 (skipped: 1)  Inserted: 3499/9049 (skipped: 1)  Inserted: 3998/9049 (skipped: 2)  Inserted: 4495/9049 (skipped: 5)  Inserted: 4994/9049 (skipped: 6)  Inserted: 5494/9049 (skipped: 6)  Inserted: 5994/9049 (skipped: 6)  Inserted: 6494/9049 (skipped: 6)  Inserted: 6991/9049 (skipped: 9)  Inserted: 7491/9049 (skipped: 9)  Inserted: 7987/9049 (skipped: 13)  Inserted: 8487/9049 (skipped: 13)  Inserted: 8977/9049 (skipped: 23)  Inserted: 9026/9049 (skipped: 23)
+  ✅ Completed: 9026 inserted, 23 skipped
+
+Processing chunk 65/130: chunk_-97.7_30.4.geojson
+  Found 6662 parcels
+  Inserted: 500/6662 (skipped: 0)  Inserted: 999/6662 (skipped: 1)  Inserted: 1495/6662 (skipped: 5)  Inserted: 1994/6662 (skipped: 6)  Inserted: 2494/6662 (skipped: 6)  Inserted: 2993/6662 (skipped: 7)  Inserted: 3492/6662 (skipped: 8)  Inserted: 3992/6662 (skipped: 8)  Inserted: 4492/6662 (skipped: 8)  Inserted: 4992/6662 (skipped: 8)  Inserted: 5491/6662 (skipped: 9)  Inserted: 5991/6662 (skipped: 9)  Inserted: 6491/6662 (skipped: 9)  Inserted: 6647/6662 (skipped: 15)
+  ✅ Completed: 6647 inserted, 15 skipped
+
+Processing chunk 66/130: chunk_-97.7_30.45.geojson
+  Found 22 parcels
+  Inserted: 20/22 (skipped: 2)
+  ✅ Completed: 20 inserted, 2 skipped
+
+Processing chunk 67/130: chunk_-97.85_30.1.geojson
+  Found 441 parcels
+  Inserted: 439/441 (skipped: 2)
+  ✅ Completed: 439 inserted, 2 skipped
+
+Processing chunk 68/130: chunk_-97.85_30.15.geojson
+  Found 6610 parcels
+  Inserted: 500/6610 (skipped: 0)  Inserted: 1000/6610 (skipped: 0)  Inserted: 1500/6610 (skipped: 0)  Inserted: 1997/6610 (skipped: 3)  Inserted: 2497/6610 (skipped: 3)  Inserted: 2996/6610 (skipped: 4)  Inserted: 3494/6610 (skipped: 6)  Inserted: 3992/6610 (skipped: 8)  Inserted: 4488/6610 (skipped: 12)  Inserted: 4988/6610 (skipped: 12)  Inserted: 5486/6610 (skipped: 14)  Inserted: 5985/6610 (skipped: 15)  Inserted: 6485/6610 (skipped: 15)  Inserted: 6591/6610 (skipped: 19)
+  ✅ Completed: 6591 inserted, 19 skipped
+
+Processing chunk 69/130: chunk_-97.85_30.2.geojson
+  Found 9284 parcels
+  Inserted: 498/9284 (skipped: 2)  Inserted: 995/9284 (skipped: 5)  Inserted: 1494/9284 (skipped: 6)  Inserted: 1993/9284 (skipped: 7)  Inserted: 2491/9284 (skipped: 9)  Inserted: 2988/9284 (skipped: 12)  Inserted: 3486/9284 (skipped: 14)  Inserted: 3984/9284 (skipped: 16)  Inserted: 4484/9284 (skipped: 16)  Inserted: 4980/9284 (skipped: 20)  Inserted: 5480/9284 (skipped: 20)  Inserted: 5976/9284 (skipped: 24)  Inserted: 6475/9284 (skipped: 25)  Inserted: 6970/9284 (skipped: 30)  Inserted: 7469/9284 (skipped: 31)  Inserted: 7967/9284 (skipped: 33)  Inserted: 8466/9284 (skipped: 34)  Inserted: 8966/9284 (skipped: 34)  Inserted: 9247/9284 (skipped: 37)
+  ✅ Completed: 9247 inserted, 37 skipped
+
+Processing chunk 70/130: chunk_-97.85_30.25.geojson
+  Found 1863 parcels
+  Inserted: 495/1863 (skipped: 5)  Inserted: 992/1863 (skipped: 8)  Inserted: 1492/1863 (skipped: 8)  Inserted: 1854/1863 (skipped: 9)
+  ✅ Completed: 1854 inserted, 9 skipped
+
+Processing chunk 71/130: chunk_-97.85_30.3.geojson
+  Found 3104 parcels
+  Inserted: 497/3104 (skipped: 3)  Inserted: 995/3104 (skipped: 5)  Inserted: 1490/3104 (skipped: 10)  Inserted: 1989/3104 (skipped: 11)  Inserted: 2489/3104 (skipped: 11)  Inserted: 2989/3104 (skipped: 11)  Inserted: 3092/3104 (skipped: 12)
+  ✅ Completed: 3092 inserted, 12 skipped
+
+Processing chunk 72/130: chunk_-97.85_30.35.geojson
+  Found 3211 parcels
+  Inserted: 499/3211 (skipped: 1)  Inserted: 999/3211 (skipped: 1)  Inserted: 1495/3211 (skipped: 5)  Inserted: 1992/3211 (skipped: 8)  Inserted: 2489/3211 (skipped: 11)  Inserted: 2989/3211 (skipped: 11)  Inserted: 3199/3211 (skipped: 12)
+  ✅ Completed: 3199 inserted, 12 skipped
+
+Processing chunk 73/130: chunk_-97.85_30.4.geojson
+  Found 1357 parcels
+  Inserted: 496/1357 (skipped: 4)  Inserted: 992/1357 (skipped: 8)  Inserted: 1346/1357 (skipped: 11)
+  ✅ Completed: 1346 inserted, 11 skipped
+
+Processing chunk 74/130: chunk_-97.85_30.45.geojson
+  Found 1880 parcels
+  Inserted: 498/1880 (skipped: 2)  Inserted: 998/1880 (skipped: 2)  Inserted: 1496/1880 (skipped: 4)  Inserted: 1869/1880 (skipped: 11)
+  ✅ Completed: 1869 inserted, 11 skipped
+
+Processing chunk 75/130: chunk_-97.85_30.5.geojson
+  Found 2946 parcels
+  Inserted: 493/2946 (skipped: 7)  Inserted: 993/2946 (skipped: 7)  Inserted: 1493/2946 (skipped: 7)  Inserted: 1993/2946 (skipped: 7)  Inserted: 2493/2946 (skipped: 7)  Inserted: 2936/2946 (skipped: 10)
+  ✅ Completed: 2936 inserted, 10 skipped
+
+Processing chunk 76/130: chunk_-97.85_30.55.geojson
+  Found 102 parcels
+  Inserted: 101/102 (skipped: 1)
+  ✅ Completed: 101 inserted, 1 skipped
+
+Processing chunk 77/130: chunk_-97.8_29.8.geojson
+  Found 1 parcels
+  Inserted: 1/1 (skipped: 0)
+  ✅ Completed: 1 inserted, 0 skipped
+
+Processing chunk 78/130: chunk_-97.8_30.05.geojson
+  Found 5 parcels
+  Inserted: 5/5 (skipped: 0)
+  ✅ Completed: 5 inserted, 0 skipped
+
+Processing chunk 79/130: chunk_-97.8_30.1.geojson
+  Found 3474 parcels
+  Inserted: 498/3474 (skipped: 2)  Inserted: 997/3474 (skipped: 3)  Inserted: 1494/3474 (skipped: 6)  Inserted: 1994/3474 (skipped: 6)  Inserted: 2494/3474 (skipped: 6)  Inserted: 2994/3474 (skipped: 6)  Inserted: 3468/3474 (skipped: 6)
+  ✅ Completed: 3468 inserted, 6 skipped
+
+Processing chunk 80/130: chunk_-97.8_30.15.geojson
+  Found 12791 parcels
+  Inserted: 500/12791 (skipped: 0)  Inserted: 1000/12791 (skipped: 0)  Inserted: 1500/12791 (skipped: 0)  Inserted: 2000/12791 (skipped: 0)  Inserted: 2500/12791 (skipped: 0)  Inserted: 3000/12791 (skipped: 0)  Inserted: 3500/12791 (skipped: 0)  Inserted: 4000/12791 (skipped: 0)  Inserted: 4500/12791 (skipped: 0)  Inserted: 5000/12791 (skipped: 0)  Inserted: 5500/12791 (skipped: 0)  Inserted: 6000/12791 (skipped: 0)  Inserted: 6500/12791 (skipped: 0)  Inserted: 7000/12791 (skipped: 0)  Inserted: 7500/12791 (skipped: 0)  Inserted: 7999/12791 (skipped: 1)  Inserted: 8499/12791 (skipped: 1)  Inserted: 8998/12791 (skipped: 2)  Inserted: 9498/12791 (skipped: 2)  Inserted: 9997/12791 (skipped: 3)  Inserted: 10497/12791 (skipped: 3)  Inserted: 10997/12791 (skipped: 3)  Inserted: 11497/12791 (skipped: 3)  Inserted: 11997/12791 (skipped: 3)  Inserted: 12497/12791 (skipped: 3)  Inserted: 12783/12791 (skipped: 8)
+  ✅ Completed: 12783 inserted, 8 skipped
+
+Processing chunk 81/130: chunk_-97.8_30.2.geojson
+  Found 7947 parcels
+  Inserted: 497/7947 (skipped: 3)  Inserted: 996/7947 (skipped: 4)  Inserted: 1495/7947 (skipped: 5)  Inserted: 1995/7947 (skipped: 5)  Inserted: 2495/7947 (skipped: 5)  Inserted: 2995/7947 (skipped: 5)  Inserted: 3495/7947 (skipped: 5)  Inserted: 3995/7947 (skipped: 5)  Inserted: 4495/7947 (skipped: 5)  Inserted: 4995/7947 (skipped: 5)  Inserted: 5495/7947 (skipped: 5)  Inserted: 5995/7947 (skipped: 5)  Inserted: 6495/7947 (skipped: 5)  Inserted: 6994/7947 (skipped: 6)  Inserted: 7493/7947 (skipped: 7)  Inserted: 7939/7947 (skipped: 8)
+  ✅ Completed: 7939 inserted, 8 skipped
+
+Processing chunk 82/130: chunk_-97.8_30.25.geojson
+  Found 4826 parcels
+  Inserted: 500/4826 (skipped: 0)  Inserted: 998/4826 (skipped: 2)  Inserted: 1498/4826 (skipped: 2)  Inserted: 1997/4826 (skipped: 3)  Inserted: 2497/4826 (skipped: 3)  Inserted: 2995/4826 (skipped: 5)  Inserted: 3494/4826 (skipped: 6)  Inserted: 3989/4826 (skipped: 11)  Inserted: 4486/4826 (skipped: 14)  Inserted: 4810/4826 (skipped: 16)
+  ✅ Completed: 4810 inserted, 16 skipped
+
+Processing chunk 83/130: chunk_-97.8_30.3.geojson
+  Found 2402 parcels
+  Inserted: 499/2402 (skipped: 1)  Inserted: 991/2402 (skipped: 9)  Inserted: 1490/2402 (skipped: 10)  Inserted: 1987/2402 (skipped: 13)  Inserted: 2387/2402 (skipped: 15)
+  ✅ Completed: 2387 inserted, 15 skipped
+
+Processing chunk 84/130: chunk_-97.8_30.35.geojson
+  Found 1730 parcels
+  Inserted: 496/1730 (skipped: 4)  Inserted: 995/1730 (skipped: 5)  Inserted: 1494/1730 (skipped: 6)  Inserted: 1721/1730 (skipped: 9)
+  ✅ Completed: 1721 inserted, 9 skipped
+
+Processing chunk 85/130: chunk_-97.8_30.4.geojson
+  Found 3403 parcels
+  Inserted: 500/3403 (skipped: 0)  Inserted: 995/3403 (skipped: 5)  Inserted: 1495/3403 (skipped: 5)  Inserted: 1994/3403 (skipped: 6)  Inserted: 2494/3403 (skipped: 6)  Inserted: 2988/3403 (skipped: 12)  Inserted: 3390/3403 (skipped: 13)
+  ✅ Completed: 3390 inserted, 13 skipped
+
+Processing chunk 86/130: chunk_-97.8_30.45.geojson
+  Found 1395 parcels
+  Inserted: 498/1395 (skipped: 2)  Inserted: 997/1395 (skipped: 3)  Inserted: 1392/1395 (skipped: 3)
+  ✅ Completed: 1392 inserted, 3 skipped
+
+Processing chunk 87/130: chunk_-97.95_30.15.geojson
+  Found 1 parcels
+  Inserted: 1/1 (skipped: 0)
+  ✅ Completed: 1 inserted, 0 skipped
+
+Processing chunk 88/130: chunk_-97.95_30.2.geojson
+  Found 602 parcels
+  Inserted: 486/602 (skipped: 14)  Inserted: 586/602 (skipped: 16)
+  ✅ Completed: 586 inserted, 16 skipped
+
+Processing chunk 89/130: chunk_-97.95_30.25.geojson
+  Found 244 parcels
+  Inserted: 243/244 (skipped: 1)
+  ✅ Completed: 243 inserted, 1 skipped
+
+Processing chunk 90/130: chunk_-97.95_30.3.geojson
+  Found 4307 parcels
+  Inserted: 498/4307 (skipped: 2)  Inserted: 992/4307 (skipped: 8)  Inserted: 1488/4307 (skipped: 12)  Inserted: 1988/4307 (skipped: 12)  Inserted: 2486/4307 (skipped: 14)  Inserted: 2985/4307 (skipped: 15)  Inserted: 3484/4307 (skipped: 16)  Inserted: 3984/4307 (skipped: 16)  Inserted: 4287/4307 (skipped: 20)
+  ✅ Completed: 4287 inserted, 20 skipped
+
+Processing chunk 91/130: chunk_-97.95_30.35.geojson
+  Found 6272 parcels
+  Inserted: 498/6272 (skipped: 2)  Inserted: 998/6272 (skipped: 2)  Inserted: 1497/6272 (skipped: 3)  Inserted: 1997/6272 (skipped: 3)  Inserted: 2486/6272 (skipped: 14)  Inserted: 2984/6272 (skipped: 16)  Inserted: 3484/6272 (skipped: 16)  Inserted: 3982/6272 (skipped: 18)  Inserted: 4482/6272 (skipped: 18)  Inserted: 4978/6272 (skipped: 22)  Inserted: 5478/6272 (skipped: 22)  Inserted: 5977/6272 (skipped: 23)  Inserted: 6237/6272 (skipped: 35)
+  ✅ Completed: 6237 inserted, 35 skipped
+
+Processing chunk 92/130: chunk_-97.95_30.4.geojson
+  Found 2973 parcels
+  Inserted: 496/2973 (skipped: 4)  Inserted: 995/2973 (skipped: 5)  Inserted: 1495/2973 (skipped: 5)  Inserted: 1994/2973 (skipped: 6)  Inserted: 2493/2973 (skipped: 7)  Inserted: 2956/2973 (skipped: 17)
+  ✅ Completed: 2956 inserted, 17 skipped
+
+Processing chunk 93/130: chunk_-97.95_30.45.geojson
+  Found 6095 parcels
+  Inserted: 498/6095 (skipped: 2)  Inserted: 997/6095 (skipped: 3)  Inserted: 1496/6095 (skipped: 4)  Inserted: 1996/6095 (skipped: 4)  Inserted: 2496/6095 (skipped: 4)  Inserted: 2995/6095 (skipped: 5)  Inserted: 3495/6095 (skipped: 5)  Inserted: 3995/6095 (skipped: 5)  Inserted: 4492/6095 (skipped: 8)  Inserted: 4991/6095 (skipped: 9)  Inserted: 5491/6095 (skipped: 9)  Inserted: 5991/6095 (skipped: 9)  Inserted: 6083/6095 (skipped: 12)
+  ✅ Completed: 6083 inserted, 12 skipped
+
+Processing chunk 94/130: chunk_-97.95_30.5.geojson
+  Found 488 parcels
+  Inserted: 484/488 (skipped: 4)
+  ✅ Completed: 484 inserted, 4 skipped
+
+Processing chunk 95/130: chunk_-97.95_30.55.geojson
+  Found 806 parcels
+  Inserted: 495/806 (skipped: 5)  Inserted: 801/806 (skipped: 5)
+  ✅ Completed: 801 inserted, 5 skipped
+
+Processing chunk 96/130: chunk_-97.95_30.6.geojson
+  Found 74 parcels
+  Inserted: 71/74 (skipped: 3)
+  ✅ Completed: 71 inserted, 3 skipped
+
+Processing chunk 97/130: chunk_-97.9_30.15.geojson
+  Found 2771 parcels
+  Inserted: 499/2771 (skipped: 1)  Inserted: 999/2771 (skipped: 1)  Inserted: 1499/2771 (skipped: 1)  Inserted: 1999/2771 (skipped: 1)  Inserted: 2499/2771 (skipped: 1)  Inserted: 2768/2771 (skipped: 3)
+  ✅ Completed: 2768 inserted, 3 skipped
+
+Processing chunk 98/130: chunk_-97.9_30.2.geojson
+  Found 2498 parcels
+  Inserted: 499/2498 (skipped: 1)  Inserted: 991/2498 (skipped: 9)  Inserted: 1487/2498 (skipped: 13)  Inserted: 1987/2498 (skipped: 13)  Inserted: 2484/2498 (skipped: 14)
+  ✅ Completed: 2484 inserted, 14 skipped
+
+Processing chunk 99/130: chunk_-97.9_30.25.geojson
+  Found 960 parcels
+  Inserted: 495/960 (skipped: 5)  Inserted: 952/960 (skipped: 8)
+  ✅ Completed: 952 inserted, 8 skipped
+
+Processing chunk 100/130: chunk_-97.9_30.3.geojson
+  Found 2886 parcels
+  Inserted: 495/2886 (skipped: 5)  Inserted: 995/2886 (skipped: 5)  Inserted: 1491/2886 (skipped: 9)  Inserted: 1990/2886 (skipped: 10)  Inserted: 2488/2886 (skipped: 12)  Inserted: 2871/2886 (skipped: 15)
+  ✅ Completed: 2871 inserted, 15 skipped
+
+Processing chunk 101/130: chunk_-97.9_30.35.geojson
+  Found 5124 parcels
+  Inserted: 499/5124 (skipped: 1)  Inserted: 999/5124 (skipped: 1)  Inserted: 1499/5124 (skipped: 1)  Inserted: 1998/5124 (skipped: 2)  Inserted: 2497/5124 (skipped: 3)  Inserted: 2994/5124 (skipped: 6)  Inserted: 3493/5124 (skipped: 7)  Inserted: 3993/5124 (skipped: 7)  Inserted: 4493/5124 (skipped: 7)  Inserted: 4992/5124 (skipped: 8)  Inserted: 5113/5124 (skipped: 11)
+  ✅ Completed: 5113 inserted, 11 skipped
+
+Processing chunk 102/130: chunk_-97.9_30.4.geojson
+  Found 2080 parcels
+  Inserted: 500/2080 (skipped: 0)  Inserted: 995/2080 (skipped: 5)  Inserted: 1495/2080 (skipped: 5)  Inserted: 1994/2080 (skipped: 6)  Inserted: 2069/2080 (skipped: 11)
+  ✅ Completed: 2069 inserted, 11 skipped
+
+Processing chunk 103/130: chunk_-97.9_30.45.geojson
+  Found 2498 parcels
+  Inserted: 499/2498 (skipped: 1)  Inserted: 997/2498 (skipped: 3)  Inserted: 1496/2498 (skipped: 4)  Inserted: 1994/2498 (skipped: 6)  Inserted: 2484/2498 (skipped: 14)
+  ✅ Completed: 2484 inserted, 14 skipped
+
+Processing chunk 104/130: chunk_-97.9_30.5.geojson
+  Found 2528 parcels
+  Inserted: 489/2528 (skipped: 11)  Inserted: 988/2528 (skipped: 12)  Inserted: 1488/2528 (skipped: 12)  Inserted: 1988/2528 (skipped: 12)  Inserted: 2487/2528 (skipped: 13)  Inserted: 2513/2528 (skipped: 15)
+  ✅ Completed: 2513 inserted, 15 skipped
+
+Processing chunk 105/130: chunk_-97.9_30.55.geojson
+  Found 593 parcels
+  Inserted: 496/593 (skipped: 4)  Inserted: 588/593 (skipped: 5)
+  ✅ Completed: 588 inserted, 5 skipped
+
+Processing chunk 106/130: chunk_-97.9_30.6.geojson
+  Found 90 parcels
+  Inserted: 89/90 (skipped: 1)
+  ✅ Completed: 89 inserted, 1 skipped
+
+Processing chunk 107/130: chunk_-98.05_30.25.geojson
+  Found 752 parcels
+  Inserted: 495/752 (skipped: 5)  Inserted: 741/752 (skipped: 11)
+  ✅ Completed: 741 inserted, 11 skipped
+
+Processing chunk 108/130: chunk_-98.05_30.3.geojson
+  Found 324 parcels
+  Inserted: 318/324 (skipped: 6)
+  ✅ Completed: 318 inserted, 6 skipped
+
+Processing chunk 109/130: chunk_-98.05_30.35.geojson
+  Found 1651 parcels
+  Inserted: 495/1651 (skipped: 5)  Inserted: 988/1651 (skipped: 12)  Inserted: 1487/1651 (skipped: 13)  Inserted: 1634/1651 (skipped: 17)
+  ✅ Completed: 1634 inserted, 17 skipped
+
+Processing chunk 110/130: chunk_-98.05_30.4.geojson
+  Found 1379 parcels
+  Inserted: 495/1379 (skipped: 5)  Inserted: 992/1379 (skipped: 8)  Inserted: 1366/1379 (skipped: 13)
+  ✅ Completed: 1366 inserted, 13 skipped
+
+Processing chunk 111/130: chunk_-98.05_30.45.geojson
+  Found 884 parcels
+  Inserted: 491/884 (skipped: 9)  Inserted: 866/884 (skipped: 18)
+  ✅ Completed: 866 inserted, 18 skipped
+
+Processing chunk 112/130: chunk_-98.05_30.5.geojson
+  Found 291 parcels
+  Inserted: 282/291 (skipped: 9)
+  ✅ Completed: 282 inserted, 9 skipped
+
+Processing chunk 113/130: chunk_-98.05_30.55.geojson
+  Found 77 parcels
+  Inserted: 77/77 (skipped: 0)
+  ✅ Completed: 77 inserted, 0 skipped
+
+Processing chunk 114/130: chunk_-98.05_30.6.geojson
+  Found 6 parcels
+  Inserted: 6/6 (skipped: 0)
+  ✅ Completed: 6 inserted, 0 skipped
+
+Processing chunk 115/130: chunk_-98.0_30.2.geojson
+  Found 35 parcels
+  Inserted: 34/35 (skipped: 1)
+  ✅ Completed: 34 inserted, 1 skipped
+
+Processing chunk 116/130: chunk_-98.0_30.25.geojson
+  Found 1680 parcels
+  Inserted: 494/1680 (skipped: 6)  Inserted: 992/1680 (skipped: 8)  Inserted: 1492/1680 (skipped: 8)  Inserted: 1672/1680 (skipped: 8)
+  ✅ Completed: 1672 inserted, 8 skipped
+
+Processing chunk 117/130: chunk_-98.0_30.3.geojson
+  Found 3585 parcels
+  Inserted: 498/3585 (skipped: 2)  Inserted: 998/3585 (skipped: 2)  Inserted: 1498/3585 (skipped: 2)  Inserted: 1997/3585 (skipped: 3)  Inserted: 2496/3585 (skipped: 4)  Inserted: 2995/3585 (skipped: 5)  Inserted: 3495/3585 (skipped: 5)  Inserted: 3579/3585 (skipped: 6)
+  ✅ Completed: 3579 inserted, 6 skipped
+
+Processing chunk 118/130: chunk_-98.0_30.35.geojson
+  Found 2905 parcels
+  Inserted: 499/2905 (skipped: 1)  Inserted: 998/2905 (skipped: 2)  Inserted: 1497/2905 (skipped: 3)  Inserted: 1996/2905 (skipped: 4)  Inserted: 2496/2905 (skipped: 4)  Inserted: 2897/2905 (skipped: 8)
+  ✅ Completed: 2897 inserted, 8 skipped
+
+Processing chunk 119/130: chunk_-98.0_30.4.geojson
+  Found 5792 parcels
+  Inserted: 498/5792 (skipped: 2)  Inserted: 998/5792 (skipped: 2)  Inserted: 1496/5792 (skipped: 4)  Inserted: 1996/5792 (skipped: 4)  Inserted: 2496/5792 (skipped: 4)  Inserted: 2996/5792 (skipped: 4)  Inserted: 3496/5792 (skipped: 4)  Inserted: 3996/5792 (skipped: 4)  Inserted: 4486/5792 (skipped: 14)  Inserted: 4985/5792 (skipped: 15)  Inserted: 5481/5792 (skipped: 19)  Inserted: 5762/5792 (skipped: 30)
+  ✅ Completed: 5762 inserted, 30 skipped
+
+Processing chunk 120/130: chunk_-98.0_30.45.geojson
+  Found 663 parcels
+  Inserted: 493/663 (skipped: 7)  Inserted: 656/663 (skipped: 7)
+  ✅ Completed: 656 inserted, 7 skipped
+
+Processing chunk 121/130: chunk_-98.0_30.5.geojson
+  Found 55 parcels
+  Inserted: 49/55 (skipped: 6)
+  ✅ Completed: 49 inserted, 6 skipped
+
+Processing chunk 122/130: chunk_-98.0_30.55.geojson
+  Found 20 parcels
+  Inserted: 18/20 (skipped: 2)
+  ✅ Completed: 18 inserted, 2 skipped
+
+Processing chunk 123/130: chunk_-98.0_30.6.geojson
+  Found 14 parcels
+  Inserted: 14/14 (skipped: 0)
+  ✅ Completed: 14 inserted, 0 skipped
+
+Processing chunk 124/130: chunk_-98.15_30.3.geojson
+  Found 9 parcels
+  Inserted: 9/9 (skipped: 0)
+  ✅ Completed: 9 inserted, 0 skipped
+
+Processing chunk 125/130: chunk_-98.15_30.35.geojson
+  Found 18 parcels
+  Inserted: 18/18 (skipped: 0)
+  ✅ Completed: 18 inserted, 0 skipped
+
+Processing chunk 126/130: chunk_-98.1_30.3.geojson
+  Found 100 parcels
+  Inserted: 98/100 (skipped: 2)
+  ✅ Completed: 98 inserted, 2 skipped
+
+Processing chunk 127/130: chunk_-98.1_30.35.geojson
+  Found 62 parcels
+  Inserted: 60/62 (skipped: 2)
+  ✅ Completed: 60 inserted, 2 skipped
+
+Processing chunk 128/130: chunk_-98.1_30.4.geojson
+  Found 130 parcels
+  Inserted: 129/130 (skipped: 1)
+  ✅ Completed: 129 inserted, 1 skipped
+
+Processing chunk 129/130: chunk_-98.1_30.45.geojson
+  Found 74 parcels
+  Inserted: 72/74 (skipped: 2)
+  ✅ Completed: 72 inserted, 2 skipped
+
+Processing chunk 130/130: chunk_-98.1_30.5.geojson
+  Found 81 parcels
+  Inserted: 79/81 (skipped: 2)
+  ✅ Completed: 79 inserted, 2 skipped
+
+=== IMPORT COMPLETE ===
+Total imported: 372826 parcels
+Duration: 7.11 minutes
+Database now has: 372826 properties
+
+Statistics:
+  Absentee owners: 18696
+  Tax delinquent: 1258
+  Vacant land: 372826

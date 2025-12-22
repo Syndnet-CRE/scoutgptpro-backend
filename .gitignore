@@ -6,4 +6,17 @@ dist/
 build/
 .vscode/
 .idea/
-data/parcels/parcels_centroids.geojson
+
+# Large data files
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+*.geojson
+data/shapefiles/
+data/parcels/
+geo_data/
+*.zip
+*.7z
+*.tar.gz

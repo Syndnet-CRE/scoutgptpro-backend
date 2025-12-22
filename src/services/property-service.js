@@ -544,3 +544,4 @@ export {
   getOpportunityFlags,
   determinePropertyType
 };
+

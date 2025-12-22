@@ -36,6 +36,7 @@ app.use('/api/parcels', parcelRoutes);
 app.use('/api/query', queryRoutes);
 app.use('/api', polygonSearchRoutes);
 app.use('/api', geocodeRoutes);
+app.use('/api/gis', gisRoutes);
 
 // 404 handler
 app.use((req, res) => {

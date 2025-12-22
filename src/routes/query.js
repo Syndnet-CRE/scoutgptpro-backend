@@ -128,6 +128,10 @@ router.post('/polygon', async (req, res) => {
     
     const queryParams = [geojsonString, ...filterParams];
     
+    // Debug logging
+    console.log('Polygon query - params count:', queryParams.length, 'filters:', filterParams.length);
+    console.log('GeoJSON preview:', geojsonString.substring(0, 100));
+    
     const properties = await prisma.$queryRawUnsafe(query, ...queryParams);
     
     // Calculate polygon metadata
