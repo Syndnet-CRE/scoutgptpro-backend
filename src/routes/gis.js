@@ -10,21 +10,53 @@ router.get('/layers', async (req, res) => {
     const { name } = req.query;
     
     if (name) {
-      // Find specific layer by matching serviceName or category
-      // First try exact match on serviceName
+      // Find layer with flexible matching - try multiple strategies
+      // Strategy 1: Exact match on category (most reliable since serviceName is often null)
       let layer = await prisma.mapServerRegistry.findFirst({
         where: {
-          serviceName: { equals: name, mode: 'insensitive' }
+          category: { equals: name, mode: 'insensitive' },
+          isActive: true
         }
       });
       
-      // If not found, try partial match on serviceName or category
+      // Strategy 2: Exact match on serviceName
       if (!layer) {
         layer = await prisma.mapServerRegistry.findFirst({
           where: {
+            serviceName: { equals: name, mode: 'insensitive' },
+            isActive: true
+          }
+        });
+      }
+      
+      // Strategy 3: Partial match on category (handles "Zoning" matching "Zoning Districts")
+      if (!layer) {
+        layer = await prisma.mapServerRegistry.findFirst({
+          where: {
+            category: { contains: name, mode: 'insensitive' },
+            isActive: true
+          }
+        });
+      }
+      
+      // Strategy 4: Partial match on serviceName
+      if (!layer) {
+        layer = await prisma.mapServerRegistry.findFirst({
+          where: {
+            serviceName: { contains: name, mode: 'insensitive' },
+            isActive: true
+          }
+        });
+      }
+      
+      // Strategy 5: Try matching name without underscores/spaces (e.g., "Zoning_Districts" -> "Zoning")
+      if (!layer) {
+        const normalizedName = name.replace(/[_\s]/g, '');
+        layer = await prisma.mapServerRegistry.findFirst({
+          where: {
             OR: [
-              { serviceName: { contains: name, mode: 'insensitive' } },
-              { category: { contains: name, mode: 'insensitive' } }
+              { category: { contains: normalizedName, mode: 'insensitive' } },
+              { serviceName: { contains: normalizedName, mode: 'insensitive' } }
             ],
             isActive: true
           }
