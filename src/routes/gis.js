@@ -52,14 +52,14 @@ router.get('/layers', async (req, res) => {
           endpoint = `${endpoint.replace(/\/$/, '')}/0`;
         }
         
-        console.log(`Returning layer: ${layer.serviceName || layer.category} -> ${endpoint}`);
+        console.log(`Returning: ${layer.serviceName} -> ${endpoint}`);
         
         return res.json({
           success: true,
           layer: {
             id: layer.id,
-            name: layer.serviceName || name,
-            displayName: layer.serviceName || layer.category,
+            name: layer.serviceName,
+            displayName: layer.serviceName,
             endpoint: endpoint,
             category: layer.category,
             url: layer.url
