@@ -32,7 +32,11 @@ router.get('/layers', async (req, res) => {
             },
             { isActive: true }
           ]
-        }
+        },
+        // Order by URL to prefer austintexas.gov over other sources
+        orderBy: [
+          { url: { sort: 'asc' } } // This will put 'austin' URLs first alphabetically
+        ]
       });
       
       // If no Austin/Texas layer found, try first word extraction with Austin/Texas filter
