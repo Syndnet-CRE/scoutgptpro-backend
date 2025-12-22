@@ -39,7 +39,7 @@ router.get('/layers', async (req, res) => {
         });
       }
       
-      // Strategy 4: Partial match on serviceName
+      // Strategy 5: Partial match on serviceName
       if (!layer) {
         layer = await prisma.mapServerRegistry.findFirst({
           where: {
@@ -47,22 +47,6 @@ router.get('/layers', async (req, res) => {
             isActive: true
           }
         });
-      }
-      
-      // Strategy 5: Try matching first word before underscore/space (e.g., "Zoning_Districts" -> "Zoning")
-      if (!layer) {
-        const firstWord = name.split(/[_\s]/)[0];
-        if (firstWord && firstWord.length > 0) {
-          layer = await prisma.mapServerRegistry.findFirst({
-            where: {
-              OR: [
-                { category: { equals: firstWord, mode: 'insensitive' } },
-                { category: { contains: firstWord, mode: 'insensitive' } }
-              ],
-              isActive: true
-            }
-          });
-        }
       }
       
       // Strategy 6: Try matching name without underscores/spaces
