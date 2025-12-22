@@ -34,9 +34,8 @@ router.get('/layers', async (req, res) => {
           ]
         },
         // Order by URL to prefer austintexas.gov over other sources
-        orderBy: [
-          { url: { sort: 'asc' } } // This will put 'austin' URLs first alphabetically
-        ]
+        // Only order by URL if we're sure URLs exist (filter nulls in where clause)
+        orderBy: { url: 'asc' }
       });
       
       // If no Austin/Texas layer found, try first word extraction with Austin/Texas filter
