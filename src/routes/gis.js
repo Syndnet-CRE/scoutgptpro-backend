@@ -30,11 +30,10 @@ router.get('/layers', async (req, res) => {
                 { url: { contains: 'travis', mode: 'insensitive' } }
               ]
             },
-            { isActive: true }
+            { isActive: true },
+            { url: { not: null } } // Ensure URL exists for orderBy
           ]
         },
-        // Order by URL to prefer austintexas.gov over other sources
-        // Only order by URL if we're sure URLs exist (filter nulls in where clause)
         orderBy: { url: 'asc' }
       });
       
@@ -58,9 +57,11 @@ router.get('/layers', async (req, res) => {
                     { url: { contains: 'travis', mode: 'insensitive' } }
                   ]
                 },
-                { isActive: true }
+                { isActive: true },
+                { url: { not: null } } // Ensure URL exists
               ]
-            }
+            },
+            orderBy: { url: 'asc' }
           });
         }
       }
