@@ -96,65 +96,75 @@ router.post('/layers', async (req, res) => {
       return res.status(400).json({ success: false, error: 'layer is required' });
     }
     
-    // Map canonical key to serviceName
-    const layerNameMap = {
-      'zoning_districts': 'Zoning Districts',
-      'fema_flood_zones': 'FEMA Flood Zones',
-      'sewer_mains': 'Sewer Mains',
-      'sewer_manholes': 'Sewer Manholes',
-      'water_mains': 'Water Mains',
-      'fire_hydrants': 'Fire Hydrants',
-      'water_meters': 'Water Meters',
-      'wetland_types': 'Wetland Types',
-      'building_permits': 'Building Permits',
-      'parcel_boundaries': 'Parcel Boundaries',
-      'gas_mains': 'Gas Mains'
+    // Hardcoded canonical map - no DB dependency
+    const CANONICAL = {
+      'zoning_districts': {
+        arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_1/MapServer/0',
+        geometryType: 'Polygon'
+      },
+      'fema_flood_zones': {
+        arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Environmental_2/MapServer/1',
+        geometryType: 'Polygon'
+      },
+      'sewer_mains': {
+        arcgisUrl: 'https://maps.pape-dawson.com/server1/rest/services/LandDevelopment/LANDDEVELOPMENT__Chesmar_SiteSelection/MapServer/55',
+        geometryType: 'LineString'
+      },
+      'sewer_manholes': {
+        arcgisUrl: 'https://gis.horrocks.com/arcgis/rest/services/TX_9706_24_General/MapServer/22',
+        geometryType: 'Point'
+      },
+      'water_mains': {
+        arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Water/MapServer/0',
+        geometryType: 'LineString'
+      },
+      'fire_hydrants': {
+        arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Water/MapServer/1',
+        geometryType: 'Point'
+      },
+      'water_meters': {
+        arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Water/MapServer/2',
+        geometryType: 'Point'
+      },
+      'wetland_types': {
+        arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Environmental_2/MapServer/0',
+        geometryType: 'Polygon'
+      },
+      'building_permits': {
+        arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Permits/MapServer/0',
+        geometryType: 'Point'
+      },
+      'parcel_boundaries': {
+        arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Parcels/MapServer/0',
+        geometryType: 'Polygon'
+      },
+      'gas_mains': {
+        arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Gas/MapServer/0',
+        geometryType: 'LineString'
+      }
     };
     
     // Validate canonical key exists
-    if (!layerNameMap[layer]) {
+    if (!CANONICAL[layer]) {
       return res.status(400).json({ 
         success: false, 
-        error: `Unknown canonical layer key: ${layer}. Valid keys: ${Object.keys(layerNameMap).join(', ')}` 
+        error: `Unknown canonical layer key: ${layer}. Valid keys: ${Object.keys(CANONICAL).join(', ')}` 
       });
     }
     
-    const serviceName = layerNameMap[layer];
+    const layerConfig = CANONICAL[layer];
     
-    // Find layer in database - EXACT match only, no fallback
-    const layerRecord = await prisma.mapServerRegistry.findFirst({
-      where: { 
-        serviceName: { equals: serviceName, mode: 'insensitive' }, 
-        isActive: true 
-      }
-    });
-    
-    if (!layerRecord) {
-      return res.status(404).json({ 
-        success: false, 
-        error: `Layer not found for canonical key "${layer}" (serviceName: "${serviceName}"). No fallback allowed.` 
-      });
-    }
-    
-    // Build ArcGIS endpoint URL
-    let arcgisUrl = layerRecord.url;
-    if (layerRecord.layerId !== null && layerRecord.layerId !== undefined) {
-      arcgisUrl = `${layerRecord.url.replace(/\/$/, '')}/${layerRecord.layerId}`;
-    } else if (!arcgisUrl.match(/\/\d+\/?$/)) {
-      arcgisUrl = `${arcgisUrl.replace(/\/$/, '')}/0`;
-    }
-    
-    console.log(`✅ GIS layer resolved: ${layer} -> ${serviceName} -> ${arcgisUrl}`);
+    console.log(`[GIS] resolved ${layer} -> ${layerConfig.arcgisUrl}`);
     
     res.json({
       success: true,
       ok: true,
       action,
       layer,
-      serviceName: layerRecord.serviceName,
-      arcgisUrl,
-      endpoint: arcgisUrl, // Keep for backward compatibility
-      geometryType: layerRecord.geometryType || null,
+      serviceName: layer.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+      arcgisUrl: layerConfig.arcgisUrl,
+      endpoint: layerConfig.arcgisUrl, // Keep for backward compatibility
+      geometryType: layerConfig.geometryType,
       bbox,
       opacity
     });
