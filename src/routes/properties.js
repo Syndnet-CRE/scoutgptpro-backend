@@ -12,6 +12,7 @@ router.post('/search', async (req, res) => {
   try {
     const { bbox, filters = {}, limit = 100, offset = 0 } = req.body;
     
+    console.log('🔍 Property search request received at /api/properties/search');
     console.log('🔍 Property search request:', { bbox, filters, limit });
     
     // CRITICAL: bbox is REQUIRED

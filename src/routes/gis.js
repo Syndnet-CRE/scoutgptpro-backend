@@ -111,44 +111,50 @@ router.post('/layers', async (req, res) => {
       'gas_mains': 'Gas Mains'
     };
     
-    const serviceName = layerNameMap[layer] || layer;
-    
-    // Find layer in database - try exact match first
-    let layerRecord = await prisma.mapServerRegistry.findFirst({
-      where: { serviceName: { equals: serviceName, mode: 'insensitive' }, isActive: true }
-    });
-    
-    // Fallback to contains search
-    if (!layerRecord) {
-      layerRecord = await prisma.mapServerRegistry.findFirst({
-        where: {
-          OR: [
-            { serviceName: { contains: serviceName, mode: 'insensitive' } },
-            { category: { contains: serviceName, mode: 'insensitive' } }
-          ],
-          isActive: true
-        }
+    // Validate canonical key exists
+    if (!layerNameMap[layer]) {
+      return res.status(400).json({ 
+        success: false, 
+        error: `Unknown canonical layer key: ${layer}. Valid keys: ${Object.keys(layerNameMap).join(', ')}` 
       });
     }
     
+    const serviceName = layerNameMap[layer];
+    
+    // Find layer in database - EXACT match only, no fallback
+    const layerRecord = await prisma.mapServerRegistry.findFirst({
+      where: { 
+        serviceName: { equals: serviceName, mode: 'insensitive' }, 
+        isActive: true 
+      }
+    });
+    
     if (!layerRecord) {
-      return res.status(404).json({ success: false, error: `Layer not found: ${layer}` });
+      return res.status(404).json({ 
+        success: false, 
+        error: `Layer not found for canonical key "${layer}" (serviceName: "${serviceName}"). No fallback allowed.` 
+      });
     }
     
-    // Build endpoint
-    let endpoint = layerRecord.url;
+    // Build ArcGIS endpoint URL
+    let arcgisUrl = layerRecord.url;
     if (layerRecord.layerId !== null && layerRecord.layerId !== undefined) {
-      endpoint = `${layerRecord.url.replace(/\/$/, '')}/${layerRecord.layerId}`;
-    } else if (!endpoint.match(/\/\d+\/?$/)) {
-      endpoint = `${endpoint.replace(/\/$/, '')}/0`;
+      arcgisUrl = `${layerRecord.url.replace(/\/$/, '')}/${layerRecord.layerId}`;
+    } else if (!arcgisUrl.match(/\/\d+\/?$/)) {
+      arcgisUrl = `${arcgisUrl.replace(/\/$/, '')}/0`;
     }
+    
+    console.log(`✅ GIS layer resolved: ${layer} -> ${serviceName} -> ${arcgisUrl}`);
     
     res.json({
       success: true,
+      ok: true,
       action,
       layer,
       serviceName: layerRecord.serviceName,
-      endpoint,
+      arcgisUrl,
+      endpoint: arcgisUrl, // Keep for backward compatibility
+      geometryType: layerRecord.geometryType || null,
       bbox,
       opacity
     });
