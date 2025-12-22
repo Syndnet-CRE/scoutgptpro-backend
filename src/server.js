@@ -7,6 +7,7 @@ import aiRoutes from './routes/ai.js';
 import queryRoutes from './routes/query.js';
 import polygonSearchRoutes from './routes/polygonSearches.js';
 import geocodeRoutes from './routes/geocode.js';
+import gisRoutes from './routes/gis.js';
 
 dotenv.config();
 
