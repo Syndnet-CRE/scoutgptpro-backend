@@ -85,4 +85,78 @@ router.get('/layers', async (req, res) => {
   }
 });
 
+// POST /api/gis/layers - Handle layer toggle actions
+router.post('/layers', async (req, res) => {
+  try {
+    const { action, layer, bbox, opacity = 0.7 } = req.body;
+    
+    console.log('🗺️ GIS layer action:', { action, layer, bbox });
+    
+    if (!layer) {
+      return res.status(400).json({ success: false, error: 'layer is required' });
+    }
+    
+    // Map canonical key to serviceName
+    const layerNameMap = {
+      'zoning_districts': 'Zoning Districts',
+      'fema_flood_zones': 'FEMA Flood Zones',
+      'sewer_mains': 'Sewer Mains',
+      'sewer_manholes': 'Sewer Manholes',
+      'water_mains': 'Water Mains',
+      'fire_hydrants': 'Fire Hydrants',
+      'water_meters': 'Water Meters',
+      'wetland_types': 'Wetland Types',
+      'building_permits': 'Building Permits',
+      'parcel_boundaries': 'Parcel Boundaries',
+      'gas_mains': 'Gas Mains'
+    };
+    
+    const serviceName = layerNameMap[layer] || layer;
+    
+    // Find layer in database - try exact match first
+    let layerRecord = await prisma.mapServerRegistry.findFirst({
+      where: { serviceName: { equals: serviceName, mode: 'insensitive' }, isActive: true }
+    });
+    
+    // Fallback to contains search
+    if (!layerRecord) {
+      layerRecord = await prisma.mapServerRegistry.findFirst({
+        where: {
+          OR: [
+            { serviceName: { contains: serviceName, mode: 'insensitive' } },
+            { category: { contains: serviceName, mode: 'insensitive' } }
+          ],
+          isActive: true
+        }
+      });
+    }
+    
+    if (!layerRecord) {
+      return res.status(404).json({ success: false, error: `Layer not found: ${layer}` });
+    }
+    
+    // Build endpoint
+    let endpoint = layerRecord.url;
+    if (layerRecord.layerId !== null && layerRecord.layerId !== undefined) {
+      endpoint = `${layerRecord.url.replace(/\/$/, '')}/${layerRecord.layerId}`;
+    } else if (!endpoint.match(/\/\d+\/?$/)) {
+      endpoint = `${endpoint.replace(/\/$/, '')}/0`;
+    }
+    
+    res.json({
+      success: true,
+      action,
+      layer,
+      serviceName: layerRecord.serviceName,
+      endpoint,
+      bbox,
+      opacity
+    });
+    
+  } catch (error) {
+    console.error('❌ GIS layer action error:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 export default router;

@@ -8,6 +8,7 @@ import queryRoutes from './routes/query.js';
 import polygonSearchRoutes from './routes/polygonSearches.js';
 import geocodeRoutes from './routes/geocode.js';
 import gisRoutes from './routes/gis.js';
+import propertiesRoutes from './routes/properties.js';
 
 dotenv.config();
 
@@ -38,6 +39,7 @@ app.use('/api/query', queryRoutes);
 app.use('/api', polygonSearchRoutes);
 app.use('/api', geocodeRoutes);
 app.use('/api/gis', gisRoutes);
+app.use('/api/properties', propertiesRoutes);
 
 // 404 handler
 app.use((req, res) => {
