@@ -29,7 +29,21 @@ router.get('/layers', async (req, res) => {
         });
       }
       
-      // Strategy 3: Partial match on category (handles "Zoning" matching "Zoning Districts")
+      // Strategy 3: Try matching first word before underscore/space (e.g., "Zoning_Districts" -> "Zoning")
+      // This handles cases where queryClassifier uses "Zoning_Districts" but DB has "Zoning"
+      if (!layer) {
+        const firstWord = name.split(/[_\s]/)[0];
+        if (firstWord && firstWord.length > 0 && firstWord !== name) {
+          layer = await prisma.mapServerRegistry.findFirst({
+            where: {
+              category: { equals: firstWord, mode: 'insensitive' },
+              isActive: true
+            }
+          });
+        }
+      }
+      
+      // Strategy 4: Partial match on category (handles "Zoning" matching "Zoning Districts")
       if (!layer) {
         layer = await prisma.mapServerRegistry.findFirst({
           where: {
