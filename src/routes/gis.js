@@ -49,7 +49,23 @@ router.get('/layers', async (req, res) => {
         });
       }
       
-      // Strategy 5: Try matching name without underscores/spaces (e.g., "Zoning_Districts" -> "Zoning")
+      // Strategy 5: Try matching first word before underscore/space (e.g., "Zoning_Districts" -> "Zoning")
+      if (!layer) {
+        const firstWord = name.split(/[_\s]/)[0];
+        if (firstWord && firstWord.length > 0) {
+          layer = await prisma.mapServerRegistry.findFirst({
+            where: {
+              OR: [
+                { category: { equals: firstWord, mode: 'insensitive' } },
+                { category: { contains: firstWord, mode: 'insensitive' } }
+              ],
+              isActive: true
+            }
+          });
+        }
+      }
+      
+      // Strategy 6: Try matching name without underscores/spaces
       if (!layer) {
         const normalizedName = name.replace(/[_\s]/g, '');
         layer = await prisma.mapServerRegistry.findFirst({
