@@ -75,6 +75,8 @@ model Property {
   siteCity      String?  // Site city (CITY from TCAD)
   siteState     String?  // Site state (STATE from TCAD)
   siteZip       String?  // Site ZIP (ZIPCODE from TCAD)
+  situsNum      String?  // Situs number (from TCAD API)
+  situsStreet   String?  // Situs street (from TCAD API)
   city          String?
   state         String?
   zip           String?
@@ -88,20 +90,29 @@ model Property {
   // Parcel info
   apn           String?  // Assessor Parcel Number
   legalDesc     String?  @db.Text
+  subdivision   String?  // Subdivision name (from TCAD API)
+  lot           String?  // Lot number (from TCAD API)
+  block         String?  // Block number (from TCAD API)
+  geoId         String?  // Geographic ID (from TCAD API)
   
   // Property details
   propertyType  String?  // land, residential, commercial, industrial, mixed, multifamily
   acres         Float?
+  tcadAcres     Float?   // TCAD acres (from TCAD API)
   size          Float?   // sq ft or acres (legacy)
   sizeUnit      String?  // sqft, acres (legacy)
   
   zoning        String?
+  landTypeDesc  String?  // Land type description (from TCAD API)
   yearBuilt     Int?
+  floodZone     String?  // Flood zone (from TCAD API)
+  deedDate      String?  // Deed date (from TCAD API)
   
   // Valuation
   totalTax      Float?
   totalDue      Float?
   assessedValue Float?   // Legacy
+  appraisedValue Float?  // Appraised value (from TCAD API)
   marketValue   Float?   // Legacy
   impValue      Float?   // Improvement value
   landValue     Float?   // Land value
@@ -110,6 +121,8 @@ model Property {
   // Ownership
   owner         String?
   ownerName     String?  // Legacy
+  ownerFirstName String? // Owner first name (from TCAD API)
+  ownerLastName  String? // Owner last name (from TCAD API)
   ownerAddress  String?  // Legacy
   mailingAddr   String?
   
@@ -123,6 +136,8 @@ model Property {
   // Metadata
   metadata      Json?    // Additional flexible data
   taxYear       Int?
+  enrichedAt    DateTime? // When enrichment was last run
+  enrichmentSource String? // Source of enrichment (e.g., 'TCAD_API')
   
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
