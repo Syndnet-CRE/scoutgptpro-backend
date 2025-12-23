@@ -1,0 +1,1163 @@
+serviceUrl,layerId,layerName,geometryType,score,tags,status,httpStatus
+http://minemaps.pasda.psu.edu/server/rest/services/pasda/FEMA_NationalRiskIndex/MapServer,0,NRI_CensusTracts,esriGeometryPolygon,0,,ok,cached
+https://apps.fs.usda.gov/arcx/rest/services/RDW_LandscapeAndWildlife/2010_Land_Cover_Of_North_America_CEC_250m/MapServer,0,NA Land Cover 2010,,10,situs,ok,cached
+https://apps.fs.usda.gov/arcx/rest/services/RDW_LandscapeAndWildlife/2010_Land_Cover_Of_North_America_CEC_250m/MapServer,1,Hawaii Land Cover 2005,,10,situs,ok,cached
+https://apps.fs.usda.gov/fsgisx02/rest/services/foresthealth/DominantForestHost/MapServer,0,Dominant Forest Hosts,,10,permits,ok,cached
+https://apps.fs.usda.gov/fsgisx05/rest/services/wo_nfs_gtac/Conus_BuildingExposure_by_90mPixel/MapServer,0,Conus_BuildingExposure_by_90mPixel,,10,permits,ok,cached
+https://arcgis.netl.doe.gov/server/rest/services/CO2Locate_Total_Well_Count/MapServer,0,Well Count,esriGeometryPolygon,10,permits,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/EDXSpatialCaches/Active_Wells_223_2025/MapServer,10,Active_Wells_223,esriGeometryPolygon,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/EDXSpatialCaches/Active_Wells_25_2025/MapServer,10,Active_Wells_25,esriGeometryPolygon,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/EDXSpatialCaches/Oil_Gas_Atlas5_v3_final_25_2025/MapServer,2,Oil_Gas_Atlas5_v3_final_25,esriGeometryPolygon,10,utilities,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/EDXSpatialCaches/Pipelines_223_2025/MapServer,6,Pipelines_223,esriGeometryPolyline,10,situs,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/EDXSpatialCaches/Wells_Vector_Grid_223_2025/MapServer,12,Wells_Vector_Grid_223,esriGeometryPolygon,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,0,Gulf_Coast_Basin_extent,esriGeometryPolygon,10,land_use,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,1,Earthquake,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,2,Earthquake_locations_integrated_GC_Basin,esriGeometryPoint,10,situs,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,3,Faults Fractures and Folds,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,4,Gulf_coast_faults_GC_Basin_USGS,esriGeometryPolyline,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,5,Faults_GC_Basin_TX_USGS,esriGeometryPolyline,10,permits,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,6,Faults_GC_Basin_SGMC_USGS,esriGeometryPolyline,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,7,Faults_GC_Basin_Diegel_et_al,esriGeometryPolyline,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,8,Faults_GC_Basin_BEG,esriGeometryPolyline,10,permits,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,9,Faults_at_the_top_of_the_basement_GC_Basin_Bouroullec2016,esriGeometryPolyline,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,10,Eagle_Ford_Formation_faults_GC_Basin_McKeighan_et_al,esriGeometryPolyline,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,11,Counter_Regional_faults_and_Neogene_extensional_faults_GC_Basin_Stephens2009_Bouroullec2017,esriGeometryPolyline,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,12,Basement_lineaments_integrated_GC_Basin,esriGeometryPolyline,10,permits,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,13,All_lineaments_integrated_GC_Basin,esriGeometryPolyline,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,14,Structural Contours and Isopachs,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,15,Eagle_Ford_Formation_thickness_GC_Basin_EIA,esriGeometryPolyline,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,16,Depth_to_top_of_the_Upper_Pliocene_GC_Basin_BEG,esriGeometryPolyline,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,17,Depth_to_top_of_the_Upper_Miocene_GC_Basin_BEG,esriGeometryPolyline,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,18,Depth_to_top_of_the_Oligocene_GC_Basin_BEG,esriGeometryPolyline,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,19,Depth_to_top_of_EagleFord_Formation_GC_Basin_EIA,esriGeometryPolyline,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,20,Depth_to_top_of_basement_GC_Basin_BEG,esriGeometryPolyline,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,21,Depth_to_base_of_the_Oligocene_GC_Basin_BEG,esriGeometryPolyline,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,22,Upper_Pliocene_Formation_surface_curvature_GC_Basin.tif,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,23,Upper_Miocene_Formation_surface_curvature_GC_Basin.tif,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,24,Oligocene_Formation_top_surface_curvature_GC_Basin.tif,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,25,Oligocene_Formation_base_surface_curvature_GC_Basin.tif,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,26,Eagle_Ford_Formation_surface_curvature_GC_Basin.tif,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,27,Change_in_sedimentary_overburden_thickness_GC_Basin.tif,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,28,Change_in_Eagle_Ford_Formation_thickness_GC_Basin.tif,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,29,Basement_surface_curvature_GC_Basin.tif,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,30,Geophysical,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,31,Horizontal_derivative_in_isostatic_gravity_anomaly_GC_Basin.tif,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,32,Horizontal_derivative_in_magnetic_anomaly_GC_Basin.tif,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,33,Isostatic_gravity_anomaly_mGal_GC_Basin_BGI.tif,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,34,Magnetic_anomaly_nT_GC_Basin_NOAA.tif,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,35,Known Structural Feature Density,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,36,Maximum_combined_SFD_score_GC_Basin.tif,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,37,Maximum_Basement_SFD_score_GC_Basin.tif,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,38,Earthquake_seismic_energy_SFD_score_GC_Basin.tif,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,39,Earthquake_event_SFD_score_GC_Basin.tif,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,40,Combined_earthquake_SFD_score_GC_Basin.tif,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,41,Basement_lineament_SFD_score_GC_Basin.tif,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,42,Basement_lineament_length_SFD_score_GC_Basin.tif,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,43,Basement_lineament_intersection_SFD_score_GC_Basin.tif,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,44,Basement_combined_lineament_SFD_score_GC_Basin.tif,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,45,All_lineament_SFD_score_GC_Basin.tif,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,46,All_lineament_length_SFD_score_GC_Basin.tif,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,47,All_lineament_intersection_SFD_score_GC_Basin.tif,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,48,All_combined_lineament_SFD_score_GC_Basin.tif,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,49,Predicted Structural Feature Density,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,50,Maximum_predicted_SFD_score_GC_Basin,esriGeometryPolygon,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,51,NoData_tally_GC_Basin,esriGeometryPolygon,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,52,Predicted_basement_SFD_score_GC_Basin,esriGeometryPolygon,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,53,Predicted_Eagle_Ford_Formation_SFD_score_GC_Basin,esriGeometryPolygon,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,54,Predicted_Eocene_Formation_SFD_score_GC_Basin,esriGeometryPolygon,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,55,Predicted_Miocene_Formation_SFD_score_GC_Basin,esriGeometryPolygon,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,56,Predicted_Oligocene_Formation_SFD_score_GC_Basin,esriGeometryPolygon,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,57,Predicted_Pliocene_Formation_SFD_score_GC_Basin,esriGeometryPolygon,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,58,Predicted_sedimentary_subsurface_basement_crosscutting_SFD_score_GC_Basin,esriGeometryPolygon,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,59,Predicted_sedimentary_subsurface_SFD_score_GC_Basin,esriGeometryPolygon,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,60,Predicted_surface_basement_crosscutting_SFD_score_GC_Basin,esriGeometryPolygon,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,61,Predicted_surface_SFD_score_GC_Basin,esriGeometryPolygon,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,62,Topographic,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,63,Topographic_Wetness_Index_GC_Basin_GEBCO.tif,,0,,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,64,Surface_slope_GC_Basin_GEBCO.tif,,10,flood,ok,200
+https://arcgis.netl.doe.gov/server/rest/services/Gulf_of_Mexico_Basin_MIL1/MapServer,65,OnOffshore_surface_elevation_GC_Basin_GEBCO.tif,,0,,ok,200
+https://awgisadaptor.austintexas.gov/awgisago/rest/services/AGO/Aclara_GPS_QAQC/MapServer,0,ACLARA_GPS_SURVEY_QAQC,esriGeometryPoint,30,"situs,legal,permits",ok,200
+https://awgisadaptor.austintexas.gov/awgisago/rest/services/RAAS/PREMISE_CONSTIUENTS/MapServer,0,PREMISE_CONSTITUENTS,esriGeometryPolygon,10,permits,ok,200
+https://awgisadaptor.austintexas.gov/awgisago/rest/services/SER/5865_SER_service/MapServer,0,SER Wastewater,esriGeometryPolygon,10,utilities,ok,200
+https://awgisadaptor.austintexas.gov/awgisago/rest/services/SER/5865_SER_service/MapServer,1,SER Water,esriGeometryPolygon,10,utilities,ok,200
+https://awgisadaptor.austintexas.gov/awgisago/rest/services/SER/5865_SER_service/MapServer,2,SER Reclaimed Water,esriGeometryPolygon,10,utilities,ok,200
+https://awgisadaptor.austintexas.gov/awgisago/rest/services/SER/LRP_Water_Pipes/MapServer,0,Future Planning,,0,,ok,200
+https://awgisadaptor.austintexas.gov/awgisago/rest/services/SER/LRP_Water_Pipes/MapServer,1,Future Water Pipes,esriGeometryPolyline,10,utilities,ok,200
+https://awsgispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,0,Heat Wave Frequency,,0,,ok,200
+https://awsgispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,1,"Heat Wave Frequency in 50 Large U.S. Cities, 1961–2023 (Statistically Significant)",esriGeometryPoint,0,,ok,200
+https://awsgispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,2,"Heat Wave Frequency in 50 Large U.S. Cities, 1961–2023 (Not Statistically Significant)",esriGeometryPoint,0,,ok,200
+https://awsgispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,3,Heat Wave Duration,,0,,ok,200
+https://awsgispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,4,"Heat Wave Duration in 50 Large U.S. Cities, 1961–2023 (Statistically Significant)",esriGeometryPoint,0,,ok,200
+https://awsgispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,5,"Heat Wave Duration in 50 Large U.S. Cities, 1961–2023 (Not Statistically Significant)",esriGeometryPoint,0,,ok,200
+https://awsgispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,6,Heat Wave Season,,0,,ok,200
+https://awsgispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,7,"Heat Wave Season in 50 Large U.S. Cities, 1961–2023 (Statistically Significant)",esriGeometryPoint,0,,ok,200
+https://awsgispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,8,"Heat Wave Season in 50 Large U.S. Cities, 1961–2023 (Not Statistically Significant)",esriGeometryPoint,0,,ok,200
+https://awsgispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,9,Heat Wave Intensity,,0,,ok,200
+https://awsgispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,10,"Heat Wave Intensity in 50 Large U.S. Cities, 1961–2023 (Statistically Significant)",esriGeometryPoint,0,,ok,200
+https://awsgispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,11,"Heat Wave Intensity in 50 Large U.S. Cities, 1961–2023 (Not Statistically Significant)",esriGeometryPoint,0,,ok,200
+https://awsgispub.epa.gov/arcgis/rest/services/ORD/Estimated_Private_Domestic_Wells/MapServer,0,US Block Groups 2010,esriGeometryPolygon,20,"legal,utilities",ok,200
+https://awsgispub.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,1,Wells,,0,,ok,200
+https://awsgispub.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,2,Blocks,esriGeometryPolygon,10,legal,ok,200
+https://awsgispub.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,3,Block_Groups,esriGeometryPolygon,10,legal,ok,200
+https://awsgispub.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,4,Wells per Sq. Km.,,0,,ok,200
+https://awsgispub.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,5,Blocks,esriGeometryPolygon,10,legal,ok,200
+https://awsgispub.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,6,Block_Groups,esriGeometryPolygon,10,legal,ok,200
+https://awsgispub.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,7,% Population Served,,0,,ok,200
+https://awsgispub.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,8,Blocks,esriGeometryPolygon,10,legal,ok,200
+https://awsgispub.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,9,Block_Groups,esriGeometryPolygon,10,legal,ok,200
+https://awsgispub.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,10,Change in Housing Units on Wells 1990-2020,,0,,ok,200
+https://awsgispub.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,11,Blocks,esriGeometryPolygon,10,legal,ok,200
+https://awsgispub.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,12,Block_Groups,esriGeometryPolygon,10,legal,ok,200
+https://coagiswebadaptor.austintexas.gov/awgisago/rest/services/AGO/Aclara_GPS_QAQC/MapServer,0,ACLARA_GPS_SURVEY_QAQC,esriGeometryPoint,30,"situs,legal,permits",ok,200
+https://coagiswebadaptor.austintexas.gov/awgisago/rest/services/RAAS/Wastewater_LRP_Data/MapServer,0,Wastewater_Points,esriGeometryPoint,10,utilities,ok,200
+https://coagiswebadaptor.austintexas.gov/awgisago/rest/services/RAAS/Wastewater_LRP_Data/MapServer,1,Wastewater_Pipes,esriGeometryPolyline,10,utilities,ok,200
+https://coagiswebadaptor.austintexas.gov/awgisago/rest/services/SER/5865_SER_service/MapServer,0,SER Wastewater,esriGeometryPolygon,10,utilities,ok,200
+https://coagiswebadaptor.austintexas.gov/awgisago/rest/services/SER/5865_SER_service/MapServer,1,SER Water,esriGeometryPolygon,10,utilities,ok,200
+https://coagiswebadaptor.austintexas.gov/awgisago/rest/services/SER/5865_SER_service/MapServer,2,SER Reclaimed Water,esriGeometryPolygon,10,utilities,ok,200
+https://coagiswebadaptor.austintexas.gov/awgisago/rest/services/SER/LRP_Wastewater_points/MapServer,0,Future Wastewater Points,esriGeometryPoint,10,utilities,ok,200
+https://feature.geographic.texas.gov/arcgis/rest/services/Basemap/Highwater_Marks/MapServer,0,Texas Highwater Marks,esriGeometryPoint,30,"situs,utilities,flood",ok,200
+https://feature.tnris.org/arcgis/rest/services/Basemap/Highwater_Marks/MapServer,0,Texas Highwater Marks,esriGeometryPoint,30,"situs,utilities,flood",ok,200
+https://geo.fas.usda.gov/arcgis2/rest/services/G_Disaster_Data/GlobalFloodRisk_UNEP/MapServer,0,Flood Risk (UNEP),,10,flood,ok,200
+https://geodata.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,0,Heat Wave Frequency,,0,,ok,200
+https://geodata.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,1,"Heat Wave Frequency in 50 Large U.S. Cities, 1961–2023 (Statistically Significant)",esriGeometryPoint,0,,ok,200
+https://geodata.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,2,"Heat Wave Frequency in 50 Large U.S. Cities, 1961–2023 (Not Statistically Significant)",esriGeometryPoint,0,,ok,200
+https://geodata.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,3,Heat Wave Duration,,0,,ok,200
+https://geodata.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,4,"Heat Wave Duration in 50 Large U.S. Cities, 1961–2023 (Statistically Significant)",esriGeometryPoint,0,,ok,200
+https://geodata.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,5,"Heat Wave Duration in 50 Large U.S. Cities, 1961–2023 (Not Statistically Significant)",esriGeometryPoint,0,,ok,200
+https://geodata.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,6,Heat Wave Season,,0,,ok,200
+https://geodata.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,7,"Heat Wave Season in 50 Large U.S. Cities, 1961–2023 (Statistically Significant)",esriGeometryPoint,0,,ok,200
+https://geodata.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,8,"Heat Wave Season in 50 Large U.S. Cities, 1961–2023 (Not Statistically Significant)",esriGeometryPoint,0,,ok,200
+https://geodata.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,9,Heat Wave Intensity,,0,,ok,200
+https://geodata.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,10,"Heat Wave Intensity in 50 Large U.S. Cities, 1961–2023 (Statistically Significant)",esriGeometryPoint,0,,ok,200
+https://geodata.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,11,"Heat Wave Intensity in 50 Large U.S. Cities, 1961–2023 (Not Statistically Significant)",esriGeometryPoint,0,,ok,200
+https://geodata.epa.gov/arcgis/rest/services/ORD/Estimated_Private_Domestic_Wells/MapServer,0,US Block Groups 2010,esriGeometryPolygon,20,"legal,utilities",ok,200
+https://geodata.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,1,Wells,,0,,ok,200
+https://geodata.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,2,Blocks,esriGeometryPolygon,10,legal,ok,200
+https://geodata.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,3,Block_Groups,esriGeometryPolygon,10,legal,ok,200
+https://geodata.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,4,Wells per Sq. Km.,,0,,ok,200
+https://geodata.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,5,Blocks,esriGeometryPolygon,10,legal,ok,200
+https://geodata.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,6,Block_Groups,esriGeometryPolygon,10,legal,ok,200
+https://geodata.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,7,% Population Served,,0,,ok,200
+https://geodata.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,8,Blocks,esriGeometryPolygon,10,legal,ok,200
+https://geodata.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,9,Block_Groups,esriGeometryPolygon,10,legal,ok,200
+https://geodata.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,10,Change in Housing Units on Wells 1990-2020,,0,,ok,200
+https://geodata.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,11,Blocks,esriGeometryPolygon,10,legal,ok,200
+https://geodata.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,12,Block_Groups,esriGeometryPolygon,10,legal,ok,200
+https://geodata.natureserve.org/hosting/rest/services/CurrentWetlands_tif/MapServer,14,Current and Historic Ecosystem Distributions,,0,,ok,200
+https://geodata.natureserve.org/hosting/rest/services/CurrentWetlands_tif/MapServer,19,CurrentWetlands.tif,,10,flood,ok,200
+https://geodata.natureserve.org/hosting/rest/services/HistoricWetlands_tif/MapServer,14,Current and Historic Ecosystem Distributions,,0,,ok,200
+https://geodata.natureserve.org/hosting/rest/services/HistoricWetlands_tif/MapServer,20,HistoricWetlands.tif,,10,flood,ok,200
+https://gis.geointelsystems.com/arcgis/rest/services/Clients/WCID17_Parcels/MapServer,0,TCAD Parcels,esriGeometryPolygon,80,"owner,situs,parcel_id,legal,land_use,sales,boundaries,flood",ok,200
+https://gis.geointelsystems.com/arcgis/rest/services/Clients/WCID17_Parcels/MapServer,1,Parcel Improvement Year,esriGeometryPolygon,70,"owner,situs,parcel_id,legal,land_use,sales,boundaries",ok,200
+https://gis.georgetown.org/intgarcgis/rest/services/MPN/MPN_FeatureWebService/MapServer,0,Address,esriGeometryPoint,30,"situs,parcel_id,boundaries",ok,200
+https://gis.georgetown.org/intgarcgis/rest/services/MPN/MPN_FeatureWebService/MapServer,1,Parcels,esriGeometryPolygon,60,"owner,situs,parcel_id,legal,land_use,boundaries",ok,200
+https://gis.georgetown.org/intgarcgis/rest/services/MPN/MPN_FeatureWebService/MapServer,2,Incorporated City,esriGeometryPolygon,20,"situs,land_use",ok,200
+https://gis.georgetown.org/intgarcgis/rest/services/MPN/MPN_FeatureWebService/MapServer,3,Extra-Territorial Jurisdiction,esriGeometryPolygon,20,"situs,land_use",ok,200
+https://gis.georgetown.org/intgarcgis/rest/services/MPN/MPN_FeatureWebService/MapServer,4,Zoning,esriGeometryPolygon,10,land_use,ok,200
+https://gis.georgetown.org/intgarcgis/rest/services/MPN/MPN_FeatureWebService/MapServer,5,CityCouncilDistricts,esriGeometryPolygon,20,"situs,land_use",ok,200
+https://gis.georgetown.org/intgarcgis/rest/services/MPN/MPN_FeatureWebService/MapServer,6,Subdivisions,esriGeometryPolygon,20,"legal,boundaries",ok,200
+https://gis.georgetown.org/intgarcgis/rest/services/MPN/MPN_FeatureWebService/MapServer,7,OldTownOvr,esriGeometryPolygon,0,,ok,200
+https://gis.georgetown.org/intgarcgis/rest/services/MPN/MPN_FeatureWebService/MapServer,8,HistoricOvr,esriGeometryPolygon,0,,ok,200
+https://gis.georgetown.org/intgarcgis/rest/services/MPN/MPN_FeatureWebService/MapServer,9,GatewayOvr,esriGeometryPolygon,0,,ok,200
+https://gis.georgetown.org/intgarcgis/rest/services/MPN/MPN_FeatureWebService/MapServer,10,DwntwnOvr,esriGeometryPolygon,0,,ok,200
+https://gis.georgetown.org/intgarcgis/rest/services/MPN/MPN_FeatureWebService/MapServer,11,CrthsViewOvr,esriGeometryPolygon,0,,ok,200
+https://gis.georgetown.org/intgarcgis/rest/services/MPN/MPN_FeatureWebService/MapServer,12,ElectricServiceProviders,esriGeometryPolygon,20,"owner,utilities",ok,200
+https://gis.georgetown.org/intgarcgis/rest/services/MPN/MPN_FeatureWebService/MapServer,13,CCN,esriGeometryPolygon,10,utilities,ok,200
+https://gis.georgetown.org/intgarcgis/rest/services/MPN/MPN_FeatureWebService/MapServer,14,EmerSvcBoundaries,esriGeometryPolygon,20,"land_use,permits",ok,200
+https://gis.georgetown.org/intgarcgis/rest/services/MPN/MPN_FeatureWebService/MapServer,15,MUD,esriGeometryPolygon,20,"legal,land_use",ok,200
+https://gis.georgetown.org/intgarcgis/rest/services/MPN/MPN_FeatureWebService/MapServer,16,PUD Overlay,esriGeometryPolygon,0,,ok,200
+https://gis.georgetown.org/intgarcgis/rest/services/MPN/MPN_FeatureWebService/MapServer,17,SPO Overlay,esriGeometryPolygon,0,,ok,200
+https://gis.georgetown.org/intgarcgis/rest/services/MPN/MPN_FeatureWebService/MapServer,18,Code Enforcement Areas,esriGeometryPolygon,20,"land_use,permits",ok,200
+https://gis.psmfc.org/server/rest/services/NFHP/NFHP_Projects/MapServer,0,NFHP Funded Projects,esriGeometryPoint,10,situs,ok,200
+https://gis.psmfc.org/server/rest/services/NFHP/NFHP_Projects/MapServer,1,NFHP Supported Projects,esriGeometryPoint,10,situs,ok,200
+https://gis.texaswildfirerisk.com/server/rest/services/TxWRAP/conditional_sources_of_ember_load_to_buildings/MapServer,0,Source of Ember Load to Buildings,,10,permits,ok,200
+https://gis.texaswildfirerisk.com/server/rest/services/TxWRAP/source_ember_load_buildings/MapServer,181,Source of Ember Load to Buildings,,10,permits,ok,200
+https://gis.traviscountytx.gov/server1/rest/services/Natural_Resources/Flood_Hazard_Layer/MapServer,0,Flood Insurance Rate Map (FIRM) Panels,esriGeometryPolygon,10,flood,ok,200
+https://gis.traviscountytx.gov/server1/rest/services/Natural_Resources/Flood_Hazard_Layer/MapServer,1,Base Flood Elevations (BFE),esriGeometryPolyline,10,flood,ok,200
+https://gis.traviscountytx.gov/server1/rest/services/Natural_Resources/Flood_Hazard_Layer/MapServer,2,Zone A 100 ft Buffer,esriGeometryPolygon,10,situs,ok,200
+https://gis.traviscountytx.gov/server1/rest/services/Natural_Resources/Flood_Hazard_Layer/MapServer,3,Finished Flood Elevation (FFE),esriGeometryPoint,40,"parcel_id,permits,boundaries,flood",ok,200
+https://gis.traviscountytx.gov/server1/rest/services/Natural_Resources/Flood_Hazard_Layer/MapServer,4,Letter of Map Revision (LOMR) (Effective Only),esriGeometryPolygon,0,,ok,200
+https://gis.traviscountytx.gov/server1/rest/services/Natural_Resources/Flood_Hazard_Layer/MapServer,5,Flood Hazard Zones,esriGeometryPolygon,20,"situs,flood",ok,200
+https://gis.traviscountytx.gov/server1/rest/services/Natural_Resources/Floodplain_100yr_2008/MapServer,0,Floodplain 100 yr (2008),esriGeometryPolygon,20,"situs,flood",ok,200
+https://gis.traviscountytx.gov/server1/rest/services/Public_Works/Fire_Hydrants/MapServer,0,Fire Hydrants,esriGeometryPoint,10,situs,ok,200
+https://gis.traviscountytx.gov/server1/rest/services/Public_Works/Travis_County_Roads/MapServer,41,Travis County Roads,esriGeometryPolyline,10,utilities,ok,200
+https://gis.traviscountytx.gov/server1/rest/services/Public_Works/Travis_County_Roads_Maintained_Only/MapServer,0,Travis County Maintained Roads,esriGeometryPolyline,10,utilities,ok,200
+https://gisdev.sanacloud.com/arcgis/rest/services/EDGE_Structures/EDGE_Structures/MapServer,0,Public_School_Characteristics___Current,esriGeometryPoint,10,situs,ok,200
+https://gisdev.sanacloud.com/arcgis/rest/services/EDGE_Structures/EDGE_Structures/MapServer,1,Strucutres_Points_Joined,esriGeometryPolygon,20,"situs,permits",ok,200
+https://gisdev.sanacloud.com/arcgis/rest/services/EDGE_Structures/EDGE_Structures/MapServer,2,MatchedStructures_appendedEducation,esriGeometryPolygon,20,"situs,permits",ok,200
+https://gisdev.sanacloud.com/arcgis/rest/services/EDGE_Structures/EDGE_Structures/MapServer,3,Education_Structures,esriGeometryPolygon,20,"situs,permits",ok,200
+https://gispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,0,Heat Wave Frequency,,0,,ok,200
+https://gispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,1,"Heat Wave Frequency in 50 Large U.S. Cities, 1961–2023 (Statistically Significant)",esriGeometryPoint,0,,ok,200
+https://gispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,2,"Heat Wave Frequency in 50 Large U.S. Cities, 1961–2023 (Not Statistically Significant)",esriGeometryPoint,0,,ok,200
+https://gispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,3,Heat Wave Duration,,0,,ok,200
+https://gispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,4,"Heat Wave Duration in 50 Large U.S. Cities, 1961–2023 (Statistically Significant)",esriGeometryPoint,0,,ok,200
+https://gispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,5,"Heat Wave Duration in 50 Large U.S. Cities, 1961–2023 (Not Statistically Significant)",esriGeometryPoint,0,,ok,200
+https://gispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,6,Heat Wave Season,,0,,ok,200
+https://gispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,7,"Heat Wave Season in 50 Large U.S. Cities, 1961–2023 (Statistically Significant)",esriGeometryPoint,0,,ok,200
+https://gispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,8,"Heat Wave Season in 50 Large U.S. Cities, 1961–2023 (Not Statistically Significant)",esriGeometryPoint,0,,ok,200
+https://gispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,9,Heat Wave Intensity,,0,,ok,200
+https://gispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,10,"Heat Wave Intensity in 50 Large U.S. Cities, 1961–2023 (Statistically Significant)",esriGeometryPoint,0,,ok,200
+https://gispub.epa.gov/arcgis/rest/services/OAR_OAP/HeatWaves/MapServer,11,"Heat Wave Intensity in 50 Large U.S. Cities, 1961–2023 (Not Statistically Significant)",esriGeometryPoint,0,,ok,200
+https://gispub.epa.gov/arcgis/rest/services/ORD/Estimated_Private_Domestic_Wells/MapServer,0,US Block Groups 2010,esriGeometryPolygon,20,"legal,utilities",ok,200
+https://gispub.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,1,Wells,,0,,ok,200
+https://gispub.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,2,Blocks,esriGeometryPolygon,10,legal,ok,200
+https://gispub.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,3,Block_Groups,esriGeometryPolygon,10,legal,ok,200
+https://gispub.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,4,Wells per Sq. Km.,,0,,ok,200
+https://gispub.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,5,Blocks,esriGeometryPolygon,10,legal,ok,200
+https://gispub.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,6,Block_Groups,esriGeometryPolygon,10,legal,ok,200
+https://gispub.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,7,% Population Served,,0,,ok,200
+https://gispub.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,8,Blocks,esriGeometryPolygon,10,legal,ok,200
+https://gispub.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,9,Block_Groups,esriGeometryPolygon,10,legal,ok,200
+https://gispub.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,10,Change in Housing Units on Wells 1990-2020,,0,,ok,200
+https://gispub.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,11,Blocks,esriGeometryPolygon,10,legal,ok,200
+https://gispub.epa.gov/arcgis/rest/services/ORD/PrivateDomesticWells2020/MapServer,12,Block_Groups,esriGeometryPolygon,10,legal,ok,200
+https://gisservices.halff.com/ags/rest/services/GCD_Reference/WaterandSewerCCN_Reference/MapServer,0,Water CCN Facility Lines,esriGeometryPolyline,10,utilities,ok,200
+https://gisservices.halff.com/ags/rest/services/GCD_Reference/WaterandSewerCCN_Reference/MapServer,1,Sewer CCN Facility Lines,esriGeometryPolyline,10,utilities,ok,200
+https://gisservices.halff.com/ags/rest/services/GCD_Reference/WaterandSewerCCN_Reference/MapServer,2,Water CCN Service Areas,esriGeometryPolygon,10,utilities,ok,200
+https://gisservices.halff.com/ags/rest/services/GCD_Reference/WaterandSewerCCN_Reference/MapServer,3,Sewer CCN Service Areas,esriGeometryPolygon,10,utilities,ok,200
+https://gisservices.halff.com/ags/rest/services/GMS_Demo/GMS_Demo_Wells_PROD/MapServer,0,All Wells,esriGeometryPoint,0,,ok,200
+https://gisservices.halff.com/ags/rest/services/GMS_Demo/GMS_Demo_Wells_PROD/MapServer,1,Wells by Well Use,esriGeometryPoint,0,,ok,200
+https://gisservices.halff.com/ags/rest/services/GMS_Demo/GMS_Demo_Wells_PROD/MapServer,2,Wells by Exempt Status,esriGeometryPoint,0,,ok,200
+https://gisservices.halff.com/ags/rest/services/GMS_Demo/GMS_Demo_Wells_PROD/MapServer,3,Wells for Search,esriGeometryPoint,40,"owner,situs,parcel_id,boundaries",ok,200
+https://greeninfrastructuremapsdev.arcgis.com/arcgis/rest/services/GreenInfrastructure/Connectors_03_05_All/MapServer,0,Least Cost Path Connectors,esriGeometryPolyline,0,,ok,200
+https://greeninfrastructuremapsdev.arcgis.com/arcgis/rest/services/GreenInfrastructure/CountySummary_Shaded/MapServer,0,Core Summary By County,esriGeometryPolygon,0,,ok,200
+https://greeninfrastructuremapsdev.arcgis.com/arcgis/rest/services/GreenInfrastructure/EndemicSpec/MapServer,0,Endemic Species Richness,,0,,ok,200
+https://greeninfrastructuremapsdev.arcgis.com/arcgis/rest/services/GreenInfrastructure/GICores030517/MapServer,0,Cores National,esriGeometryPolygon,30,"land_use,utilities,flood",ok,200
+https://gulfpub-gisstg.esriemcs.com/server/rest/services/Open_Data/World_Gas_Map_PE/MapServer,0,Gas Processing Plants [Canada & Mexico],esriGeometryPoint,10,utilities,ok,200
+https://gulfpub-gisstg.esriemcs.com/server/rest/services/Open_Data/World_Gas_Map_PE/MapServer,1,Gas Processing Plants [United States],esriGeometryPoint,10,utilities,ok,200
+https://gulfpub-gisstg.esriemcs.com/server/rest/services/Open_Data/World_Gas_Map_PE/MapServer,2,GTL Projects,esriGeometryPoint,0,,ok,200
+https://gulfpub-gisstg.esriemcs.com/server/rest/services/Open_Data/World_Gas_Map_PE/MapServer,3,LNG Projects,esriGeometryPoint,10,situs,ok,200
+https://gulfpub-gisstg.esriemcs.com/server/rest/services/Open_Data/World_Gas_Map_PE/MapServer,4,Projects And Shareholders,esriGeometryPoint,0,,ok,200
+https://gulfpub-gisstg.esriemcs.com/server/rest/services/Open_Data/World_Gas_Map_PE/MapServer,5,Gas Fields ,esriGeometryPolygon,10,utilities,ok,200
+https://gulfpub-gisstg.esriemcs.com/server/rest/services/Open_Data/World_Gas_Map_PE/MapServer,6,Existing Gas Pipelines - US,esriGeometryPolyline,10,utilities,ok,200
+https://gulfpub-gisstg.esriemcs.com/server/rest/services/Open_Data/World_Gas_Map_PE/MapServer,7,Gas Pipelines - World,esriGeometryPolyline,10,utilities,ok,200
+https://gulfpub-gisstg.esriemcs.com/server/rest/services/Open_Data/gei_gas_pipelines_summary/MapServer,0,US Natural Gas Pipelines,esriGeometryPolyline,40,"owner,situs,permits,utilities",ok,200
+https://gulfpub-gisstg.esriemcs.com/server/rest/services/Open_Data/gei_gas_pipelines_summary/MapServer,1,Global Natural Gas Pipelines,esriGeometryPolyline,30,"owner,situs,utilities",ok,200
+https://gulfpub-gisstg.esriemcs.com/server/rest/services/Open_Data/gei_pipelines/MapServer,0,gulfpub.SDE.Product_Pipelines_Global,esriGeometryPolyline,20,"owner,situs",ok,200
+https://gulfpub-gisstg.esriemcs.com/server/rest/services/Open_Data/gei_pipelines/MapServer,1,gulfpub.SDE.Product_Pipelines_US,esriGeometryPolyline,20,"owner,situs",ok,200
+https://gulfpub-gisstg.esriemcs.com/server/rest/services/Open_Data/gei_pipelines/MapServer,2,gulfpub.SDE.Existing_NG_Pipelines_US,esriGeometryPolyline,30,"owner,situs,permits",ok,200
+https://gulfpub-gisstg.esriemcs.com/server/rest/services/Open_Data/gei_pipelines/MapServer,3,gulfpub.SDE.Existing_Oil_Pipelines_US,esriGeometryPolyline,20,"owner,situs",ok,200
+https://gulfpub-gisstg.esriemcs.com/server/rest/services/Open_Data/gei_pipelines/MapServer,4,gulfpub.SDE.NG_Pipelines_Global,esriGeometryPolyline,20,"owner,situs",ok,200
+https://gulfpub-gisstg.esriemcs.com/server/rest/services/Open_Data/gei_pipelines/MapServer,5,gulfpub.SDE.Oil_Pipelines_Global,esriGeometryPolyline,20,"owner,situs",ok,200
+https://gulfpub-gisstg.esriemcs.com/server/rest/services/Service_Data/GEI_Data_Dashboard/MapServer,0,gulfpub.SDE.Oceans,esriGeometryPoint,10,situs,ok,200
+https://gulfpub-gisstg.esriemcs.com/server/rest/services/Service_Data/GEI_Data_Dashboard/MapServer,1,gulfpub.SDE.LNG_Imports_Exports_Min_FINAL,esriGeometryPoint,10,situs,ok,200
+https://gulfpub-gisstg.esriemcs.com/server/rest/services/Service_Data/GEI_Data_Dashboard/MapServer,2,gulfpub.SDE.Solar,esriGeometryPoint,10,situs,ok,200
+https://gulfpub-gisstg.esriemcs.com/server/rest/services/Service_Data/GEI_Data_Dashboard/MapServer,3,gulfpub.SDE.Wind,esriGeometryPoint,10,situs,ok,200
+https://gulfpub-gisstg.esriemcs.com/server/rest/services/Service_Data/GEI_Data_Dashboard/MapServer,4,gulfpub.SDE.Hydrogen,esriGeometryPoint,20,"owner,situs",ok,200
+https://gulfpub-gisstg.esriemcs.com/server/rest/services/Service_Data/GEI_Data_Dashboard/MapServer,5,gulfpub.SDE.Downstream_Assets,esriGeometryPoint,30,"owner,situs,permits",ok,200
+https://gulfpub-gisstg.esriemcs.com/server/rest/services/Service_Data/GEI_Data_Dashboard/MapServer,6,gulfpub.SDE.Existing_NG_Pipelines_US,esriGeometryPolyline,30,"owner,situs,permits",ok,200
+https://gulfpub-gisstg.esriemcs.com/server/rest/services/Service_Data/GEI_Data_Dashboard/MapServer,7,gulfpub.SDE.Existing_Oil_Pipelines_US,esriGeometryPolyline,20,"owner,situs",ok,200
+https://gulfpub-gisstg.esriemcs.com/server/rest/services/Service_Data/GEI_Data_Dashboard/MapServer,8,gulfpub.SDE.NG_Pipelines_Global,esriGeometryPolyline,20,"owner,situs",ok,200
+https://gulfpub-gisstg.esriemcs.com/server/rest/services/Service_Data/GEI_Data_Dashboard/MapServer,9,gulfpub.SDE.Oil_Pipelines_Global,esriGeometryPolyline,20,"owner,situs",ok,200
+https://harcags.harcresearch.org/arcgisserver/rest/services/Energy/Texas_EnergyStar_Buildings/MapServer,0,Texas_EnergyStar_Buildings,esriGeometryPoint,40,"owner,situs,land_use,permits",ok,200
+https://harcags.harcresearch.org/arcgisserver/rest/services/Energy/Texas_LEED_Buildings/MapServer,0,Texas_LEED_Buildings,esriGeometryPoint,40,"owner,situs,land_use,permits",ok,200
+https://harcags.harcresearch.org/arcgisserver/rest/services/Hazards/FEMA_SRLP_ZipCode/MapServer,0,FEMA_SRLP_ZipCode,esriGeometryPolygon,30,"situs,permits,flood",ok,200
+https://harcags.harcresearch.org/arcgisserver/rest/services/Hazards/FEMA_SRLP_ZipCode_Summary/MapServer,0,FEMA_SRLP_ZipCode_Summary,esriGeometryPolygon,30,"situs,permits,flood",ok,200
+https://harcags.harcresearch.org/arcgisserver/rest/services/Hazards/TCEQ_Leaking_Petroleum_Storage_Tank/MapServer,0,TCEQ_Leaking_Petroleum_Storage_Tank,esriGeometryPoint,20,"situs,permits",ok,200
+https://harcags.harcresearch.org/arcgisserver/rest/services/Hazards/TCEQ_Petroleum_Storage_Tanks/MapServer,0,TCEQ_Petroleum_Storage_Tanks,esriGeometryPoint,10,situs,ok,200
+https://harcags.harcresearch.org/arcgisserver/rest/services/Infrastructure/TCEQ_Permitted_Wastewater_Outfalls/MapServer,0,TCEQ_Permitted_Wastewater_Outfalls,esriGeometryPoint,20,"permits,utilities",ok,200
+https://harcags.harcresearch.org/arcgisserver/rest/services/Infrastructure/TCEQ_Public_Water_System_Surface_Water_Intakes/MapServer,0,TCEQ_Public_Water_System_Surface_Water_Intakes,esriGeometryPoint,10,utilities,ok,200
+https://harcags.harcresearch.org/arcgisserver/rest/services/Infrastructure/TCEQ_Public_Water_System_Wells/MapServer,0,TCEQ_Public_Water_System_Wells,esriGeometryPoint,10,utilities,ok,200
+https://harcags.harcresearch.org/arcgisserver/rest/services/Infrastructure/TWDB_BRACS_Wells/MapServer,0,TWDB_BRACS_Wells,esriGeometryPoint,40,"owner,parcel_id,permits,utilities",ok,200
+https://harcags.harcresearch.org/arcgisserver/rest/services/Infrastructure/TWDB_SDRDB_Wells/MapServer,0,TWDB_SDRDB_Wells,esriGeometryPoint,40,"owner,situs,permits,utilities",ok,200
+https://lddzoning.ldd.go.th/arcgis/rest/services/SampleWorldCities/MapServer,0,Cities,esriGeometryPoint,10,situs,ok,200
+https://lddzoning.ldd.go.th/arcgis/rest/services/SampleWorldCities/MapServer,1,Continent,esriGeometryPolygon,0,,ok,200
+https://lddzoning.ldd.go.th/arcgis/rest/services/SampleWorldCities/MapServer,2,World,esriGeometryPolygon,0,,ok,200
+https://livefeeds2.arcgis.com/arcgis/rest/services/GEOGLOWS/GlobalWaterModel_Medium/MapServer,0,Flow Forecast (m³/sec),esriGeometryPolyline,10,utilities,ok,200
+https://livefeeds2.arcgis.com/arcgis/rest/services/NFIE/NationalWaterModel_Medium_Anomaly/MapServer,0,Flow Forecast (cfs),esriGeometryPolyline,20,"situs,permits",ok,200
+https://livefeeds2.arcgis.com/arcgis/rest/services/NFIE/NationalWaterModel_Short/MapServer,0,Flow Forecast (cfs),esriGeometryPolyline,20,"situs,permits",ok,200
+https://livefeeds2.arcgis.com/arcgis/rest/services/NFIE/NationalWaterModel_Short_Anomaly/MapServer,0,Flow Forecast (cfs),esriGeometryPolyline,20,"situs,permits",ok,200
+https://livefeeds3.arcgis.com/arcgis/rest/services/GEOGLOWS/GlobalWaterModel_Medium/MapServer,0,Flow Forecast (m³/sec),esriGeometryPolyline,0,,ok,200
+https://maps.austintexas.gov/image/rest/services/MapTiled/AerialImagery_WebMercator/MapServer,0,IMAGERYBASEMAPSEARTHCOVER.md_2021_01_6in_tc,,0,,ok,200
+https://maps.austintexas.gov/image/rest/services/MapTiled/AerialImagery_WebMercator/MapServer,1,Boundary,esriGeometryPolygon,10,boundaries,ok,200
+https://maps.austintexas.gov/image/rest/services/MapTiled/AerialImagery_WebMercator/MapServer,2,Footprint,esriGeometryPolygon,0,,ok,200
+https://maps.austintexas.gov/image/rest/services/MapTiled/AerialImagery_WebMercator/MapServer,3,Image,unknown,0,,ok,200
+https://maps.austintexas.gov/image/rest/services/MapTiled/AerialImagery_WebMercator/MapServer,4,IMAGERYBASEMAPSEARTHCOVER.md_2019_01_6in_tc,,0,,ok,200
+https://maps.austintexas.gov/image/rest/services/MapTiled/AerialImagery_WebMercator/MapServer,5,Boundary,esriGeometryPolygon,10,boundaries,ok,200
+https://maps.austintexas.gov/image/rest/services/MapTiled/AerialImagery_WebMercator/MapServer,6,Footprint,esriGeometryPolygon,0,,ok,200
+https://maps.austintexas.gov/image/rest/services/MapTiled/AerialImagery_WebMercator/MapServer,7,Image,unknown,0,,ok,200
+https://maps.calagpermits.org/arcgis/rest/services/SampleWorldCities/MapServer,0,Cities,esriGeometryPoint,10,situs,ok,200
+https://maps.calagpermits.org/arcgis/rest/services/SampleWorldCities/MapServer,1,Continent,esriGeometryPolygon,0,,ok,200
+https://maps.calagpermits.org/arcgis/rest/services/SampleWorldCities/MapServer,2,World,esriGeometryPolygon,0,,ok,200
+https://maps.floridadisaster.org/gis/rest/services/Hazards/Weather_Flooding_Precipitation/MapServer,1,Flash Flood Guidance,,10,flood,ok,200
+https://maps.loadpasspermits.com/arcgis/rest/services/SampleWorldCities/MapServer,0,Cities,esriGeometryPoint,10,situs,ok,200
+https://maps.loadpasspermits.com/arcgis/rest/services/SampleWorldCities/MapServer,1,Continent,esriGeometryPolygon,0,,ok,200
+https://maps.loadpasspermits.com/arcgis/rest/services/SampleWorldCities/MapServer,2,World,esriGeometryPolygon,0,,ok,200
+https://maps.pflugervilletx.gov/arcgis/rest/services/Engineering/Floodway/MapServer,0,Floodway,esriGeometryPolygon,20,"situs,flood",ok,200
+https://maps.pflugervilletx.gov/arcgis/rest/services/Water/Water_CCNs/MapServer,0,Water CCN,esriGeometryPolygon,10,utilities,ok,200
+https://maps.pflugervilletx.gov/arcgisadmin/rest/services/Engineering/Floodway/MapServer,0,Floodway,esriGeometryPolygon,20,"situs,flood",ok,200
+https://maps.pflugervilletx.gov/arcgisadmin/rest/services/Water/Water_CCNs/MapServer,0,Water CCN,esriGeometryPolygon,10,utilities,ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Existing_Flood_Risk_Map/MapServer,0,Existing Vulnerability,,0,,ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Existing_Flood_Risk_Map/MapServer,1,Critical Facilities,esriGeometryPoint,20,"situs,flood",ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Existing_Flood_Risk_Map/MapServer,2,Critical Facilities - Others,esriGeometryPoint,20,"situs,flood",ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Existing_Flood_Risk_Map/MapServer,3,Social Vulnerability Index,esriGeometryPoint,20,"situs,flood",ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Existing_Flood_Risk_Map/MapServer,4,Existing Exposure,,0,,ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Existing_Flood_Risk_Map/MapServer,5,Low Water Crossing,esriGeometryPoint,30,"situs,utilities,flood",ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Existing_Flood_Risk_Map/MapServer,6,Existing Exposure (All),esriGeometryPoint,20,"situs,flood",ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Existing_Flood_Risk_Map/MapServer,7,Existing Exposure (Point),esriGeometryPoint,20,"situs,flood",ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Existing_Flood_Risk_Map/MapServer,8,Existing Exposure (Line),esriGeometryPolyline,20,"situs,flood",ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Existing_Flood_Risk_Map/MapServer,9,Existing Exposure (Polygon),esriGeometryPolygon,20,"situs,flood",ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Existing_Flood_Risk_Map/MapServer,10,Agricultural Land,esriGeometryPolygon,20,"situs,flood",ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Existing_Flood_Risk_Map/MapServer,11,Existing Flood Mapping Gaps,esriGeometryPolygon,20,"parcel_id,flood",ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Existing_Flood_Risk_Map/MapServer,12,Existing Flood Hazard,esriGeometryPolygon,10,flood,ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Existing_Flood_Risk_Map/MapServer,13,Existing Vulnerability Heatmap,esriGeometryPolygon,0,,ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Existing_Infrastructure_Map/MapServer,0,Existing Infrastructure,,0,,ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Existing_Infrastructure_Map/MapServer,1,Major Flood Infrastructure (Point),esriGeometryPoint,10,flood,ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Existing_Infrastructure_Map/MapServer,2,Major Flood Infrastructure (Line),esriGeometryPolyline,10,flood,ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Existing_Infrastructure_Map/MapServer,3,Major Flood Infrastructure (Polygon),esriGeometryPolygon,20,"land_use,flood",ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Existing_Infrastructure_Map/MapServer,4,Proposed or Ongoing Flood Mitigation Projects,esriGeometryPolygon,10,flood,ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Floodplain_Management_Map/MapServer,0,Streams,esriGeometryPolyline,10,permits,ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Floodplain_Management_Map/MapServer,1,Entity Flood Management Practices,,10,flood,ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Floodplain_Management_Map/MapServer,2,Entities - Adopted Minimum Regulations,esriGeometryPolygon,10,permits,ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Floodplain_Management_Map/MapServer,3,Entities - NFIP Participant,esriGeometryPolygon,10,permits,ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Floodplain_Management_Map/MapServer,4,Entities - Higher Standards Adopted,esriGeometryPolygon,10,permits,ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Floodplain_Management_Map/MapServer,5,Municipalities  - Level of Floodplain Management Practices,esriGeometryPolygon,20,"permits,flood",ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Floodplain_Management_Map/MapServer,6,Counties - Level of Floodplain Management Practices,esriGeometryPolygon,20,"permits,flood",ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Floodplain_Management_Map/MapServer,7,Municipalities - Level of Enforcement,esriGeometryPolygon,10,permits,ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Floodplain_Management_Map/MapServer,8,Counties - Level of Enforcement,esriGeometryPolygon,10,permits,ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Floodplain_Management_Map/MapServer,9,Entities - Existing Stormwater or Drainage Fee,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Floodplain_Management_Map/MapServer,10,Entities - Identified,esriGeometryPolygon,0,,ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Floodplain_Management_Map/MapServer,11,Watersheds,esriGeometryPolygon,10,utilities,ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Future_Flood_Risk_Map/MapServer,0,Future Vulnerability,,0,,ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Future_Flood_Risk_Map/MapServer,1,Critical Facilities,esriGeometryPoint,20,"situs,flood",ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Future_Flood_Risk_Map/MapServer,2,Critical Facilities - Others,esriGeometryPoint,20,"situs,flood",ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Future_Flood_Risk_Map/MapServer,3,Social Vulnerability Index,esriGeometryPoint,20,"situs,flood",ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Future_Flood_Risk_Map/MapServer,4,Future Exposure,,0,,ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Future_Flood_Risk_Map/MapServer,5,Low Water Crossing,esriGeometryPoint,30,"situs,utilities,flood",ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Future_Flood_Risk_Map/MapServer,6,Future Exposure (All),esriGeometryPoint,20,"situs,flood",ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Future_Flood_Risk_Map/MapServer,7,Future Exposure (Point),esriGeometryPoint,20,"situs,flood",ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Future_Flood_Risk_Map/MapServer,8,Future Exposure (Line),esriGeometryPolyline,20,"situs,flood",ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Future_Flood_Risk_Map/MapServer,9,Future Exposure (Polygon),esriGeometryPolygon,20,"situs,flood",ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Future_Flood_Risk_Map/MapServer,10,Agricultural Land,esriGeometryPolygon,20,"situs,flood",ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Future_Flood_Risk_Map/MapServer,11,Future Flood Mapping Gaps,esriGeometryPolygon,20,"parcel_id,flood",ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Future_Flood_Risk_Map/MapServer,12,Future Flood Hazard,esriGeometryPolygon,10,flood,ok,200
+https://maps3.hdrgateway.com/arcgis/rest/services/Texas/TWDB_SFPV_Future_Flood_Risk_Map/MapServer,13,Future Vulnerability Heatmap,esriGeometryPolygon,0,,ok,200
+https://mapservices.pasda.psu.edu/server/rest/services/pasda/FEMA_NationalRiskIndex/MapServer,0,NRI_CensusTracts,esriGeometryPolygon,0,,ok,200
+https://mapservices.weather.noaa.gov/raster/rest/services/precip/rfc_gridded_ffg/MapServer,0,Flash Flood Guidance 01 Hour,,10,flood,ok,200
+https://mapservices.weather.noaa.gov/raster/rest/services/precip/rfc_gridded_ffg/MapServer,1,Boundary,esriGeometryPolygon,10,boundaries,ok,200
+https://mapservices.weather.noaa.gov/raster/rest/services/precip/rfc_gridded_ffg/MapServer,2,Footprint,esriGeometryPolygon,0,,ok,200
+https://mapservices.weather.noaa.gov/raster/rest/services/precip/rfc_gridded_ffg/MapServer,3,Image,unknown,0,,ok,200
+https://mapservices.weather.noaa.gov/raster/rest/services/precip/rfc_gridded_ffg/MapServer,4,Flash Flood Guidance 03 Hour,,10,flood,ok,200
+https://mapservices.weather.noaa.gov/raster/rest/services/precip/rfc_gridded_ffg/MapServer,5,Boundary,esriGeometryPolygon,10,boundaries,ok,200
+https://mapservices.weather.noaa.gov/raster/rest/services/precip/rfc_gridded_ffg/MapServer,6,Footprint,esriGeometryPolygon,0,,ok,200
+https://mapservices.weather.noaa.gov/raster/rest/services/precip/rfc_gridded_ffg/MapServer,7,Image,unknown,0,,ok,200
+https://mapservices.weather.noaa.gov/raster/rest/services/precip/rfc_gridded_ffg/MapServer,8,Flash Flood Guidance 06 Hour,,10,flood,ok,200
+https://mapservices.weather.noaa.gov/raster/rest/services/precip/rfc_gridded_ffg/MapServer,9,Boundary,esriGeometryPolygon,10,boundaries,ok,200
+https://mapservices.weather.noaa.gov/raster/rest/services/precip/rfc_gridded_ffg/MapServer,10,Footprint,esriGeometryPolygon,0,,ok,200
+https://mapservices.weather.noaa.gov/raster/rest/services/precip/rfc_gridded_ffg/MapServer,11,Image,unknown,0,,ok,200
+https://mapservices.weather.noaa.gov/raster/rest/services/precip/rfc_gridded_ffg/MapServer,12,Flash Flood Guidance 12 Hour,,10,flood,ok,200
+https://mapservices.weather.noaa.gov/raster/rest/services/precip/rfc_gridded_ffg/MapServer,13,Boundary,esriGeometryPolygon,10,boundaries,ok,200
+https://mapservices.weather.noaa.gov/raster/rest/services/precip/rfc_gridded_ffg/MapServer,14,Footprint,esriGeometryPolygon,0,,ok,200
+https://mapservices.weather.noaa.gov/raster/rest/services/precip/rfc_gridded_ffg/MapServer,15,Image,unknown,0,,ok,200
+https://mapservices.weather.noaa.gov/raster/rest/services/precip/rfc_gridded_ffg/MapServer,16,Flash Flood Guidance 24 Hour,,10,flood,ok,200
+https://mapservices.weather.noaa.gov/raster/rest/services/precip/rfc_gridded_ffg/MapServer,17,Boundary,esriGeometryPolygon,10,boundaries,ok,200
+https://mapservices.weather.noaa.gov/raster/rest/services/precip/rfc_gridded_ffg/MapServer,18,Footprint,esriGeometryPolygon,0,,ok,200
+https://mapservices.weather.noaa.gov/raster/rest/services/precip/rfc_gridded_ffg/MapServer,19,Image,unknown,0,,ok,200
+https://sanagisdev.sanacloud.com/arcgis/rest/services/EDGE_Structures/EDGE_Structures/MapServer,0,Public_School_Characteristics___Current,esriGeometryPoint,10,situs,ok,200
+https://sanagisdev.sanacloud.com/arcgis/rest/services/EDGE_Structures/EDGE_Structures/MapServer,1,Strucutres_Points_Joined,esriGeometryPolygon,20,"situs,permits",ok,200
+https://sanagisdev.sanacloud.com/arcgis/rest/services/EDGE_Structures/EDGE_Structures/MapServer,2,MatchedStructures_appendedEducation,esriGeometryPolygon,20,"situs,permits",ok,200
+https://sanagisdev.sanacloud.com/arcgis/rest/services/EDGE_Structures/EDGE_Structures/MapServer,3,Education_Structures,esriGeometryPolygon,20,"situs,permits",ok,200
+https://taxmaps.traviscountytx.gov/arcgis/rest/services/Parcels/MapServer,0,DBO.Parcels,esriGeometryPolygon,70,"owner,situs,parcel_id,legal,land_use,sales,boundaries",ok,200
+https://tiles.arcgis.com/tiles/0L95CJ0VTaxqcmED/arcgis/rest/services/CD_Struct_Symbology/MapServer,0,Structures,esriGeometryPolygon,40,"parcel_id,land_use,permits,boundaries",ok,200
+https://tiles.arcgis.com/tiles/0L95CJ0VTaxqcmED/arcgis/rest/services/Proximity_to_Each_Other_in_feet/MapServer,0,Structures,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/0L95CJ0VTaxqcmED/arcgis/rest/services/Structure_Conflagration_Tile/MapServer,0,Structure Conflagration,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/0L95CJ0VTaxqcmED/arcgis/rest/services/Structure_Proximity_to_Wildlands/MapServer,0,Structures,esriGeometryPolygon,0,,ok,200
+https://tiles.arcgis.com/tiles/0L95CJ0VTaxqcmED/arcgis/rest/services/Structure_Wildfire_Risk/MapServer,8,Structure Wildfire Risk,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/0L95CJ0VTaxqcmED/arcgis/rest/services/Structures_Proximity_to_Each_Other_in_feet/MapServer,1,Proximity to Each Other in feet,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/0L95CJ0VTaxqcmED/arcgis/rest/services/Structures_Proximity_to_Wildlands/MapServer,0,Structures,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/0L95CJ0VTaxqcmED/arcgis/rest/services/Structures__Proximity_to_Wildlands/MapServer,0,Structures (Proximity to Wildlands),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/0L95CJ0VTaxqcmED/arcgis/rest/services/Structures__Proximity_to_Wildlands_/MapServer,0,Structures (Proximity to Wildlands),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/0L95CJ0VTaxqcmED/arcgis/rest/services/Structures__Proximity_to_each_other_/MapServer,0,Structures (Proximity to each other),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/0L95CJ0VTaxqcmED/arcgis/rest/services/Structures_proximity_to_each_other_2019/MapServer,0,Structures,esriGeometryPolygon,0,,ok,200
+https://tiles.arcgis.com/tiles/4VKUUfImpyJbJJ8O/arcgis/rest/services/forestland_ownership3_WTL1/MapServer,0,2014,,10,owner,ok,200
+https://tiles.arcgis.com/tiles/6DIQcwlPy8knb6sg/arcgis/rest/services/Age_Of_Seafloor_4_WTL2/MapServer,0,Seafloor Age,,0,,ok,200
+https://tiles.arcgis.com/tiles/6DIQcwlPy8knb6sg/arcgis/rest/services/Age_Of_Seafloor_4_WTL2/MapServer,1,hs_dem,,0,,ok,200
+https://tiles.arcgis.com/tiles/6dxqrE38upDMg1va/arcgis/rest/services/Perc_HsUnits_By_Owner_JMM/MapServer,0,US_Counties,esriGeometryPolygon,20,"owner,flood",ok,200
+https://tiles.arcgis.com/tiles/6dxqrE38upDMg1va/arcgis/rest/services/Perc_HsUnits_By_Owner_JMM/MapServer,1,US_States,esriGeometryPolygon,20,"owner,flood",ok,200
+https://tiles.arcgis.com/tiles/7uJv7I3kgh2y7Pe0/arcgis/rest/services/Sleep_Quality_and_Incarceration_WTL1/MapServer,2,Nighttime Lights ,,0,,ok,200
+https://tiles.arcgis.com/tiles/7uJv7I3kgh2y7Pe0/arcgis/rest/services/Sleep_Quality_and_Incarceration_WTL1/MapServer,3,Road Noise Level,,0,,ok,200
+https://tiles.arcgis.com/tiles/7uJv7I3kgh2y7Pe0/arcgis/rest/services/Sleep_Quality_and_Incarceration_WTL1/MapServer,4,Boundary,esriGeometryPolygon,10,boundaries,ok,200
+https://tiles.arcgis.com/tiles/7uJv7I3kgh2y7Pe0/arcgis/rest/services/Sleep_Quality_and_Incarceration_WTL1/MapServer,5,Footprint,esriGeometryPolygon,0,,ok,200
+https://tiles.arcgis.com/tiles/7uJv7I3kgh2y7Pe0/arcgis/rest/services/Sleep_Quality_and_Incarceration_WTL1/MapServer,6,Image,unknown,0,,ok,200
+https://tiles.arcgis.com/tiles/7uJv7I3kgh2y7Pe0/arcgis/rest/services/Sleep_Quality_and_Incarceration_WTL1/MapServer,7,Aviation + Road +Train Noise Level,,0,,ok,200
+https://tiles.arcgis.com/tiles/7uJv7I3kgh2y7Pe0/arcgis/rest/services/Sleep_Quality_and_Incarceration_WTL1/MapServer,8,Boundary,esriGeometryPolygon,10,boundaries,ok,200
+https://tiles.arcgis.com/tiles/7uJv7I3kgh2y7Pe0/arcgis/rest/services/Sleep_Quality_and_Incarceration_WTL1/MapServer,9,Footprint,esriGeometryPolygon,0,,ok,200
+https://tiles.arcgis.com/tiles/7uJv7I3kgh2y7Pe0/arcgis/rest/services/Sleep_Quality_and_Incarceration_WTL1/MapServer,10,Image,unknown,0,,ok,200
+https://tiles.arcgis.com/tiles/8df8p0NlLFEShl0r/arcgis/rest/services/GreenhouseGasEmissions/MapServer,0,total_emissions.tif,,0,,ok,200
+https://tiles.arcgis.com/tiles/8vL8ZFWfQxhb4uIP/arcgis/rest/services/County_GIS_Map_3D_CaitlinPowell_WTL1/MapServer,0,County Courthouse,esriGeometryPoint,0,,ok,200
+https://tiles.arcgis.com/tiles/8vL8ZFWfQxhb4uIP/arcgis/rest/services/County_GIS_Map_3D_CaitlinPowell_WTL1/MapServer,1,County Boundary,esriGeometryPolygon,20,"utilities,boundaries",ok,200
+https://tiles.arcgis.com/tiles/8vL8ZFWfQxhb4uIP/arcgis/rest/services/County_GIS_Map_3D_CaitlinPowell_WTL1/MapServer,2,Bridges,esriGeometryPoint,10,situs,ok,200
+https://tiles.arcgis.com/tiles/8vL8ZFWfQxhb4uIP/arcgis/rest/services/County_GIS_Map_3D_CaitlinPowell_WTL1/MapServer,3,Roadways,esriGeometryPolyline,0,,ok,200
+https://tiles.arcgis.com/tiles/8vL8ZFWfQxhb4uIP/arcgis/rest/services/County_GIS_Map_3D_CaitlinPowell_WTL1/MapServer,6,Waterways,esriGeometryPolyline,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/8vL8ZFWfQxhb4uIP/arcgis/rest/services/County_GIS_Map_3D_CaitlinPowell_WTL1/MapServer,7,Waterbodies,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/8vL8ZFWfQxhb4uIP/arcgis/rest/services/County_GIS_Map_3D_CaitlinPowell_WTL1/MapServer,8,Contours,esriGeometryPolyline,0,,ok,200
+https://tiles.arcgis.com/tiles/8vL8ZFWfQxhb4uIP/arcgis/rest/services/County_GIS_Map_3D_CaitlinPowell_WTL1/MapServer,9,Land Cover,,10,situs,ok,200
+https://tiles.arcgis.com/tiles/8vL8ZFWfQxhb4uIP/arcgis/rest/services/County_GIS_Map_3D_CaitlinPowell_WTL1/MapServer,10,Hillshade,,0,,ok,200
+https://tiles.arcgis.com/tiles/8vL8ZFWfQxhb4uIP/arcgis/rest/services/County_GIS_Map_3D_WTL1_CC/MapServer,0,Waterways,esriGeometryPolyline,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/8vL8ZFWfQxhb4uIP/arcgis/rest/services/County_GIS_Map_3D_WTL1_CC/MapServer,1,Waterbodies,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/8vL8ZFWfQxhb4uIP/arcgis/rest/services/County_GIS_Map_3D_WTL1_CC/MapServer,2,Roadways,esriGeometryPolyline,0,,ok,200
+https://tiles.arcgis.com/tiles/8vL8ZFWfQxhb4uIP/arcgis/rest/services/County_GIS_Map_3D_WTL1_CC/MapServer,3,Courthouse,esriGeometryPoint,0,,ok,200
+https://tiles.arcgis.com/tiles/8vL8ZFWfQxhb4uIP/arcgis/rest/services/County_GIS_Map_3D_WTL1_CC/MapServer,4,Contour,esriGeometryPolyline,0,,ok,200
+https://tiles.arcgis.com/tiles/8vL8ZFWfQxhb4uIP/arcgis/rest/services/County_GIS_Map_3D_WTL1_CC/MapServer,5,County,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/8vL8ZFWfQxhb4uIP/arcgis/rest/services/County_GIS_Map_3D_WTL1_CC/MapServer,6,HillSha_2012_ACC,,0,,ok,200
+https://tiles.arcgis.com/tiles/8vL8ZFWfQxhb4uIP/arcgis/rest/services/County_GIS_Map_3D_WTL1_CC/MapServer,7,DEM_2012_ACC,,0,,ok,200
+https://tiles.arcgis.com/tiles/8vL8ZFWfQxhb4uIP/arcgis/rest/services/County_GIS_Map_3D_WTL1_CC/MapServer,8,Land Cover,,10,situs,ok,200
+https://tiles.arcgis.com/tiles/8vL8ZFWfQxhb4uIP/arcgis/rest/services/County_GIS_Map_3D_WTL1_CC/MapServer,9,NED_2012_TNRIS,,0,,ok,200
+https://tiles.arcgis.com/tiles/8vL8ZFWfQxhb4uIP/arcgis/rest/services/County_GIS_Map_3D_WTL1_CC/MapServer,10,Boundary,esriGeometryPolygon,10,boundaries,ok,200
+https://tiles.arcgis.com/tiles/8vL8ZFWfQxhb4uIP/arcgis/rest/services/County_GIS_Map_3D_WTL1_CC/MapServer,11,Footprint,esriGeometryPolygon,0,,ok,200
+https://tiles.arcgis.com/tiles/8vL8ZFWfQxhb4uIP/arcgis/rest/services/County_GIS_Map_3D_WTL1_CC/MapServer,12,Image,unknown,0,,ok,200
+https://tiles.arcgis.com/tiles/AFcQb6oKR1arZw02/arcgis/rest/services/Solar_NatGas_SuitabilityFinal4/MapServer,60,Solar_NatGas_SuitabilityFinal4,,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/AFcQb6oKR1arZw02/arcgis/rest/services/Solar_and_Natural_Gas_Suitability_Areas/MapServer,60,Solar and Natural Gas Suitability Areas,,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/AFcQb6oKR1arZw02/arcgis/rest/services/Wind_and_Natural_Gas_Suitability_Areas/MapServer,256,Wind and Natural Gas Suitability Areas,,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/BG6nSlhZSAWtExvp/arcgis/rest/services/SeaLevelRise50Meters/MapServer,0,Plus 50 Meters,,0,,ok,200
+https://tiles.arcgis.com/tiles/C0HVLQJI37vYnazu/arcgis/rest/services/Flood_exposure/MapServer,0,Level of physical exposure,,0,,ok,200
+https://tiles.arcgis.com/tiles/C0HVLQJI37vYnazu/arcgis/rest/services/Forest_management_opportunities_to_reduce_flood_risk/MapServer,0,Forest restoration opportunities for reducing flood,,10,flood,ok,200
+https://tiles.arcgis.com/tiles/C0HVLQJI37vYnazu/arcgis/rest/services/Forest_management_opportunities_to_reduce_flood_risk/MapServer,1,Forest protection opportunities for reducing flood,,10,flood,ok,200
+https://tiles.arcgis.com/tiles/C8EMgrsFcRFL6LrL/arcgis/rest/services/geoid18_height_conus_tile_package/MapServer,0,meters,,0,,ok,200
+https://tiles.arcgis.com/tiles/C8EMgrsFcRFL6LrL/arcgis/rest/services/geoid18_height_conus_tile_package/MapServer,1,hillshade,,0,,ok,200
+https://tiles.arcgis.com/tiles/DCPX1PuggGH4Tici/arcgis/rest/services/Wooded_Wetlands_Forests/MapServer,0,WoodedWetland.tif,,10,flood,ok,200
+https://tiles.arcgis.com/tiles/DCPX1PuggGH4Tici/arcgis/rest/services/Wooded_Wetlands_NoBaseMap/MapServer,0,WoodedWetland.tif,,10,flood,ok,200
+https://tiles.arcgis.com/tiles/DCPX1PuggGH4Tici/arcgis/rest/services/World_Forests_NoBaseMap/MapServer,0,WoodedWetland.tif,,10,flood,ok,200
+https://tiles.arcgis.com/tiles/EDxZDh4HqQ1a9KvA/arcgis/rest/services/FloodOccurence_ReverseLegend/MapServer,0,Flood Occurrence,esriGeometryPolygon,10,flood,ok,200
+https://tiles.arcgis.com/tiles/ELI1iJkCzTIagHkp/arcgis/rest/services/Forested_Wetlands/MapServer,0,Forested Wetlands,,10,flood,ok,200
+https://tiles.arcgis.com/tiles/ELI1iJkCzTIagHkp/arcgis/rest/services/TX_Structures_RTiles/MapServer,0,Address Points 2017,esriGeometryPoint,10,situs,ok,200
+https://tiles.arcgis.com/tiles/ELI1iJkCzTIagHkp/arcgis/rest/services/TX_Structures_RTiles/MapServer,1,Microsoft Buildings,esriGeometryPoint,10,permits,ok,200
+https://tiles.arcgis.com/tiles/ELI1iJkCzTIagHkp/arcgis/rest/services/TX_Structures_RTiles/MapServer,2,Structures per sqmi,esriGeometryPolygon,10,situs,ok,200
+https://tiles.arcgis.com/tiles/EVsTT4nNRCwmHNyb/arcgis/rest/services/Current_Ecological_Systems/MapServer,0,Current Land Use,,0,,ok,200
+https://tiles.arcgis.com/tiles/EVsTT4nNRCwmHNyb/arcgis/rest/services/Current_Ecological_Systems/MapServer,5,Forests,,0,,ok,200
+https://tiles.arcgis.com/tiles/EVsTT4nNRCwmHNyb/arcgis/rest/services/Current_Ecological_Systems/MapServer,6,Grasslands,,0,,ok,200
+https://tiles.arcgis.com/tiles/EVsTT4nNRCwmHNyb/arcgis/rest/services/Current_Ecological_Systems/MapServer,7,Wetlands,,10,flood,ok,200
+https://tiles.arcgis.com/tiles/EVsTT4nNRCwmHNyb/arcgis/rest/services/Current_Ecological_Systems/MapServer,8,Deserts,,0,,ok,200
+https://tiles.arcgis.com/tiles/EVsTT4nNRCwmHNyb/arcgis/rest/services/Historic_Ecological_Systems/MapServer,0,Historic Land Use,,0,,ok,200
+https://tiles.arcgis.com/tiles/EVsTT4nNRCwmHNyb/arcgis/rest/services/Historic_Ecological_Systems/MapServer,4,Forests,,0,,ok,200
+https://tiles.arcgis.com/tiles/EVsTT4nNRCwmHNyb/arcgis/rest/services/Historic_Ecological_Systems/MapServer,3,Grasslands,,0,,ok,200
+https://tiles.arcgis.com/tiles/EVsTT4nNRCwmHNyb/arcgis/rest/services/Historic_Ecological_Systems/MapServer,1,Wetlands,,10,flood,ok,200
+https://tiles.arcgis.com/tiles/EVsTT4nNRCwmHNyb/arcgis/rest/services/Historic_Ecological_Systems/MapServer,2,Deserts,,0,,ok,200
+https://tiles.arcgis.com/tiles/F8VN7MYN9lP1oiiV/arcgis/rest/services/Behind_the_Meter/MapServer,23,Behind the Meter,,0,,ok,200
+https://tiles.arcgis.com/tiles/F8VN7MYN9lP1oiiV/arcgis/rest/services/Front_of_the_Meter/MapServer,0,Front of the Meter,,0,,ok,200
+https://tiles.arcgis.com/tiles/FrTO2wfz5ckEyZcp/arcgis/rest/services/gasoductos_mundo/MapServer,0,"Gasoductos en funcionamiento, en construcción y en proyecto",esriGeometryPolyline,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/HRY6x8qt5qjGnAA9/arcgis/rest/services/Argas_reflexus_WTL1/MapServer,0,Argas reflexus,,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/IB7Kf2F8K18M2LKr/arcgis/rest/services/GravityDataCoverage10c/MapServer,0,GRAVITY DATA,,0,,ok,200
+https://tiles.arcgis.com/tiles/IB7Kf2F8K18M2LKr/arcgis/rest/services/GravityDataCoverage10c/MapServer,1,GravityPoints,esriGeometryPoint,0,,ok,200
+https://tiles.arcgis.com/tiles/IB7Kf2F8K18M2LKr/arcgis/rest/services/GravityDataCoverage10c/MapServer,2,GravityLines,esriGeometryPolyline,0,,ok,200
+https://tiles.arcgis.com/tiles/IB7Kf2F8K18M2LKr/arcgis/rest/services/GravityDataCoverage10c/MapServer,3,Gravity Grids,esriGeometryPolygon,0,,ok,200
+https://tiles.arcgis.com/tiles/IB7Kf2F8K18M2LKr/arcgis/rest/services/GravityDataCoverage10d/MapServer,0,GRAVITY DATA,,0,,ok,200
+https://tiles.arcgis.com/tiles/IB7Kf2F8K18M2LKr/arcgis/rest/services/GravityDataCoverage10d/MapServer,1,GravityPoints,esriGeometryPoint,0,,ok,200
+https://tiles.arcgis.com/tiles/IB7Kf2F8K18M2LKr/arcgis/rest/services/GravityDataCoverage10d/MapServer,2,GravityLines,esriGeometryPolyline,0,,ok,200
+https://tiles.arcgis.com/tiles/IB7Kf2F8K18M2LKr/arcgis/rest/services/GravityDataCoverage10d/MapServer,3,Gravity Grids,esriGeometryPolygon,0,,ok,200
+https://tiles.arcgis.com/tiles/IB7Kf2F8K18M2LKr/arcgis/rest/services/Gravity_points/MapServer,0,Gravity points,esriGeometryPoint,0,,ok,200
+https://tiles.arcgis.com/tiles/IB7Kf2F8K18M2LKr/arcgis/rest/services/Gravity_points22/MapServer,0,Gravity points,esriGeometryPoint,0,,ok,200
+https://tiles.arcgis.com/tiles/IX0rbbPRMd0YfCJN/arcgis/rest/services/Wastewater_Facilities_WTL1/MapServer,0,KernelDensity2022,,0,,ok,200
+https://tiles.arcgis.com/tiles/IX0rbbPRMd0YfCJN/arcgis/rest/services/Wastewater_Facilities_WTL1/MapServer,1,KernelDensity2023,,0,,ok,200
+https://tiles.arcgis.com/tiles/IX0rbbPRMd0YfCJN/arcgis/rest/services/Wastewater_Facilities_WTL1/MapServer,2,KernelDensity2024,,0,,ok,200
+https://tiles.arcgis.com/tiles/O0h7Kr4STkhD6uiU/arcgis/rest/services/TexasStructure/MapServer,0,Structure,esriGeometryPolyline,0,,ok,200
+https://tiles.arcgis.com/tiles/OmhjjQKPQ4s7vrAK/arcgis/rest/services/Old_Growth_Forests_and_Wetlands_on_Tribal_Lands_WTL1/MapServer,0,Mature Forests,,0,,ok,200
+https://tiles.arcgis.com/tiles/OmhjjQKPQ4s7vrAK/arcgis/rest/services/Wetlands_and_Mature_Forests_On_Tribal_Lands__Continental_U_S___WTL1/MapServer,0,Mature Forests,,0,,ok,200
+https://tiles.arcgis.com/tiles/P8Cok4qAP1sTVE59/arcgis/rest/services/TROP_SUBTROP_WetlandV3_2016_CIFOR3b/MapServer,0,Wetland,,10,flood,ok,200
+https://tiles.arcgis.com/tiles/P8Cok4qAP1sTVE59/arcgis/rest/services/World_WetlandV2_2016_CIFOR/MapServer,0,Wetland,,10,flood,ok,200
+https://tiles.arcgis.com/tiles/QCH1Le0vwRIyplqB/arcgis/rest/services/Landcover_WTL1/MapServer,8,NA_LandCover_2010_V2_25haMMU,,10,situs,ok,200
+https://tiles.arcgis.com/tiles/QCH1Le0vwRIyplqB/arcgis/rest/services/Landcover_WTL1/MapServer,9,NA_LandCover_2010_V2_25haMMU.tif,,10,situs,ok,200
+https://tiles.arcgis.com/tiles/QCH1Le0vwRIyplqB/arcgis/rest/services/Landcover_WTL1/MapServer,10,NA_Wetlands_GRID,,10,flood,ok,200
+https://tiles.arcgis.com/tiles/QCH1Le0vwRIyplqB/arcgis/rest/services/WetlandMap_WTL1/MapServer,3,NA_Wetlands_GRID,,10,flood,ok,200
+https://tiles.arcgis.com/tiles/V6ZHFr6zdgNZuVG0/arcgis/rest/services/Avg_Buff_Widthvvdfgfdg/MapServer,0,Business address vacancy rate for 2014,esriGeometryPolygon,20,"situs,utilities",ok,200
+https://tiles.arcgis.com/tiles/Vlw77QWOmRIp56YB/arcgis/rest/services/TGS_Permian_EL_Forecast/MapServer,0,Permian EL Forecast,,0,,ok,200
+https://tiles.arcgis.com/tiles/Vlw77QWOmRIp56YB/arcgis/rest/services/TGS_Permian_EL_Forecast/MapServer,1,10 YR Wells,esriGeometryPoint,0,,ok,200
+https://tiles.arcgis.com/tiles/Vlw77QWOmRIp56YB/arcgis/rest/services/TGS_Permian_EL_Forecast/MapServer,2,5 YR Wells,esriGeometryPoint,0,,ok,200
+https://tiles.arcgis.com/tiles/Vlw77QWOmRIp56YB/arcgis/rest/services/TGS_Permian_EL_Forecast/MapServer,3,1 YR Wells,esriGeometryPoint,0,,ok,200
+https://tiles.arcgis.com/tiles/Vlw77QWOmRIp56YB/arcgis/rest/services/TGS_Permian_EL_Forecast/MapServer,4,Shut-In Wells,esriGeometryPoint,0,,ok,200
+https://tiles.arcgis.com/tiles/X8NyCH3igCKuBk9D/arcgis/rest/services/Marsh_Vulnerability/MapServer,0,Wetlands Vulnerability,,10,flood,ok,200
+https://tiles.arcgis.com/tiles/XG15cJAlne2vxtgt/arcgis/rest/services/CensusTract_FEMA_Community_Resilience_Index/MapServer,0,Census Tracts - FEMA Community Resilience Index (CRI),esriGeometryPolygon,30,"parcel_id,utilities,flood",ok,200
+https://tiles.arcgis.com/tiles/XG15cJAlne2vxtgt/arcgis/rest/services/Counties_FEMA_Community_Resilience_Index/MapServer,0,Counties - FEMA Community Resilience Index (CRI),esriGeometryPolygon,10,flood,ok,200
+https://tiles.arcgis.com/tiles/XORNS2fPFySPlBgy/arcgis/rest/services/Popular_TouchTerrain_locations_WTL1/MapServer,0,Accumulated_footprint ,,0,,ok,200
+https://tiles.arcgis.com/tiles/XORNS2fPFySPlBgy/arcgis/rest/services/TouchTerrain_print_area_footprints_WTL1/MapServer,0,Accumulated footprint ,,0,,ok,200
+https://tiles.arcgis.com/tiles/XSv3KNGfmrd1txPN/arcgis/rest/services/NA_WetLand_WTL1/MapServer,8,WETLAND,,10,flood,ok,200
+https://tiles.arcgis.com/tiles/XSv3KNGfmrd1txPN/arcgis/rest/services/WETLAND_NEW/MapServer,8,WETLAND,,10,flood,ok,200
+https://tiles.arcgis.com/tiles/YPZZRcK4Jvh09Ovf/arcgis/rest/services/LANDOWNERSHIP/MapServer,0,Land_Ownership,esriGeometryPolygon,20,"owner,land_use",ok,200
+https://tiles.arcgis.com/tiles/YPZZRcK4Jvh09Ovf/arcgis/rest/services/Travis_Wells_Balcones/MapServer,0,travis_wells_Clip,esriGeometryPoint,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/bFQCiZqoe0LrqfWM/arcgis/rest/services/emisiones_metano_produccion_combustibles_gas_2016/MapServer,0,"Emisiones totales de metano en la explotación de gas, TM/año/km2 2016",,20,"legal,utilities",ok,200
+https://tiles.arcgis.com/tiles/bFQCiZqoe0LrqfWM/arcgis/rest/services/emisiones_metano_produccion_combustibles_gas_2016/MapServer,1,"Emisiones totales de metano en la explotación de petróleo, TM/año/km2 2016",,10,legal,ok,200
+https://tiles.arcgis.com/tiles/cJ9YHowT8TU7DUyn/arcgis/rest/services/GIC7_Number_of_atrisk_wetland_plant_species_observed/MapServer,0,Number of at-risk wetland plant species observed,esriGeometryPolygon,10,flood,ok,200
+https://tiles.arcgis.com/tiles/cJ9YHowT8TU7DUyn/arcgis/rest/services/GIC7_Number_of_combined_sewer_overflow_events/MapServer,0,Number of combined sewer overflow events,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/cJ9YHowT8TU7DUyn/arcgis/rest/services/GIC7_Permitted_metals_discharges_toxicweighted_poundequivalents/MapServer,0,Permitted metals discharges - toxic-weighted pound-equivalents,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/cJ9YHowT8TU7DUyn/arcgis/rest/services/GIC7_Permitted_nitrogen_discharges_pounds_per_year_from_non_publiclyowned_treatment_works/MapServer,0,Permitted nitrogen discharges - pounds per year from non publicly-owned treatment works,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/cJ9YHowT8TU7DUyn/arcgis/rest/services/GIC7_Permitted_priority_pollutant_discharges_pounds_per_year/MapServer,0,Permitted priority pollutant discharges - pounds per year,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/cJ9YHowT8TU7DUyn/arcgis/rest/services/GIC7_Total_number_of_observed_atrisk_wetland_plant_and_animal_species/MapServer,0,Total number of observed at-risk wetland plant and animal species,esriGeometryPolygon,10,flood,ok,200
+https://tiles.arcgis.com/tiles/cJ9YHowT8TU7DUyn/arcgis/rest/services/GIC7_Wastewater_flow_discharges_annual_total_mgy/MapServer,0,Wastewater flow discharges - annual total (mgy),esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/cJ9YHowT8TU7DUyn/arcgis/rest/services/GIC7_Wastewater_flow_discharges_daily_average_mgd/MapServer,0,Wastewater flow discharges - daily average (mgd),esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/cJ9YHowT8TU7DUyn/arcgis/rest/services/National_Measured_Conductivity_Data_NWIS/MapServer,0,National Measured Conductivity Data NWIS,,0,,ok,200
+https://tiles.arcgis.com/tiles/cJ9YHowT8TU7DUyn/arcgis/rest/services/National_Measured_Conductivity_Data_NWIS/MapServer,1,Rivers/Streams,esriGeometryPoint,10,situs,ok,200
+https://tiles.arcgis.com/tiles/cJ9YHowT8TU7DUyn/arcgis/rest/services/National_Measured_Conductivity_Data_NWIS/MapServer,2,Lakes/Wetlands,esriGeometryPoint,20,"situs,flood",ok,200
+https://tiles.arcgis.com/tiles/cJ9YHowT8TU7DUyn/arcgis/rest/services/National_Measured_Conductivity_Data_NWIS/MapServer,3,Wells,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/cJ9YHowT8TU7DUyn/arcgis/rest/services/National_Measured_Conductivity_Data_NWIS/MapServer,4,Other,esriGeometryPoint,10,situs,ok,200
+https://tiles.arcgis.com/tiles/cJ9YHowT8TU7DUyn/arcgis/rest/services/National_Measured_Conductivity_Data_WQP_Tile/MapServer,0,National Measured Conductivity Data WQP,,0,,ok,200
+https://tiles.arcgis.com/tiles/cJ9YHowT8TU7DUyn/arcgis/rest/services/National_Measured_Conductivity_Data_WQP_Tile/MapServer,1,Rivers/Streams,esriGeometryPoint,10,situs,ok,200
+https://tiles.arcgis.com/tiles/cJ9YHowT8TU7DUyn/arcgis/rest/services/National_Measured_Conductivity_Data_WQP_Tile/MapServer,2,Lakes/Wetlands,esriGeometryPoint,20,"situs,flood",ok,200
+https://tiles.arcgis.com/tiles/cJ9YHowT8TU7DUyn/arcgis/rest/services/National_Measured_Conductivity_Data_WQP_Tile/MapServer,3,Wells,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/cJ9YHowT8TU7DUyn/arcgis/rest/services/National_Measured_Conductivity_Data_WQP_Tile/MapServer,4,Other,esriGeometryPoint,10,situs,ok,200
+https://tiles.arcgis.com/tiles/cdccLpR4yujbZ02J/arcgis/rest/services/Terrain/MapServer,0,Oceans,esriGeometryPolygon,0,,ok,200
+https://tiles.arcgis.com/tiles/cdccLpR4yujbZ02J/arcgis/rest/services/Terrain/MapServer,1,Contours,esriGeometryPolyline,0,,ok,200
+https://tiles.arcgis.com/tiles/cdccLpR4yujbZ02J/arcgis/rest/services/Terrain/MapServer,2,Terrain,,0,,ok,200
+https://tiles.arcgis.com/tiles/cdccLpR4yujbZ02J/arcgis/rest/services/Terrain/MapServer,3,Boundary,esriGeometryPolygon,10,boundaries,ok,200
+https://tiles.arcgis.com/tiles/cdccLpR4yujbZ02J/arcgis/rest/services/Terrain/MapServer,4,Footprint,esriGeometryPolygon,0,,ok,200
+https://tiles.arcgis.com/tiles/cdccLpR4yujbZ02J/arcgis/rest/services/Terrain/MapServer,5,Image,,0,,ok,200
+https://tiles.arcgis.com/tiles/hzUHIzEWfNimPCoo/arcgis/rest/services/Biodiversity_WFI/MapServer,0,Biodiversity Factors In Wetland Forests,,10,flood,ok,200
+https://tiles.arcgis.com/tiles/hzUHIzEWfNimPCoo/arcgis/rest/services/Stressors__WFI/MapServer,0,Stressors of Wetland Forests,,10,flood,ok,200
+https://tiles.arcgis.com/tiles/hzUHIzEWfNimPCoo/arcgis/rest/services/full_wfi_map/MapServer,0,Wetland Forest Initiative Conservation Priorities,,10,flood,ok,200
+https://tiles.arcgis.com/tiles/lDFzr3JyGEn5Eymu/arcgis/rest/services/0311_OilandGas_update/MapServer,59,0311_OilandGasHIFLD_Current,,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/lDFzr3JyGEn5Eymu/arcgis/rest/services/Wetland_Climate_Stronghold/MapServer,0,Wetland Climate Stronghold,,10,flood,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,0,Scale Ranges (M = million; k = thousand),,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,1,Above 25M,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,2,Major Cities,esriGeometryPoint,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,3,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,4,States/Provinces (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,5,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,6,Interstates,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,7,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,8,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,9,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,10,National Parks,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,11,Land,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,12,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,13,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,14,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,15,25 - 15M,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,16,Major Cities,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,17,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,18,States/Provinces (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,19,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,20,Interstates,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,21,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,22,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,23,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,24,National and State Parks,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,25,Land,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,26,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,27,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,28,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,29,15 - 5M,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,30,Major Cities,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,31,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,32,States/Provinces (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,33,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,34,Interstates,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,35,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,36,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,37,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,38,Landmarks,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,39,Islands (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,40,Land Use Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,41,Land,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,42,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,43,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,44,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,45,5 - 3M,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,46,Places,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,47,Major Cities,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,48,Cities,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,49,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,50,States/Provinces (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,51,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,52,Roads,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,53,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,54,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,55,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,56,Landmarks,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,57,Islands (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,58,Land Use Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,59,Urban Areas,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,60,"Urban Areas (U.S., PR)",esriGeometryPolygon,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,61,"Urban Areas (Canada, Mexico)",esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,62,Land,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,63,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,64,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,65,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,66,3 - 1.5M,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,67,Places,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,68,Major Cities,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,69,Cities,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,70,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,71,States/Provinces (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,72,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,73,Roads,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,74,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,75,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,76,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,77,Landmarks,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,78,Islands (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,79,Land Use Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,80,Urban Areas,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,81,"Urban Areas (U.S., PR)",esriGeometryPolygon,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,82,"Urban Areas (Canada, Mexico)",esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,83,Land,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,84,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,85,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,86,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,87,1.5M - 750k,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,88,Places,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,89,Major Cities,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,90,Cities,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,91,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,92,County (labels only),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,93,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,94,Roads,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,95,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,96,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,97,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,98,Landmarks,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,99,Islands (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,100,Land Use Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,101,Urban Areas,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,102,"Urban Areas (U.S., PR)",esriGeometryPolygon,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,103,"Urban Areas (Canada, Mexico)",esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,104,Land,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,105,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,106,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,107,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,108,750 - 300k,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,109,Cities,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,110,Roads,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,111,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,112,County (labels only),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,113,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,114,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,115,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,116,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,117,Landmarks,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,118,Islands (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,119,Land Use\Facility Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,120,Urban Areas,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,121,"Urban Areas (U.S., PR)",esriGeometryPolygon,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,122,"Urban Areas (Canada, Mexico)",esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,123,Land,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,124,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,125,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,126,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,127,300 - 150k,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,128,Cities,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,129,Roads,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,130,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,131,County (labels only),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,132,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,133,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,134,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,135,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,136,Landmarks,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,137,Islands (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,138,Land Use\Facility Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,139,Urban Areas,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,140,"Urban Areas (U.S., PR)",esriGeometryPolygon,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,141,"Urban Areas (Canada, Mexico)",esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,142,Land ,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,143,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,144,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,145,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,146,150 - 100k,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,147,Cities,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,148,Transportation,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,149,Roads,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,150,Railroads,esriGeometryPolyline,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,151,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,152,County (labels only),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,153,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,154,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,155,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,156,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,157,Landmarks,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,158,Islands (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,159,Land\Facility Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,160,Land,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,161,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,162,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,163,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,164,100 - 50k,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,165,Places,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,166,Cities (labels),esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,167,Transportation,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,168,Roads,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,169,Railroads,esriGeometryPolyline,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,170,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,171,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,172,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,173,Water Segments,esriGeometryPolyline,30,"situs,permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,174,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,175,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,176,Landmarks,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,177,Islands (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,178,Land\Facility Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,179,Land,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,180,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,181,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,182,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,183,50 - 25k,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,184,Places,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,185,Cities (labels) ,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,186,Transportation,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,187,Roads,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,188,Railroads,esriGeometryPolyline,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,189,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,190,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,191,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,192,Water Segments,esriGeometryPolyline,30,"situs,permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,193,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,194,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,195,Landmarks,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,196,Islands (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,197,Land\Facility Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,198,Land,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,199,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,200,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,201,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,202,25 - 15k,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,203,Places,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,204,Cities (labels),esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,205,Transportation,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,206,Roads,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,207,Railroads,esriGeometryPolyline,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,208,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,209,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,210,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,211,Water Segments,esriGeometryPolyline,30,"situs,permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,212,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,213,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,214,Landmarks,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,215,Building Footprints,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,216,Islands (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,217,Land\Facility Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,218,Land ,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,219,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,220,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,221,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,222,15 - 5k,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,223,Places,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,224,Cities (labels),esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,225,Transportation,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,226,Exits (labels),esriGeometryPoint,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,227,Roads,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,228,Railroads,esriGeometryPolyline,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,229,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,230,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,231,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,232,Water Segments,esriGeometryPolyline,30,"situs,permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,233,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,234,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,235,Landmarks,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,236,Islands (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,237,Building Footprints,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,238,Land\Facility Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,239,Land,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,240,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,241,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,242,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,243,5 - 2.5k,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,244,Places,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,245,Cities (labels),esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,246,Points of Interest,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,247,Transportation Hubs,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,248,Transportation,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,249,Exits (labels),esriGeometryPoint,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,250,Roads,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,251,Railroads,esriGeometryPolyline,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,252,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,253,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,254,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,255,Water Segments,esriGeometryPolyline,30,"situs,permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,256,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,257,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,258,Landmarks,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,259,Islands (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,260,Building Footprints,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,261,Land\Facility Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,262,Land,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,263,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,264,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,265,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,266,2.5k - 0,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,267,Points of Interest,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,268,Transportation Hubs,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,269,Transportation,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,270,Exits (labels),esriGeometryPoint,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,271,Roads,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,272,Railroads,esriGeometryPolyline,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,273,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,274,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,275,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,276,Water Segments,esriGeometryPolyline,30,"situs,permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,277,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,278,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,279,Landmarks,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,280,Building Footprints,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,281,Land\Facility Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,282,Land ,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,283,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,284,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031/MapServer,285,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,0,Scale Ranges (M = million; k = thousand),,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,1,Above 25M,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,2,Major Cities,esriGeometryPoint,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,3,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,4,States/Provinces (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,5,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,6,Interstates,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,7,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,8,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,9,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,10,National Parks,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,11,Land,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,12,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,13,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,14,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,15,25 - 15M,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,16,Major Cities,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,17,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,18,States/Provinces (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,19,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,20,Interstates,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,21,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,22,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,23,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,24,National and State Parks,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,25,Land,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,26,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,27,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,28,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,29,15 - 5M,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,30,Major Cities,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,31,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,32,States/Provinces (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,33,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,34,Interstates,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,35,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,36,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,37,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,38,Landmarks,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,39,Islands (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,40,Land Use Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,41,Land,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,42,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,43,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,44,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,45,5 - 3M,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,46,Places,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,47,Major Cities,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,48,Cities,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,49,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,50,States/Provinces (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,51,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,52,Roads,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,53,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,54,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,55,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,56,Landmarks,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,57,Islands (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,58,Land Use Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,59,Urban Areas,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,60,"Urban Areas (U.S., PR)",esriGeometryPolygon,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,61,"Urban Areas (Canada, Mexico)",esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,62,Land,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,63,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,64,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,65,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,66,3 - 1.5M,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,67,Places,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,68,Major Cities,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,69,Cities,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,70,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,71,States/Provinces (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,72,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,73,Roads,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,74,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,75,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,76,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,77,Landmarks,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,78,Islands (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,79,Land Use Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,80,Urban Areas,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,81,"Urban Areas (U.S., PR)",esriGeometryPolygon,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,82,"Urban Areas (Canada, Mexico)",esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,83,Land,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,84,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,85,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,86,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,87,1.5M - 750k,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,88,Places,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,89,Major Cities,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,90,Cities,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,91,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,92,County (labels only),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,93,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,94,Roads,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,95,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,96,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,97,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,98,Landmarks,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,99,Islands (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,100,Land Use Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,101,Urban Areas,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,102,"Urban Areas (U.S., PR)",esriGeometryPolygon,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,103,"Urban Areas (Canada, Mexico)",esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,104,Land,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,105,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,106,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,107,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,108,750 - 300k,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,109,Cities,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,110,Roads,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,111,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,112,County (labels only),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,113,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,114,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,115,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,116,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,117,Landmarks,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,118,Islands (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,119,Land Use\Facility Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,120,Urban Areas,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,121,"Urban Areas (U.S., PR)",esriGeometryPolygon,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,122,"Urban Areas (Canada, Mexico)",esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,123,Land,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,124,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,125,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,126,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,127,300 - 150k,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,128,Cities,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,129,Roads,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,130,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,131,County (labels only),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,132,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,133,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,134,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,135,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,136,Landmarks,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,137,Islands (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,138,Land Use\Facility Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,139,Urban Areas,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,140,"Urban Areas (U.S., PR)",esriGeometryPolygon,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,141,"Urban Areas (Canada, Mexico)",esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,142,Land ,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,143,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,144,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,145,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,146,150 - 100k,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,147,Cities,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,148,Transportation,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,149,Roads,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,150,Railroads,esriGeometryPolyline,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,151,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,152,County (labels only),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,153,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,154,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,155,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,156,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,157,Landmarks,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,158,Islands (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,159,Land\Facility Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,160,Land,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,161,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,162,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,163,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,164,100 - 50k,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,165,Places,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,166,Cities (labels),esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,167,Transportation,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,168,Roads,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,169,Railroads,esriGeometryPolyline,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,170,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,171,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,172,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,173,Water Segments,esriGeometryPolyline,30,"situs,permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,174,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,175,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,176,Landmarks,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,177,Islands (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,178,Land\Facility Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,179,Land,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,180,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,181,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,182,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,183,50 - 25k,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,184,Places,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,185,Cities (labels) ,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,186,Transportation,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,187,Roads,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,188,Railroads,esriGeometryPolyline,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,189,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,190,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,191,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,192,Water Segments,esriGeometryPolyline,30,"situs,permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,193,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,194,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,195,Landmarks,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,196,Islands (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,197,Land\Facility Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,198,Land,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,199,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,200,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,201,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,202,25 - 15k,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,203,Places,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,204,Cities (labels),esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,205,Transportation,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,206,Roads,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,207,Railroads,esriGeometryPolyline,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,208,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,209,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,210,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,211,Water Segments,esriGeometryPolyline,30,"situs,permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,212,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,213,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,214,Landmarks,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,215,Building Footprints,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,216,Islands (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,217,Land\Facility Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,218,Land ,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,219,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,220,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,221,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,222,15 - 5k,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,223,Places,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,224,Cities (labels),esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,225,Transportation,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,226,Exits (labels),esriGeometryPoint,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,227,Roads,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,228,Railroads,esriGeometryPolyline,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,229,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,230,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,231,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,232,Water Segments,esriGeometryPolyline,30,"situs,permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,233,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,234,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,235,Landmarks,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,236,Islands (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,237,Building Footprints,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,238,Land\Facility Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,239,Land,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,240,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,241,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,242,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,243,5 - 2.5k,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,244,Places,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,245,Cities (labels),esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,246,Points of Interest,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,247,Transportation Hubs,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,248,Transportation,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,249,Exits (labels),esriGeometryPoint,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,250,Roads,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,251,Railroads,esriGeometryPolyline,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,252,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,253,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,254,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,255,Water Segments,esriGeometryPolyline,30,"situs,permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,256,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,257,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,258,Landmarks,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,259,Islands (labels),esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,260,Building Footprints,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,261,Land\Facility Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,262,Land,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,263,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,264,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,265,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,266,2.5k - 0,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,267,Points of Interest,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,268,Transportation Hubs,esriGeometryPoint,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,269,Transportation,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,270,Exits (labels),esriGeometryPoint,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,271,Roads,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,272,Railroads,esriGeometryPolyline,20,"situs,permits",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,273,Boundaries,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,274,Administrative Lines,esriGeometryPolyline,10,situs,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,275,Hydrology,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,276,Water Segments,esriGeometryPolyline,30,"situs,permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,277,Water Areas,esriGeometryPolygon,20,"permits,utilities",ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,278,Ocean Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,279,Landmarks,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,280,Building Footprints,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,281,Land\Facility Areas,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,282,Land ,,0,,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,283,North America,esriGeometryPolygon,10,permits,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,284,Countries,esriGeometryPolygon,10,parcel_id,ok,200
+https://tiles.arcgis.com/tiles/pmcEyn9tLWCoX7Dm/arcgis/rest/services/WorldWebMercatorFromDesktop1031TPK/MapServer,285,Water Background,esriGeometryPolygon,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/rmsJABJlpZN311A4/arcgis/rest/services/Cancer_Mortality_Females_and_Males_1079_to_1994/MapServer,0,cancer,esriGeometryPolygon,0,,ok,200
+https://tiles.arcgis.com/tiles/rmsJABJlpZN311A4/arcgis/rest/services/Cancer_Mortality_females_1970_to_1994/MapServer,0,cancerp020 - Females,esriGeometryPolygon,10,flood,ok,200
+https://tiles.arcgis.com/tiles/swlKRWoduvVuwMcX/arcgis/rest/services/Mean_Hist_Onychomys_leucogaster/MapServer,0,Mean_Hist_Onychomys_leucogaster.tif,unknown,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/swlKRWoduvVuwMcX/arcgis/rest/services/Mean_RCP45_2040_Microtus_ochrogaster/MapServer,0,Mean_RCP45_2040_Microtus_ochrogaster.tif,unknown,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/swlKRWoduvVuwMcX/arcgis/rest/services/Mean_RCP45_2040_Onychomys_leucogaster/MapServer,0,Mean_RCP45_2040_Onychomys_leucogaster.tif,unknown,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/swlKRWoduvVuwMcX/arcgis/rest/services/Mean_RCP45_2040_Platynus_decentis/MapServer,0,Mean_RCP45_2040_Platynus_decentis.tif,unknown,10,legal,ok,200
+https://tiles.arcgis.com/tiles/swlKRWoduvVuwMcX/arcgis/rest/services/Mean_RCP45_2070_Microtus_ochrogaster/MapServer,0,Mean_RCP45_2070_Microtus_ochrogaster.tif,unknown,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/swlKRWoduvVuwMcX/arcgis/rest/services/Mean_RCP45_2070_Onychomys_leucogaster/MapServer,0,Mean_RCP45_2070_Onychomys_leucogaster.tif,unknown,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/swlKRWoduvVuwMcX/arcgis/rest/services/Mean_RCP85_2040_Onychomys_leucogaster/MapServer,0,Mean_RCP85_2040_Onychomys_leucogaster.tif,unknown,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/swlKRWoduvVuwMcX/arcgis/rest/services/Mean_RCP85_2070_Microtus_ochrogaster/MapServer,0,Mean_RCP85_2070_Microtus_ochrogaster.tif,unknown,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/swlKRWoduvVuwMcX/arcgis/rest/services/RSE_Hist_Onychomys_leucogaster/MapServer,0,RSE_Hist_Onychomys_leucogaster.tif,unknown,10,utilities,ok,200
+https://tiles.arcgis.com/tiles/swlKRWoduvVuwMcX/arcgis/rest/services/RSE_Hist_Platanus_occidentalis/MapServer,0,RSE_Hist_Platanus_occidentalis.tif,unknown,10,legal,ok,200
+https://tiles.arcgis.com/tiles/swlKRWoduvVuwMcX/arcgis/rest/services/RSE_RCP45_2040_Platanus_occidentalis/MapServer,0,RSE_RCP45_2040_Platanus_occidentalis.tif,unknown,10,legal,ok,200
+https://tiles.arcgis.com/tiles/swlKRWoduvVuwMcX/arcgis/rest/services/RSE_RCP45_2070_Platanus_occidentalis/MapServer,0,RSE_RCP45_2070_Platanus_occidentalis.tif,unknown,10,legal,ok,200
+https://tiles.arcgis.com/tiles/swlKRWoduvVuwMcX/arcgis/rest/services/RSE_RCP85_2040_Platanus_occidentalis/MapServer,0,RSE_RCP85_2040_Platanus_occidentalis.tif,unknown,10,legal,ok,200
+https://tiles.arcgis.com/tiles/tWF28TdwCm3ZaV7m/arcgis/rest/services/WoodsHoleCanopyHeightsFull/MapServer,0,WoodsHoleHeights,,0,,ok,200
+https://tiles.arcgis.com/tiles/tWF28TdwCm3ZaV7m/arcgis/rest/services/WoodsHoleCanopyHeightsFull/MapServer,1,Boundary,esriGeometryPolygon,10,boundaries,ok,200
+https://tiles.arcgis.com/tiles/tWF28TdwCm3ZaV7m/arcgis/rest/services/WoodsHoleCanopyHeightsFull/MapServer,2,Footprint,esriGeometryPolygon,0,,ok,200
+https://tiles.arcgis.com/tiles/tWF28TdwCm3ZaV7m/arcgis/rest/services/WoodsHoleCanopyHeightsFull/MapServer,3,Image,,0,,ok,200
+https://tiles.arcgis.com/tiles/tWF28TdwCm3ZaV7m/arcgis/rest/services/WoodsHoleHeights/MapServer,0,WoodsHoleHeights,,0,,ok,200
+https://tiles.arcgis.com/tiles/tWF28TdwCm3ZaV7m/arcgis/rest/services/WoodsHoleHeights/MapServer,1,Boundary,esriGeometryPolygon,10,boundaries,ok,200
+https://tiles.arcgis.com/tiles/tWF28TdwCm3ZaV7m/arcgis/rest/services/WoodsHoleHeights/MapServer,2,Footprint,esriGeometryPolygon,0,,ok,200
+https://tiles.arcgis.com/tiles/tWF28TdwCm3ZaV7m/arcgis/rest/services/WoodsHoleHeights/MapServer,3,Image,,0,,ok,200
+https://tiles.arcgis.com/tiles/v01gqwM5QqNysAAi/arcgis/rest/services/Domestic_wells_in_the_contiguous_US_2010/MapServer,0,projected_REM2010.tif,,0,,ok,200
+https://tiles.arcgis.com/tiles/vG3UXQhL1lX6K0JM/arcgis/rest/services/NoisePollution_STL_WTL1/MapServer,2,CONUS_rail_road_and_aviation_noise_2020,,0,,ok,200
+https://tiles.arcgis.com/tiles/vG3UXQhL1lX6K0JM/arcgis/rest/services/NoisePollution_STL_WTL1/MapServer,3,Boundary,esriGeometryPolygon,10,boundaries,ok,200
+https://tiles.arcgis.com/tiles/vG3UXQhL1lX6K0JM/arcgis/rest/services/NoisePollution_STL_WTL1/MapServer,4,Footprint,esriGeometryPolygon,0,,ok,200
+https://tiles.arcgis.com/tiles/vG3UXQhL1lX6K0JM/arcgis/rest/services/NoisePollution_STL_WTL1/MapServer,5,Image,unknown,0,,ok,200
+https://tiles.arcgis.com/tiles/wigUtW04kdxVe3C7/arcgis/rest/services/Zip4__Female/MapServer,0,Zip4: Female,esriGeometryPolygon,20,"situs,flood",ok,200
+https://tiles2.arcgis.com/tiles/7uJv7I3kgh2y7Pe0/arcgis/rest/services/Sleep_Quality_and_Incarceration_WTL1/MapServer,2,Nighttime Lights ,,0,,ok,200
+https://tiles2.arcgis.com/tiles/7uJv7I3kgh2y7Pe0/arcgis/rest/services/Sleep_Quality_and_Incarceration_WTL1/MapServer,3,Road Noise Level,,0,,ok,200
+https://tiles2.arcgis.com/tiles/7uJv7I3kgh2y7Pe0/arcgis/rest/services/Sleep_Quality_and_Incarceration_WTL1/MapServer,4,Boundary,esriGeometryPolygon,10,boundaries,ok,200
+https://tiles2.arcgis.com/tiles/7uJv7I3kgh2y7Pe0/arcgis/rest/services/Sleep_Quality_and_Incarceration_WTL1/MapServer,5,Footprint,esriGeometryPolygon,0,,ok,200
+https://tiles2.arcgis.com/tiles/7uJv7I3kgh2y7Pe0/arcgis/rest/services/Sleep_Quality_and_Incarceration_WTL1/MapServer,6,Image,unknown,0,,ok,200
+https://tiles2.arcgis.com/tiles/7uJv7I3kgh2y7Pe0/arcgis/rest/services/Sleep_Quality_and_Incarceration_WTL1/MapServer,7,Aviation + Road +Train Noise Level,,0,,ok,200
+https://tiles2.arcgis.com/tiles/7uJv7I3kgh2y7Pe0/arcgis/rest/services/Sleep_Quality_and_Incarceration_WTL1/MapServer,8,Boundary,esriGeometryPolygon,10,boundaries,ok,200
+https://tiles2.arcgis.com/tiles/7uJv7I3kgh2y7Pe0/arcgis/rest/services/Sleep_Quality_and_Incarceration_WTL1/MapServer,9,Footprint,esriGeometryPolygon,0,,ok,200
+https://tiles2.arcgis.com/tiles/7uJv7I3kgh2y7Pe0/arcgis/rest/services/Sleep_Quality_and_Incarceration_WTL1/MapServer,10,Image,unknown,0,,ok,200
+https://tiles2.arcgis.com/tiles/C0HVLQJI37vYnazu/arcgis/rest/services/Flood_exposure/MapServer,0,Level of physical exposure,,0,,ok,200
+https://tiles2.arcgis.com/tiles/C0HVLQJI37vYnazu/arcgis/rest/services/Forest_management_opportunities_to_reduce_flood_risk/MapServer,0,Forest restoration opportunities for reducing flood,,10,flood,ok,200
+https://tiles2.arcgis.com/tiles/C0HVLQJI37vYnazu/arcgis/rest/services/Forest_management_opportunities_to_reduce_flood_risk/MapServer,1,Forest protection opportunities for reducing flood,,10,flood,ok,200
+https://tiles4.arcgis.com/tiles/C8EMgrsFcRFL6LrL/arcgis/rest/services/geoid18_height_conus_tile_package/MapServer,0,meters,,0,,ok,200
+https://tiles4.arcgis.com/tiles/C8EMgrsFcRFL6LrL/arcgis/rest/services/geoid18_height_conus_tile_package/MapServer,1,hillshade,,0,,ok,200
+https://tiles4.arcgis.com/tiles/P8Cok4qAP1sTVE59/arcgis/rest/services/TROP_SUBTROP_WetlandV3_2016_CIFOR3b/MapServer,0,Wetland,,10,flood,ok,200
+https://tiles4.arcgis.com/tiles/P8Cok4qAP1sTVE59/arcgis/rest/services/World_WetlandV2_2016_CIFOR/MapServer,0,Wetland,,10,flood,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/NFHL_Print/NFHL/MapServer,0,LOMRs,esriGeometryPolygon,0,,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/NFHL_Print/NFHL/MapServer,1,PLSS,esriGeometryPolygon,0,,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/NFHL_Print/NFHL/MapServer,2,River Mile Markers,esriGeometryPoint,0,,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/NFHL_Print/NFHL/MapServer,3,Cross-Sections,esriGeometryPolyline,0,,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/NFHL_Print/NFHL/MapServer,4,Coastal Transects,esriGeometryPolyline,0,,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/NFHL_Print/NFHL/MapServer,5,Base Flood Elevations,esriGeometryPolyline,10,flood,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/NFHL_Print/NFHL/MapServer,6,Profile Baselines,esriGeometryPolyline,10,utilities,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/NFHL_Print/NFHL/MapServer,7,Transect Baselines,esriGeometryPolyline,0,,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/NFHL_Print/NFHL/MapServer,8,Limit of Moderate Wave Action,esriGeometryPolyline,0,,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/NFHL_Print/NFHL/MapServer,9,Political Jurisdictions,esriGeometryPolygon,0,,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/NFHL_Print/NFHL/MapServer,10,Levees,esriGeometryPolyline,10,owner,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/NFHL_Print/NFHL/MapServer,11,General Structures,esriGeometryPolyline,0,,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/NFHL_Print/NFHL/MapServer,12,Primary Frontal Dunes,esriGeometryPolyline,0,,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/NFHL_Print/NFHL/MapServer,13,Flood Hazard Boundaries,esriGeometryPolyline,10,flood,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/NFHL_Print/NFHL/MapServer,14,Flood Hazard Zones,esriGeometryPolygon,20,"situs,flood",ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/TEST/NFHL/MapServer,0,LOMRs,esriGeometryPolygon,0,,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/TEST/NFHL/MapServer,1,PLSS,esriGeometryPolygon,0,,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/TEST/NFHL/MapServer,2,River Mile Markers,esriGeometryPoint,0,,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/TEST/NFHL/MapServer,3,Cross-Sections,esriGeometryPolyline,0,,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/TEST/NFHL/MapServer,4,Coastal Transects,esriGeometryPolyline,0,,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/TEST/NFHL/MapServer,5,Base Flood Elevations,esriGeometryPolyline,10,flood,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/TEST/NFHL/MapServer,6,Profile Baselines,esriGeometryPolyline,10,utilities,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/TEST/NFHL/MapServer,7,Transect Baselines,esriGeometryPolyline,0,,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/TEST/NFHL/MapServer,8,Limit of Moderate Wave Action,esriGeometryPolyline,0,,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/TEST/NFHL/MapServer,9,Political Jurisdictions,esriGeometryPolygon,0,,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/TEST/NFHL/MapServer,10,Levees,esriGeometryPolyline,10,owner,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/TEST/NFHL/MapServer,11,General Structures,esriGeometryPolyline,0,,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/TEST/NFHL/MapServer,12,Primary Frontal Dunes,esriGeometryPolyline,0,,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/TEST/NFHL/MapServer,13,Flood Hazard Boundaries,esriGeometryPolyline,10,flood,ok,200
+https://uat-msc.msc.fema.gov/arcgis/rest/services/TEST/NFHL/MapServer,14,Flood Hazard Zones,esriGeometryPolygon,20,"situs,flood",ok,200
+https://wwf-sight-maps.org/arcgis/rest/services/Global/Airports/MapServer,0,Airports,esriGeometryPoint,10,permits,ok,200
+https://wwf-sight-maps.org/arcgis/rest/services/Global/Dams/MapServer,0,Future Dams,esriGeometryPoint,10,situs,ok,200
+https://wwf-sight-maps.org/arcgis/rest/services/Global/Dams/MapServer,1,Global Georeferenced Database of Dams GOOD2,esriGeometryPoint,0,,ok,200
+https://wwf-sight-maps.org/arcgis/rest/services/Global/Dams/MapServer,2,Dams by Reported Storage Capacity (GRanD),esriGeometryPoint,10,situs,ok,200
+https://wwf-sight-maps.org/arcgis/rest/services/Global/Dams/MapServer,3,Reservoirs GRanD,esriGeometryPolygon,10,situs,ok,200
+https://wwf-sight-maps.org/arcgis/rest/services/Global/Global_Railways/MapServer,0,Railways,esriGeometryPolyline,0,,ok,200
+https://wwf-sight-maps.org/arcgis/rest/services/Global/Global_Roads_GRIP4/MapServer,0,Roads,esriGeometryPolyline,0,,ok,200
+https://wwfke-giscoe.wwfkenya.org/arcgis/rest/services/AEF_II/Global_Railways/MapServer,0,Railways,esriGeometryPolyline,0,,ok,200
+https://zportalpub.zayo.com/zayoportalpubap/rest/services/SF_Buildings/MapServer,0,SF Buildings,esriGeometryPoint,30,"owner,situs,permits",ok,200
