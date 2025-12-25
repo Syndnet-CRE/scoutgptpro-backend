@@ -117,27 +117,87 @@ model Property {
 }
 
 model Listing {
-  id          String        @id @default(cuid())
-  userId      String
-  propertyId  String
-  listingType ListingType
-  price       Float
-  status      ListingStatus @default(ACTIVE)
+  id String @id @default(cuid())
+
+  // Status & Type
+  status       ListingStatus @default(ACTIVE)
+  propertyType PropertyType
+
+  // Basic Info
   title       String
-  description String?
-  images      Json?
-  documents   Json?
-  highlights  Json?
-  listedAt    DateTime      @default(now())
-  expiresAt   DateTime?
-  soldAt      DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  property    Property      @relation(fields: [propertyId], references: [id], onDelete: Cascade)
-  user        User          @relation(fields: [userId], references: [id])
+  description String? @db.Text
+
+  // Location (required)
+  address   String
+  city      String
+  state     String  @default("TX")
+  zipCode   String
+  county    String?
+  latitude  Float?
+  longitude Float?
+  apn       String? // Parcel ID
+
+  // Pricing
+  askingPrice  Decimal  @db.Decimal(15, 2)
+  pricePerSqft Decimal? @db.Decimal(10, 2)
+  pricePerAcre Decimal? @db.Decimal(15, 2)
+
+  // Property Characteristics (common)
+  totalSqft    Int?
+  lotSizeAcres Decimal? @db.Decimal(10, 4)
+  lotSizeSqft  Int?
+  yearBuilt    Int?
+  zoning       String?
+
+  // Commercial-specific (nullable)
+  assetType     String? // Office, Retail, Industrial, etc.
+  assetSubtype  String?
+  noi           Decimal? @db.Decimal(15, 2)
+  capRate       Decimal? @db.Decimal(5, 2)
+  occupancy     Decimal? @db.Decimal(5, 2)
+  tenantCount   Int?
+  buildingCount Int?
+  floors        Int?
+  parkingSpaces Int?
+  leaseType     String? // NNN, Gross, etc.
+
+  // Residential-specific (nullable)
+  bedrooms  Int?
+  bathrooms Decimal? @db.Decimal(3, 1)
+  hoaFee    Decimal? @db.Decimal(10, 2)
+
+  // Land-specific (nullable)
+  totalAcres   Decimal? @db.Decimal(10, 4)
+  numberOfLots Int?
+  roadFrontage Int?
+  topography   String?
+  utilities    Json? // {water: bool, sewer: bool, electric: bool, etc.}
+  entitlements String?  @db.Text
+
+  // Media & Documents
+  images     Json? // Array of image URLs
+  documents  Json? // Array of {name, url, type}
+  coverImage String?
+
+  // Tracking
+  views     Int @default(0)
+  inquiries Int @default(0)
+
+  // Relationships (optional for anonymous submissions)
+  userId     String?
+  propertyId String? // Optional link to Property table
+  property   Property? @relation(fields: [propertyId], references: [id], onDelete: SetNull)
+  user       User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  listedAt  DateTime @default(now())
 
   @@index([status])
-  @@index([listingType])
+  @@index([propertyType])
+  @@index([city])
+  @@index([askingPrice])
   @@map("listings")
 }
 
@@ -423,9 +483,16 @@ enum ListingType {
 enum ListingStatus {
   ACTIVE
   PENDING
+  UNDER_CONTRACT
   SOLD
-  EXPIRED
   WITHDRAWN
+  EXPIRED
+}
+
+enum PropertyType {
+  COMMERCIAL
+  RESIDENTIAL
+  LAND
 }
 
 enum DealStage {

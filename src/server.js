@@ -9,6 +9,7 @@ import polygonSearchRoutes from './routes/polygonSearches.js';
 import geocodeRoutes from './routes/geocode.js';
 import gisRoutes from './routes/gis.js';
 import propertiesRoutes from './routes/properties.js';
+import listingsRoutes from './routes/listings.js';
 
 dotenv.config();
 
@@ -17,7 +18,12 @@ const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors({
-  origin: process.env.FRONTEND_URL || '*',
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'https://scoutcrm.netlify.app',
+    process.env.FRONTEND_URL
+  ].filter(Boolean),
   credentials: true
 }));
 app.use(express.json());
@@ -40,6 +46,7 @@ app.use('/api', polygonSearchRoutes);
 app.use('/api', geocodeRoutes);
 app.use('/api/gis', gisRoutes);
 app.use('/api/properties', propertiesRoutes);
+app.use('/api/listings', listingsRoutes);
 
 // 404 handler
 app.use((req, res) => {
