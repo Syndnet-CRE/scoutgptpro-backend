@@ -21,3 +21,4 @@ geo_data/
 *.7z
 *.tar.gz
 .env.local
+data/backups/
