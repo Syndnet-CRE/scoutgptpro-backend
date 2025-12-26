@@ -175,4 +175,42 @@ router.post('/layers', async (req, res) => {
   }
 });
 
+// GET /api/gis/layers/:id/query - Query specific layer by bbox or geometry
+router.get('/layers/:id/query', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { bbox, geometry } = req.query;
+
+    const layer = await prisma.gisLayer.findUnique({
+      where: { id }
+    });
+
+    if (!layer) {
+      return res.status(404).json({ success: false, error: 'Layer not found' });
+    }
+
+    // For now, return layer info - actual querying would require ArcGIS API calls
+    res.json({
+      success: true,
+      layer: {
+        id: layer.id,
+        name: layer.name,
+        category: layer.category,
+        url: layer.sourceUrl,
+        bbox: bbox ? JSON.parse(bbox) : null,
+        geometry: geometry ? JSON.parse(geometry) : null
+      },
+      message: 'Layer query endpoint - implement ArcGIS query logic here'
+    });
+  } catch (error) {
+    console.error('Error querying layer:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 export default router;
+
+
+
+
+

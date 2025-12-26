@@ -44,3 +44,7 @@ export async function generatePolygonSearchNameFromCoords(lat, lng, areaAcres) {
     return generatePolygonSearchName(null, areaAcres);
   }
 }
+
+
+
+

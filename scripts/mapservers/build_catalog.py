@@ -183,3 +183,4 @@ if __name__ == '__main__':
     csv_file = sys.argv[1] if len(sys.argv) > 1 else 'data/mapservers/mapserver_links.csv'
     main(csv_file)
 
+

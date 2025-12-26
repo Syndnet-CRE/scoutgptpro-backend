@@ -3,14 +3,15 @@ import Anthropic from '@anthropic-ai/sdk';
 import { searchMapServers } from '../services/mapserver-service.js';
 import { extractCategories } from '../services/category-mapper.js';
 import { queryProperties, needsPropertyData } from '../services/property-service.js';
+import { rateLimiter } from '../middleware/rateLimiter.js';
 
 const router = express.Router();
 const anthropic = new Anthropic({ 
   apiKey: process.env.CLAUDE_API_KEY 
 });
 
-// POST /api/ai/query
-router.post('/query', async (req, res) => {
+// POST /api/ai/query - Rate limited to 30 calls per 15 minutes
+router.post('/query', rateLimiter({ max: 30, windowMs: 15 * 60 * 1000 }), async (req, res) => {
   try {
     const { mode, query, bounds, subject } = req.body;
     

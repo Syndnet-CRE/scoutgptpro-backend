@@ -100,6 +100,12 @@ model Property {
   situsStreet      String?
   subdivision      String?
   tcadAcres        Float?
+  attomId          String?   @map("attomId")
+  avmValue         Decimal?  @map("avmValue") @db.Decimal(14, 2)
+  avmMin           Decimal?  @map("avmMin") @db.Decimal(14, 2)
+  avmMax           Decimal?  @map("avmMax") @db.Decimal(14, 2)
+  avmConfidence    Int?      @map("avmConfidence")
+  avmDate          DateTime? @map("avmDate")
   comps            Comp[]
   deals            Deal[]
   listings         Listing[]
@@ -113,86 +119,63 @@ model Property {
   @@index([acres])
   @@index([totalTax])
   @@index([parcelId])
+  @@index([attomId])
   @@map("properties")
 }
 
 model Listing {
-  id String @id @default(cuid())
-
-  // Status & Type
-  status       ListingStatus @default(ACTIVE)
-  propertyType PropertyType
-
-  // Basic Info
-  title       String
-  description String? @db.Text
-
-  // Location (required)
-  address   String
-  city      String
-  state     String  @default("TX")
-  zipCode   String
-  county    String?
-  latitude  Float?
-  longitude Float?
-  apn       String? // Parcel ID
-
-  // Pricing
-  askingPrice  Decimal  @db.Decimal(15, 2)
-  pricePerSqft Decimal? @db.Decimal(10, 2)
-  pricePerAcre Decimal? @db.Decimal(15, 2)
-
-  // Property Characteristics (common)
-  totalSqft    Int?
-  lotSizeAcres Decimal? @db.Decimal(10, 4)
-  lotSizeSqft  Int?
-  yearBuilt    Int?
-  zoning       String?
-
-  // Commercial-specific (nullable)
-  assetType     String? // Office, Retail, Industrial, etc.
+  id            String        @id @default(cuid())
+  status        ListingStatus @default(ACTIVE)
+  propertyType  PropertyType
+  title         String
+  description   String?
+  address       String
+  city          String
+  state         String        @default("TX")
+  zipCode       String
+  county        String?
+  latitude      Float?
+  longitude     Float?
+  apn           String?
+  askingPrice   Decimal       @db.Decimal(15, 2)
+  pricePerSqft  Decimal?      @db.Decimal(10, 2)
+  pricePerAcre  Decimal?      @db.Decimal(15, 2)
+  totalSqft     Int?
+  lotSizeAcres  Decimal?      @db.Decimal(10, 4)
+  lotSizeSqft   Int?
+  yearBuilt     Int?
+  zoning        String?
+  assetType     String?
   assetSubtype  String?
-  noi           Decimal? @db.Decimal(15, 2)
-  capRate       Decimal? @db.Decimal(5, 2)
-  occupancy     Decimal? @db.Decimal(5, 2)
+  noi           Decimal?      @db.Decimal(15, 2)
+  capRate       Decimal?      @db.Decimal(5, 2)
+  occupancy     Decimal?      @db.Decimal(5, 2)
   tenantCount   Int?
   buildingCount Int?
   floors        Int?
   parkingSpaces Int?
-  leaseType     String? // NNN, Gross, etc.
-
-  // Residential-specific (nullable)
-  bedrooms  Int?
-  bathrooms Decimal? @db.Decimal(3, 1)
-  hoaFee    Decimal? @db.Decimal(10, 2)
-
-  // Land-specific (nullable)
-  totalAcres   Decimal? @db.Decimal(10, 4)
-  numberOfLots Int?
-  roadFrontage Int?
-  topography   String?
-  utilities    Json? // {water: bool, sewer: bool, electric: bool, etc.}
-  entitlements String?  @db.Text
-
-  // Media & Documents
-  images     Json? // Array of image URLs
-  documents  Json? // Array of {name, url, type}
-  coverImage String?
-
-  // Tracking
-  views     Int @default(0)
-  inquiries Int @default(0)
-
-  // Relationships (optional for anonymous submissions)
-  userId     String?
-  propertyId String? // Optional link to Property table
-  property   Property? @relation(fields: [propertyId], references: [id], onDelete: SetNull)
-  user       User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
-
-  // Timestamps
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  listedAt  DateTime @default(now())
+  leaseType     String?
+  bedrooms      Int?
+  bathrooms     Decimal?      @db.Decimal(3, 1)
+  hoaFee        Decimal?      @db.Decimal(10, 2)
+  totalAcres    Decimal?      @db.Decimal(10, 4)
+  numberOfLots  Int?
+  roadFrontage  Int?
+  topography    String?
+  utilities     Json?
+  entitlements  String?
+  images        Json?
+  documents     Json?
+  coverImage    String?
+  views         Int           @default(0)
+  inquiries     Int           @default(0)
+  userId        String?
+  propertyId    String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  listedAt      DateTime      @default(now())
+  property      Property?     @relation(fields: [propertyId], references: [id])
+  user          User?         @relation(fields: [userId], references: [id])
 
   @@index([status])
   @@index([propertyType])
@@ -483,10 +466,10 @@ enum ListingType {
 enum ListingStatus {
   ACTIVE
   PENDING
-  UNDER_CONTRACT
   SOLD
-  WITHDRAWN
   EXPIRED
+  WITHDRAWN
+  UNDER_CONTRACT
 }
 
 enum PropertyType {

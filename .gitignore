@@ -20,3 +20,4 @@ geo_data/
 *.zip
 *.7z
 *.tar.gz
+.env.local

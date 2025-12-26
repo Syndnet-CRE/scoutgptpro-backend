@@ -5,6 +5,154 @@ const router = express.Router();
 const prisma = new PrismaClient();
 
 /**
+ * GET /api/properties
+ * Search properties with query parameters
+ */
+router.get('/', async (req, res) => {
+  try {
+    const {
+      zip,
+      city,
+      propertyType,
+      priceMin,
+      priceMax,
+      acresMin,
+      acresMax,
+      absenteeOwner,
+      taxDelinquent,
+      limit = 50,
+      offset = 0
+    } = req.query;
+
+    const where = {};
+
+    if (zip) where.siteZip = zip;
+    if (city) where.siteCity = { contains: city, mode: 'insensitive' };
+    if (propertyType) where.propertyType = propertyType;
+    if (absenteeOwner === 'true') where.isAbsentee = true;
+    if (taxDelinquent === 'true') where.isTaxDelinquent = true;
+
+    // Price filters (use avmValue or mktValue)
+    if (priceMin || priceMax) {
+      where.OR = [];
+      if (priceMin) {
+        where.OR.push(
+          { avmValue: { gte: parseFloat(priceMin) } },
+          { mktValue: { gte: parseFloat(priceMin) } }
+        );
+      }
+      if (priceMax) {
+        where.OR.push(
+          { avmValue: { lte: parseFloat(priceMax) } },
+          { mktValue: { lte: parseFloat(priceMax) } }
+        );
+      }
+    }
+
+    // Acreage filter
+    if (acresMin) where.acres = { ...where.acres, gte: parseFloat(acresMin) };
+    if (acresMax) where.acres = { ...where.acres, lte: parseFloat(acresMax) };
+
+    const properties = await prisma.property.findMany({
+      where,
+      take: Math.min(parseInt(limit), 100),
+      skip: parseInt(offset),
+      orderBy: [
+        { motivationScore: 'desc' },
+        { avmValue: 'desc' }
+      ]
+    });
+
+    const total = await prisma.property.count({ where });
+
+    res.json({
+      success: true,
+      properties,
+      pagination: {
+        total,
+        limit: parseInt(limit),
+        offset: parseInt(offset),
+        hasMore: total > parseInt(offset) + parseInt(limit)
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching properties:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * GET /api/properties/:id
+ * Get single property by ID
+ */
+router.get('/:id', async (req, res) => {
+  try {
+    const property = await prisma.property.findUnique({
+      where: { id: req.params.id }
+    });
+
+    if (!property) {
+      return res.status(404).json({ success: false, error: 'Property not found' });
+    }
+
+    res.json({ success: true, property });
+  } catch (error) {
+    console.error('Error fetching property:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * GET /api/properties/bbox
+ * Get properties in bounding box
+ */
+router.get('/bbox', async (req, res) => {
+  try {
+    const { minLat, maxLat, minLng, maxLng, limit = 100 } = req.query;
+
+    if (!minLat || !maxLat || !minLng || !maxLng) {
+      return res.status(400).json({
+        success: false,
+        error: 'minLat, maxLat, minLng, maxLng are required'
+      });
+    }
+
+    const properties = await prisma.property.findMany({
+      where: {
+        latitude: {
+          gte: parseFloat(minLat),
+          lte: parseFloat(maxLat)
+        },
+        longitude: {
+          gte: parseFloat(minLng),
+          lte: parseFloat(maxLng)
+        }
+      },
+      take: Math.min(parseInt(limit), 500),
+      orderBy: [
+        { motivationScore: 'desc' },
+        { avmValue: 'desc' }
+      ]
+    });
+
+    res.json({
+      success: true,
+      properties,
+      count: properties.length,
+      bbox: {
+        minLat: parseFloat(minLat),
+        maxLat: parseFloat(maxLat),
+        minLng: parseFloat(minLng),
+        maxLng: parseFloat(maxLng)
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching properties by bbox:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
  * POST /api/properties/search
  * Search properties with required bbox and optional filters
  */
@@ -115,3 +263,8 @@ router.post('/search', async (req, res) => {
 });
 
 export default router;
+
+
+
+
+

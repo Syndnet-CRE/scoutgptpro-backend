@@ -6,7 +6,9 @@
   "main": "src/server.js",
   "scripts": {
     "dev": "node --watch src/server.js",
+    "dev:local": "dotenv -e .env.local -- node --watch src/server.js",
     "start": "node src/server.js",
+    "start:local": "dotenv -e .env.local -- node src/server.js",
     "build": "echo 'No build needed'",
     "postinstall": "prisma generate",
     "prisma:generate": "prisma generate",
@@ -23,10 +25,12 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "papaparse": "^5.4.1",
+    "pg": "^8.16.3",
     "proj4": "^2.20.2",
     "shapefile": "^0.6.6"
   },
   "devDependencies": {
+    "dotenv-cli": "^11.0.0",
     "prisma": "^6.1.0"
   }
 }

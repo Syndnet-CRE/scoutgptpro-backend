@@ -10,23 +10,49 @@ import geocodeRoutes from './routes/geocode.js';
 import gisRoutes from './routes/gis.js';
 import propertiesRoutes from './routes/properties.js';
 import listingsRoutes from './routes/listings.js';
+import dealsRoutes from './routes/deals.js';
+import buyBoxesRoutes from './routes/buyboxes.js';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Middleware
-app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:3000',
-    'https://scoutcrm.netlify.app',
-    process.env.FRONTEND_URL
-  ].filter(Boolean),
-  credentials: true
-}));
+// Middleware - CORS Configuration
+// In development, allow all origins for easier local testing
+const isDevelopment = process.env.NODE_ENV === 'development' || !process.env.NODE_ENV;
+
+const corsOptions = isDevelopment 
+  ? {
+      origin: true, // Allow all origins in development
+      credentials: true,
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+      optionsSuccessStatus: 200
+    }
+  : {
+      origin: process.env.CORS_ORIGINS 
+        ? process.env.CORS_ORIGINS.split(',').map(origin => origin.trim())
+        : [
+            'http://localhost:4028',
+            'http://localhost:5173',
+            'http://localhost:3000',
+            'https://scoutcrm.netlify.app',
+            process.env.FRONTEND_URL
+          ].filter(Boolean),
+      credentials: true,
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+    };
+
+app.use(cors(corsOptions));
 app.use(express.json());
+
+// Request logging middleware
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} ${req.method} ${req.path}`);
+  next();
+});
 
 // Health check
 app.get('/health', (req, res) => {
@@ -47,6 +73,8 @@ app.use('/api', geocodeRoutes);
 app.use('/api/gis', gisRoutes);
 app.use('/api/properties', propertiesRoutes);
 app.use('/api/listings', listingsRoutes);
+app.use('/api/deals', dealsRoutes);
+app.use('/api/buy-boxes', buyBoxesRoutes);
 
 // 404 handler
 app.use((req, res) => {

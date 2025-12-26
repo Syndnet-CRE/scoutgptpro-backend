@@ -4,13 +4,13 @@
  * Fetches parcel data from TCAD ArcGIS API and enriches our database
  */
 
-const { PrismaClient } = require('@prisma/client');
-const https = require('https');
+import { PrismaClient } from '@prisma/client';
+import https from 'https';
 
 const prisma = new PrismaClient();
 
 const API_BASE = 'https://gis.geointelsystems.com/arcgis/rest/services/Clients/WCID17_Parcels/MapServer/0';
-const BATCH_SIZE = 1000;
+const BATCH_SIZE = 100; // Reduced from 1000 to avoid URL length limits
 const RATE_LIMIT_MS = 1000; // 1 second between requests
 
 // Fields to fetch from API
@@ -44,17 +44,31 @@ function sleep(ms) {
 
 function fetchJson(url) {
   return new Promise((resolve, reject) => {
-    https.get(url, (res) => {
+    const req = https.get(url, (res) => {
       let data = '';
       res.on('data', chunk => data += chunk);
       res.on('end', () => {
+        if (res.statusCode !== 200) {
+          reject(new Error(`HTTP ${res.statusCode}: ${data.substring(0, 200)}`));
+          return;
+        }
         try {
-          resolve(JSON.parse(data));
+          const parsed = JSON.parse(data);
+          if (parsed.error) {
+            reject(new Error(`API error: ${parsed.error.message || JSON.stringify(parsed.error)}`));
+            return;
+          }
+          resolve(parsed);
         } catch (e) {
-          reject(new Error(`Invalid JSON: ${e.message}`));
+          reject(new Error(`Invalid JSON: ${e.message}. Response preview: ${data.substring(0, 200)}`));
         }
       });
-    }).on('error', reject);
+    });
+    req.on('error', reject);
+    req.setTimeout(30000, () => {
+      req.destroy();
+      reject(new Error('Request timeout'));
+    });
   });
 }
 
@@ -74,7 +88,13 @@ async function getParcelIdsToEnrich() {
 
 async function fetchFromApi(propIds) {
   // Build WHERE clause for batch of PROP_IDs
-  const whereClause = `PROP_ID IN (${propIds.join(',')})`;
+  // Convert to integers since API expects numeric PROP_ID
+  const numericIds = propIds.map(id => parseInt(id, 10)).filter(id => !isNaN(id));
+  if (numericIds.length === 0) {
+    return [];
+  }
+  
+  const whereClause = `PROP_ID IN (${numericIds.join(',')})`;
   
   const url = `${API_BASE}/query?` + new URLSearchParams({
     where: whereClause,

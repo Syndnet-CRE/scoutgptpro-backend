@@ -73,3 +73,7 @@ async function addGeometryColumn() {
 }
 
 addGeometryColumn();
+
+
+
+

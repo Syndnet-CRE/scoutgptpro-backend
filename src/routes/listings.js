@@ -413,5 +413,27 @@ router.get('/stats/summary', async (req, res) => {
   }
 });
 
+// GET /api/listings/my - Get current user's listings
+router.get('/my', async (req, res) => {
+  try {
+    const { userId } = req.query;
+
+    if (!userId) {
+      return res.status(400).json({ success: false, error: 'userId is required' });
+    }
+
+    const listings = await prisma.listing.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' }
+    });
+
+    res.json({ success: true, listings });
+  } catch (error) {
+    console.error('Error fetching user listings:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 export default router;
+
 
