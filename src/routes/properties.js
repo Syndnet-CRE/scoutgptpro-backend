@@ -82,6 +82,45 @@ router.get('/', async (req, res) => {
 });
 
 /**
+ * GET /api/properties/resolve?parcelId=...
+ * Resolve parcelId to propertyId
+ */
+router.get('/resolve', async (req, res) => {
+  try {
+    const { parcelId } = req.query;
+    
+    if (!parcelId) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'parcelId query parameter is required' 
+      });
+    }
+    
+    // Look up property by parcelId
+    const property = await prisma.property.findUnique({
+      where: { parcelId: String(parcelId) },
+      select: { id: true, parcelId: true }
+    });
+    
+    if (!property) {
+      return res.status(404).json({ 
+        success: false, 
+        error: 'No property found for this parcelId' 
+      });
+    }
+    
+    res.json({ 
+      success: true, 
+      propertyId: property.id,
+      parcelId: property.parcelId
+    });
+  } catch (error) {
+    console.error('Error resolving parcelId:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
  * GET /api/properties/:id
  * Get single property by ID
  */
