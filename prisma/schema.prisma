@@ -106,6 +106,25 @@ model Property {
   avmMax           Decimal?  @map("avmMax") @db.Decimal(14, 2)
   avmConfidence    Int?      @map("avmConfidence")
   avmDate          DateTime? @map("avmDate")
+  // Transaction/Deed Data (from RECORDER)
+  lastSaleDate        DateTime?
+  lastSaleAmount      Float?
+  lastSaleDocType     String?
+  grantorName         String?
+  granteeName         String?
+  granteeMailAddress  String?
+  granteeMailCity     String?
+  granteeMailState    String?
+  granteeMailZip      String?
+  isInvestorOwned     Boolean   @default(false)
+  isForeclosure       Boolean   @default(false)
+  // Mortgage Data
+  mortgageAmount      Float?
+  mortgageLender      String?
+  mortgageRate        Float?
+  mortgageTerm        Int?
+  // Ownership Duration (calculated)
+  ownershipYears      Float?
   comps            Comp[]
   deals            Deal[]
   listings         Listing[]
