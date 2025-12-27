@@ -232,6 +232,11 @@ router.post('/search', async (req, res) => {
         "yearBuilt", "motivationScore", "opportunityFlags",
         "isAbsentee", "isTaxDelinquent", "isVacantLand",
         "legalDesc", "taxYear",
+        "mortgageAmount", "mortgageLender", "mortgageRate", "mortgageTerm",
+        "lastSaleDate", "lastSaleAmount", "lastSaleDocType",
+        "grantorName", "granteeName",
+        "granteeMailAddress", "granteeMailCity", "granteeMailState", "granteeMailZip",
+        "isInvestorOwned", "isForeclosure", "ownershipYears",
         "createdAt", "updatedAt"
       FROM properties
       WHERE ${whereClause}
@@ -263,6 +268,7 @@ router.post('/search', async (req, res) => {
 });
 
 export default router;
+
 
 
 
