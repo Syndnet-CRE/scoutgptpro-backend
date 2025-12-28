@@ -1,5 +1,6 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
+import { attachAttomGeoIdsToProperties, getAttomGeoIdByParcelId } from '../services/attom-resolver-service.js';
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -65,9 +66,12 @@ router.get('/', async (req, res) => {
 
     const total = await prisma.property.count({ where });
 
+    // Attach ATTOM GeoJSON IDs to properties (preserves existing numeric attomId)
+    const propertiesWithAttom = await attachAttomGeoIdsToProperties(properties);
+
     res.json({
       success: true,
-      properties,
+      properties: propertiesWithAttom,
       pagination: {
         total,
         limit: parseInt(limit),
@@ -83,7 +87,7 @@ router.get('/', async (req, res) => {
 
 /**
  * GET /api/properties/resolve?parcelId=...
- * Resolve parcelId to propertyId
+ * Resolve parcelId to propertyId, numeric attomId (if present), and ATTOM GeoJSON ID
  */
 router.get('/resolve', async (req, res) => {
   try {
@@ -96,10 +100,19 @@ router.get('/resolve', async (req, res) => {
       });
     }
     
-    // Look up property by parcelId
+    const parcelIdStr = String(parcelId).trim();
+    
+    if (!parcelIdStr || !/^\d{6}$/.test(parcelIdStr)) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'parcelId must be a 6-digit numeric string' 
+      });
+    }
+    
+    // Look up property by parcelId (include numeric attomId if present)
     const property = await prisma.property.findUnique({
-      where: { parcelId: String(parcelId) },
-      select: { id: true, parcelId: true }
+      where: { parcelId: parcelIdStr },
+      select: { id: true, parcelId: true, attomId: true }
     });
     
     if (!property) {
@@ -109,10 +122,17 @@ router.get('/resolve', async (req, res) => {
       });
     }
     
+    // Resolve ATTOM GeoJSON ID (32-hex)
+    const { attomGeoId, attomConflict, attomGeoIdSource } = await getAttomGeoIdByParcelId(parcelIdStr);
+    
     res.json({ 
       success: true, 
+      parcelId: property.parcelId,
       propertyId: property.id,
-      parcelId: property.parcelId
+      attomId: property.attomId || null, // Numeric ATTOM ID from properties table (if present)
+      attomGeoId, // 32-hex GeoJSON ID from resolver
+      attomConflict,
+      attomGeoIdSource
     });
   } catch (error) {
     console.error('Error resolving parcelId:', error);
@@ -134,7 +154,10 @@ router.get('/:id', async (req, res) => {
       return res.status(404).json({ success: false, error: 'Property not found' });
     }
 
-    res.json({ success: true, property });
+    // Attach ATTOM GeoJSON ID (preserves existing numeric attomId)
+    const [propertyWithAttom] = await attachAttomGeoIdsToProperties([property]);
+
+    res.json({ success: true, property: propertyWithAttom });
   } catch (error) {
     console.error('Error fetching property:', error);
     res.status(500).json({ success: false, error: error.message });
@@ -174,10 +197,13 @@ router.get('/bbox', async (req, res) => {
       ]
     });
 
+    // Attach ATTOM GeoJSON IDs to properties (preserves existing numeric attomId)
+    const propertiesWithAttom = await attachAttomGeoIdsToProperties(properties);
+
     res.json({
       success: true,
-      properties,
-      count: properties.length,
+      properties: propertiesWithAttom,
+      count: propertiesWithAttom.length,
       bbox: {
         minLat: parseFloat(minLat),
         maxLat: parseFloat(maxLat),
@@ -292,10 +318,13 @@ router.post('/search', async (req, res) => {
     
     console.log(`✅ Found ${properties.length} properties in bbox [${west.toFixed(3)}, ${south.toFixed(3)}, ${east.toFixed(3)}, ${north.toFixed(3)}]`);
     
+    // Attach ATTOM GeoJSON IDs to properties (preserves existing numeric attomId)
+    const propertiesWithAttom = await attachAttomGeoIdsToProperties(properties);
+    
     res.json({
       success: true,
-      properties,
-      count: properties.length,
+      properties: propertiesWithAttom,
+      count: propertiesWithAttom.length,
       bbox,
       filters
     });
