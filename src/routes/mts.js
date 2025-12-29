@@ -57,6 +57,7 @@ router.get('/centroids', async (req, res) => {
       const geom = row.geometry;
       return {
         type: 'Feature',
+        id: row.parcelId, // Stable identifier for Mapbox clustering
         geometry: geom,
         properties: {
           parcelId: row.parcelId,
