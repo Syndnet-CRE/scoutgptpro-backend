@@ -12,6 +12,7 @@ import propertiesRoutes from './routes/properties.js';
 import listingsRoutes from './routes/listings.js';
 import dealsRoutes from './routes/deals.js';
 import buyBoxesRoutes from './routes/buyboxes.js';
+import mtsRoutes from './routes/mts.js';
 
 dotenv.config();
 
@@ -75,6 +76,7 @@ app.use('/api/properties', propertiesRoutes);
 app.use('/api/listings', listingsRoutes);
 app.use('/api/deals', dealsRoutes);
 app.use('/api/buy-boxes', buyBoxesRoutes);
+app.use('/api/mts', mtsRoutes);
 
 // 404 handler
 app.use((req, res) => {
