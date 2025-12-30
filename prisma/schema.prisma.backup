@@ -1,0 +1,800 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String       @id @default(cuid())
+  email      String       @unique
+  name       String?
+  role       UserRole     @default(AGENT)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  activities Activity[]
+  buyBoxes   BuyBox[]
+  deals      Deal[]
+  documents  Document[]
+  listings   Listing[]
+  mapQueries MapQuery[]
+  tasks      Task[]
+  profile    UserProfile?
+
+  @@map("users")
+}
+
+model UserProfile {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  phone         String?
+  company       String?
+  licenseNumber String?
+  bio           String?
+  avatar        String?
+  preferences   Json?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_profiles")
+}
+
+model Property {
+  id               String    @id @default(cuid())
+  address          String?
+  city             String?
+  state            String?
+  zip              String?
+  county           String?
+  apn              String?
+  legalDesc        String?
+  propertyType     String?
+  size             Float?
+  sizeUnit         String?
+  zoning           String?
+  yearBuilt        Int?
+  assessedValue    Float?
+  marketValue      Float?
+  ownerName        String?
+  ownerAddress     String?
+  metadata         Json?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  acres            Float?
+  centroid         Json?
+  impValue         Float?
+  isAbsentee       Boolean   @default(false)
+  isTaxDelinquent  Boolean   @default(false)
+  isVacantLand     Boolean   @default(false)
+  landValue        Float?
+  latitude         Float?
+  longitude        Float?
+  mailingAddr      String?
+  mktValue         Float?
+  motivationScore  Int?
+  opportunityFlags String[]
+  owner            String?
+  parcelId         String    @unique
+  siteAddress      String?
+  taxYear          Int?
+  totalDue         Float?
+  totalTax         Float?
+  siteCity         String?
+  siteState        String?
+  siteZip          String?
+  appraisedValue   Float?
+  block            String?
+  deedDate         String?
+  enrichedAt       DateTime?
+  enrichmentSource String?
+  floodZone        String?
+  geoId            String?
+  landTypeDesc     String?
+  lot              String?
+  ownerFirstName   String?
+  ownerLastName    String?
+  situsNum         String?
+  situsStreet      String?
+  subdivision      String?
+  tcadAcres        Float?
+  attomId          String?   @map("attomId")
+  avmValue         Decimal?  @map("avmValue") @db.Decimal(14, 2)
+  avmMin           Decimal?  @map("avmMin") @db.Decimal(14, 2)
+  avmMax           Decimal?  @map("avmMax") @db.Decimal(14, 2)
+  avmConfidence    Int?      @map("avmConfidence")
+  avmDate          DateTime? @map("avmDate")
+  // Transaction/Deed Data (from RECORDER)
+  lastSaleDate        DateTime?
+  lastSaleAmount      Float?
+  lastSaleDocType     String?
+  grantorName         String?
+  granteeName         String?
+  granteeMailAddress  String?
+  granteeMailCity     String?
+  granteeMailState    String?
+  granteeMailZip      String?
+  isInvestorOwned     Boolean   @default(false)
+  isForeclosure       Boolean   @default(false)
+  // Mortgage Data
+  mortgageAmount      Float?
+  mortgageLender      String?
+  mortgageRate        Float?
+  mortgageTerm        Int?
+  // Ownership Duration (calculated)
+  ownershipYears      Float?
+  comps            Comp[]
+  deals            Deal[]
+  listings         Listing[]
+  pins             Pin[]
+
+  @@index([propertyType])
+  @@index([latitude, longitude])
+  @@index([isAbsentee])
+  @@index([isTaxDelinquent])
+  @@index([motivationScore])
+  @@index([acres])
+  @@index([totalTax])
+  @@index([parcelId])
+  @@index([attomId])
+  @@map("properties")
+}
+
+model Listing {
+  id            String        @id @default(cuid())
+  status        ListingStatus @default(ACTIVE)
+  propertyType  PropertyType
+  title         String
+  description   String?
+  address       String
+  city          String
+  state         String        @default("TX")
+  zipCode       String
+  county        String?
+  latitude      Float?
+  longitude     Float?
+  apn           String?
+  askingPrice   Decimal       @db.Decimal(15, 2)
+  pricePerSqft  Decimal?      @db.Decimal(10, 2)
+  pricePerAcre  Decimal?      @db.Decimal(15, 2)
+  totalSqft     Int?
+  lotSizeAcres  Decimal?      @db.Decimal(10, 4)
+  lotSizeSqft   Int?
+  yearBuilt     Int?
+  zoning        String?
+  assetType     String?
+  assetSubtype  String?
+  noi           Decimal?      @db.Decimal(15, 2)
+  capRate       Decimal?      @db.Decimal(5, 2)
+  occupancy     Decimal?      @db.Decimal(5, 2)
+  tenantCount   Int?
+  buildingCount Int?
+  floors        Int?
+  parkingSpaces Int?
+  leaseType     String?
+  bedrooms      Int?
+  bathrooms     Decimal?      @db.Decimal(3, 1)
+  hoaFee        Decimal?      @db.Decimal(10, 2)
+  totalAcres    Decimal?      @db.Decimal(10, 4)
+  numberOfLots  Int?
+  roadFrontage  Int?
+  topography    String?
+  utilities     Json?
+  entitlements  String?
+  images        Json?
+  documents     Json?
+  coverImage    String?
+  views         Int           @default(0)
+  inquiries     Int           @default(0)
+  userId        String?
+  propertyId    String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  listedAt      DateTime      @default(now())
+  property      Property?     @relation(fields: [propertyId], references: [id])
+  user          User?         @relation(fields: [userId], references: [id])
+
+  @@index([status])
+  @@index([propertyType])
+  @@index([city])
+  @@index([askingPrice])
+  @@map("listings")
+}
+
+model Deal {
+  id            String     @id @default(cuid())
+  userId        String
+  propertyId    String?
+  title         String
+  stage         DealStage  @default(PIPELINE)
+  dealType      String?
+  purchasePrice Float?
+  offerPrice    Float?
+  closingDate   DateTime?
+  seller        String?
+  buyer         String?
+  probability   Int?
+  lostReason    String?
+  notes         String?
+  metadata      Json?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  activities    Activity[]
+  property      Property?  @relation(fields: [propertyId], references: [id])
+  user          User       @relation(fields: [userId], references: [id])
+  documents     Document[]
+  tasks         Task[]
+
+  @@index([userId, stage])
+  @@index([stage])
+  @@map("deals")
+}
+
+model BuyBox {
+  id            String   @id @default(cuid())
+  userId        String
+  name          String
+  isActive      Boolean  @default(true)
+  markets       Json?
+  counties      Json?
+  propertyTypes Json?
+  minSize       Float?
+  maxSize       Float?
+  sizeUnit      String?
+  minPrice      Float?
+  maxPrice      Float?
+  minCap        Float?
+  maxCap        Float?
+  zoning        Json?
+  minYearBuilt  Int?
+  filters       Json?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("buy_boxes")
+}
+
+model Document {
+  id          String   @id @default(cuid())
+  userId      String
+  dealId      String?
+  filename    String
+  fileUrl     String
+  fileType    String
+  fileSize    Int
+  category    String?
+  description String?
+  uploadedAt  DateTime @default(now())
+  deal        Deal?    @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([dealId])
+  @@map("documents")
+}
+
+model Activity {
+  id          String   @id @default(cuid())
+  userId      String
+  dealId      String?
+  type        String
+  subject     String
+  description String?
+  completedAt DateTime @default(now())
+  deal        Deal?    @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([dealId])
+  @@map("activities")
+}
+
+model Task {
+  id          String     @id @default(cuid())
+  userId      String
+  dealId      String?
+  title       String
+  description String?
+  dueDate     DateTime?
+  priority    Priority   @default(MEDIUM)
+  status      TaskStatus @default(TODO)
+  completedAt DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  deal        Deal?      @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  user        User       @relation(fields: [userId], references: [id])
+
+  @@index([userId, status])
+  @@index([dueDate])
+  @@map("tasks")
+}
+
+model Comp {
+  id           String    @id @default(cuid())
+  propertyId   String?
+  address      String
+  city         String
+  state        String
+  propertyType String
+  size         Float
+  sizeUnit     String
+  salePrice    Float
+  pricePerUnit Float
+  saleDate     DateTime
+  capRate      Float?
+  noi          Float?
+  distance     Float?
+  source       String?
+  verified     Boolean   @default(false)
+  metadata     Json?
+  createdAt    DateTime  @default(now())
+  property     Property? @relation(fields: [propertyId], references: [id])
+
+  @@index([city, state, propertyType])
+  @@map("comps")
+}
+
+model GisLayer {
+  id         String   @id @default(cuid())
+  name       String
+  category   String
+  sourceType String
+  sourceUrl  String?
+  style      Json?
+  minZoom    Float?
+  maxZoom    Float?
+  isActive   Boolean  @default(true)
+  metadata   Json?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("gis_layers")
+}
+
+model Pin {
+  id         String    @id @default(cuid())
+  propertyId String?
+  title      String
+  lat        Float
+  lng        Float
+  summary    String?
+  tags       Json?
+  pinType    String?
+  metadata   Json?
+  createdAt  DateTime  @default(now())
+  property   Property? @relation(fields: [propertyId], references: [id])
+
+  @@index([lat, lng])
+  @@map("pins")
+}
+
+model MapServerRegistry {
+  id              String    @id @default(cuid())
+  url             String    @unique
+  category        String
+  context         String?
+  datasetType     String?
+  datasetCategory String?
+  serviceName     String?
+  layerId         Int?
+  geometryType    String?
+  fields          Json?
+  extent          Json?
+  isActive        Boolean   @default(true)
+  lastQueried     DateTime?
+  queryCount      Int       @default(0)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([category])
+  @@index([datasetType])
+  @@index([isActive, category])
+  @@map("map_server_registry")
+}
+
+model LayerSet {
+  id                String    @id @default(cuid())
+  layerSetId        String    @unique
+  name              String
+  category          String
+  description       String?
+  geometryType      String
+  style             Json
+  primaryLayerUrl   String
+  primaryLayerId    String?
+  alternativeLayers Json?
+  totalFeatureCount Int       @default(0)
+  layerCount        Int       @default(1)
+  isActive          Boolean   @default(true)
+  queryCount        Int       @default(0)
+  lastQueried       DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([category])
+  @@index([geometryType])
+  @@index([isActive, category])
+  @@map("layer_sets")
+}
+
+model MapQuery {
+  id              String   @id @default(cuid())
+  userId          String
+  query           String
+  selectedServers Json
+  bounds          Json?
+  results         Json?
+  createdAt       DateTime @default(now())
+  user            User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("map_queries")
+}
+
+model PolygonSearch {
+  id             String   @id @default(cuid())
+  userId         String?
+  name           String
+  description    String?
+  polygonGeoJSON Json
+  areaAcres      Float?
+  centroidLat    Float?
+  centroidLng    Float?
+  messages       Json     @default("[]")
+  filters        Json?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  lastAccessedAt DateTime @default(now())
+  isArchived     Boolean  @default(false)
+
+  @@index([userId])
+  @@index([updatedAt])
+  @@index([lastAccessedAt])
+  @@map("polygon_searches")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model spatial_ref_sys {
+  srid      Int     @id
+  auth_name String? @db.VarChar(256)
+  auth_srid Int?
+  srtext    String? @db.VarChar(2048)
+  proj4text String? @db.VarChar(2048)
+}
+
+enum UserRole {
+  AGENT
+  BROKER
+  LENDER
+  INVESTOR
+  DEVELOPER
+  WHOLESALER
+}
+
+enum ListingType {
+  FOR_SALE
+  FOR_LEASE
+  OFF_MARKET
+}
+
+enum ListingStatus {
+  ACTIVE
+  PENDING
+  SOLD
+  EXPIRED
+  WITHDRAWN
+  UNDER_CONTRACT
+}
+
+enum PropertyType {
+  COMMERCIAL
+  RESIDENTIAL
+  LAND
+}
+
+enum DealStage {
+  PIPELINE
+  ACTIVE
+  UNDERWRITING
+  PENDING
+  CLOSED
+  HOLD
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+
+enum EntityType {
+  PERSON
+  LLC
+  INC
+  LP
+  TRUST
+  UNKNOWN
+}
+
+// Owner-Property relationship
+model OwnerProperty {
+  id        String   @id @default(cuid())
+  ownerId   String
+  parcelId  String
+  createdAt DateTime @default(now())
+
+  owner Owner @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@unique([ownerId, parcelId])
+  @@index([parcelId])
+  @@index([ownerId])
+  @@map("owner_properties")
+}
+
+// Owner features aggregated for Texas
+model OwnerFeaturesTx {
+  id                  String   @id
+  ownerId             String   @unique
+  parcelCountTx       Int      @default(0)
+  totalAssessedValueTx Decimal? @db.Decimal(15, 2)
+  assetClassMix       Json?
+  absenteeRate        Decimal? @db.Decimal(5, 4)
+  outOfState          Boolean  @default(false)
+  avgHoldYears        Decimal? @db.Decimal(5, 2)
+  updatedAt           DateTime @updatedAt
+
+  owner Owner @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@index([parcelCountTx])
+  @@index([outOfState])
+  @@map("owner_features_tx")
+}
+
+// Owner segment definitions
+model OwnerSegment {
+  segmentKey  String   @id
+  description String?  @db.Text
+  ruleJson    Json
+  version     String   @default("1.0")
+  updatedAt   DateTime @updatedAt
+
+  @@index([segmentKey])
+  @@map("owner_segments")
+}
+
+// Texas enrichment rollups
+model TxEnrichmentRollup {
+  parcelId      String   @id
+  pop1mi         Decimal? @db.Decimal(10, 0)
+  medIncome1mi   Decimal? @db.Decimal(10, 2)
+  poiCounts      Json?
+  nearestPoi     Json?
+  trafficIndex   Decimal? @db.Decimal(5, 2)
+  floodPct       Decimal? @db.Decimal(5, 4)
+  inFloodplain   Boolean  @default(false)
+  updatedAt      DateTime @updatedAt
+
+  @@index([parcelId])
+  @@map("tx_enrichment_rollups")
+}
+
+// Buy boxes (saved discovery intents)
+model BuyBox {
+  id         String   @id @default(cuid())
+  name       String
+  intentJson Json
+  createdBy  String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([createdBy])
+  @@map("buyboxes")
+}
+
+// Discovery run tracking
+model DiscoverRun {
+  id         String   @id @default(cuid())
+  queryText  String?  @db.Text
+  intentJson Json
+  createdBy  String?
+  startedAt  DateTime @default(now())
+  endedAt    DateTime?
+  stats      Json?
+  error      String?  @db.Text
+
+  results    DiscoverResult[]
+
+  @@index([createdBy])
+  @@index([startedAt])
+  @@map("discover_runs")
+}
+
+// Discovery results
+model DiscoverResult {
+  id        String   @id @default(cuid())
+  runId     String
+  parcelId  String
+  score     Decimal  @db.Decimal(10, 6)
+  reasons   Json
+  breakdown Json
+
+  run DiscoverRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@index([runId])
+  @@index([parcelId])
+  @@index([score])
+  @@map("discover_results")
+}
+
+// Scoring models
+model ScoringModel {
+  modelId    String   @id
+  assetClass String
+  version    String   @default("1.0")
+  modelJson  Json
+  updatedAt  DateTime @updatedAt
+
+  @@index([assetClass])
+  @@index([version])
+  @@map("scoring_models")
+}
+
+// ============================================
+// Discovery Engine Models
+// ============================================
+
+enum EntityType {
+  PERSON
+  LLC
+  INC
+  LP
+  TRUST
+  UNKNOWN
+}
+
+// Owner entity
+model Owner {
+  id                String   @id @default(cuid())
+  ownerNameRaw      String?  @db.Text
+  ownerNameNorm     String?  @db.Text
+  mailingAddressRaw String?  @db.Text
+  mailingAddressNorm String? @db.Text
+  mailingState      String?
+  entityType        EntityType @default(UNKNOWN)
+  isCorporate       Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  properties        OwnerProperty[]
+  features          OwnerFeaturesTx?
+
+  @@index([ownerNameNorm])
+  @@index([mailingState])
+  @@index([entityType])
+  @@index([isCorporate])
+  @@map("owners")
+}
+
+// Owner-Property relationship
+model OwnerProperty {
+  id        String   @id @default(cuid())
+  ownerId   String
+  parcelId  String
+  createdAt DateTime @default(now())
+
+  owner Owner @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@unique([ownerId, parcelId])
+  @@index([parcelId])
+  @@index([ownerId])
+  @@map("owner_properties")
+}
+
+// Owner features aggregated for Texas
+model OwnerFeaturesTx {
+  id                  String   @id
+  ownerId             String   @unique
+  parcelCountTx       Int      @default(0)
+  totalAssessedValueTx Decimal? @db.Decimal(15, 2)
+  assetClassMix       Json?
+  absenteeRate        Decimal? @db.Decimal(5, 4)
+  outOfState          Boolean  @default(false)
+  avgHoldYears        Decimal? @db.Decimal(5, 2)
+  updatedAt           DateTime @updatedAt
+
+  owner Owner @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@index([parcelCountTx])
+  @@index([outOfState])
+  @@map("owner_features_tx")
+}
+
+// Owner segment definitions
+model OwnerSegment {
+  segmentKey  String   @id
+  description String?  @db.Text
+  ruleJson    Json
+  version     String   @default("1.0")
+  updatedAt   DateTime @updatedAt
+
+  @@index([segmentKey])
+  @@map("owner_segments")
+}
+
+// Texas enrichment rollups
+model TxEnrichmentRollup {
+  parcelId      String   @id
+  pop1mi         Decimal? @db.Decimal(10, 0)
+  medIncome1mi   Decimal? @db.Decimal(10, 2)
+  poiCounts      Json?
+  nearestPoi     Json?
+  trafficIndex   Decimal? @db.Decimal(5, 2)
+  floodPct       Decimal? @db.Decimal(5, 4)
+  inFloodplain   Boolean  @default(false)
+  updatedAt      DateTime @updatedAt
+
+  @@index([parcelId])
+  @@map("tx_enrichment_rollups")
+}
+
+// Discovery run tracking
+model DiscoverRun {
+  id         String   @id @default(cuid())
+  queryText  String?  @db.Text
+  intentJson Json
+  createdBy  String?
+  startedAt  DateTime @default(now())
+  endedAt    DateTime?
+  stats      Json?
+  error      String?  @db.Text
+
+  results    DiscoverResult[]
+
+  @@index([createdBy])
+  @@index([startedAt])
+  @@map("discover_runs")
+}
+
+// Discovery results
+model DiscoverResult {
+  id        String   @id @default(cuid())
+  runId     String
+  parcelId  String
+  score     Decimal  @db.Decimal(10, 6)
+  reasons   Json
+  breakdown Json
+
+  run DiscoverRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@index([runId])
+  @@index([parcelId])
+  @@index([score])
+  @@map("discover_results")
+}
+
+// Scoring models
+model ScoringModel {
+  modelId    String   @id
+  assetClass String
+  version    String   @default("1.0")
+  modelJson  Json
+  updatedAt  DateTime @updatedAt
+
+  @@index([assetClass])
+  @@index([version])
+  @@map("scoring_models")
+}

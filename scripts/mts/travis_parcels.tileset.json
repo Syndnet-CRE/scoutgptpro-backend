@@ -1,0 +1,39 @@
+{
+    "version": 1,
+    "layers": {
+      "parcels": {
+        "source": "mapbox://tileset-source/bradyirwin/parcels_travis_v1_polygons",
+        "minzoom": 0,
+        "maxzoom": 16
+      },
+      "parcel_centroids": {
+        "source": "mapbox://tileset-source/bradyirwin/parcels_travis_v1_centroids",
+        "minzoom": 0,
+        "maxzoom": 16
+      },
+      "parcel_centroids_clustered": {
+        "source": "mapbox://tileset-source/bradyirwin/parcels_travis_v1_centroids",
+        "minzoom": 0,
+        "maxzoom": 14,
+        "features": {
+          "attributes": {
+            "set": {
+              "point_count": 1
+            }
+          }
+        },
+        "tiles": {
+          "union": [
+            {
+              "group_by": [],
+              "aggregate": {
+                "point_count": "sum"
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+  
+

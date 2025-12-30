@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "layers": {
+    "parcels": {
+      "source": "mapbox://tileset-source/bradyirwin/ptv1p_2512291438310",
+      "minzoom": 0,
+      "maxzoom": 16
+    },
+    "parcel_centroids": {
+      "source": "mapbox://tileset-source/bradyirwin/ptv1c_2512291438310",
+      "minzoom": 15,
+      "maxzoom": 16
+    },
+    "parcel_centroids_clustered": {
+      "source": "mapbox://tileset-source/bradyirwin/ptv1c_2512291438310",
+      "minzoom": 0,
+      "maxzoom": 14,
+      "tiles": {
+        "tiles.union": {
+          "point_count": [
+            "+",
+            1
+          ]
+        }
+      }
+    }
+  }
+}

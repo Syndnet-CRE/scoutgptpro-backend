@@ -13,6 +13,8 @@ import listingsRoutes from './routes/listings.js';
 import dealsRoutes from './routes/deals.js';
 import buyBoxesRoutes from './routes/buyboxes.js';
 import mtsRoutes from './routes/mts.js';
+import parcelsTxRoutes from './routes/parcels-tx.js';
+import parcelsSearchRoutes from './routes/parcels-search.js';
 
 dotenv.config();
 
@@ -67,6 +69,7 @@ app.get('/health', (req, res) => {
 // API Routes
 app.use('/api/mapservers', mapserverRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/parcels', parcelsSearchRoutes); // Register search BEFORE parameterized routes
 app.use('/api/parcels', parcelRoutes);
 app.use('/api/query', queryRoutes);
 app.use('/api', polygonSearchRoutes);
@@ -77,6 +80,7 @@ app.use('/api/listings', listingsRoutes);
 app.use('/api/deals', dealsRoutes);
 app.use('/api/buy-boxes', buyBoxesRoutes);
 app.use('/api/mts', mtsRoutes);
+app.use('/api/parcels-tx', parcelsTxRoutes);
 
 // 404 handler
 app.use((req, res) => {

@@ -519,3 +519,148 @@ enum TaskStatus {
   COMPLETED
   CANCELLED
 }
+
+
+enum EntityType {
+  PERSON
+  LLC
+  INC
+  LP
+  TRUST
+  UNKNOWN
+}
+
+
+// Owner entity
+model Owner {
+  id                String   @id @default(cuid())
+  ownerNameRaw      String?  @db.Text
+  ownerNameNorm     String?  @db.Text
+  mailingAddressRaw String?  @db.Text
+  mailingAddressNorm String? @db.Text
+  mailingState      String?
+  entityType        EntityType @default(UNKNOWN)
+  isCorporate       Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  properties        OwnerProperty[]
+  features          OwnerFeaturesTx?
+
+  @@index([ownerNameNorm])
+  @@index([mailingState])
+  @@index([entityType])
+  @@index([isCorporate])
+  @@map("owners")
+}
+
+// Owner-Property relationship
+model OwnerProperty {
+  id        String   @id @default(cuid())
+  ownerId   String
+  parcelId  String
+  createdAt DateTime @default(now())
+
+  owner Owner @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@unique([ownerId, parcelId])
+  @@index([parcelId])
+  @@index([ownerId])
+  @@map("owner_properties")
+}
+
+// Owner features aggregated for Texas
+model OwnerFeaturesTx {
+  id                  String   @id
+  ownerId             String   @unique
+  parcelCountTx       Int      @default(0)
+  totalAssessedValueTx Decimal? @db.Decimal(15, 2)
+  assetClassMix       Json?
+  absenteeRate        Decimal? @db.Decimal(5, 4)
+  outOfState          Boolean  @default(false)
+  avgHoldYears        Decimal? @db.Decimal(5, 2)
+  updatedAt           DateTime @updatedAt
+
+  owner Owner @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@index([parcelCountTx])
+  @@index([outOfState])
+  @@map("owner_features_tx")
+}
+
+// Owner segment definitions
+model OwnerSegment {
+  segmentKey  String   @id
+  description String?  @db.Text
+  ruleJson    Json
+  version     String   @default("1.0")
+  updatedAt   DateTime @updatedAt
+
+  @@index([segmentKey])
+  @@map("owner_segments")
+}
+
+// Texas enrichment rollups
+model TxEnrichmentRollup {
+  parcelId      String   @id
+  pop1mi         Decimal? @db.Decimal(10, 0)
+  medIncome1mi   Decimal? @db.Decimal(10, 2)
+  poiCounts      Json?
+  nearestPoi     Json?
+  trafficIndex   Decimal? @db.Decimal(5, 2)
+  floodPct       Decimal? @db.Decimal(5, 4)
+  inFloodplain   Boolean  @default(false)
+  updatedAt      DateTime @updatedAt
+
+  @@index([parcelId])
+  @@map("tx_enrichment_rollups")
+}
+
+
+// Discovery run tracking
+model DiscoverRun {
+  id         String   @id @default(cuid())
+  queryText  String?  @db.Text
+  intentJson Json
+  createdBy  String?
+  startedAt  DateTime @default(now())
+  endedAt    DateTime?
+  stats      Json?
+  error      String?  @db.Text
+
+  results    DiscoverResult[]
+
+  @@index([createdBy])
+  @@index([startedAt])
+  @@map("discover_runs")
+}
+
+// Discovery results
+model DiscoverResult {
+  id        String   @id @default(cuid())
+  runId     String
+  parcelId  String
+  score     Decimal  @db.Decimal(10, 6)
+  reasons   Json
+  breakdown Json
+
+  run DiscoverRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@index([runId])
+  @@index([parcelId])
+  @@index([score])
+  @@map("discover_results")
+}
+
+// Scoring models
+model ScoringModel {
+  modelId    String   @id
+  assetClass String
+  version    String   @default("1.0")
+  modelJson  Json
+  updatedAt  DateTime @updatedAt
+
+  @@index([assetClass])
+  @@index([version])
+  @@map("scoring_models")
+}

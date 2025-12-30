@@ -1,0 +1,416 @@
+========================================
+Enrichment Keys Report
+========================================
+
+Top 80 top-level JSON keys by frequency:
+    key     | frequency | pct_coverage 
+------------+-----------+--------------
+ COUNTY     |     27546 |       100.00
+ DATE_ACQ   |     27546 |       100.00
+ FIPS       |     27546 |       100.00
+ GEO_ID     |     27546 |       100.00
+ GIS_AREA   |     27546 |       100.00
+ GIS_AREA_U |     27546 |       100.00
+ IMP_VALUE  |     27546 |       100.00
+ LAND_VALUE |     27546 |       100.00
+ LEGAL_AREA |     27546 |       100.00
+ LEGAL_DESC |     27546 |       100.00
+ LGL_AREA_U |     27546 |       100.00
+ LOC_LAND_U |     27546 |       100.00
+ MAIL_ADDR  |     27546 |       100.00
+ MAIL_CITY  |     27546 |       100.00
+ MAIL_LINE1 |     27546 |       100.00
+ MAIL_LINE2 |     27546 |       100.00
+ MAIL_STAT  |     27546 |       100.00
+ MAIL_ZIP   |     27546 |       100.00
+ MKT_VALUE  |     27546 |       100.00
+ NAME_CARE  |     27546 |       100.00
+ OWNER_NAME |     27546 |       100.00
+ Prop_ID    |     27546 |       100.00
+ SITUS_ADDR |     27546 |       100.00
+ SITUS_CITY |     27546 |       100.00
+ SITUS_NUM  |     27546 |       100.00
+ SITUS_STAT |     27546 |       100.00
+ SITUS_STRE |     27546 |       100.00
+ SITUS_ST_1 |     27546 |       100.00
+ SITUS_ST_2 |     27546 |       100.00
+ SITUS_ZIP  |     27546 |       100.00
+ SOURCE     |     27546 |       100.00
+ STAT_LAND_ |     27546 |       100.00
+ TAX_YEAR   |     27546 |       100.00
+ YEAR_BUILT |     27546 |       100.00
+(34 rows)
+
+
+========================================
+Sample Raw Payloads (10)
+========================================
+
+ parcel_id |                              raw_pretty                               
+-----------+-----------------------------------------------------------------------
+ 100101    | {                                                                    +
+           |     "FIPS": "48453",                                                 +
+           |     "COUNTY": "TRAVIS",                                              +
+           |     "GEO_ID": "215100101",                                           +
+           |     "SOURCE": "TRAVIS APPRAISAL DISTRICT",                           +
+           |     "Prop_ID": "0215100101",                                         +
+           |     "DATE_ACQ": 20250801,                                            +
+           |     "GIS_AREA": 2.94280665,                                          +
+           |     "MAIL_ZIP": null,                                                +
+           |     "TAX_YEAR": 2025,                                                +
+           |     "IMP_VALUE": 0,                                                  +
+           |     "MAIL_ADDR": ", ,",                                              +
+           |     "MAIL_CITY": null,                                               +
+           |     "MAIL_STAT": null,                                               +
+           |     "MKT_VALUE": 0,                                                  +
+           |     "NAME_CARE": null,                                               +
+           |     "SITUS_NUM": null,                                               +
+           |     "SITUS_ZIP": null,                                               +
+           |     "GIS_AREA_U": "Acres",                                           +
+           |     "LAND_VALUE": 0,                                                 +
+           |     "LEGAL_AREA": null,                                              +
+           |     "LEGAL_DESC": null,                                              +
+           |     "LGL_AREA_U": "Acres",                                           +
+           |     "LOC_LAND_U": null,                                              +
+           |     "MAIL_LINE1": null,                                              +
+           |     "MAIL_LINE2": null,                                              +
+           |     "OWNER_NAME": null,                                              +
+           |     "SITUS_ADDR": ", TX",                                            +
+           |     "SITUS_CITY": null,                                              +
+           |     "SITUS_STAT": "TX",                                              +
+           |     "SITUS_STRE": null,                                              +
+           |     "SITUS_ST_1": null,                                              +
+           |     "SITUS_ST_2": null,                                              +
+           |     "STAT_LAND_": null,                                              +
+           |     "YEAR_BUILT": null                                               +
+           | }
+ 100102    | {                                                                    +
+           |     "FIPS": "48453",                                                 +
+           |     "COUNTY": "TRAVIS",                                              +
+           |     "GEO_ID": "243100102",                                           +
+           |     "SOURCE": "TRAVIS APPRAISAL DISTRICT",                           +
+           |     "Prop_ID": "0243100102",                                         +
+           |     "DATE_ACQ": 20250801,                                            +
+           |     "GIS_AREA": 10.5692365,                                          +
+           |     "MAIL_ZIP": "78758",                                             +
+           |     "TAX_YEAR": 2025,                                                +
+           |     "IMP_VALUE": 0,                                                  +
+           |     "MAIL_ADDR": "1812 PEYTON GIN, AUSTIN, TX 78758",                +
+           |     "MAIL_CITY": "AUSTIN",                                           +
+           |     "MAIL_STAT": "TX",                                               +
+           |     "MKT_VALUE": 227967,                                             +
+           |     "NAME_CARE": null,                                               +
+           |     "SITUS_NUM": null,                                               +
+           |     "SITUS_ZIP": "78758",                                            +
+           |     "GIS_AREA_U": "Acres",                                           +
+           |     "LAND_VALUE": 0,                                                 +
+           |     "LEGAL_AREA": null,                                              +
+           |     "LEGAL_DESC": "LOT A ROBINSONS PEYTON GIN ROAD ADDN",            +
+           |     "LGL_AREA_U": "Acres",                                           +
+           |     "LOC_LAND_U": null,                                              +
+           |     "MAIL_LINE1": "1812 PEYTON GIN",                                 +
+           |     "MAIL_LINE2": null,                                              +
+           |     "OWNER_NAME": "KIKAPU LLC",                                      +
+           |     "SITUS_ADDR": ", TX 78758",                                      +
+           |     "SITUS_CITY": null,                                              +
+           |     "SITUS_STAT": "TX",                                              +
+           |     "SITUS_STRE": null,                                              +
+           |     "SITUS_ST_1": "PAYTON GIN",                                      +
+           |     "SITUS_ST_2": "RD",                                              +
+           |     "STAT_LAND_": null,                                              +
+           |     "YEAR_BUILT": null                                               +
+           | }
+ 100104    | {                                                                    +
+           |     "FIPS": "48453",                                                 +
+           |     "COUNTY": "TRAVIS",                                              +
+           |     "GEO_ID": "369100104",                                           +
+           |     "SOURCE": "TRAVIS APPRAISAL DISTRICT",                           +
+           |     "Prop_ID": "0369100104",                                         +
+           |     "DATE_ACQ": 20250801,                                            +
+           |     "GIS_AREA": 9.00268736,                                          +
+           |     "MAIL_ZIP": "78610",                                             +
+           |     "TAX_YEAR": 2025,                                                +
+           |     "IMP_VALUE": 0,                                                  +
+           |     "MAIL_ADDR": "SANTOS M ALVARADO, BUDA, TX 78610",                +
+           |     "MAIL_CITY": "BUDA",                                             +
+           |     "MAIL_STAT": "TX",                                               +
+           |     "MKT_VALUE": 16020,                                              +
+           |     "NAME_CARE": null,                                               +
+           |     "SITUS_NUM": null,                                               +
+           |     "SITUS_ZIP": "78610",                                            +
+           |     "GIS_AREA_U": "Acres",                                           +
+           |     "LAND_VALUE": 0,                                                 +
+           |     "LEGAL_AREA": null,                                              +
+           |     "LEGAL_DESC": "LOT 106 MUSTANG MESA SEC 2 AMENDED FINAL PLAT OF",+
+           |     "LGL_AREA_U": "Acres",                                           +
+           |     "LOC_LAND_U": null,                                              +
+           |     "MAIL_LINE1": "SANTOS M ALVARADO",                               +
+           |     "MAIL_LINE2": null,                                              +
+           |     "OWNER_NAME": "SIERRA NATALIO S &",                              +
+           |     "SITUS_ADDR": "12100 COLT DR , TX 78610",                        +
+           |     "SITUS_CITY": null,                                              +
+           |     "SITUS_STAT": "TX",                                              +
+           |     "SITUS_STRE": null,                                              +
+           |     "SITUS_ST_1": "COLT",                                            +
+           |     "SITUS_ST_2": "DR",                                              +
+           |     "STAT_LAND_": null,                                              +
+           |     "YEAR_BUILT": null                                               +
+           | }
+ 100105    | {                                                                    +
+           |     "FIPS": "48453",                                                 +
+           |     "COUNTY": "TRAVIS",                                              +
+           |     "GEO_ID": "310100105",                                           +
+           |     "SOURCE": "TRAVIS APPRAISAL DISTRICT",                           +
+           |     "Prop_ID": "0310100105",                                         +
+           |     "DATE_ACQ": 20250801,                                            +
+           |     "GIS_AREA": 3.11349027,                                          +
+           |     "MAIL_ZIP": "78741",                                             +
+           |     "TAX_YEAR": 2025,                                                +
+           |     "IMP_VALUE": 0,                                                  +
+           |     "MAIL_ADDR": "2304 RIVERSIDE FARMS RD, AUSTIN, TX 78741",        +
+           |     "MAIL_CITY": "AUSTIN",                                           +
+           |     "MAIL_STAT": "TX",                                               +
+           |     "MKT_VALUE": 1200,                                               +
+           |     "NAME_CARE": null,                                               +
+           |     "SITUS_NUM": null,                                               +
+           |     "SITUS_ZIP": "78741",                                            +
+           |     "GIS_AREA_U": "Acres",                                           +
+           |     "LAND_VALUE": 0,                                                 +
+           |     "LEGAL_AREA": null,                                              +
+           |     "LEGAL_DESC": "W118.9 FT OF LOT 45 RIVERSIDE FARMS",             +
+           |     "LGL_AREA_U": "Acres",                                           +
+           |     "LOC_LAND_U": null,                                              +
+           |     "MAIL_LINE1": "2304 RIVERSIDE FARMS RD",                         +
+           |     "MAIL_LINE2": null,                                              +
+           |     "OWNER_NAME": "CONEVERY ROBERT & PATRICIA R GRIGADEN",           +
+           |     "SITUS_ADDR": ", TX 78741",                                      +
+           |     "SITUS_CITY": null,                                              +
+           |     "SITUS_STAT": "TX",                                              +
+           |     "SITUS_STRE": null,                                              +
+           |     "SITUS_ST_1": "RIVERSIDE FARMS",                                 +
+           |     "SITUS_ST_2": "RD",                                              +
+           |     "STAT_LAND_": null,                                              +
+           |     "YEAR_BUILT": null                                               +
+           | }
+ 100106    | {                                                                    +
+           |     "FIPS": "48453",                                                 +
+           |     "COUNTY": "TRAVIS",                                              +
+           |     "GEO_ID": "225100106",                                           +
+           |     "SOURCE": "TRAVIS APPRAISAL DISTRICT",                           +
+           |     "Prop_ID": "0225100106",                                         +
+           |     "DATE_ACQ": 20250801,                                            +
+           |     "GIS_AREA": 1.56210078,                                          +
+           |     "MAIL_ZIP": "78757",                                             +
+           |     "TAX_YEAR": 2025,                                                +
+           |     "IMP_VALUE": 0,                                                  +
+           |     "MAIL_ADDR": "1901 ALEGRIA RD, AUSTIN, TX 78757",                +
+           |     "MAIL_CITY": "AUSTIN",                                           +
+           |     "MAIL_STAT": "TX",                                               +
+           |     "MKT_VALUE": 43942,                                              +
+           |     "NAME_CARE": null,                                               +
+           |     "SITUS_NUM": null,                                               +
+           |     "SITUS_ZIP": "78751",                                            +
+           |     "GIS_AREA_U": "Acres",                                           +
+           |     "LAND_VALUE": 0,                                                 +
+           |     "LEGAL_AREA": null,                                              +
+           |     "LEGAL_DESC": "LOT 7-8 BLK 37 HIGHLANDS THE",                    +
+           |     "LGL_AREA_U": "Acres",                                           +
+           |     "LOC_LAND_U": null,                                              +
+           |     "MAIL_LINE1": "1901 ALEGRIA RD",                                 +
+           |     "MAIL_LINE2": null,                                              +
+           |     "OWNER_NAME": "DEVERE PAUL",                                     +
+           |     "SITUS_ADDR": ", TX 78751",                                      +
+           |     "SITUS_CITY": null,                                              +
+           |     "SITUS_STAT": "TX",                                              +
+           |     "SITUS_STRE": null,                                              +
+           |     "SITUS_ST_1": "AVENUE G",                                        +
+           |     "SITUS_ST_2": null,                                              +
+           |     "STAT_LAND_": null,                                              +
+           |     "YEAR_BUILT": null                                               +
+           | }
+ 100107    | {                                                                    +
+           |     "FIPS": "48453",                                                 +
+           |     "COUNTY": "TRAVIS",                                              +
+           |     "GEO_ID": "205100107",                                           +
+           |     "SOURCE": "TRAVIS APPRAISAL DISTRICT",                           +
+           |     "Prop_ID": "0205100107",                                         +
+           |     "DATE_ACQ": 20250801,                                            +
+           |     "GIS_AREA": 1.1295618,                                           +
+           |     "MAIL_ZIP": "80027",                                             +
+           |     "TAX_YEAR": 2025,                                                +
+           |     "IMP_VALUE": 0,                                                  +
+           |     "MAIL_ADDR": "575 W MULBERRY ST, LOUISVILLE, CO 80027",          +
+           |     "MAIL_CITY": "LOUISVILLE",                                       +
+           |     "MAIL_STAT": "CO",                                               +
+           |     "MKT_VALUE": 58715,                                              +
+           |     "NAME_CARE": null,                                               +
+           |     "SITUS_NUM": null,                                               +
+           |     "SITUS_ZIP": "78702",                                            +
+           |     "GIS_AREA_U": "Acres",                                           +
+           |     "LAND_VALUE": 0,                                                 +
+           |     "LEGAL_AREA": null,                                              +
+           |     "LEGAL_DESC": "LOT 7 BLK 9 GRANDVIEW PLACE",                     +
+           |     "LGL_AREA_U": "Acres",                                           +
+           |     "LOC_LAND_U": null,                                              +
+           |     "MAIL_LINE1": "575 W MULBERRY ST",                               +
+           |     "MAIL_LINE2": null,                                              +
+           |     "OWNER_NAME": "MALONEY REBECCA & JAMES",                         +
+           |     "SITUS_ADDR": ", TX 78702",                                      +
+           |     "SITUS_CITY": null,                                              +
+           |     "SITUS_STAT": "TX",                                              +
+           |     "SITUS_STRE": null,                                              +
+           |     "SITUS_ST_1": "E         10",                                    +
+           |     "SITUS_ST_2": "ST",                                              +
+           |     "STAT_LAND_": null,                                              +
+           |     "YEAR_BUILT": null                                               +
+           | }
+ 100108    | {                                                                    +
+           |     "FIPS": "48453",                                                 +
+           |     "COUNTY": "TRAVIS",                                              +
+           |     "GEO_ID": "336100108",                                           +
+           |     "SOURCE": "TRAVIS APPRAISAL DISTRICT",                           +
+           |     "Prop_ID": "0336100108",                                         +
+           |     "DATE_ACQ": 20250801,                                            +
+           |     "GIS_AREA": 14.14860115,                                         +
+           |     "MAIL_ZIP": "78744",                                             +
+           |     "TAX_YEAR": 2025,                                                +
+           |     "IMP_VALUE": 0,                                                  +
+           |     "MAIL_ADDR": "5003 BRUSHY RIDGE DR, AUSTIN, TX 78744",           +
+           |     "MAIL_CITY": "AUSTIN",                                           +
+           |     "MAIL_STAT": "TX",                                               +
+           |     "MKT_VALUE": 8671,                                               +
+           |     "NAME_CARE": null,                                               +
+           |     "SITUS_NUM": null,                                               +
+           |     "SITUS_ZIP": "78744",                                            +
+           |     "GIS_AREA_U": "Acres",                                           +
+           |     "LAND_VALUE": 0,                                                 +
+           |     "LEGAL_AREA": null,                                              +
+           |     "LEGAL_DESC": "ABS 24 DELVALLE S ACR 1.264",                     +
+           |     "LGL_AREA_U": "Acres",                                           +
+           |     "LOC_LAND_U": null,                                              +
+           |     "MAIL_LINE1": "5003 BRUSHY RIDGE DR",                            +
+           |     "MAIL_LINE2": null,                                              +
+           |     "OWNER_NAME": "PANTOJA ISMAEL C & JUANITA E",                    +
+           |     "SITUS_ADDR": ", TX 78744",                                      +
+           |     "SITUS_CITY": null,                                              +
+           |     "SITUS_STAT": "TX",                                              +
+           |     "SITUS_STRE": null,                                              +
+           |     "SITUS_ST_1": "COLTON-BLUFF SPRG",                               +
+           |     "SITUS_ST_2": "RD",                                              +
+           |     "STAT_LAND_": null,                                              +
+           |     "YEAR_BUILT": null                                               +
+           | }
+ 100109    | {                                                                    +
+           |     "FIPS": "48453",                                                 +
+           |     "COUNTY": "TRAVIS",                                              +
+           |     "GEO_ID": "262100109",                                           +
+           |     "SOURCE": "TRAVIS APPRAISAL DISTRICT",                           +
+           |     "Prop_ID": "0262100109",                                         +
+           |     "DATE_ACQ": 20250801,                                            +
+           |     "GIS_AREA": 16.1474368,                                          +
+           |     "MAIL_ZIP": "78759",                                             +
+           |     "TAX_YEAR": 2025,                                                +
+           |     "IMP_VALUE": 0,                                                  +
+           |     "MAIL_ADDR": "PARTNERSHIP, AUSTIN, TX 78759",                    +
+           |     "MAIL_CITY": "AUSTIN",                                           +
+           |     "MAIL_STAT": "TX",                                               +
+           |     "MKT_VALUE": 20908,                                              +
+           |     "NAME_CARE": null,                                               +
+           |     "SITUS_NUM": null,                                               +
+           |     "SITUS_ZIP": "78759",                                            +
+           |     "GIS_AREA_U": "Acres",                                           +
+           |     "LAND_VALUE": 0,                                                 +
+           |     "LEGAL_AREA": null,                                              +
+           |     "LEGAL_DESC": "LOT 1 DAILEY ED ADDN",                            +
+           |     "LGL_AREA_U": "Acres",                                           +
+           |     "LOC_LAND_U": null,                                              +
+           |     "MAIL_LINE1": "PARTNERSHIP",                                     +
+           |     "MAIL_LINE2": null,                                              +
+           |     "OWNER_NAME": "TPS DAILEY FAMILY LIMITED",                       +
+           |     "SITUS_ADDR": "11605 BLACKHAWK DR , TX 78759",                   +
+           |     "SITUS_CITY": null,                                              +
+           |     "SITUS_STAT": "TX",                                              +
+           |     "SITUS_STRE": null,                                              +
+           |     "SITUS_ST_1": "WATERS PARK",                                     +
+           |     "SITUS_ST_2": "RD",                                              +
+           |     "STAT_LAND_": null,                                              +
+           |     "YEAR_BUILT": null                                               +
+           | }
+ 100110    | {                                                                    +
+           |     "FIPS": "48453",                                                 +
+           |     "COUNTY": "TRAVIS",                                              +
+           |     "GEO_ID": "310100110",                                           +
+           |     "SOURCE": "TRAVIS APPRAISAL DISTRICT",                           +
+           |     "Prop_ID": "0310100110",                                         +
+           |     "DATE_ACQ": 20250801,                                            +
+           |     "GIS_AREA": 3.07676612,                                          +
+           |     "MAIL_ZIP": "78741",                                             +
+           |     "TAX_YEAR": 2025,                                                +
+           |     "IMP_VALUE": 0,                                                  +
+           |     "MAIL_ADDR": "2414 RIVERSIDE FARMS RD, AUSTIN, TX 78741",        +
+           |     "MAIL_CITY": "AUSTIN",                                           +
+           |     "MAIL_STAT": "TX",                                               +
+           |     "MKT_VALUE": 27883,                                              +
+           |     "NAME_CARE": null,                                               +
+           |     "SITUS_NUM": null,                                               +
+           |     "SITUS_ZIP": "78741",                                            +
+           |     "GIS_AREA_U": "Acres",                                           +
+           |     "LAND_VALUE": 0,                                                 +
+           |     "LEGAL_AREA": null,                                              +
+           |     "LEGAL_DESC": "W118 FT OF LOT 37 RIVERSIDE FARMS",               +
+           |     "LGL_AREA_U": "Acres",                                           +
+           |     "LOC_LAND_U": null,                                              +
+           |     "MAIL_LINE1": "2414 RIVERSIDE FARMS RD",                         +
+           |     "MAIL_LINE2": null,                                              +
+           |     "OWNER_NAME": "SIEGEL LAWRENCE",                                 +
+           |     "SITUS_ADDR": ", TX 78741",                                      +
+           |     "SITUS_CITY": null,                                              +
+           |     "SITUS_STAT": "TX",                                              +
+           |     "SITUS_STRE": null,                                              +
+           |     "SITUS_ST_1": "RIVERSIDE FARMS",                                 +
+           |     "SITUS_ST_2": "RD",                                              +
+           |     "STAT_LAND_": null,                                              +
+           |     "YEAR_BUILT": null                                               +
+           | }
+ 100111    | {                                                                    +
+           |     "FIPS": "48453",                                                 +
+           |     "COUNTY": "TRAVIS",                                              +
+           |     "GEO_ID": "226100111",                                           +
+           |     "SOURCE": "TRAVIS APPRAISAL DISTRICT",                           +
+           |     "Prop_ID": "0226100111",                                         +
+           |     "DATE_ACQ": 20250801,                                            +
+           |     "GIS_AREA": 1.77861236,                                          +
+           |     "MAIL_ZIP": "78752",                                             +
+           |     "TAX_YEAR": 2025,                                                +
+           |     "IMP_VALUE": 0,                                                  +
+           |     "MAIL_ADDR": "5803 DUVAL ST, AUSTIN, TX 78752",                  +
+           |     "MAIL_CITY": "AUSTIN",                                           +
+           |     "MAIL_STAT": "TX",                                               +
+           |     "MKT_VALUE": 76766,                                              +
+           |     "NAME_CARE": null,                                               +
+           |     "SITUS_NUM": null,                                               +
+           |     "SITUS_ZIP": "78752",                                            +
+           |     "GIS_AREA_U": "Acres",                                           +
+           |     "LAND_VALUE": 0,                                                 +
+           |     "LEGAL_AREA": null,                                              +
+           |     "LEGAL_DESC": "LOT 198 SKYVIEW SEC 3",                           +
+           |     "LGL_AREA_U": "Acres",                                           +
+           |     "LOC_LAND_U": null,                                              +
+           |     "MAIL_LINE1": "5803 DUVAL ST",                                   +
+           |     "MAIL_LINE2": null,                                              +
+           |     "OWNER_NAME": "GREGORY CATHERINE PAIGE",                         +
+           |     "SITUS_ADDR": ", TX 78752",                                      +
+           |     "SITUS_CITY": null,                                              +
+           |     "SITUS_STAT": "TX",                                              +
+           |     "SITUS_STRE": null,                                              +
+           |     "SITUS_ST_1": "DUVAL",                                           +
+           |     "SITUS_ST_2": "ST",                                              +
+           |     "STAT_LAND_": null,                                              +
+           |     "YEAR_BUILT": null                                               +
+           | }
+(10 rows)
+
+
+========================================
+Report complete
+========================================

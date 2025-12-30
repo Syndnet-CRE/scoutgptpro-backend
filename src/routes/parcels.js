@@ -2,6 +2,10 @@ import express from 'express';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { Pool } from 'pg';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -183,6 +187,56 @@ router.get('/parcel/:id', async (req, res) => {
     
   } catch (error) {
     console.error('❌ Error fetching parcel:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Initialize database pool for enrichment queries
+const enrichmentPool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  max: 5
+});
+
+// GET /api/parcels/:parcelId/enrichment - Get enrichment data for a parcel
+router.get('/:parcelId/enrichment', async (req, res) => {
+  try {
+    const { parcelId } = req.params;
+    
+    // Check if parcel has geometry
+    const geomCheck = await enrichmentPool.query(
+      'SELECT 1 FROM parcels_travis WHERE parcel_id = $1',
+      [parcelId]
+    );
+    
+    const hasGeometry = geomCheck.rows.length > 0;
+    
+    // Get enrichment data
+    const enrichmentResult = await enrichmentPool.query(
+      `SELECT 
+        parcel_id, owner_name, owner2, mail_address1, mail_address2,
+        mail_city, mail_state, mail_zip, situs_address, land_use,
+        land_use_desc, legal_desc, year_built, acres, land_value,
+        improvement_value, market_value, assessed_value, last_update,
+        source_layer, updated_at
+      FROM parcels_travis_enrichment
+      WHERE parcel_id = $1`,
+      [parcelId]
+    );
+    
+    // Optionally get property data
+    const propertyResult = await enrichmentPool.query(
+      'SELECT id, address, city, state, zip, propertyType, mktValue FROM properties WHERE "parcelId" = $1 LIMIT 1',
+      [parcelId]
+    );
+    
+    res.json({
+      parcelId,
+      hasGeometry,
+      enrichment: enrichmentResult.rows[0] || null,
+      property: propertyResult.rows[0] || null
+    });
+  } catch (error) {
+    console.error('Error fetching enrichment:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -384,6 +438,8 @@ router.get('/viewport', async (req, res) => {
 });
 
 export default router;
+
+
 
 
 

@@ -15,7 +15,18 @@
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push",
     "seed": "node scripts/seed-mapservers.js",
-    "seed:layersets": "node scripts/seed-layer-sets.js"
+    "seed:layersets": "node scripts/seed-layer-sets.js",
+    "export:parcels:travis": "node scripts/export-parcels-to-mts.mjs",
+    "load:parcels:travis": "node scripts/load-parcels-travis.mjs",
+    "reload:parcels:travis:ogr": "bash scripts/reload-parcels-travis-ogr.sh",
+    "reload:parcels:travis:node": "node scripts/load-parcels-travis.mjs --truncateFirst=true --batchSize=1000 --verify=true --forceNode=true",
+    "mts:travis:publish": "node scripts/mts/publish-travis.mjs",
+    "mts:travis:studio": "node scripts/mts/ndjson-to-geojson.mjs",
+    "ingest:parcels:tx": "node scripts/ingest-parcels-tx.mjs",
+    "ingest:parcels:tx:travis": "node scripts/ingest-parcels-tx.mjs --countyFips=48453",
+    "ingest:txgio:travis": "bash scripts/ingest-txgio-travis.sh",
+    "ingest:travis:enrichment": "node scripts/ingest-travis-enrichment.mjs",
+    "ingest:travis:enrichment:local": "node scripts/ingest-travis-enrichment-local.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.1",
