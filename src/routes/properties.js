@@ -1,9 +1,29 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
+import { Pool } from 'pg';
 import { attachAttomGeoIdsToProperties, getAttomGeoIdByParcelId } from '../services/attom-resolver-service.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const router = express.Router();
 const prisma = new PrismaClient();
+
+// Database pool for enrichment queries
+const enrichmentPool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  max: 5
+});
+
+// Unreliable fields (0% coverage in enrichment table)
+const UNRELIABLE_FIELDS = [
+  'zoningCode',
+  'floodZone',
+  'taxDelinquentFlag',
+  'lastSaleDate',
+  'lastSalePrice',
+  'homesteadExemptionFlag'
+];
 
 /**
  * GET /api/properties
@@ -137,6 +157,134 @@ router.get('/resolve', async (req, res) => {
   } catch (error) {
     console.error('Error resolving parcelId:', error);
     res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * GET /api/properties/parcel/:parcelId
+ * PropertyBundle endpoint - returns complete property data keyed by parcel_id
+ * 
+ * Response shape:
+ * {
+ *   parcelId: string,
+ *   geometry: GeoJSON | null,
+ *   enrichment: { ownerName, mailingAddress, situsAddress, ... } | null,
+ *   attomProperty: { full properties row } | null,
+ *   meta: { enrichmentSource, attomMatched, unreliableFields }
+ * }
+ */
+router.get('/parcel/:parcelId', async (req, res) => {
+  try {
+    const { parcelId } = req.params;
+    
+    // Validate parcelId format (6-digit numeric string)
+    if (!parcelId || !/^\d{6}$/.test(String(parcelId))) {
+      return res.status(400).json({ 
+        success: false,
+        error: 'parcelId must be a 6-digit numeric string' 
+      });
+    }
+    
+    const parcelIdStr = String(parcelId).trim();
+    
+    // Step 1: Query parcels_travis for geometry using Prisma.$queryRaw
+    const geomResult = await prisma.$queryRaw`
+      SELECT 
+        parcel_id,
+        ST_AsGeoJSON(geom)::jsonb as geometry
+      FROM parcels_travis
+      WHERE parcel_id = ${parcelIdStr}
+    `;
+    
+    if (!geomResult || geomResult.length === 0) {
+      console.log(`[PropertyBundle] Parcel ${parcelIdStr} not found in parcels_travis`);
+      return res.status(404).json({ 
+        success: false,
+        error: 'Parcel not found' 
+      });
+    }
+    
+    const geomRow = geomResult[0];
+    const geometry = geomRow.geometry;
+    
+    // Step 2: Query parcels_travis_enrichment for attributes
+    const enrichmentResult = await prisma.$queryRaw`
+      SELECT 
+        owner_name,
+        mailing_address,
+        situs_address,
+        assessed_land_value,
+        assessed_improvement_value,
+        assessed_total_value,
+        acreage,
+        year_built,
+        land_use_code,
+        land_use_description
+      FROM parcels_travis_enrichment
+      WHERE parcel_id = ${parcelIdStr}
+    `;
+    
+    const enrichmentRow = enrichmentResult && enrichmentResult.length > 0 ? enrichmentResult[0] : null;
+    const hasEnrichment = !!enrichmentRow;
+    
+    if (hasEnrichment) {
+      console.log(`[PropertyBundle] Enrichment found for parcel ${parcelIdStr}`);
+    } else {
+      console.log(`[PropertyBundle] No enrichment found for parcel ${parcelIdStr}`);
+    }
+    
+    // Step 3: Query properties table (ATTOM data)
+    let attomProperty = null;
+    try {
+      const property = await prisma.property.findUnique({
+        where: { parcelId: parcelIdStr }
+      });
+      
+      if (property) {
+        attomProperty = property;
+        console.log(`[PropertyBundle] ATTOM match found for parcel ${parcelIdStr} (propertyId: ${property.id})`);
+      } else {
+        console.log(`[PropertyBundle] No ATTOM match for parcel ${parcelIdStr}`);
+      }
+    } catch (prismaError) {
+      // Prisma errors are non-blocking (properties table may not exist or have errors)
+      console.warn(`[PropertyBundle] Could not query properties table for ${parcelIdStr}:`, prismaError.message);
+    }
+    
+    // Step 4: Build enrichment object with camelCase fields
+    const enrichment = hasEnrichment ? {
+      ownerName: enrichmentRow.owner_name || null,
+      mailingAddress: enrichmentRow.mailing_address || null,
+      situsAddress: enrichmentRow.situs_address || null,
+      assessedLandValue: enrichmentRow.assessed_land_value ? Number(enrichmentRow.assessed_land_value) : null,
+      assessedImprovementValue: enrichmentRow.assessed_improvement_value ? Number(enrichmentRow.assessed_improvement_value) : null,
+      assessedTotalValue: enrichmentRow.assessed_total_value ? Number(enrichmentRow.assessed_total_value) : null,
+      acreage: enrichmentRow.acreage ? Number(enrichmentRow.acreage) : null,
+      yearBuilt: enrichmentRow.year_built ? Number(enrichmentRow.year_built) : null,
+      landUseCode: enrichmentRow.land_use_code || null,
+      landUseDescription: enrichmentRow.land_use_description || null
+    } : null;
+    
+    // Step 5: Build response
+    const bundle = {
+      parcelId: parcelIdStr,
+      geometry: geometry,
+      enrichment: enrichment,
+      attomProperty: attomProperty,
+      meta: {
+        enrichmentSource: hasEnrichment ? 'tcad' : null,
+        attomMatched: !!attomProperty,
+        unreliableFields: UNRELIABLE_FIELDS
+      }
+    };
+    
+    res.json(bundle);
+  } catch (error) {
+    console.error(`[PropertyBundle] Error fetching bundle for ${req.params.parcelId}:`, error);
+    res.status(500).json({ 
+      success: false,
+      error: error.message 
+    });
   }
 });
 
@@ -332,6 +480,152 @@ router.post('/search', async (req, res) => {
   } catch (error) {
     console.error('❌ Property search error:', error);
     res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+
+/**
+ * POST /api/properties/bulk
+ * Bulk fetch PropertyBundles for multiple parcelIds
+ * 
+ * Body: { parcelIds: string[] } (max 500)
+ * Response: { items: PropertyBundle[] } (same order as input)
+ * For missing parcels: { parcelId: "xxx", error: "not found" }
+ */
+router.post('/bulk', async (req, res) => {
+  try {
+    const { parcelIds } = req.body;
+    
+    if (!Array.isArray(parcelIds) || parcelIds.length === 0) {
+      return res.status(400).json({ 
+        success: false,
+        error: 'parcelIds must be a non-empty array' 
+      });
+    }
+    
+    if (parcelIds.length > 500) {
+      return res.status(400).json({ 
+        success: false,
+        error: 'Maximum 500 parcelIds allowed per request' 
+      });
+    }
+    
+    // Validate all parcelIds are 6-digit numeric strings
+    const invalidParcelIds = parcelIds.filter(id => !/^\d{6}$/.test(String(id)));
+    if (invalidParcelIds.length > 0) {
+      return res.status(400).json({ 
+        success: false,
+        error: `Invalid parcelId format: ${invalidParcelIds.slice(0, 5).join(', ')}${invalidParcelIds.length > 5 ? '...' : ''}. Must be 6-digit strings.`
+      });
+    }
+    
+    const parcelIdStrings = parcelIds.map(id => String(id).trim());
+    const startTime = Date.now();
+    
+    // Step 1: Batch query parcels_travis for geometries using Prisma.$queryRawUnsafe
+    const geomQuery = `
+      SELECT 
+        parcel_id,
+        ST_AsGeoJSON(geom)::jsonb as geometry
+      FROM parcels_travis
+      WHERE parcel_id = ANY($1::text[])
+    `;
+    const geomResult = await prisma.$queryRawUnsafe(geomQuery, parcelIdStrings);
+    const geomMap = new Map(
+      (geomResult || []).map(row => [row.parcel_id, row.geometry])
+    );
+    
+    // Step 2: Batch query parcels_travis_enrichment for attributes
+    const enrichmentQuery = `
+      SELECT 
+        parcel_id,
+        owner_name,
+        mailing_address,
+        situs_address,
+        assessed_land_value,
+        assessed_improvement_value,
+        assessed_total_value,
+        acreage,
+        year_built,
+        land_use_code,
+        land_use_description
+      FROM parcels_travis_enrichment
+      WHERE parcel_id = ANY($1::text[])
+    `;
+    const enrichmentResult = await prisma.$queryRawUnsafe(enrichmentQuery, parcelIdStrings);
+    const enrichmentMap = new Map(
+      (enrichmentResult || []).map(row => [
+        row.parcel_id,
+        {
+          ownerName: row.owner_name || null,
+          mailingAddress: row.mailing_address || null,
+          situsAddress: row.situs_address || null,
+          assessedLandValue: row.assessed_land_value ? Number(row.assessed_land_value) : null,
+          assessedImprovementValue: row.assessed_improvement_value ? Number(row.assessed_improvement_value) : null,
+          assessedTotalValue: row.assessed_total_value ? Number(row.assessed_total_value) : null,
+          acreage: row.acreage ? Number(row.acreage) : null,
+          yearBuilt: row.year_built ? Number(row.year_built) : null,
+          landUseCode: row.land_use_code || null,
+          landUseDescription: row.land_use_description || null
+        }
+      ])
+    );
+    
+    // Step 3: Batch query properties table (ATTOM data)
+    let attomMap = new Map();
+    try {
+      const attomProperties = await prisma.property.findMany({
+        where: { parcelId: { in: parcelIdStrings } }
+      });
+      attomMap = new Map(
+        attomProperties.map(property => [property.parcelId, property])
+      );
+    } catch (prismaError) {
+      console.warn('[PropertyBundle Bulk] Could not query properties table:', prismaError.message);
+    }
+    
+    // Step 4: Build bundles in same order as input
+    const bundles = parcelIdStrings.map(parcelId => {
+      const geometry = geomMap.get(parcelId) || null;
+      const enrichment = enrichmentMap.get(parcelId) || null;
+      const attomProperty = attomMap.get(parcelId) || null;
+      
+      // If parcel not found, return error object
+      if (!geometry) {
+        return {
+          parcelId: parcelId,
+          error: 'not found'
+        };
+      }
+      
+      return {
+        parcelId: parcelId,
+        geometry: geometry,
+        enrichment: enrichment,
+        attomProperty: attomProperty,
+        meta: {
+          enrichmentSource: enrichment ? 'tcad' : null,
+          attomMatched: !!attomProperty,
+          unreliableFields: UNRELIABLE_FIELDS
+        }
+      };
+    });
+    
+    const processingTime = Date.now() - startTime;
+    const enrichmentCount = bundles.filter(b => b.enrichment && !b.error).length;
+    const attomCount = bundles.filter(b => b.attomProperty && !b.error).length;
+    const geometryCount = bundles.filter(b => b.geometry && !b.error).length;
+    const notFoundCount = bundles.filter(b => b.error === 'not found').length;
+    
+    console.log(`[PropertyBundle Bulk] Processed ${bundles.length} parcels in ${processingTime}ms. Geometry: ${geometryCount}, Enrichment: ${enrichmentCount}, ATTOM: ${attomCount}, Not Found: ${notFoundCount}`);
+    
+    res.json({ items: bundles });
+  } catch (error) {
+    console.error('[PropertyBundle Bulk] Error:', error);
+    res.status(500).json({ 
+      success: false,
+      error: error.message 
+    });
   }
 });
 
