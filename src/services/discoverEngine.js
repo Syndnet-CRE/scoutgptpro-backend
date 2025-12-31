@@ -109,18 +109,30 @@ export function buildDiscoverQuery(intent, geo, limit = 100) {
   }
 
   // Owner segment filter - need to adjust SQL structure
-  let hasOwnerJoin = false;
-  if (intent.ownerSegment) {
+  if (intent.ownerSegment && !hasOwnerJoin) {
     sql = sql.replace('FROM properties p', `
       FROM properties p
       INNER JOIN owner_properties op ON op."parcelId" = p."parcelId"
       INNER JOIN owners o ON o.id = op."ownerId"
-      INNER JOIN owner_segments os ON os."segmentKey" = $${paramIndex}
+      INNER JOIN owner_features_tx oft ON oft."ownerId" = o.id
     `);
-    sql += ` AND os."segmentKey" = $${paramIndex}`;
-    params.push(intent.ownerSegment);
-    paramIndex++;
     hasOwnerJoin = true;
+  }
+  
+  // Owner segment filter condition
+  if (intent.ownerSegment && hasOwnerJoin) {
+    // Apply segment rules via SQL
+    if (intent.ownerSegment === 'mom_pop') {
+      sql += ` AND oft."parcelCountTx" <= 5 AND o."isCorporate" = false`;
+    } else if (intent.ownerSegment === 'small_operator') {
+      sql += ` AND oft."parcelCountTx" >= 6 AND oft."parcelCountTx" <= 25`;
+    } else if (intent.ownerSegment === 'institutional') {
+      sql += ` AND (oft."parcelCountTx" >= 200 OR (o."isCorporate" = true AND oft."totalAssessedValueTx" >= 50000000))`;
+    } else if (intent.ownerSegment === 'local_owner') {
+      sql += ` AND oft."outOfState" = false`;
+    } else if (intent.ownerSegment === 'tired_landlord') {
+      sql += ` AND oft."avgHoldYears" >= 15`;
+    }
   }
 
   // Geo filters
