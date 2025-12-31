@@ -237,11 +237,56 @@ router.get('/parcel/:parcelId', async (req, res) => {
     let attomProperty = null;
     try {
       const property = await prisma.property.findUnique({
-        where: { parcelId: parcelIdStr }
+        where: { parcelId: parcelIdStr },
+        select: {
+          id: true,
+          address: true,
+          city: true,
+          state: true,
+          zip: true,
+          propertyType: true,
+          mktValue: true,
+          landValue: true,
+          impValue: true,
+          acres: true,
+          yearBuilt: true,
+          ownerName: true,
+          isAbsentee: true,
+          isTaxDelinquent: true,
+          motivationScore: true,
+          lastSaleDate: true,
+          lastSaleAmount: true,
+          asset_class: true,
+          asset_subtype: true,
+          land_use_code: true,
+          general_land_use_code: true
+        }
       });
       
       if (property) {
-        attomProperty = property;
+        attomProperty = {
+          id: property.id,
+          address: property.address || '',
+          city: property.city || '',
+          state: property.state || '',
+          zip: property.zip || '',
+          propertyType: property.propertyType,
+          mktValue: property.mktValue,
+          landValue: property.landValue,
+          impValue: property.impValue,
+          acres: property.acres,
+          yearBuilt: property.yearBuilt,
+          ownerName: property.ownerName,
+          isAbsentee: property.isAbsentee,
+          isTaxDelinquent: property.isTaxDelinquent,
+          motivationScore: property.motivationScore,
+          lastSaleDate: property.lastSaleDate ? property.lastSaleDate.toISOString().split('T')[0] : null,
+          lastSaleAmount: property.lastSaleAmount,
+          assetType: property.asset_class || property.propertyType || null,
+          assetSubtype: property.asset_subtype || null,
+          landUseCode: property.land_use_code || null,
+          generalLandUseCode: property.general_land_use_code || null
+        };
         console.log(`[PropertyBundle] ATTOM match found for parcel ${parcelIdStr} (propertyId: ${property.id})`);
       } else {
         console.log(`[PropertyBundle] No ATTOM match for parcel ${parcelIdStr}`);
@@ -270,7 +315,7 @@ router.get('/parcel/:parcelId', async (req, res) => {
       parcelId: parcelIdStr,
       geometry: geometry,
       enrichment: enrichment,
-      attomProperty: attomProperty,
+      core: attomProperty,
       meta: {
         enrichmentSource: hasEnrichment ? 'tcad' : null,
         attomMatched: !!attomProperty,
@@ -575,10 +620,59 @@ router.post('/bulk', async (req, res) => {
     let attomMap = new Map();
     try {
       const attomProperties = await prisma.property.findMany({
-        where: { parcelId: { in: parcelIdStrings } }
+        where: { parcelId: { in: parcelIdStrings } },
+        select: {
+          id: true,
+          parcelId: true,
+          address: true,
+          city: true,
+          state: true,
+          zip: true,
+          propertyType: true,
+          mktValue: true,
+          landValue: true,
+          impValue: true,
+          acres: true,
+          yearBuilt: true,
+          ownerName: true,
+          isAbsentee: true,
+          isTaxDelinquent: true,
+          motivationScore: true,
+          lastSaleDate: true,
+          lastSaleAmount: true,
+          asset_class: true,
+          asset_subtype: true,
+          land_use_code: true,
+          general_land_use_code: true
+        }
       });
       attomMap = new Map(
-        attomProperties.map(property => [property.parcelId, property])
+        attomProperties.map(property => [
+          property.parcelId,
+          {
+            id: property.id,
+            address: property.address || '',
+            city: property.city || '',
+            state: property.state || '',
+            zip: property.zip || '',
+            propertyType: property.propertyType,
+            mktValue: property.mktValue,
+            landValue: property.landValue,
+            impValue: property.impValue,
+            acres: property.acres,
+            yearBuilt: property.yearBuilt,
+            ownerName: property.ownerName,
+            isAbsentee: property.isAbsentee,
+            isTaxDelinquent: property.isTaxDelinquent,
+            motivationScore: property.motivationScore,
+            lastSaleDate: property.lastSaleDate ? property.lastSaleDate.toISOString().split('T')[0] : null,
+            lastSaleAmount: property.lastSaleAmount,
+            assetType: property.asset_class || property.propertyType || null,
+            assetSubtype: property.asset_subtype || null,
+            landUseCode: property.land_use_code || null,
+            generalLandUseCode: property.general_land_use_code || null
+          }
+        ])
       );
     } catch (prismaError) {
       console.warn('[PropertyBundle Bulk] Could not query properties table:', prismaError.message);
@@ -602,7 +696,7 @@ router.post('/bulk', async (req, res) => {
         parcelId: parcelId,
         geometry: geometry,
         enrichment: enrichment,
-        attomProperty: attomProperty,
+        core: attomProperty,
         meta: {
           enrichmentSource: enrichment ? 'tcad' : null,
           attomMatched: !!attomProperty,
@@ -613,7 +707,7 @@ router.post('/bulk', async (req, res) => {
     
     const processingTime = Date.now() - startTime;
     const enrichmentCount = bundles.filter(b => b.enrichment && !b.error).length;
-    const attomCount = bundles.filter(b => b.attomProperty && !b.error).length;
+    const attomCount = bundles.filter(b => b.core && !b.error).length;
     const geometryCount = bundles.filter(b => b.geometry && !b.error).length;
     const notFoundCount = bundles.filter(b => b.error === 'not found').length;
     
