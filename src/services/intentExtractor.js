@@ -80,35 +80,63 @@ Return ONLY valid JSON matching the schema. No markdown, no explanation, just JS
  * Extract DiscoverIntent from natural language query
  */
 export async function extractDiscoverIntent(queryText, anthropicClient) {
+  console.log('[DEBUG] extractDiscoverIntent called with query:', queryText);
+  
   try {
+    const fullPrompt = `${INTENT_EXTRACTION_PROMPT}\n\nQuery: "${queryText}"\n\nExtract intent JSON:`;
+    console.log('[DEBUG] Prompt length:', fullPrompt.length);
+    console.log('[DEBUG] Prompt preview:', fullPrompt.substring(0, 300) + '...');
+    
     const response = await anthropicClient.messages.create({
       model: 'claude-3-sonnet-20240229',
       max_tokens: 1024,
       messages: [
         {
           role: 'user',
-          content: `${INTENT_EXTRACTION_PROMPT}\n\nQuery: "${queryText}"\n\nExtract intent JSON:`
+          content: fullPrompt
         }
       ]
     });
 
     const content = response.content[0];
+    console.log('[DEBUG] Claude response type:', content.type);
     if (content.type !== 'text') {
       throw new Error('Unexpected response type from Claude');
     }
+    console.log('[DEBUG] Claude raw response text:', content.text);
 
     // Extract JSON from response (handle markdown code blocks)
     let jsonText = content.text.trim();
+    console.log('[DEBUG] Raw JSON text (first 500 chars):', jsonText.substring(0, 500));
     if (jsonText.startsWith('```')) {
       jsonText = jsonText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+      console.log('[DEBUG] After markdown cleanup:', jsonText.substring(0, 500));
     }
 
-    const intent = JSON.parse(jsonText);
+    let intent;
+    try {
+      intent = JSON.parse(jsonText);
+      console.log('[DEBUG] Parsed intent:', JSON.stringify(intent, null, 2));
+    } catch (parseError) {
+      console.error('[ERROR] JSON parse failed. Text was:', jsonText);
+      throw parseError;
+    }
 
     // Validate and normalize
-    return validateAndNormalizeIntent(intent);
+    const normalized = validateAndNormalizeIntent(intent);
+    console.log('[DEBUG] Normalized intent:', JSON.stringify(normalized, null, 2));
+    console.log('[DEBUG] Final assetTypes:', normalized.assetTypes);
+    console.log('[DEBUG] Final ownerSegment:', normalized.ownerSegment);
+    return normalized;
   } catch (error) {
-    console.error('Intent extraction error:', error);
+    console.error('[ERROR] Intent extraction failed');
+    console.error('[ERROR] Error type:', error.constructor.name);
+    console.error('[ERROR] Error message:', error.message);
+    console.error('[ERROR] Error stack:', error.stack);
+    console.error('[ERROR] Query was:', queryText);
+    if (error.status) console.error('[ERROR] HTTP status:', error.status);
+    if (error.response) console.error('[ERROR] Response:', JSON.stringify(error.response, null, 2));
+    
     // Return default intent for Texas
     return {
       assetTypes: [],

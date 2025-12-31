@@ -7,7 +7,15 @@ import crypto from 'crypto';
 
 const router = express.Router();
 const prisma = new PrismaClient();
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
+// Check API key (support both env var names for compatibility)
+const apiKey = process.env.ANTHROPIC_API_KEY || process.env.CLAUDE_API_KEY;
+if (!apiKey) {
+  console.error('[ERROR] ANTHROPIC_API_KEY or CLAUDE_API_KEY not set in environment');
+} else {
+  console.log('[DEBUG] API key found, length:', apiKey.length, 'prefix:', apiKey.substring(0, 10));
+}
+const anthropic = new Anthropic({ apiKey });
 
 /**
  * POST /api/discover/query
