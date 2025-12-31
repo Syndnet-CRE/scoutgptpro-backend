@@ -237,56 +237,11 @@ router.get('/parcel/:parcelId', async (req, res) => {
     let attomProperty = null;
     try {
       const property = await prisma.property.findUnique({
-        where: { parcelId: parcelIdStr },
-        select: {
-          id: true,
-          address: true,
-          city: true,
-          state: true,
-          zip: true,
-          propertyType: true,
-          mktValue: true,
-          landValue: true,
-          impValue: true,
-          acres: true,
-          yearBuilt: true,
-          ownerName: true,
-          isAbsentee: true,
-          isTaxDelinquent: true,
-          motivationScore: true,
-          lastSaleDate: true,
-          lastSaleAmount: true,
-          asset_class: true,
-          asset_subtype: true,
-          land_use_code: true,
-          general_land_use_code: true
-        }
+        where: { parcelId: parcelIdStr }
       });
       
       if (property) {
-        attomProperty = {
-          id: property.id,
-          address: property.address || '',
-          city: property.city || '',
-          state: property.state || '',
-          zip: property.zip || '',
-          propertyType: property.propertyType,
-          mktValue: property.mktValue,
-          landValue: property.landValue,
-          impValue: property.impValue,
-          acres: property.acres,
-          yearBuilt: property.yearBuilt,
-          ownerName: property.ownerName,
-          isAbsentee: property.isAbsentee,
-          isTaxDelinquent: property.isTaxDelinquent,
-          motivationScore: property.motivationScore,
-          lastSaleDate: property.lastSaleDate ? property.lastSaleDate.toISOString().split('T')[0] : null,
-          lastSaleAmount: property.lastSaleAmount,
-          assetType: property.asset_class || property.propertyType || null,
-          assetSubtype: property.asset_subtype || null,
-          landUseCode: property.land_use_code || null,
-          generalLandUseCode: property.general_land_use_code || null
-        };
+        attomProperty = property;
         console.log(`[PropertyBundle] ATTOM match found for parcel ${parcelIdStr} (propertyId: ${property.id})`);
       } else {
         console.log(`[PropertyBundle] No ATTOM match for parcel ${parcelIdStr}`);
@@ -294,6 +249,33 @@ router.get('/parcel/:parcelId', async (req, res) => {
     } catch (prismaError) {
       // Prisma errors are non-blocking (properties table may not exist or have errors)
       console.warn(`[PropertyBundle] Could not query properties table for ${parcelIdStr}:`, prismaError.message);
+    }
+    
+    // Step 3.5: Query enrichment fields via raw SQL (fields not in Prisma schema)
+    let enrichmentFields = null;
+    try {
+      const enrichmentResult = await prisma.$queryRaw`
+        SELECT asset_class, asset_subtype, land_use_code, general_land_use_code 
+        FROM properties 
+        WHERE "parcelId" = ${parcelIdStr}
+        LIMIT 1
+      `;
+      if (enrichmentResult && enrichmentResult[0]) {
+        enrichmentFields = enrichmentResult[0];
+      }
+    } catch (err) {
+      console.warn('[PropertyBundle] Could not query enrichment fields:', err.message);
+    }
+    
+    // Merge enrichment fields into attomProperty
+    if (attomProperty && enrichmentFields) {
+      attomProperty = {
+        ...attomProperty,
+        assetType: enrichmentFields.asset_class || attomProperty.propertyType || null,
+        assetSubtype: enrichmentFields.asset_subtype || null,
+        landUseCode: enrichmentFields.land_use_code || null,
+        generalLandUseCode: enrichmentFields.general_land_use_code || null
+      };
     }
     
     // Step 4: Build enrichment object with camelCase fields
@@ -620,62 +602,43 @@ router.post('/bulk', async (req, res) => {
     let attomMap = new Map();
     try {
       const attomProperties = await prisma.property.findMany({
-        where: { parcelId: { in: parcelIdStrings } },
-        select: {
-          id: true,
-          parcelId: true,
-          address: true,
-          city: true,
-          state: true,
-          zip: true,
-          propertyType: true,
-          mktValue: true,
-          landValue: true,
-          impValue: true,
-          acres: true,
-          yearBuilt: true,
-          ownerName: true,
-          isAbsentee: true,
-          isTaxDelinquent: true,
-          motivationScore: true,
-          lastSaleDate: true,
-          lastSaleAmount: true,
-          asset_class: true,
-          asset_subtype: true,
-          land_use_code: true,
-          general_land_use_code: true
-        }
+        where: { parcelId: { in: parcelIdStrings } }
       });
       attomMap = new Map(
-        attomProperties.map(property => [
-          property.parcelId,
-          {
-            id: property.id,
-            address: property.address || '',
-            city: property.city || '',
-            state: property.state || '',
-            zip: property.zip || '',
-            propertyType: property.propertyType,
-            mktValue: property.mktValue,
-            landValue: property.landValue,
-            impValue: property.impValue,
-            acres: property.acres,
-            yearBuilt: property.yearBuilt,
-            ownerName: property.ownerName,
-            isAbsentee: property.isAbsentee,
-            isTaxDelinquent: property.isTaxDelinquent,
-            motivationScore: property.motivationScore,
-            lastSaleDate: property.lastSaleDate ? property.lastSaleDate.toISOString().split('T')[0] : null,
-            lastSaleAmount: property.lastSaleAmount,
-            assetType: property.asset_class || property.propertyType || null,
-            assetSubtype: property.asset_subtype || null,
-            landUseCode: property.land_use_code || null,
-            generalLandUseCode: property.general_land_use_code || null
-          }
-        ])
+        attomProperties.map(property => [property.parcelId, property])
       );
     } catch (prismaError) {
       console.warn('[PropertyBundle Bulk] Could not query properties table:', prismaError.message);
+    }
+    
+    // Step 3.5: Batch query enrichment fields via raw SQL (fields not in Prisma schema)
+    let enrichmentFieldsMap = new Map();
+    try {
+      const enrichmentFieldsResult = await prisma.$queryRawUnsafe(
+        `SELECT "parcelId", asset_class, asset_subtype, land_use_code, general_land_use_code 
+         FROM properties 
+         WHERE "parcelId" = ANY($1::text[])`,
+        parcelIdStrings
+      );
+      enrichmentFieldsMap = new Map(
+        (enrichmentFieldsResult || []).map(row => [row.parcelId, row])
+      );
+    } catch (err) {
+      console.warn('[PropertyBundle Bulk] Could not query enrichment fields:', err.message);
+    }
+    
+    // Merge enrichment fields into attomProperty objects
+    for (const [parcelId, property] of attomMap.entries()) {
+      const enrichmentFields = enrichmentFieldsMap.get(parcelId);
+      if (enrichmentFields) {
+        attomMap.set(parcelId, {
+          ...property,
+          assetType: enrichmentFields.asset_class || property.propertyType || null,
+          assetSubtype: enrichmentFields.asset_subtype || null,
+          landUseCode: enrichmentFields.land_use_code || null,
+          generalLandUseCode: enrichmentFields.general_land_use_code || null
+        });
+      }
     }
     
     // Step 4: Build bundles in same order as input
