@@ -444,3 +444,4 @@ FOREIGN KEY (Prop_ID) REFERENCES properties("parcelId");
 **Neon Sample Size:** 50,000 parcelIds  
 **Conclusion:** ✅ **Bridge EXISTS** - Use `zip3/Prop_ID` for deterministic join
 
+

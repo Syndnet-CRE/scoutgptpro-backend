@@ -106,3 +106,4 @@ WHERE assessed_total_value IS NOT NULL;
 \echo 'Validation complete'
 \echo '========================================'
 
+

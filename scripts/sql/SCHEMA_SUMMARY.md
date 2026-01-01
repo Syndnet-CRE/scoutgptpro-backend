@@ -57,3 +57,4 @@ RIGHT(REGEXP_REPLACE(TRIM(detected_id::text), E'\.0+$', ''), 6)
 - `detected_id::text ~ '^[0-9]+(\\.[0-9]+)?$'` (numeric only)
 - `LENGTH(parcel_id) = 6` (must be exactly 6 digits)
 
+

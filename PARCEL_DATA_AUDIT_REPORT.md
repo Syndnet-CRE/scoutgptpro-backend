@@ -431,3 +431,4 @@ SELECT COUNT(DISTINCT "parcelId") FROM properties WHERE "parcelId" IS NOT NULL;
 **Database:** Neon (`neondb`)  
 **Status:** ✅ Complete - Missing load script identified and solution documented
 
+

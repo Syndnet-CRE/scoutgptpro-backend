@@ -250,3 +250,4 @@ echo "Count 1: $COUNT1, Count 2: $COUNT2"
 - **Staging Table:** Automatically cleaned up after merge
 - **Error Handling:** Script exits on errors, preserves database state
 
+

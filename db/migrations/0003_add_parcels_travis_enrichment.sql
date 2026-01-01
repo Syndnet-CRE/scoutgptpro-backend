@@ -63,3 +63,4 @@ COMMENT ON TABLE parcels_travis_enrichment IS
 COMMENT ON TABLE parcels_travis_enrichment_stage IS 
     'Staging table for raw enrichment data before matching to parcel_id';
 
+

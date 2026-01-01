@@ -1,5 +1,5 @@
 import express from 'express';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -164,9 +164,18 @@ router.post('/', async (req, res) => {
       });
     }
 
-    // Calculate derived fields
-    const pricePerSqft = totalSqft ? parseFloat(askingPrice) / totalSqft : null;
-    const pricePerAcre = totalAcres ? parseFloat(askingPrice) / parseFloat(totalAcres) : null;
+    // Validate propertyType enum
+    const validPropertyTypes = ['COMMERCIAL', 'RESIDENTIAL', 'LAND'];
+    if (!validPropertyTypes.includes(propertyType)) {
+      return res.status(400).json({
+        success: false,
+        error: `Invalid propertyType. Must be one of: ${validPropertyTypes.join(', ')}`
+      });
+    }
+
+    // Calculate derived fields (convert to Decimal for Prisma)
+    const pricePerSqft = totalSqft ? new Prisma.Decimal(parseFloat(askingPrice) / totalSqft) : null;
+    const pricePerAcre = totalAcres ? new Prisma.Decimal(parseFloat(askingPrice) / parseFloat(totalAcres)) : null;
     const calculatedCapRate = (noi && askingPrice) ? (parseFloat(noi) / parseFloat(askingPrice)) * 100 : capRate;
 
     const listing = await prisma.listing.create({
@@ -186,37 +195,37 @@ router.post('/', async (req, res) => {
         longitude: longitude ? parseFloat(longitude) : null,
         apn,
         
-        // Pricing
-        askingPrice: parseFloat(askingPrice),
+        // Pricing - Use Prisma.Decimal for Decimal fields
+        askingPrice: new Prisma.Decimal(askingPrice),
         pricePerSqft,
         pricePerAcre,
         
         // Characteristics
         totalSqft: totalSqft ? parseInt(totalSqft) : null,
-        lotSizeAcres: lotSizeAcres ? parseFloat(lotSizeAcres) : null,
+        lotSizeAcres: lotSizeAcres ? new Prisma.Decimal(lotSizeAcres) : null,
         lotSizeSqft: lotSizeSqft ? parseInt(lotSizeSqft) : null,
         yearBuilt: yearBuilt ? parseInt(yearBuilt) : null,
         zoning,
         
-        // Commercial
+        // Commercial - Use Prisma.Decimal for Decimal fields
         assetType,
         assetSubtype,
-        noi: noi ? parseFloat(noi) : null,
-        capRate: calculatedCapRate ? parseFloat(calculatedCapRate) : null,
-        occupancy: occupancy ? parseFloat(occupancy) : null,
+        noi: noi ? new Prisma.Decimal(noi) : null,
+        capRate: calculatedCapRate ? new Prisma.Decimal(calculatedCapRate) : null,
+        occupancy: occupancy ? new Prisma.Decimal(occupancy) : null,
         tenantCount: tenantCount ? parseInt(tenantCount) : null,
         buildingCount: buildingCount ? parseInt(buildingCount) : null,
         floors: floors ? parseInt(floors) : null,
         parkingSpaces: parkingSpaces ? parseInt(parkingSpaces) : null,
         leaseType,
         
-        // Residential
+        // Residential - Use Prisma.Decimal for Decimal fields
         bedrooms: bedrooms ? parseInt(bedrooms) : null,
-        bathrooms: bathrooms ? parseFloat(bathrooms) : null,
-        hoaFee: hoaFee ? parseFloat(hoaFee) : null,
+        bathrooms: bathrooms ? new Prisma.Decimal(bathrooms) : null,
+        hoaFee: hoaFee ? new Prisma.Decimal(hoaFee) : null,
         
-        // Land
-        totalAcres: totalAcres ? parseFloat(totalAcres) : null,
+        // Land - Use Prisma.Decimal for Decimal fields
+        totalAcres: totalAcres ? new Prisma.Decimal(totalAcres) : null,
         numberOfLots: numberOfLots ? parseInt(numberOfLots) : null,
         roadFrontage: roadFrontage ? parseInt(roadFrontage) : null,
         topography,
@@ -241,7 +250,17 @@ router.post('/', async (req, res) => {
     });
   } catch (error) {
     console.error('Error creating listing:', error);
-    res.status(500).json({ success: false, error: 'Failed to create listing', details: error.message });
+    console.error('Error details:', {
+      message: error.message,
+      code: error.code,
+      meta: error.meta,
+      stack: error.stack
+    });
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to create listing', 
+      details: error.message 
+    });
   }
 });
 

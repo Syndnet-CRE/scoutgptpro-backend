@@ -106,3 +106,4 @@ LIMIT 5;
 - ✅ Case-insensitive lookup during streaming
 - ✅ Error messages include diagnostic info
 
+

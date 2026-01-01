@@ -144,3 +144,4 @@ See `MTS_UPLOAD_COMMANDS.md` for detailed troubleshooting guide.
 - Source not found → Wait a few minutes after upload
 - Tileset stuck → Normal for large datasets, wait 15-30 min
 
+
