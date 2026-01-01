@@ -178,6 +178,62 @@ router.post('/', async (req, res) => {
     const pricePerAcre = totalAcres ? new Prisma.Decimal(parseFloat(askingPrice) / parseFloat(totalAcres)) : null;
     const calculatedCapRate = (noi && askingPrice) ? (parseFloat(noi) / parseFloat(askingPrice)) * 100 : capRate;
 
+    // Try to find matching property by address or coordinates
+    let matchedPropertyId = propertyId || null; // Use provided propertyId if given
+
+    if (!matchedPropertyId) {
+      try {
+        // First try exact address match
+        const addressMatch = await prisma.property.findFirst({
+          where: {
+            OR: [
+              { siteAddress: { contains: address, mode: 'insensitive' } },
+              { address: { contains: address, mode: 'insensitive' } }
+            ],
+            // Also match city and state if provided
+            ...(city && { siteCity: { contains: city, mode: 'insensitive' } }),
+            ...(state && { siteState: state })
+          },
+          select: { id: true, parcelId: true, siteAddress: true, address: true }
+        });
+        
+        if (addressMatch) {
+          matchedPropertyId = addressMatch.id;
+          console.log(`[Listings] Matched property by address: ${matchedPropertyId} (parcelId: ${addressMatch.parcelId})`);
+        } 
+        // If no address match and we have coordinates, try coordinate match
+        else if (latitude && longitude) {
+          const coordMatch = await prisma.property.findFirst({
+            where: {
+              latitude: { 
+                gte: parseFloat(latitude) - 0.0001, 
+                lte: parseFloat(latitude) + 0.0001 
+              },
+              longitude: { 
+                gte: parseFloat(longitude) - 0.0001, 
+                lte: parseFloat(longitude) + 0.0001 
+              }
+            },
+            select: { id: true, parcelId: true, latitude: true, longitude: true }
+          });
+          
+          if (coordMatch) {
+            matchedPropertyId = coordMatch.id;
+            console.log(`[Listings] Matched property by coordinates: ${matchedPropertyId} (parcelId: ${coordMatch.parcelId})`);
+          }
+        }
+        
+        if (!matchedPropertyId) {
+          console.log(`[Listings] No matching property found for: ${address}${city ? `, ${city}` : ''}`);
+        }
+      } catch (matchError) {
+        console.error('[Listings] Error matching property:', matchError);
+        // Continue without match - listing can still be created
+      }
+    } else {
+      console.log(`[Listings] Using provided propertyId: ${matchedPropertyId}`);
+    }
+
     const listing = await prisma.listing.create({
       data: {
         status: 'ACTIVE', // Immediately active per requirements
@@ -239,9 +295,11 @@ router.post('/', async (req, res) => {
         
         // Optional relationships
         userId: userId || null,
-        propertyId: propertyId || null
+        propertyId: matchedPropertyId  // Link to matched property (or null if no match)
       }
     });
+
+    console.log(`[Listings] Created listing ${listing.id} with propertyId: ${listing.propertyId || 'null'}`);
 
     res.status(201).json({
       success: true,
