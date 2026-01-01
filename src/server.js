@@ -16,6 +16,7 @@ import mtsRoutes from './routes/mts.js';
 import parcelsTxRoutes from './routes/parcels-tx.js';
 import parcelsSearchRoutes from './routes/parcels-search.js';
 import discoverRoutes from './routes/discover.js';
+import osmPoisRoutes from './routes/osm-pois.js';
 
 dotenv.config();
 
@@ -83,6 +84,7 @@ app.use('/api/buy-boxes', buyBoxesRoutes);
 app.use('/api/mts', mtsRoutes);
 app.use('/api/parcels-tx', parcelsTxRoutes);
 app.use('/api/discover', discoverRoutes);
+app.use('/api/osm-pois', osmPoisRoutes);
 
 // 404 handler
 app.use((req, res) => {
