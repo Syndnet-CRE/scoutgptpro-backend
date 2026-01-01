@@ -36,22 +36,45 @@ router.get('/', async (req, res) => {
     
     let query = `
       SELECT 
-        id, osm_id, name, category, subcategory,
-        latitude, longitude, address, city, state, zip,
-        phone, website, tags
-      FROM osm_pois_travis
-      WHERE category = $1
+        poi.id, 
+        poi.osm_id, 
+        poi.name, 
+        poi.category, 
+        poi.subcategory,
+        poi.latitude, 
+        poi.longitude, 
+        poi.address, 
+        poi.city, 
+        poi.state, 
+        poi.zip,
+        poi.phone, 
+        poi.website, 
+        poi.tags,
+        poi.property_id,
+        -- Property data (null if not linked)
+        p."siteAddress" as property_address,
+        p.owner as property_owner,
+        p."mktValue" as property_market_value,
+        p."assessedValue" as property_assessed_value,
+        p."totalTax" as property_total_tax,
+        p.acres as property_acres,
+        p."yearBuilt" as property_year_built,
+        p.zoning as property_zoning,
+        p."propertyType" as property_type
+      FROM osm_pois_travis poi
+      LEFT JOIN properties p ON poi.property_id = p.id
+      WHERE poi.category = $1
     `;
     const params = [category];
     
     // Add bounding box filter if provided
     if (bbox) {
       const [west, south, east, north] = bbox.split(',').map(Number);
-      query += ` AND longitude >= $2 AND longitude <= $3 AND latitude >= $4 AND latitude <= $5`;
+      query += ` AND poi.longitude >= $2 AND poi.longitude <= $3 AND poi.latitude >= $4 AND poi.latitude <= $5`;
       params.push(west, east, south, north);
     }
     
-    query += ` ORDER BY name LIMIT $${params.length + 1}`;
+    query += ` ORDER BY poi.name LIMIT $${params.length + 1}`;
     params.push(parseInt(limit));
     
     const result = await pool.query(query, params);
