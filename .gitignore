@@ -22,3 +22,8 @@ geo_data/
 *.tar.gz
 .env.local
 data/backups/
+flood-zones-travis.ndjson
+flood-zones-travis.geojson
+flood-zones-travis-simplified.geojson
+zoning-districts-travis.geojson
+zoning-districts-travis.ndjson
