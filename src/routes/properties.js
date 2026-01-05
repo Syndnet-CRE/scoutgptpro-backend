@@ -2,6 +2,7 @@ import express from 'express';
 import { PrismaClient } from '@prisma/client';
 import { Pool } from 'pg';
 import { attachAttomGeoIdsToProperties, getAttomGeoIdByParcelId } from '../services/attom-resolver-service.js';
+import { resolveParcelCounty } from '../services/countyResolver.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -177,43 +178,62 @@ router.get('/parcel/:parcelId', async (req, res) => {
   try {
     const { parcelId } = req.params;
     
-    // Validate parcelId format (6-digit numeric string)
-    if (!parcelId || !/^\d{6}$/.test(String(parcelId))) {
+    // Validate parcelId format (non-empty string - formats vary by county)
+    if (!parcelId || typeof parcelId !== 'string' || parcelId.trim().length === 0) {
       return res.status(400).json({ 
         success: false,
-        error: 'parcelId must be a 6-digit numeric string' 
+        error: 'parcelId is required and must be a non-empty string' 
       });
     }
     
     const parcelIdStr = String(parcelId).trim();
     
+    // Resolve county for this parcelId
+    const county = await resolveParcelCounty(parcelIdStr, prisma);
+    if (!county) {
+      console.log(`[PropertyBundle] Parcel ${parcelIdStr} not found in any county`);
+      return res.status(404).json({ 
+        success: false,
+        error: 'Parcel not found in any county' 
+      });
+    }
+    
+    console.log(`[PropertyBundle] Resolved parcel ${parcelIdStr} to ${county.name} County (${county.fips})`);
+    
     // OPTIMIZED: Parallelize all 4 database queries for 3-4x speedup
     const [geomResult, enrichmentResult, property, enrichmentFieldsResult] = await Promise.all([
-      // Query 1: Geometry from parcels_travis
-      prisma.$queryRaw`
-        SELECT 
+      // Query 1: Geometry from county-specific table
+      prisma.$queryRawUnsafe(
+        `SELECT 
           parcel_id,
           ST_AsGeoJSON(geom)::jsonb as geometry
-        FROM parcels_travis
-        WHERE parcel_id = ${parcelIdStr}
-      `,
+        FROM ${county.table}
+        WHERE parcel_id = $1`,
+        parcelIdStr
+      ),
       
-      // Query 2: Enrichment from parcels_travis_enrichment
-      prisma.$queryRaw`
-        SELECT 
+      // Query 2: Enrichment from county-specific enrichment table
+      prisma.$queryRawUnsafe(
+        `SELECT 
           owner_name,
-          mailing_address,
+          mail_address1,
+          mail_address2,
+          mail_city,
+          mail_state,
+          mail_zip,
           situs_address,
-          assessed_land_value,
-          assessed_improvement_value,
-          assessed_total_value,
+          land_value,
+          improvement_value,
+          market_value,
+          assessed_value,
+          acres,
           acreage,
           year_built,
-          land_use_code,
-          land_use_description
-        FROM parcels_travis_enrichment
-        WHERE parcel_id = ${parcelIdStr}
-      `,
+          legal_desc
+        FROM ${county.enrichment}
+        WHERE parcel_id = $1`,
+        parcelIdStr
+      ),
       
       // Query 3: Properties/ATTOM data (non-blocking if fails)
       prisma.property.findUnique({
@@ -225,7 +245,7 @@ router.get('/parcel/:parcelId', async (req, res) => {
       
       // Query 4: Enrichment fields via raw SQL (fields not in Prisma schema)
       prisma.$queryRaw`
-        SELECT asset_class, asset_subtype, land_use_code, general_land_use_code 
+        SELECT asset_class, asset_subtype, land_use_code, general_land_use_code, land_use, general_land_use, zoning
         FROM properties 
         WHERE "parcelId" = ${parcelIdStr}
         LIMIT 1
@@ -237,7 +257,7 @@ router.get('/parcel/:parcelId', async (req, res) => {
     
     // Check if geometry exists (required)
     if (!geomResult || geomResult.length === 0) {
-      console.log(`[PropertyBundle] Parcel ${parcelIdStr} not found in parcels_travis`);
+      console.log(`[PropertyBundle] Parcel ${parcelIdStr} not found in ${county.table}`);
       return res.status(404).json({ 
         success: false,
         error: 'Parcel not found' 
@@ -271,23 +291,33 @@ router.get('/parcel/:parcelId', async (req, res) => {
         ...attomProperty,
         assetType: enrichmentFields.asset_class || attomProperty.propertyType || null,
         assetSubtype: enrichmentFields.asset_subtype || null,
-        landUseCode: enrichmentFields.land_use_code || null,
-        generalLandUseCode: enrichmentFields.general_land_use_code || null
+        landUseCode: enrichmentFields.land_use_code || enrichmentFields.land_use || null,
+        generalLandUseCode: enrichmentFields.general_land_use_code || enrichmentFields.general_land_use || null,
+        landUse: enrichmentFields.land_use || enrichmentFields.land_use_code || null,
+        generalLandUse: enrichmentFields.general_land_use || enrichmentFields.general_land_use_code || null,
+        zoning: enrichmentFields.zoning || attomProperty.zoning || null
       };
     }
     
     // Step 4: Build enrichment object with camelCase fields
     const enrichment = hasEnrichment ? {
       ownerName: enrichmentRow.owner_name || null,
-      mailingAddress: enrichmentRow.mailing_address || null,
+      mailingAddress: [
+        enrichmentRow.mail_address1,
+        enrichmentRow.mail_address2,
+        enrichmentRow.mail_city,
+        enrichmentRow.mail_state,
+        enrichmentRow.mail_zip
+      ].filter(Boolean).join(', ') || null,
       situsAddress: enrichmentRow.situs_address || null,
-      assessedLandValue: enrichmentRow.assessed_land_value ? Number(enrichmentRow.assessed_land_value) : null,
-      assessedImprovementValue: enrichmentRow.assessed_improvement_value ? Number(enrichmentRow.assessed_improvement_value) : null,
-      assessedTotalValue: enrichmentRow.assessed_total_value ? Number(enrichmentRow.assessed_total_value) : null,
+      landValue: enrichmentRow.land_value ? Number(enrichmentRow.land_value) : null,
+      improvementValue: enrichmentRow.improvement_value ? Number(enrichmentRow.improvement_value) : null,
+      marketValue: enrichmentRow.market_value ? Number(enrichmentRow.market_value) : null,
+      assessedValue: enrichmentRow.assessed_value ? Number(enrichmentRow.assessed_value) : null,
+      acres: enrichmentRow.acres ? Number(enrichmentRow.acres) : null,
       acreage: enrichmentRow.acreage ? Number(enrichmentRow.acreage) : null,
       yearBuilt: enrichmentRow.year_built ? Number(enrichmentRow.year_built) : null,
-      landUseCode: enrichmentRow.land_use_code || null,
-      landUseDescription: enrichmentRow.land_use_description || null
+      legalDesc: enrichmentRow.legal_desc || null
     } : null;
     
     // Step 5: Build response
@@ -464,7 +494,7 @@ router.post('/search', async (req, res) => {
         id, "parcelId", address, "siteAddress", "siteCity", "siteState", "siteZip",
         city, state, zip, county, owner, "ownerName",
         latitude, longitude,
-        "propertyType", zoning,
+        "propertyType", zoning, land_use, general_land_use,
         "mktValue", "landValue", "impValue",
         acres, "totalTax", "totalDue",
         "yearBuilt", "motivationScore", "opportunityFlags",
@@ -535,56 +565,94 @@ router.post('/bulk', async (req, res) => {
       });
     }
     
-    // Validate all parcelIds are 6-digit numeric strings
-    const invalidParcelIds = parcelIds.filter(id => !/^\d{6}$/.test(String(id)));
+    // Validate all parcelIds are non-empty strings
+    const invalidParcelIds = parcelIds.filter(id => !id || typeof id !== 'string' || id.trim().length === 0);
     if (invalidParcelIds.length > 0) {
       return res.status(400).json({ 
         success: false,
-        error: `Invalid parcelId format: ${invalidParcelIds.slice(0, 5).join(', ')}${invalidParcelIds.length > 5 ? '...' : ''}. Must be 6-digit strings.`
+        error: `Invalid parcelId format: ${invalidParcelIds.slice(0, 5).join(', ')}${invalidParcelIds.length > 5 ? '...' : ''}. Must be non-empty strings.`
       });
     }
     
     const parcelIdStrings = parcelIds.map(id => String(id).trim());
     const startTime = Date.now();
     
-    // OPTIMIZED: Parallelize all batch queries for 3-4x speedup
-    const geomQuery = `
-      SELECT 
-        parcel_id,
-        ST_AsGeoJSON(geom)::jsonb as geometry
-      FROM parcels_travis
-      WHERE parcel_id = ANY($1::text[])
-    `;
-    const enrichmentQuery = `
-      SELECT 
-        parcel_id,
-        owner_name,
-        mailing_address,
-        situs_address,
-        assessed_land_value,
-        assessed_improvement_value,
-        assessed_total_value,
-        acreage,
-        year_built,
-        land_use_code,
-        land_use_description
-      FROM parcels_travis_enrichment
-      WHERE parcel_id = ANY($1::text[])
-    `;
+    // Step 1: Resolve county for each parcelId (parallel)
+    const countyResolutions = await Promise.all(
+      parcelIdStrings.map(parcelId => resolveParcelCounty(parcelId, prisma))
+    );
+    
+    // Step 2: Group parcelIds by county
+    const countyGroups = new Map(); // county.fips -> {county, parcelIds[]}
+    parcelIdStrings.forEach((parcelId, index) => {
+      const county = countyResolutions[index];
+      if (county) {
+        if (!countyGroups.has(county.fips)) {
+          countyGroups.set(county.fips, {
+            county,
+            parcelIds: []
+          });
+        }
+        countyGroups.get(county.fips).parcelIds.push(parcelId);
+      }
+    });
+    
+    // Step 3: Query each county table in parallel
+    const queryPromises = Array.from(countyGroups.values()).map(async ({ county, parcelIds }) => {
+      const geomQuery = `
+        SELECT 
+          parcel_id,
+          ST_AsGeoJSON(geom)::jsonb as geometry
+        FROM ${county.table}
+        WHERE parcel_id = ANY($1::text[])
+      `;
+      const enrichmentQuery = `
+        SELECT 
+          parcel_id,
+          owner_name,
+          mail_address1,
+          mail_address2,
+          mail_city,
+          mail_state,
+          mail_zip,
+          situs_address,
+          land_value,
+          improvement_value,
+          market_value,
+          assessed_value,
+          acres,
+          acreage,
+          year_built,
+          legal_desc
+        FROM ${county.enrichment}
+        WHERE parcel_id = ANY($1::text[])
+      `;
+      
+      const [geomResult, enrichmentResult] = await Promise.all([
+        prisma.$queryRawUnsafe(geomQuery, parcelIds),
+        prisma.$queryRawUnsafe(enrichmentQuery, parcelIds)
+      ]);
+      
+      return {
+        county,
+        parcelIds,
+        geomResult: geomResult || [],
+        enrichmentResult: enrichmentResult || []
+      };
+    });
+    
+    const countyResults = await Promise.all(queryPromises);
+    
+    // Step 4: Query properties table and enrichment fields (all parcels together)
     const enrichmentFieldsQuery = `
       SELECT parcel_id, asset_class, asset_subtype, land_use_code, general_land_use_code 
       FROM properties 
       WHERE "parcelId" = ANY($1::text[])
     `;
     
-    const [geomResult, enrichmentResult, attomProperties, enrichmentFieldsResult] = await Promise.all([
-      // Query 1: Batch query parcels_travis for geometries
-      prisma.$queryRawUnsafe(geomQuery, parcelIdStrings),
+    const [attomProperties, enrichmentFieldsResult] = await Promise.all([
       
-      // Query 2: Batch query parcels_travis_enrichment for attributes
-      prisma.$queryRawUnsafe(enrichmentQuery, parcelIdStrings),
-      
-      // Query 3: Batch query properties table (ATTOM data) - non-blocking if fails
+      // Query properties table (ATTOM data) - non-blocking if fails
       prisma.property.findMany({
         where: { parcelId: { in: parcelIdStrings } }
       }).catch((prismaError) => {
@@ -592,34 +660,43 @@ router.post('/bulk', async (req, res) => {
         return [];
       }),
       
-      // Query 4: Batch query enrichment fields via raw SQL (fields not in Prisma schema) - non-blocking if fails
+      // Query enrichment fields via raw SQL (fields not in Prisma schema) - non-blocking if fails
       prisma.$queryRawUnsafe(enrichmentFieldsQuery, parcelIdStrings).catch((err) => {
         console.warn('[PropertyBundle Bulk] Could not query enrichment fields:', err.message);
         return [];
       })
     ]);
     
-    const geomMap = new Map(
-      (geomResult || []).map(row => [row.parcel_id, row.geometry])
-    );
+    // Step 5: Build maps from county-specific results
+    const geomMap = new Map();
+    const enrichmentMap = new Map();
     
-    const enrichmentMap = new Map(
-      (enrichmentResult || []).map(row => [
-        row.parcel_id,
-        {
+    countyResults.forEach(({ geomResult, enrichmentResult }) => {
+      geomResult.forEach(row => {
+        geomMap.set(row.parcel_id, row.geometry);
+      });
+      enrichmentResult.forEach(row => {
+        enrichmentMap.set(row.parcel_id, {
           ownerName: row.owner_name || null,
-          mailingAddress: row.mailing_address || null,
+          mailingAddress: [
+            row.mail_address1,
+            row.mail_address2,
+            row.mail_city,
+            row.mail_state,
+            row.mail_zip
+          ].filter(Boolean).join(', ') || null,
           situsAddress: row.situs_address || null,
-          assessedLandValue: row.assessed_land_value ? Number(row.assessed_land_value) : null,
-          assessedImprovementValue: row.assessed_improvement_value ? Number(row.assessed_improvement_value) : null,
-          assessedTotalValue: row.assessed_total_value ? Number(row.assessed_total_value) : null,
+          landValue: row.land_value ? Number(row.land_value) : null,
+          improvementValue: row.improvement_value ? Number(row.improvement_value) : null,
+          marketValue: row.market_value ? Number(row.market_value) : null,
+          assessedValue: row.assessed_value ? Number(row.assessed_value) : null,
+          acres: row.acres ? Number(row.acres) : null,
           acreage: row.acreage ? Number(row.acreage) : null,
           yearBuilt: row.year_built ? Number(row.year_built) : null,
-          landUseCode: row.land_use_code || null,
-          landUseDescription: row.land_use_description || null
-        }
-      ])
-    );
+          legalDesc: row.legal_desc || null
+        });
+      });
+    });
     
     const attomMap = new Map(
       (attomProperties || []).map(property => [property.parcelId, property])
@@ -644,7 +721,7 @@ router.post('/bulk', async (req, res) => {
       }
     }
     
-    // Step 4: Build bundles in same order as input
+    // Step 6: Build bundles in same order as input
     const bundles = parcelIdStrings.map(parcelId => {
       const geometry = geomMap.get(parcelId) || null;
       const enrichment = enrichmentMap.get(parcelId) || null;

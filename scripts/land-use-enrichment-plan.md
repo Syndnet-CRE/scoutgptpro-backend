@@ -374,3 +374,4 @@ WHERE a.parcel_id_10 IS NULL;
 4. Create reports on land use distribution
 
 
+
