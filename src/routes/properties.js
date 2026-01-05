@@ -213,23 +213,58 @@ router.get('/parcel/:parcelId', async (req, res) => {
       ),
       
       // Query 2: Enrichment from county-specific enrichment table
+      // Handle Travis County raw JSONB extraction with COALESCE fallbacks
       prisma.$queryRawUnsafe(
         `SELECT 
           owner_name,
+          situs_address,
+          -- Acres: Travis uses acreage, Williamson uses acres
+          COALESCE(acres, acreage) as acres,
+          -- Assessed value: Travis uses assessed_total_value
+          COALESCE(assessed_value, assessed_total_value) as assessed_value,
+          -- Market value: Travis stores in raw JSONB
+          COALESCE(
+            market_value::numeric,
+            CASE WHEN raw IS NOT NULL THEN (raw->>'MKT_VALUE')::numeric ELSE NULL END
+          ) as market_value,
+          -- Improvement value: Travis stores in raw JSONB
+          COALESCE(
+            improvement_value::numeric,
+            CASE WHEN raw IS NOT NULL THEN (raw->>'IMP_VALUE')::numeric ELSE NULL END
+          ) as improvement_value,
+          -- Land value: Travis stores in raw JSONB
+          COALESCE(
+            land_value::numeric,
+            CASE WHEN raw IS NOT NULL THEN (raw->>'LAND_VALUE')::numeric ELSE NULL END
+          ) as land_value,
+          -- Mailing address: Travis stores in raw JSONB, Williamson uses separate columns
+          COALESCE(
+            mailing_address,
+            raw->>'MAIL_ADDR',
+            CONCAT_WS(', ',
+              NULLIF(mail_address1, ''),
+              NULLIF(mail_address2, ''),
+              NULLIF(mail_city, ''),
+              NULLIF(mail_state, ''),
+              NULLIF(mail_zip, '')
+            )
+          ) as mailing_address,
           mail_address1,
           mail_address2,
           mail_city,
           mail_state,
           mail_zip,
-          situs_address,
-          land_value,
-          improvement_value,
-          market_value,
-          assessed_value,
-          acres,
-          acreage,
-          year_built,
-          legal_desc
+          -- Legal description: Travis stores in raw JSONB
+          COALESCE(legal_desc, raw->>'LEGAL_DESC') as legal_desc,
+          -- Year built: Travis stores in raw JSONB
+          COALESCE(
+            year_built,
+            CASE 
+              WHEN raw IS NOT NULL AND raw->>'YEAR_BUILT' != '' AND raw->>'YEAR_BUILT' IS NOT NULL 
+              THEN (raw->>'YEAR_BUILT')::integer 
+              ELSE NULL 
+            END
+          ) as year_built
         FROM ${county.enrichment}
         WHERE parcel_id = $1`,
         parcelIdStr
@@ -302,7 +337,7 @@ router.get('/parcel/:parcelId', async (req, res) => {
     // Step 4: Build enrichment object with camelCase fields
     const enrichment = hasEnrichment ? {
       ownerName: enrichmentRow.owner_name || null,
-      mailingAddress: [
+      mailingAddress: enrichmentRow.mailing_address || [
         enrichmentRow.mail_address1,
         enrichmentRow.mail_address2,
         enrichmentRow.mail_city,
@@ -315,7 +350,6 @@ router.get('/parcel/:parcelId', async (req, res) => {
       marketValue: enrichmentRow.market_value ? Number(enrichmentRow.market_value) : null,
       assessedValue: enrichmentRow.assessed_value ? Number(enrichmentRow.assessed_value) : null,
       acres: enrichmentRow.acres ? Number(enrichmentRow.acres) : null,
-      acreage: enrichmentRow.acreage ? Number(enrichmentRow.acreage) : null,
       yearBuilt: enrichmentRow.year_built ? Number(enrichmentRow.year_built) : null,
       legalDesc: enrichmentRow.legal_desc || null
     } : null;
