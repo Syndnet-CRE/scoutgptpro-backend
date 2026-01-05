@@ -85,7 +85,14 @@ router.post('/query', rateLimiter({ max: 30, windowMs: 15 * 60 * 1000 }), async 
         messages: [{ 
           role: 'user', 
           content: userPrompt 
-        }]
+        }],
+        mcp_servers: [
+          {
+            type: "url",
+            url: process.env.PROPERTY_MCP_URL || "https://scoutgpt-property-mcp.onrender.com/mcp",
+            name: "property-data"
+          }
+        ]
       });
       
       const content = response.content[0];
@@ -189,6 +196,14 @@ IMPORTANT:
 - Highlight the BEST opportunities first
 - Explain WHY each property is interesting
 - Be specific with numbers (acres, tax values, scores)
+
+You have access to property data tools via MCP:
+- get_property(parcel_id): Get details for a specific parcel
+- search_properties(county, min_acres, max_acres, min_value, max_value, owner_name, limit): Search properties with filters
+- get_enrichment(parcel_id): Get enrichment data for a parcel
+- bulk_properties(parcel_ids): Get multiple properties at once
+
+Use these tools to answer questions about properties, owners, and values.
 
 `;
 
