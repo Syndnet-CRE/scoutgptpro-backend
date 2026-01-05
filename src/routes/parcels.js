@@ -3,6 +3,8 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { Pool } from 'pg';
+import { PrismaClient } from '@prisma/client';
+import { resolveParcelCounty } from '../services/countyResolver.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -197,20 +199,43 @@ const enrichmentPool = new Pool({
   max: 5
 });
 
+// Initialize Prisma for county resolver
+const prisma = new PrismaClient();
+
 // GET /api/parcels/:parcelId/enrichment - Get enrichment data for a parcel
 router.get('/:parcelId/enrichment', async (req, res) => {
   try {
     const { parcelId } = req.params;
     
-    // Check if parcel has geometry
+    // Validate parcelId
+    if (!parcelId || typeof parcelId !== 'string' || parcelId.trim().length === 0) {
+      return res.status(400).json({ 
+        error: 'parcelId is required and must be a non-empty string' 
+      });
+    }
+    
+    const parcelIdStr = String(parcelId).trim();
+    
+    // Resolve county for this parcelId
+    const county = await resolveParcelCounty(parcelIdStr, prisma);
+    if (!county) {
+      console.log(`[Parcels Enrichment] Parcel ${parcelIdStr} not found in any county`);
+      return res.status(404).json({ 
+        error: 'Parcel not found in any county' 
+      });
+    }
+    
+    console.log(`[Parcels Enrichment] Resolved parcel ${parcelIdStr} to ${county.name} County (${county.fips})`);
+    
+    // Check if parcel has geometry using county-specific table
     const geomCheck = await enrichmentPool.query(
-      'SELECT 1 FROM parcels_travis WHERE parcel_id = $1',
-      [parcelId]
+      `SELECT 1 FROM ${county.table} WHERE parcel_id = $1`,
+      [parcelIdStr]
     );
     
     const hasGeometry = geomCheck.rows.length > 0;
     
-    // Get enrichment data
+    // Get enrichment data from county-specific enrichment table
     const enrichmentResult = await enrichmentPool.query(
       `SELECT 
         parcel_id, owner_name, owner2, mail_address1, mail_address2,
@@ -218,19 +243,20 @@ router.get('/:parcelId/enrichment', async (req, res) => {
         land_use_desc, legal_desc, year_built, acres, land_value,
         improvement_value, market_value, assessed_value, last_update,
         source_layer, updated_at
-      FROM parcels_travis_enrichment
+      FROM ${county.enrichment}
       WHERE parcel_id = $1`,
-      [parcelId]
+      [parcelIdStr]
     );
     
     // Optionally get property data
     const propertyResult = await enrichmentPool.query(
       'SELECT id, address, city, state, zip, propertyType, mktValue FROM properties WHERE "parcelId" = $1 LIMIT 1',
-      [parcelId]
+      [parcelIdStr]
     );
     
     res.json({
-      parcelId,
+      parcelId: parcelIdStr,
+      county: county.name,
       hasGeometry,
       enrichment: enrichmentResult.rows[0] || null,
       property: propertyResult.rows[0] || null
