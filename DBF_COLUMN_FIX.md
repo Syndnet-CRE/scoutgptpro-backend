@@ -107,3 +107,4 @@ LIMIT 5;
 - ✅ Error messages include diagnostic info
 
 
+

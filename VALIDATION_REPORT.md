@@ -374,3 +374,4 @@ curl "http://localhost:3001/api/parcels/970897/enrichment"
 **Recommendation:** Fix all 4 critical issues before running ingestion or deploying to demo environment.
 
 
+

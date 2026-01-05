@@ -445,3 +445,4 @@ FOREIGN KEY (Prop_ID) REFERENCES properties("parcelId");
 **Conclusion:** ✅ **Bridge EXISTS** - Use `zip3/Prop_ID` for deterministic join
 
 
+

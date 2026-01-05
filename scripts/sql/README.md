@@ -61,3 +61,4 @@ psql "$DATABASE_URL" -f scripts/sql/travis_enrichment_validate.sql
 - **Join coverage:** Should match most parcels_travis records
 
 
+
