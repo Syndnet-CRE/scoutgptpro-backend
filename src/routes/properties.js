@@ -264,7 +264,9 @@ router.get('/parcel/:parcelId', async (req, res) => {
               THEN (raw->>'YEAR_BUILT')::integer 
               ELSE NULL 
             END
-          ) as year_built
+          ) as year_built,
+          zoning_code,
+          tax_delinquent_flag
         FROM ${county.enrichment}
         WHERE parcel_id = $1`,
         parcelIdStr
@@ -351,7 +353,9 @@ router.get('/parcel/:parcelId', async (req, res) => {
       assessedValue: enrichmentRow.assessed_value ? Number(enrichmentRow.assessed_value) : null,
       acres: enrichmentRow.acres ? Number(enrichmentRow.acres) : null,
       yearBuilt: enrichmentRow.year_built ? Number(enrichmentRow.year_built) : null,
-      legalDesc: enrichmentRow.legal_desc || null
+      legalDesc: enrichmentRow.legal_desc || null,
+      zoningCode: enrichmentRow?.zoning_code || null,
+      taxDelinquentFlag: enrichmentRow?.tax_delinquent_flag || null
     } : null;
     
     // Step 5: Build response
