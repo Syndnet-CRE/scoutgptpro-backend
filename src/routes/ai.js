@@ -10,6 +10,78 @@ const anthropic = new Anthropic({
   apiKey: process.env.CLAUDE_API_KEY 
 });
 
+/**
+ * Call MCP tool directly via HTTP
+ */
+async function callMcpTool(toolName, params) {
+  const mcpUrl = process.env.PROPERTY_MCP_URL || 'https://scoutgpt-property-mcp.onrender.com/mcp/';
+  
+  try {
+    console.log(`🔧 Calling MCP tool: ${toolName}`, params);
+    
+    const response = await fetch(mcpUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        jsonrpc: '2.0',
+        method: 'tools/call',
+        params: {
+          name: toolName,
+          arguments: params
+        },
+        id: Date.now()
+      })
+    });
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`❌ MCP tool ${toolName} failed:`, response.status, errorText);
+      return null;
+    }
+    
+    const result = await response.json();
+    
+    if (result.error) {
+      console.error(`❌ MCP tool ${toolName} error:`, result.error);
+      return null;
+    }
+    
+    console.log(`✅ MCP tool ${toolName} returned:`, result.result ? 'data' : 'empty');
+    return result.result;
+  } catch (error) {
+    console.error(`❌ MCP tool ${toolName} exception:`, error.message);
+    return null;
+  }
+}
+
+/**
+ * Extract county and filters from query for MCP search
+ */
+function extractSearchParams(query) {
+  const params = {};
+  
+  // Extract county
+  const countyMatch = query.match(/\b(travis|williamson|hays|bastrop|caldwell|burnet|blanco|lee|llano|comal|kendall|bell)\s*(?:county)?\b/i);
+  if (countyMatch) {
+    params.county = countyMatch[1].charAt(0).toUpperCase() + countyMatch[1].slice(1).toLowerCase();
+  }
+  
+  // Extract acre ranges
+  const acreMatch = query.match(/(\d+(?:\.\d+)?)\s*(?:-|to)\s*(\d+(?:\.\d+)?)\s*acres?/i);
+  if (acreMatch) {
+    params.minAcres = parseFloat(acreMatch[1]);
+    params.maxAcres = parseFloat(acreMatch[2]);
+  } else {
+    const minAcreMatch = query.match(/(?:at least|over|more than|min(?:imum)?)\s*(\d+(?:\.\d+)?)\s*acres?/i);
+    if (minAcreMatch) params.minAcres = parseFloat(minAcreMatch[1]);
+    
+    const maxAcreMatch = query.match(/(?:under|less than|max(?:imum)?)\s*(\d+(?:\.\d+)?)\s*acres?/i);
+    if (maxAcreMatch) params.maxAcres = parseFloat(maxAcreMatch[1]);
+  }
+  
+  return params;
+}
+
 // POST /api/ai/query - Rate limited to 30 calls per 15 minutes
 router.post('/query', rateLimiter({ max: 30, windowMs: 15 * 60 * 1000 }), async (req, res) => {
   try {
@@ -77,7 +149,38 @@ router.post('/query', rateLimiter({ max: 30, windowMs: 15 * 60 * 1000 }), async 
     const systemPrompt = buildSystemPrompt(mode, mapData, propertyResults);
     const userPrompt = buildUserPrompt(query, subject, mapData, propertyResults);
     
-    // Call Claude
+    // If no bounds and no property results, try MCP directly
+    if (!bounds && propertyResults.length === 0) {
+      const searchParams = extractSearchParams(query);
+      console.log('🔧 MCP search params extracted:', searchParams);
+      
+      if (searchParams.county || searchParams.minAcres || searchParams.maxAcres) {
+        const mcpResult = await callMcpTool('search_properties', searchParams);
+        if (mcpResult && Array.isArray(mcpResult)) {
+          propertyResults = mcpResult.map(p => ({
+            id: p.parcelId,
+            parcelId: p.parcelId,
+            address: p.address,
+            owner: p.ownerName,
+            propertyType: p.landUse || 'Land',
+            acres: p.acres,
+            taxValue: p.assessedValue,
+            marketValue: p.marketValue,
+            motivationScore: p.taxDelinquent ? 80 : (p.isAbsenteeOwner ? 70 : 50),
+            opportunityFlags: [
+              p.taxDelinquent ? 'Tax Delinquent' : null,
+              p.isAbsenteeOwner ? 'Absentee Owner' : null,
+              p.homesteadExemption ? null : 'No Homestead'
+            ].filter(Boolean),
+            lat: p.centroid?.lat,
+            lng: p.centroid?.lng
+          }));
+          console.log(`✅ MCP returned ${propertyResults.length} properties`);
+        }
+      }
+    }
+
+    // Call Claude (without MCP servers - we handle MCP directly)
     let text = '';
     try {
       console.log('🧠 Calling Claude API...');
@@ -88,14 +191,7 @@ router.post('/query', rateLimiter({ max: 30, windowMs: 15 * 60 * 1000 }), async 
         messages: [{ 
           role: 'user', 
           content: userPrompt 
-        }],
-        mcp_servers: [
-          {
-            type: "url",
-            url: process.env.PROPERTY_MCP_URL || "https://scoutgpt-property-mcp.onrender.com/mcp",
-            name: "property-data"
-          }
-        ]
+        }]
       });
       
       const content = response.content[0];
