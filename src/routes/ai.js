@@ -48,26 +48,29 @@ router.post('/query', rateLimiter({ max: 30, windowMs: 15 * 60 * 1000 }), async 
       }
     }
     
-    // Query properties if needed
+    // Query properties directly only if bounds provided
+    // Otherwise, let Claude + MCP handle the property search
     let propertyResults = [];
-    if (needsPropertyData(query, mode)) {
+    if (needsPropertyData(query, mode) && bounds) {
       try {
-        console.log('🏠 Querying properties...');
+        console.log('🏠 Querying properties with bounds...');
         propertyResults = await queryProperties({
-          bounds: bounds ? {
+          bounds: {
             north: bounds.north,
             south: bounds.south,
             east: bounds.east,
             west: bounds.west
-          } : null,
+          },
           query,
           mode,
-          limit: 100  // Get more, we'll paginate on frontend
+          limit: 100
         });
         console.log(`✅ Property query returned ${propertyResults.length} results`);
       } catch (error) {
         console.error('❌ Property query failed:', error);
       }
+    } else if (needsPropertyData(query, mode)) {
+      console.log('🤖 No bounds provided - Claude + MCP will handle property search');
     }
     
     // Build prompts
