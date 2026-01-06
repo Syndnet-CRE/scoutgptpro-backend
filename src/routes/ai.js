@@ -54,12 +54,12 @@ async function queryPropertiesDirect(params) {
     let paramIndex = 1;
     
     if (minAcres) {
-      conditions.push(`(e.acres >= $${paramIndex} OR e.acreage >= $${paramIndex})`);
+      conditions.push(`COALESCE(e.acres, e.acreage, 0) >= $${paramIndex}`);
       values.push(minAcres);
       paramIndex++;
     }
     if (maxAcres) {
-      conditions.push(`(e.acres <= $${paramIndex} OR e.acreage <= $${paramIndex})`);
+      conditions.push(`COALESCE(e.acres, e.acreage, 0) <= $${paramIndex}`);
       values.push(maxAcres);
       paramIndex++;
     }
