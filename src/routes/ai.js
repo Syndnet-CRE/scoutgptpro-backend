@@ -11,50 +11,129 @@ const anthropic = new Anthropic({
 });
 
 /**
- * Call MCP tool directly via HTTP
+ * Query properties directly from database (bypassing MCP)
  */
-async function callMcpTool(toolName, params) {
-  const mcpUrl = process.env.PROPERTY_MCP_URL || 'https://scoutgpt-property-mcp.onrender.com/mcp/';
+async function queryPropertiesDirect(params) {
+  const { county, minAcres, maxAcres, minMarketValue, limit = 25 } = params;
+  
+  // Import pg pool
+  const pg = await import('pg');
+  const pool = new pg.default.Pool({
+    connectionString: process.env.DATABASE_URL,
+    max: 5
+  });
   
   try {
-    console.log(`🔧 Calling MCP tool: ${toolName}`, params);
+    console.log(`🔍 Direct DB query: county=${county}, acres=${minAcres}-${maxAcres}, limit=${limit}`);
     
-    const response = await fetch(mcpUrl, {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Host': 'scoutgpt-property-mcp.onrender.com',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify({
-        jsonrpc: '2.0',
-        method: 'tools/call',
-        params: {
-          name: toolName,
-          arguments: params
-        },
-        id: Date.now()
-      })
+    // Map county name to table
+    const countyTables = {
+      'Travis': { table: 'parcels_travis', enrichment: 'parcels_travis_enrichment' },
+      'Williamson': { table: 'parcels_williamson', enrichment: 'parcels_williamson_enrichment' },
+      'Hays': { table: 'parcels_hays', enrichment: 'parcels_hays_enrichment' },
+      'Bastrop': { table: 'parcels_bastrop', enrichment: 'parcels_bastrop_enrichment' },
+      'Caldwell': { table: 'parcels_caldwell', enrichment: 'parcels_caldwell_enrichment' },
+      'Burnet': { table: 'parcels_burnet', enrichment: 'parcels_burnet_enrichment' },
+      'Blanco': { table: 'parcels_blanco', enrichment: 'parcels_blanco_enrichment' },
+      'Lee': { table: 'parcels_lee', enrichment: 'parcels_lee_enrichment' },
+      'Llano': { table: 'parcels_llano', enrichment: 'parcels_llano_enrichment' },
+      'Comal': { table: 'parcels_comal', enrichment: 'parcels_comal_enrichment' },
+      'Kendall': { table: 'parcels_kendall', enrichment: 'parcels_kendall_enrichment' },
+      'Bell': { table: 'parcels_bell', enrichment: 'parcels_bell_enrichment' }
+    };
+    
+    const tableInfo = countyTables[county];
+    if (!tableInfo) {
+      console.log(`❌ Unknown county: ${county}`);
+      return [];
+    }
+    
+    // Build query
+    const conditions = [];
+    const values = [];
+    let paramIndex = 1;
+    
+    if (minAcres) {
+      conditions.push(`(e.acres >= $${paramIndex} OR e.acreage >= $${paramIndex})`);
+      values.push(minAcres);
+      paramIndex++;
+    }
+    if (maxAcres) {
+      conditions.push(`(e.acres <= $${paramIndex} OR e.acreage <= $${paramIndex})`);
+      values.push(maxAcres);
+      paramIndex++;
+    }
+    if (minMarketValue) {
+      conditions.push(`e.market_value >= $${paramIndex}`);
+      values.push(minMarketValue);
+      paramIndex++;
+    }
+    
+    values.push(limit);
+    
+    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+    
+    const query = `
+      SELECT 
+        p.parcel_id,
+        ST_AsGeoJSON(ST_PointOnSurface(p.geom))::json as centroid,
+        e.owner_name,
+        e.situs_address,
+        e.acres,
+        e.acreage,
+        e.market_value,
+        e.assessed_value,
+        e.land_use,
+        e.land_use_desc,
+        e.year_built,
+        e.mail_city,
+        e.mail_state,
+        e.tax_delinquent_flag,
+        e.homestead_exemption_flag
+      FROM ${tableInfo.table} p
+      LEFT JOIN ${tableInfo.enrichment} e ON p.parcel_id = e.parcel_id
+      ${whereClause}
+      LIMIT $${paramIndex}
+    `;
+    
+    console.log(`📝 SQL Query:`, query);
+    console.log(`📝 Values:`, values);
+    
+    const result = await pool.query(query, values);
+    
+    console.log(`✅ Direct DB returned ${result.rows.length} properties`);
+    
+    // Transform results
+    return result.rows.map(row => {
+      const centroid = row.centroid?.coordinates ? {
+        lng: row.centroid.coordinates[0],
+        lat: row.centroid.coordinates[1]
+      } : null;
+      
+      const isAbsentee = row.mail_state && row.mail_state.toUpperCase() !== 'TX';
+      
+      return {
+        parcelId: row.parcel_id,
+        address: row.situs_address || 'No address',
+        ownerName: row.owner_name || 'Unknown',
+        acres: row.acres || row.acreage,
+        marketValue: row.market_value,
+        assessedValue: row.assessed_value,
+        landUse: row.land_use || row.land_use_desc,
+        yearBuilt: row.year_built,
+        taxDelinquent: row.tax_delinquent_flag === true,
+        isAbsenteeOwner: isAbsentee,
+        homesteadExemption: row.homestead_exemption_flag === true,
+        centroid,
+        county
+      };
     });
     
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`❌ MCP tool ${toolName} failed:`, response.status, errorText);
-      return null;
-    }
-    
-    const result = await response.json();
-    
-    if (result.error) {
-      console.error(`❌ MCP tool ${toolName} error:`, result.error);
-      return null;
-    }
-    
-    console.log(`✅ MCP tool ${toolName} returned:`, result.result ? 'data' : 'empty');
-    return result.result;
   } catch (error) {
-    console.error(`❌ MCP tool ${toolName} exception:`, error.message);
-    return null;
+    console.error('❌ Direct DB query error:', error.message);
+    return [];
+  } finally {
+    await pool.end();
   }
 }
 
@@ -153,15 +232,15 @@ router.post('/query', rateLimiter({ max: 30, windowMs: 15 * 60 * 1000 }), async 
     const systemPrompt = buildSystemPrompt(mode, mapData, propertyResults);
     const userPrompt = buildUserPrompt(query, subject, mapData, propertyResults);
     
-    // If no bounds and no property results, try MCP directly
+    // If no bounds and no property results, try direct DB query
     if (!bounds && propertyResults.length === 0) {
       const searchParams = extractSearchParams(query);
-      console.log('🔧 MCP search params extracted:', searchParams);
+      console.log('🔧 Direct DB search params extracted:', searchParams);
       
       if (searchParams.county || searchParams.minAcres || searchParams.maxAcres) {
-        const mcpResult = await callMcpTool('search_properties', searchParams);
-        if (mcpResult && Array.isArray(mcpResult)) {
-          propertyResults = mcpResult.map(p => ({
+        const dbResult = await queryPropertiesDirect(searchParams);
+        if (dbResult && Array.isArray(dbResult) && dbResult.length > 0) {
+          propertyResults = dbResult.map(p => ({
             id: p.parcelId,
             parcelId: p.parcelId,
             address: p.address,
@@ -179,7 +258,7 @@ router.post('/query', rateLimiter({ max: 30, windowMs: 15 * 60 * 1000 }), async 
             lat: p.centroid?.lat,
             lng: p.centroid?.lng
           }));
-          console.log(`✅ MCP returned ${propertyResults.length} properties`);
+          console.log(`✅ Direct DB returned ${propertyResults.length} properties`);
         }
       }
     }
