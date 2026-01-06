@@ -21,7 +21,11 @@ async function callMcpTool(toolName, params) {
     
     const response = await fetch(mcpUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Host': 'scoutgpt-property-mcp.onrender.com',
+        'Accept': 'application/json'
+      },
       body: JSON.stringify({
         jsonrpc: '2.0',
         method: 'tools/call',
