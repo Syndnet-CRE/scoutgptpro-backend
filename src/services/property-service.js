@@ -480,6 +480,7 @@ export async function queryProperties({ bounds, query, mode, limit = 50 }) {
 
           results.push({
             id: props.id || feature.id || `parcel_${results.length}`,
+            parcelId: props.parcelId || props.parcel_id || props.id || feature.id,
             address: props.address || 'Unknown Address',
             owner: props.owner || 'Unknown Owner',
             propertyType: propertyType,

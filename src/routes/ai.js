@@ -118,6 +118,7 @@ router.post('/query', rateLimiter({ max: 30, windowMs: 15 * 60 * 1000 }), async 
       overlays: [],
       pins: propertyResults.slice(0, 25).map(prop => ({
         id: prop.id,
+        parcelId: prop.parcelId || prop.parcel_id || prop.id,
         lat: prop.lat,
         lng: prop.lng,
         address: prop.address,
