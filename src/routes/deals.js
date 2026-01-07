@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 // GET /api/deals - List deals with filters
 router.get('/', async (req, res) => {
   try {
-    const { userId, stage, priority, search, limit = 50, offset = 0 } = req.query;
+    const { userId, stage, search, limit = 50, offset = 0 } = req.query;
     
     if (!userId) {
       return res.status(400).json({ error: 'userId is required' });
@@ -15,12 +15,10 @@ router.get('/', async (req, res) => {
     
     const where = { userId };
     if (stage) where.stage = stage;
-    if (priority) where.priority = priority;
     if (search) {
       where.OR = [
         { title: { contains: search, mode: 'insensitive' } },
-        { contactName: { contains: search, mode: 'insensitive' } },
-        { propertyAddress: { contains: search, mode: 'insensitive' } }
+        { notes: { contains: search, mode: 'insensitive' } }
       ];
     }
     
@@ -68,50 +66,76 @@ router.post('/', async (req, res) => {
       userId,
       title,
       stage = 'PIPELINE',
-      priority = 'MEDIUM',
-      value,
-      propertyId,
-      propertyAddress,
-      propertyCity,
-      propertyState,
-      propertyZip,
-      propertyType,
-      contactName,
-      contactEmail,
-      contactPhone,
-      contactCompany,
+      dealType,
+      purchasePrice,
+      offerPrice,
+      closingDate,
+      seller,
+      buyer,
+      probability,
+      lostReason,
       notes,
-      source,
-      sourceQuery
+      propertyId,
+      metadata
     } = req.body;
     
     if (!userId || !title) {
       return res.status(400).json({ error: 'userId and title are required' });
     }
     
+    // Store any extra fields (like propertyAddress, contactName, etc.) in metadata
+    const metadataObj = metadata || {};
+    const extraFields = {};
+    if (req.body.propertyAddress) extraFields.propertyAddress = req.body.propertyAddress;
+    if (req.body.propertyCity) extraFields.propertyCity = req.body.propertyCity;
+    if (req.body.propertyState) extraFields.propertyState = req.body.propertyState;
+    if (req.body.propertyZip) extraFields.propertyZip = req.body.propertyZip;
+    if (req.body.propertyType) extraFields.propertyType = req.body.propertyType;
+    if (req.body.contactName) extraFields.contactName = req.body.contactName;
+    if (req.body.contactEmail) extraFields.contactEmail = req.body.contactEmail;
+    if (req.body.contactPhone) extraFields.contactPhone = req.body.contactPhone;
+    if (req.body.contactCompany) extraFields.contactCompany = req.body.contactCompany;
+    if (req.body.source) extraFields.source = req.body.source;
+    if (req.body.sourceQuery) extraFields.sourceQuery = req.body.sourceQuery;
+    
     const deal = await prisma.deal.create({
       data: {
         userId,
         title,
         stage,
-        value: value ? parseFloat(value) : null,
-        purchasePrice: value ? parseFloat(value) : null,
-        propertyId,
+        dealType,
+        purchasePrice: purchasePrice ? parseFloat(purchasePrice) : null,
+        offerPrice: offerPrice ? parseFloat(offerPrice) : null,
+        closingDate: closingDate ? new Date(closingDate) : null,
+        seller,
+        buyer,
+        probability: probability ? parseInt(probability) : null,
+        lostReason,
         notes,
-        metadata: source ? { source, sourceQuery, propertyAddress, propertyCity, propertyState, propertyZip, propertyType, contactName, contactEmail, contactPhone, contactCompany } : { propertyAddress, propertyCity, propertyState, propertyZip, propertyType, contactName, contactEmail, contactPhone, contactCompany },
-        activities: {
-          create: {
-            userId,
-            type: 'created',
-            subject: 'Deal created',
-            description: `Deal "${title}" was created`,
-          }
-        }
+        propertyId,
+        metadata: Object.keys(extraFields).length > 0 ? { ...metadataObj, ...extraFields } : metadataObj
       },
       include: { activities: true }
     });
     
-    res.status(201).json(deal);
+    // Create activity for deal creation
+    await prisma.activity.create({
+      data: {
+        userId,
+        dealId: deal.id,
+        type: 'created',
+        subject: 'Deal created',
+        description: `Deal "${title}" was created`
+      }
+    });
+    
+    // Fetch deal with activities
+    const dealWithActivities = await prisma.deal.findUnique({
+      where: { id: deal.id },
+      include: { activities: true }
+    });
+    
+    res.status(201).json(dealWithActivities);
   } catch (error) {
     console.error('[Deals] Create error:', error);
     res.status(500).json({ error: 'Failed to create deal' });
@@ -131,25 +155,52 @@ router.put('/:id', async (req, res) => {
     
     const stageChanged = updateData.stage && updateData.stage !== existing.stage;
     
+    // Only include valid Deal model fields
+    const validUpdateData = {};
+    if (updateData.title !== undefined) validUpdateData.title = updateData.title;
+    if (updateData.stage !== undefined) validUpdateData.stage = updateData.stage;
+    if (updateData.dealType !== undefined) validUpdateData.dealType = updateData.dealType;
+    if (updateData.purchasePrice !== undefined) validUpdateData.purchasePrice = updateData.purchasePrice ? parseFloat(updateData.purchasePrice) : null;
+    if (updateData.offerPrice !== undefined) validUpdateData.offerPrice = updateData.offerPrice ? parseFloat(updateData.offerPrice) : null;
+    if (updateData.closingDate !== undefined) validUpdateData.closingDate = updateData.closingDate ? new Date(updateData.closingDate) : null;
+    if (updateData.seller !== undefined) validUpdateData.seller = updateData.seller;
+    if (updateData.buyer !== undefined) validUpdateData.buyer = updateData.buyer;
+    if (updateData.probability !== undefined) validUpdateData.probability = updateData.probability ? parseInt(updateData.probability) : null;
+    if (updateData.lostReason !== undefined) validUpdateData.lostReason = updateData.lostReason;
+    if (updateData.notes !== undefined) validUpdateData.notes = updateData.notes;
+    if (updateData.propertyId !== undefined) validUpdateData.propertyId = updateData.propertyId;
+    if (updateData.metadata !== undefined) validUpdateData.metadata = updateData.metadata;
+    
+    // Handle value field - map to purchasePrice
+    if (updateData.value !== undefined) {
+      validUpdateData.purchasePrice = updateData.value ? parseFloat(updateData.value) : null;
+    }
+    
     const deal = await prisma.deal.update({
       where: { id },
-      data: {
-        ...updateData,
-        value: updateData.value ? parseFloat(updateData.value) : existing.purchasePrice,
-        purchasePrice: updateData.value ? parseFloat(updateData.value) : existing.purchasePrice,
-        ...(stageChanged ? {
-          activities: {
-            create: {
-              userId: userId || existing.userId,
-              type: 'stage_change',
-              subject: 'Stage changed',
-              description: `Stage changed from ${existing.stage} to ${updateData.stage}`,
-            }
-          }
-        } : {})
-      },
+      data: validUpdateData,
       include: { activities: { orderBy: { completedAt: 'desc' }, take: 5 } }
     });
+    
+    // Create activity if stage changed
+    if (stageChanged) {
+      await prisma.activity.create({
+        data: {
+          userId: userId || existing.userId,
+          dealId: id,
+          type: 'stage_change',
+          subject: 'Stage changed',
+          description: `Stage changed from ${existing.stage} to ${updateData.stage}`
+        }
+      });
+      
+      // Fetch updated deal with activities
+      const updatedDeal = await prisma.deal.findUnique({
+        where: { id },
+        include: { activities: { orderBy: { completedAt: 'desc' }, take: 5 } }
+      });
+      return res.json(updatedDeal);
+    }
     
     res.json(deal);
   } catch (error) {
