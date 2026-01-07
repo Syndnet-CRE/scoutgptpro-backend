@@ -43,92 +43,92 @@ model UserProfile {
 }
 
 model Property {
-  id                 String    @id @default(cuid())
-  address            String?
-  city               String?
-  state              String?
-  zip                String?
-  county             String?
-  apn                String?
-  legalDesc          String?
-  propertyType       String?
-  size               Float?
-  sizeUnit           String?
-  zoning             String?
-  yearBuilt          Int?
-  assessedValue      Float?
-  marketValue        Float?
-  ownerName          String?
-  ownerAddress       String?
-  metadata           Json?
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
-  acres              Float?
-  centroid           Json?
-  impValue           Float?
-  isAbsentee         Boolean   @default(false)
-  isTaxDelinquent    Boolean   @default(false)
-  isVacantLand       Boolean   @default(false)
-  landValue          Float?
-  latitude           Float?
-  longitude          Float?
-  mailingAddr        String?
-  mktValue           Float?
-  motivationScore    Int?
-  opportunityFlags   String[]
-  owner              String?
-  parcelId           String    @unique
-  siteAddress        String?
-  taxYear            Int?
-  totalDue           Float?
-  totalTax           Float?
-  siteCity           String?
-  siteState          String?
-  siteZip            String?
-  appraisedValue     Float?
-  block              String?
-  deedDate           String?
-  enrichedAt         DateTime?
-  enrichmentSource   String?
-  floodZone          String?
-  geoId              String?
-  landTypeDesc       String?
-  lot                String?
-  ownerFirstName     String?
-  ownerLastName      String?
-  situsNum           String?
-  situsStreet        String?
-  subdivision        String?
-  tcadAcres          Float?
-  attomId            String?   @map("attomId")
-  avmValue           Decimal?  @map("avmValue") @db.Decimal(14, 2)
-  avmMin             Decimal?  @map("avmMin") @db.Decimal(14, 2)
-  avmMax             Decimal?  @map("avmMax") @db.Decimal(14, 2)
-  avmConfidence      Int?      @map("avmConfidence")
-  avmDate            DateTime? @map("avmDate")
+  id               String    @id @default(cuid())
+  address          String?
+  city             String?
+  state            String?
+  zip              String?
+  county           String?
+  apn              String?
+  legalDesc        String?
+  propertyType     String?
+  size             Float?
+  sizeUnit         String?
+  zoning           String?
+  yearBuilt        Int?
+  assessedValue    Float?
+  marketValue      Float?
+  ownerName        String?
+  ownerAddress     String?
+  metadata         Json?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  acres            Float?
+  centroid         Json?
+  impValue         Float?
+  isAbsentee       Boolean   @default(false)
+  isTaxDelinquent  Boolean   @default(false)
+  isVacantLand     Boolean   @default(false)
+  landValue        Float?
+  latitude         Float?
+  longitude        Float?
+  mailingAddr      String?
+  mktValue         Float?
+  motivationScore  Int?
+  opportunityFlags String[]
+  owner            String?
+  parcelId         String    @unique
+  siteAddress      String?
+  taxYear          Int?
+  totalDue         Float?
+  totalTax         Float?
+  siteCity         String?
+  siteState        String?
+  siteZip          String?
+  appraisedValue   Float?
+  block            String?
+  deedDate         String?
+  enrichedAt       DateTime?
+  enrichmentSource String?
+  floodZone        String?
+  geoId            String?
+  landTypeDesc     String?
+  lot              String?
+  ownerFirstName   String?
+  ownerLastName    String?
+  situsNum         String?
+  situsStreet      String?
+  subdivision      String?
+  tcadAcres        Float?
+  attomId          String?   @map("attomId")
+  avmValue         Decimal?  @map("avmValue") @db.Decimal(14, 2)
+  avmMin           Decimal?  @map("avmMin") @db.Decimal(14, 2)
+  avmMax           Decimal?  @map("avmMax") @db.Decimal(14, 2)
+  avmConfidence    Int?      @map("avmConfidence")
+  avmDate          DateTime? @map("avmDate")
   // Transaction/Deed Data (from RECORDER)
-  lastSaleDate       DateTime?
-  lastSaleAmount     Float?
-  lastSaleDocType    String?
-  grantorName        String?
-  granteeName        String?
-  granteeMailAddress String?
-  granteeMailCity    String?
-  granteeMailState   String?
-  granteeMailZip     String?
-  isInvestorOwned    Boolean   @default(false)
-  isForeclosure      Boolean   @default(false)
+  lastSaleDate        DateTime?
+  lastSaleAmount      Float?
+  lastSaleDocType     String?
+  grantorName         String?
+  granteeName         String?
+  granteeMailAddress  String?
+  granteeMailCity     String?
+  granteeMailState    String?
+  granteeMailZip      String?
+  isInvestorOwned     Boolean   @default(false)
+  isForeclosure       Boolean   @default(false)
   // Mortgage Data
-  mortgageAmount     Float?
-  mortgageLender     String?
-  mortgageRate       Float?
-  mortgageTerm       Int?
+  mortgageAmount      Float?
+  mortgageLender      String?
+  mortgageRate        Float?
+  mortgageTerm        Int?
   // Ownership Duration (calculated)
-  ownershipYears     Float?
-  comps              Comp[]
-  deals              Deal[]
-  listings           Listing[]
-  pins               Pin[]
+  ownershipYears      Float?
+  comps            Comp[]
+  deals            Deal[]
+  listings         Listing[]
+  pins             Pin[]
 
   @@index([propertyType])
   @@index([latitude, longitude])
@@ -225,7 +225,6 @@ model Deal {
   property      Property?  @relation(fields: [propertyId], references: [id])
   documents     Document[]
   tasks         Task[]
-  user          User       @relation(fields: [userId], references: [id])
 
   @@index([userId, stage])
   @@index([stage])
@@ -270,7 +269,6 @@ model Document {
   description String?
   uploadedAt  DateTime @default(now())
   deal        Deal?    @relation(fields: [dealId], references: [id], onDelete: Cascade)
-  user        User     @relation(fields: [userId], references: [id])
 
   @@index([userId])
   @@index([dealId])
@@ -286,7 +284,6 @@ model Activity {
   description String?
   completedAt DateTime @default(now())
   deal        Deal?    @relation(fields: [dealId], references: [id], onDelete: Cascade)
-  user        User     @relation(fields: [userId], references: [id])
 
   @@index([userId])
   @@index([dealId])
@@ -520,6 +517,7 @@ enum TaskStatus {
   CANCELLED
 }
 
+
 enum EntityType {
   PERSON
   LLC
@@ -529,21 +527,22 @@ enum EntityType {
   UNKNOWN
 }
 
+
 // Owner entity
 model Owner {
-  id                 String     @id @default(cuid())
-  ownerNameRaw       String?    @db.Text
-  ownerNameNorm      String?    @db.Text
-  mailingAddressRaw  String?    @db.Text
-  mailingAddressNorm String?    @db.Text
-  mailingState       String?
-  entityType         EntityType @default(UNKNOWN)
-  isCorporate        Boolean    @default(false)
-  createdAt          DateTime   @default(now())
-  updatedAt          DateTime   @updatedAt
+  id                String   @id @default(cuid())
+  ownerNameRaw      String?  @db.Text
+  ownerNameNorm     String?  @db.Text
+  mailingAddressRaw String?  @db.Text
+  mailingAddressNorm String? @db.Text
+  mailingState      String?
+  entityType        EntityType @default(UNKNOWN)
+  isCorporate       Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
-  properties OwnerProperty[]
-  features   OwnerFeaturesTx?
+  properties        OwnerProperty[]
+  features          OwnerFeaturesTx?
 
   @@index([ownerNameNorm])
   @@index([mailingState])
@@ -569,15 +568,15 @@ model OwnerProperty {
 
 // Owner features aggregated for Texas
 model OwnerFeaturesTx {
-  id                   String   @id
-  ownerId              String   @unique
-  parcelCountTx        Int      @default(0)
+  id                  String   @id
+  ownerId             String   @unique
+  parcelCountTx       Int      @default(0)
   totalAssessedValueTx Decimal? @db.Decimal(15, 2)
-  assetClassMix        Json?
-  absenteeRate         Decimal? @db.Decimal(5, 4)
-  outOfState           Boolean  @default(false)
-  avgHoldYears         Decimal? @db.Decimal(5, 2)
-  updatedAt            DateTime @updatedAt
+  assetClassMix       Json?
+  absenteeRate        Decimal? @db.Decimal(5, 4)
+  outOfState          Boolean  @default(false)
+  avgHoldYears        Decimal? @db.Decimal(5, 2)
+  updatedAt           DateTime @updatedAt
 
   owner Owner @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
@@ -600,32 +599,33 @@ model OwnerSegment {
 
 // Texas enrichment rollups
 model TxEnrichmentRollup {
-  parcelId     String   @id
-  pop1mi       Decimal? @db.Decimal(10, 0)
-  medIncome1mi Decimal? @db.Decimal(10, 2)
-  poiCounts    Json?
-  nearestPoi   Json?
-  trafficIndex Decimal? @db.Decimal(5, 2)
-  floodPct     Decimal? @db.Decimal(5, 4)
-  inFloodplain Boolean  @default(false)
-  updatedAt    DateTime @updatedAt
+  parcelId      String   @id
+  pop1mi         Decimal? @db.Decimal(10, 0)
+  medIncome1mi   Decimal? @db.Decimal(10, 2)
+  poiCounts      Json?
+  nearestPoi     Json?
+  trafficIndex   Decimal? @db.Decimal(5, 2)
+  floodPct       Decimal? @db.Decimal(5, 4)
+  inFloodplain   Boolean  @default(false)
+  updatedAt      DateTime @updatedAt
 
   @@index([parcelId])
   @@map("tx_enrichment_rollups")
 }
 
+
 // Discovery run tracking
 model DiscoverRun {
-  id         String    @id @default(cuid())
-  queryText  String?   @db.Text
+  id         String   @id @default(cuid())
+  queryText  String?  @db.Text
   intentJson Json
   createdBy  String?
-  startedAt  DateTime  @default(now())
+  startedAt  DateTime @default(now())
   endedAt    DateTime?
   stats      Json?
-  error      String?   @db.Text
+  error      String?  @db.Text
 
-  results DiscoverResult[]
+  results    DiscoverResult[]
 
   @@index([createdBy])
   @@index([startedAt])
@@ -634,10 +634,10 @@ model DiscoverRun {
 
 // Discovery results
 model DiscoverResult {
-  id        String  @id @default(cuid())
+  id        String   @id @default(cuid())
   runId     String
   parcelId  String
-  score     Decimal @db.Decimal(10, 6)
+  score     Decimal  @db.Decimal(10, 6)
   reasons   Json
   breakdown Json
 
