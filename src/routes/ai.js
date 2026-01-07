@@ -10,8 +10,316 @@ const anthropic = new Anthropic({
   apiKey: process.env.CLAUDE_API_KEY 
 });
 
+// ============================================================================
+// NEW: Intent Extraction System
+// ============================================================================
+
+const INTENT_EXTRACTION_SYSTEM_PROMPT = `You are a real estate query intent extractor. Extract structured filters from natural language property search queries.
+
+OUTPUT FORMAT (JSON only, no markdown, no explanation):
+{
+  "geo": {
+    "county_fips": "48453" | null,  // '48453' = Travis County
+    "bbox": [minLng, minLat, maxLng, maxLat] | null
+  },
+  "filters": {
+    "acres_min": number | null,
+    "acres_max": number | null,
+    "asset_class": "residential" | "commercial" | "land" | "industrial" | "mixed" | null,
+    "owner_entity_type": "person" | "llc" | "corp" | "trust_estate" | null,
+    "owner_segment": "mom_pop" | "small_operator" | "institutional" | "local_owner" | "absentee" | null,
+    "tax_delinquent": true | false | null,
+    "market_value_min": number | null,
+    "market_value_max": number | null
+  },
+  "limit": number  // default 50, max 200
+}
+
+MAPPING RULES:
+- "2 to 4 acres", "2-4 acres", "between 2 and 4 acres" → acres_min: 2, acres_max: 4
+- "at least 5 acres", "over 5 acres", "more than 5 acres" → acres_min: 5
+- "under 10 acres", "less than 10 acres" → acres_max: 10
+- "Travis County", "in Travis" → county_fips: "48453"
+- "tax delinquent", "back taxes", "tax lien" → tax_delinquent: true
+- "LLC owned", "owned by LLC" → owner_entity_type: "llc"
+- "mom and pop", "mom & pop", "small owner" → owner_segment: "mom_pop"
+- "commercial property" → asset_class: "commercial"
+- "vacant land", "land" → asset_class: "land"
+- "under $500k", "below $500000" → market_value_max: 500000
+- "over $1M", "above $1000000" → market_value_min: 1000000
+
+Return ONLY valid JSON. No markdown code blocks, no explanations.`;
+
 /**
- * Query properties directly from database (bypassing MCP)
+ * Extract structured intent from natural language query using Claude
+ */
+async function extractIntentFromQuery(query, bounds) {
+  try {
+    console.log('🧠 Extracting intent from query...');
+    
+    // Build user prompt with query and optional bounds
+    let userPrompt = `Query: "${query}"`;
+    if (bounds) {
+      userPrompt += `\n\nOptional bounds: ${JSON.stringify(bounds)}`;
+    }
+    userPrompt += `\n\nExtract intent JSON:`;
+    
+    const response = await anthropic.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1024,
+      system: INTENT_EXTRACTION_SYSTEM_PROMPT,
+      messages: [{
+        role: 'user',
+        content: userPrompt
+      }]
+    });
+    
+    const content = response.content[0];
+    if (content.type !== 'text') {
+      throw new Error('Unexpected response type from Claude');
+    }
+    
+    // Extract JSON from response (handle markdown code blocks)
+    let jsonText = content.text.trim();
+    if (jsonText.startsWith('```')) {
+      jsonText = jsonText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+    }
+    
+    // Parse JSON
+    const intent = JSON.parse(jsonText);
+    
+    // Validate and normalize
+    const normalized = {
+      geo: {
+        county_fips: intent.geo?.county_fips || null,
+        bbox: intent.geo?.bbox || (bounds ? [bounds.west, bounds.south, bounds.east, bounds.north] : null)
+      },
+      filters: {
+        acres_min: intent.filters?.acres_min ?? null,
+        acres_max: intent.filters?.acres_max ?? null,
+        asset_class: intent.filters?.asset_class || null,
+        owner_entity_type: intent.filters?.owner_entity_type || null,
+        owner_segment: intent.filters?.owner_segment || null,
+        tax_delinquent: intent.filters?.tax_delinquent ?? null,
+        market_value_min: intent.filters?.market_value_min ?? null,
+        market_value_max: intent.filters?.market_value_max ?? null
+      },
+      limit: Math.min(Math.max(intent.limit || 50, 1), 200)
+    };
+    
+    console.log('✅ Extracted intent:', JSON.stringify(normalized, null, 2));
+    return normalized;
+    
+  } catch (error) {
+    console.error('❌ Intent extraction failed:', error);
+    throw error;
+  }
+}
+
+/**
+ * Build deterministic SQL query against parcel_features_travis
+ */
+function buildParcelQuery(intent) {
+  const conditions = [];
+  const values = [];
+  let paramIndex = 1;
+  
+  // County filter
+  if (intent.geo?.county_fips) {
+    conditions.push(`county_fips = $${paramIndex}`);
+    values.push(intent.geo.county_fips);
+    paramIndex++;
+  }
+  
+  // Bbox spatial filter
+  if (intent.geo?.bbox && Array.isArray(intent.geo.bbox) && intent.geo.bbox.length === 4) {
+    const [minLng, minLat, maxLng, maxLat] = intent.geo.bbox;
+    conditions.push(`ST_Intersects(geom_centroid, ST_MakeEnvelope($${paramIndex}, $${paramIndex + 1}, $${paramIndex + 2}, $${paramIndex + 3}, 4326))`);
+    values.push(minLng, minLat, maxLng, maxLat);
+    paramIndex += 4;
+  }
+  
+  // Filter: acres_min
+  if (intent.filters?.acres_min !== null && intent.filters?.acres_min !== undefined) {
+    conditions.push(`acres_calc >= $${paramIndex}`);
+    values.push(intent.filters.acres_min);
+    paramIndex++;
+  }
+  
+  // Filter: acres_max
+  if (intent.filters?.acres_max !== null && intent.filters?.acres_max !== undefined) {
+    conditions.push(`acres_calc <= $${paramIndex}`);
+    values.push(intent.filters.acres_max);
+    paramIndex++;
+  }
+  
+  // Filter: asset_class
+  if (intent.filters?.asset_class) {
+    conditions.push(`asset_class = $${paramIndex}`);
+    values.push(intent.filters.asset_class);
+    paramIndex++;
+  }
+  
+  // Filter: owner_entity_type
+  if (intent.filters?.owner_entity_type) {
+    conditions.push(`owner_entity_type = $${paramIndex}`);
+    values.push(intent.filters.owner_entity_type);
+    paramIndex++;
+  }
+  
+  // Filter: owner_segment
+  if (intent.filters?.owner_segment) {
+    conditions.push(`owner_segment = $${paramIndex}`);
+    values.push(intent.filters.owner_segment);
+    paramIndex++;
+  }
+  
+  // Filter: tax_delinquent
+  if (intent.filters?.tax_delinquent === true) {
+    conditions.push(`tax_delinquent_flag = $${paramIndex}`);
+    values.push(true);
+    paramIndex++;
+  }
+  
+  // Filter: market_value_min
+  if (intent.filters?.market_value_min !== null && intent.filters?.market_value_min !== undefined) {
+    conditions.push(`market_value >= $${paramIndex}`);
+    values.push(intent.filters.market_value_min);
+    paramIndex++;
+  }
+  
+  // Filter: market_value_max
+  if (intent.filters?.market_value_max !== null && intent.filters?.market_value_max !== undefined) {
+    conditions.push(`market_value <= $${paramIndex}`);
+    values.push(intent.filters.market_value_max);
+    paramIndex++;
+  }
+  
+  // Limit
+  const limit = Math.min(Math.max(intent.limit || 50, 1), 200);
+  values.push(limit);
+  
+  // Build WHERE clause
+  const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+  
+  // Build SQL
+  const sql = `
+    SELECT 
+      parcel_id,
+      situs_address,
+      owner_name_raw,
+      owner_entity_type,
+      acres_calc,
+      asset_class,
+      market_value,
+      tax_delinquent_flag,
+      ST_AsGeoJSON(geom_centroid)::json as geom
+    FROM parcel_features_travis
+    ${whereClause}
+    ORDER BY acres_calc
+    LIMIT $${paramIndex}
+  `;
+  
+  // Build debug SQL (with values substituted)
+  const sqlDebug = sql.replace(/\$\d+/g, (match) => {
+    const idx = parseInt(match.substring(1)) - 1;
+    return JSON.stringify(values[idx]);
+  });
+  
+  return {
+    query: sql,
+    values: values,
+    sql: sqlDebug
+  };
+}
+
+/**
+ * Verify filter correctness - assert all results satisfy intent filters
+ */
+function verifyFilterCorrectness(intent, results) {
+  const violations = [];
+  
+  // Verify acres_min
+  if (intent.filters?.acres_min !== null && intent.filters?.acres_min !== undefined) {
+    for (const row of results) {
+      if (row.acres_calc < intent.filters.acres_min) {
+        violations.push({
+          parcel_id: row.parcel_id,
+          filter: 'acres_min',
+          expected: intent.filters.acres_min,
+          actual: row.acres_calc
+        });
+      }
+    }
+  }
+  
+  // Verify acres_max
+  if (intent.filters?.acres_max !== null && intent.filters?.acres_max !== undefined) {
+    for (const row of results) {
+      if (row.acres_calc > intent.filters.acres_max) {
+        violations.push({
+          parcel_id: row.parcel_id,
+          filter: 'acres_max',
+          expected: intent.filters.acres_max,
+          actual: row.acres_calc
+        });
+      }
+    }
+  }
+  
+  // Log violations
+  if (violations.length > 0) {
+    console.error('❌ FILTER VIOLATIONS DETECTED:');
+    violations.forEach(v => {
+      console.error(`  Parcel ${v.parcel_id}: ${v.filter} violation (expected: ${v.expected}, actual: ${v.actual})`);
+    });
+    throw new Error(`Filter correctness violation: ${violations.length} parcels failed filter checks`);
+  }
+  
+  console.log(`✅ Filter correctness verified: ${results.length} results satisfy all filters`);
+}
+
+/**
+ * Generate summary message from intent and results
+ */
+function generateSummaryMessage(intent, count) {
+  const parts = [];
+  
+  // Acres range
+  if (intent.filters?.acres_min !== null && intent.filters?.acres_max !== null) {
+    parts.push(`${intent.filters.acres_min}-${intent.filters.acres_max} acres`);
+  } else if (intent.filters?.acres_min !== null) {
+    parts.push(`at least ${intent.filters.acres_min} acres`);
+  } else if (intent.filters?.acres_max !== null) {
+    parts.push(`under ${intent.filters.acres_max} acres`);
+  }
+  
+  // County
+  if (intent.geo?.county_fips === '48453') {
+    parts.push('in Travis County');
+  }
+  
+  // Asset class
+  if (intent.filters?.asset_class) {
+    parts.push(`(${intent.filters.asset_class})`);
+  }
+  
+  // Tax delinquent
+  if (intent.filters?.tax_delinquent === true) {
+    parts.push('(tax delinquent)');
+  }
+  
+  const criteria = parts.length > 0 ? parts.join(' ') : 'your criteria';
+  return `Found ${count} parcel${count !== 1 ? 's' : ''} matching ${criteria}.`;
+}
+
+// ============================================================================
+// DEPRECATED: Old Functions (kept for backward compatibility)
+// ============================================================================
+
+/**
+ * DEPRECATED: Query properties directly from database (bypassing MCP)
+ * @deprecated Use buildParcelQuery() and query parcel_features_travis instead
  */
 async function queryPropertiesDirect(params) {
   const { county, minAcres, maxAcres, minMarketValue, limit = 25 } = params;
@@ -138,7 +446,8 @@ async function queryPropertiesDirect(params) {
 }
 
 /**
- * Extract county and filters from query for MCP search
+ * DEPRECATED: Extract county and filters from query for MCP search
+ * @deprecated Use extractIntentFromQuery() instead
  */
 function extractSearchParams(query) {
   const params = {};
@@ -165,198 +474,10 @@ function extractSearchParams(query) {
   return params;
 }
 
-// POST /api/ai/query - Rate limited to 30 calls per 15 minutes
-router.post('/query', rateLimiter({ max: 30, windowMs: 15 * 60 * 1000 }), async (req, res) => {
-  try {
-    const { mode, query, bounds, subject } = req.body;
-    
-    if (!query) {
-      return res.status(400).json({ error: 'Query is required' });
-    }
-    
-    console.log(`🤖 AI Query [${mode}]: "${query}"`);
-    
-    // Check if needs MapServer data
-    const needsGIS = shouldFetchGIS(query, mode);
-    
-    let mapData = null;
-    if (needsGIS) {
-      console.log('📍 Fetching MapServer data...');
-      
-      try {
-        // Extract relevant categories from query
-        const categories = extractCategories(query);
-        
-        // Call service with category filter
-        mapData = await searchMapServers({ 
-          query, 
-          bounds,
-          categories: categories.length > 0 ? categories : undefined,
-          maxResults: 10 
-        });
-        
-        console.log(`✅ Got ${mapData.servers?.length || 0} MapServers with data`);
-      } catch (error) {
-        console.error('❌ MapServer search failed:');
-        console.error('   Error:', error.message);
-        console.error('   Stack:', error.stack);
-      }
-    }
-    
-    // Query properties directly only if bounds provided
-    // Otherwise, let Claude + MCP handle the property search
-    let propertyResults = [];
-    if (needsPropertyData(query, mode) && bounds) {
-      try {
-        console.log('🏠 Querying properties with bounds...');
-        propertyResults = await queryProperties({
-          bounds: {
-            north: bounds.north,
-            south: bounds.south,
-            east: bounds.east,
-            west: bounds.west
-          },
-          query,
-          mode,
-          limit: 100
-        });
-        console.log(`✅ Property query returned ${propertyResults.length} results`);
-      } catch (error) {
-        console.error('❌ Property query failed:', error);
-      }
-    } else if (needsPropertyData(query, mode)) {
-      console.log('🤖 No bounds provided - Claude + MCP will handle property search');
-    }
-    
-    // Build prompts
-    const systemPrompt = buildSystemPrompt(mode, mapData, propertyResults);
-    const userPrompt = buildUserPrompt(query, subject, mapData, propertyResults);
-    
-    // If no bounds and no property results, try direct DB query
-    if (!bounds && propertyResults.length === 0) {
-      const searchParams = extractSearchParams(query);
-      console.log('🔧 Direct DB search params extracted:', searchParams);
-      
-      if (searchParams.county || searchParams.minAcres || searchParams.maxAcres) {
-        const dbResult = await queryPropertiesDirect(searchParams);
-        if (dbResult && Array.isArray(dbResult) && dbResult.length > 0) {
-          propertyResults = dbResult.map(p => ({
-            id: p.parcelId,
-            parcelId: p.parcelId,
-            address: p.address,
-            owner: p.ownerName,
-            propertyType: p.landUse || 'Land',
-            acres: p.acres,
-            taxValue: p.assessedValue,
-            marketValue: p.marketValue,
-            motivationScore: p.taxDelinquent ? 80 : (p.isAbsenteeOwner ? 70 : 50),
-            opportunityFlags: [
-              p.taxDelinquent ? 'Tax Delinquent' : null,
-              p.isAbsenteeOwner ? 'Absentee Owner' : null,
-              p.homesteadExemption ? null : 'No Homestead'
-            ].filter(Boolean),
-            lat: p.centroid?.lat,
-            lng: p.centroid?.lng
-          }));
-          console.log(`✅ Direct DB returned ${propertyResults.length} properties`);
-        }
-      }
-    }
-
-    // Call Claude (without MCP servers - we handle MCP directly)
-    let text = '';
-    try {
-      console.log('🧠 Calling Claude API...');
-      const response = await anthropic.messages.create({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 4000,
-        system: systemPrompt,
-        messages: [{ 
-          role: 'user', 
-          content: userPrompt 
-        }]
-      });
-      
-      const content = response.content[0];
-      text = content.type === 'text' ? content.text : '';
-    } catch (claudeError) {
-      console.error('⚠️ Claude API error (continuing with property results):', claudeError.message);
-      // Generate a basic message if Claude fails
-      if (propertyResults.length > 0) {
-        text = `I found ${propertyResults.length} properties matching your criteria. Here are the top results based on motivation scores.`;
-      } else {
-        text = 'I searched for properties but did not find any matching your criteria.';
-      }
-    }
-    
-    // Build response
-    const result = {
-      messages: [{ 
-        role: 'assistant', 
-        text 
-      }],
-      properties: propertyResults.slice(0, 25),  // First 25 for initial load
-      totalCount: propertyResults.length,
-      overlays: [],
-      pins: propertyResults.slice(0, 25).map(prop => ({
-        id: prop.id,
-        parcelId: prop.parcelId || prop.parcel_id || prop.id,
-        lat: prop.lat,
-        lng: prop.lng,
-        address: prop.address,
-        propertyType: prop.propertyType,
-        motivationScore: prop.motivationScore
-      })),
-      insights: propertyResults.length > 0 ? [
-        `Found ${propertyResults.length} properties`,
-        `Average motivation score: ${propertyResults.length > 0 ? Math.round(propertyResults.reduce((a, b) => a + b.motivationScore, 0) / propertyResults.length) : 0}`,
-        `Property types: ${[...new Set(propertyResults.map(p => p.propertyType))].join(', ')}`
-      ] : []
-    };
-    
-    // Add MapServer overlays
-    if (mapData?.servers) {
-      mapData.servers.forEach(server => {
-        if (server.features.length > 0) {
-          result.overlays.push({
-            id: server.serverId,
-            type: 'geojson',
-            name: server.category,
-            data: {
-              type: 'FeatureCollection',
-              features: server.features
-            },
-            style: getStyleForCategory(server.category),
-            visible: true
-          });
-        }
-      });
-    }
-    
-    console.log(`✅ Response ready (${result.overlays.length} overlays, ${result.properties.length} properties)`);
-    res.json(result);
-    
-  } catch (error) {
-    console.error('❌ AI query error:', error);
-    res.status(500).json({ 
-      error: 'AI query failed',
-      message: error.message 
-    });
-  }
-});
-
-function shouldFetchGIS(query, mode) {
-  if (mode === 'zoning') return true;
-  
-  const gisKeywords = [
-    'sewer', 'utility', 'utilities', 'flood', 'floodplain',
-    'zoning', 'parcel', 'permit', 'water', 'wastewater',
-    'infrastructure', 'easement', 'right of way'
-  ];
-  
-  return gisKeywords.some(kw => query.toLowerCase().includes(kw));
-}
-
+/**
+ * DEPRECATED: Build system prompt for Claude
+ * @deprecated No longer used - Claude only extracts intent now
+ */
 function buildSystemPrompt(mode, mapData, propertyResults = []) {
   let prompt = `You are ScoutGPT, an AI-powered commercial real estate acquisition assistant. You help investors, developers, and brokers find and analyze properties.
 
@@ -419,6 +540,10 @@ Use these tools to answer questions about properties, owners, and values.
   return prompt;
 }
 
+/**
+ * DEPRECATED: Build user prompt for Claude
+ * @deprecated No longer used - Claude only extracts intent now
+ */
 function buildUserPrompt(query, subject, mapData, propertyResults = []) {
   let prompt = query;
   
@@ -472,6 +597,147 @@ function buildUserPrompt(query, subject, mapData, propertyResults = []) {
   }
   
   return prompt;
+}
+
+// ============================================================================
+// Main Endpoint: POST /api/ai/query
+// ============================================================================
+
+// POST /api/ai/query - Rate limited to 30 calls per 15 minutes
+router.post('/query', rateLimiter({ max: 30, windowMs: 15 * 60 * 1000 }), async (req, res) => {
+  try {
+    const { mode, query, bounds, subject } = req.body;
+    const debug = req.query.debug === '1';
+    
+    if (!query) {
+      return res.status(400).json({ error: 'Query is required' });
+    }
+    
+    console.log(`🤖 AI Query [${mode}]: "${query}"`);
+    
+    // STEP 1: Extract intent from query using Claude
+    let intent;
+    try {
+      intent = await extractIntentFromQuery(query, bounds);
+    } catch (error) {
+      console.error('❌ Intent extraction failed:', error);
+      return res.status(500).json({ 
+        error: 'Intent extraction failed',
+        message: error.message 
+      });
+    }
+    
+    // STEP 2: Build deterministic SQL query
+    const { query: sqlQuery, values, sql: sqlDebug } = buildParcelQuery(intent);
+    console.log('📝 Generated SQL:', sqlDebug);
+    
+    // STEP 3: Execute query against parcel_features_travis
+    const pg = await import('pg');
+    const pool = new pg.default.Pool({
+      connectionString: process.env.DATABASE_URL,
+      max: 5
+    });
+    
+    let results = [];
+    try {
+      const result = await pool.query(sqlQuery, values);
+      results = result.rows.map(row => ({
+        parcel_id: row.parcel_id,
+        situs_address: row.situs_address,
+        owner_name_raw: row.owner_name_raw,
+        owner_entity_type: row.owner_entity_type,
+        acres_calc: parseFloat(row.acres_calc),
+        asset_class: row.asset_class,
+        market_value: row.market_value ? parseFloat(row.market_value) : null,
+        tax_delinquent_flag: row.tax_delinquent_flag === true,
+        geom: row.geom  // Already JSON from ST_AsGeoJSON
+      }));
+      
+      console.log(`✅ Query returned ${results.length} results`);
+    } catch (dbError) {
+      console.error('❌ Database query failed:', dbError);
+      await pool.end();
+      return res.status(500).json({ 
+        error: 'Database query failed',
+        message: dbError.message 
+      });
+    } finally {
+      await pool.end();
+    }
+    
+    // STEP 4: Verify filter correctness
+    try {
+      verifyFilterCorrectness(intent, results);
+    } catch (verifyError) {
+      console.error('❌ Filter verification failed:', verifyError);
+      // Continue anyway, but log the error
+    }
+    
+    // STEP 5: Generate summary message
+    const summaryText = generateSummaryMessage(intent, results.length);
+    
+    // STEP 6: Build response with both old and new fields
+    const response = {
+      success: true,
+      // NEW fields
+      intent: intent,
+      results: results,
+      count: results.length,
+      // OLD fields (for backward compatibility)
+      messages: [{ 
+        role: 'assistant', 
+        text: summaryText
+      }],
+      properties: results,  // alias to results
+      totalCount: results.length,
+      overlays: [],
+      pins: results.slice(0, 25).map(row => ({
+        id: row.parcel_id,
+        parcelId: row.parcel_id,
+        lat: row.geom?.coordinates?.[1] || null,
+        lng: row.geom?.coordinates?.[0] || null,
+        address: row.situs_address,
+        propertyType: row.asset_class || 'unknown',
+        motivationScore: row.tax_delinquent_flag ? 80 : 50
+      })),
+      insights: results.length > 0 ? [
+        `Found ${results.length} parcels`,
+        `Average acres: ${results.length > 0 ? (results.reduce((a, b) => a + b.acres_calc, 0) / results.length).toFixed(2) : 0}`,
+        `Asset classes: ${[...new Set(results.map(r => r.asset_class).filter(Boolean))].join(', ') || 'N/A'}`
+      ] : []
+    };
+    
+    // Add query_sql only if debug=1
+    if (debug) {
+      response.query_sql = sqlDebug;
+    }
+    
+    console.log(`✅ Response ready (${response.count} results)`);
+    res.json(response);
+    
+  } catch (error) {
+    console.error('❌ AI query error:', error);
+    res.status(500).json({ 
+      error: 'AI query failed',
+      message: error.message 
+    });
+  }
+});
+
+// ============================================================================
+// Helper Functions (still used)
+// ============================================================================
+
+function shouldFetchGIS(query, mode) {
+  if (mode === 'zoning') return true;
+  
+  const gisKeywords = [
+    'sewer', 'utility', 'utilities', 'flood', 'floodplain',
+    'zoning', 'parcel', 'permit', 'water', 'wastewater',
+    'infrastructure', 'easement', 'right of way'
+  ];
+  
+  return gisKeywords.some(kw => query.toLowerCase().includes(kw));
 }
 
 function getStyleForCategory(category) {
