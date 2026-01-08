@@ -321,4 +321,32 @@ router.post('/:id/activities', async (req, res) => {
   }
 });
 
+// DELETE /api/deals/activities/:activityId - Delete activity
+router.delete('/activities/:activityId', async (req, res) => {
+  try {
+    const { activityId } = req.params;
+    
+    // Check if activity exists
+    const activity = await prisma.activity.findUnique({
+      where: { id: activityId }
+    });
+    
+    if (!activity) {
+      return res.status(404).json({ error: 'Activity not found' });
+    }
+    
+    // Delete the activity
+    await prisma.activity.delete({
+      where: { id: activityId }
+    });
+    
+    console.log(`Activity deleted: ${activityId}`);
+    
+    res.json({ success: true, id: activityId });
+  } catch (error) {
+    console.error('Error deleting activity:', error);
+    res.status(500).json({ error: 'Failed to delete activity' });
+  }
+});
+
 export default router;
