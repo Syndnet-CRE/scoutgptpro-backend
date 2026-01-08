@@ -233,6 +233,32 @@ model Deal {
   @@map("deals")
 }
 
+model DealRoom {
+  id          String   @id @default(cuid())
+  ownerId     String
+  title       String
+  status      String   @default("inbound")
+  assetType   String?
+  location    String?
+  
+  // Inputs
+  purchasePrice    Float?
+  capEx            Float?
+  targetCapRate    Float?
+  notes            String?
+  
+  // JSON fields
+  characteristics  Json?
+  outputs          Json?
+  mapState         Json?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("deal_rooms")
+  @@index([ownerId])
+}
+
 model BuyBox {
   id            String   @id @default(cuid())
   userId        String
