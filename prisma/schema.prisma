@@ -258,11 +258,180 @@ model DealRoom {
   // Primary property (main subject property)
   primaryPropertyId String?
   
+  // Property Overview (extended)
+  description         String?
+  highlights          String[]  @default([])
+  offeringType        String?   // Sale, Lease, JV, Ground Lease, Note, Distressed, Development
+  locationVisibility  String    @default("exact")  // exact, approximate, hidden
+
+  // Key Facts
+  askingPrice         Float?
+  noi                 Float?
+  capRate             Float?
+  units               Int?
+  squareFeet          Float?
+  acres               Float?
+  yearBuilt           Int?
+  zoning              String?
+
+  // Property Details
+  assetClass          String?
+  propertyType        String?
+  address             String?
+  addressMasked       String?
+  parcelIds           String[]  @default([])
+  submarket           String?
+  county              String?
+  legalDescription    String?
+
+  // Physical Attributes (JSON for flexibility across asset classes)
+  physicalAttributes  Json?
+
+  // Zoning & Entitlements
+  zoningJurisdiction  String?
+  zoningCodes         String[]  @default([])
+  allowedUses         String[]  @default([])
+  far                 Float?
+  maxHeight           Float?
+  setbacks            Json?
+  entitlementStatus   String?   // none, in_progress, approved
+  knownConstraints    String?
+  requiredStudies     String[]  @default([])
+  developmentNotes    String?
+
+  // Environmental & Risk
+  phaseIStatus        String?
+  phaseIIStatus       String?
+  floodZone           String?
+  wetlandsPresent     String?   // yes, no, unknown
+  soilNotes           String?
+  environmentalIssues String?
+
+  // Utilities & Infrastructure
+  waterProvider       String?
+  sewerProvider       String?
+  electricProvider    String?
+  gasProvider         String?
+  fiberAvailable      Boolean?
+  capacityNotes       String?
+  easementsNotes      String?
+
+  // Financials (Seller)
+  t12Income           Float?
+  t12Expenses         Float?
+  occupancy           Float?
+
+  // Tenancy
+  topTenantSummary    String?
+
+  // Contacts (JSON)
+  contacts            Json?
+
+  // Access Control
+  accessTier          String    @default("PUBLIC_PREVIEW")  // PUBLIC_PREVIEW, REGISTERED, NDA_REQUIRED, VERIFIED, INVITE_ONLY
+  ndaRequired         Boolean   @default(false)
+  
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   
   @@map("deal_rooms")
   @@index([ownerId])
+}
+
+model DealDocument {
+  id            String   @id @default(cuid())
+  dealRoomId    String
+  folder        String
+  name          String
+  fileUrl       String
+  fileType      String?
+  fileSize      Int?
+  accessTier    String   @default("REGISTERED")
+  canDownload   Boolean  @default(true)
+  uploadedBy    String
+  createdAt     DateTime @default(now())
+  
+  @@map("deal_documents")
+  @@index([dealRoomId])
+}
+
+model DealMedia {
+  id            String   @id @default(cuid())
+  dealRoomId    String
+  mediaType     String
+  tag           String?
+  name          String?
+  url           String
+  thumbnailUrl  String?
+  uploadedBy    String
+  createdAt     DateTime @default(now())
+  
+  @@map("deal_media")
+  @@index([dealRoomId])
+}
+
+model DealUserAccess {
+  id            String   @id @default(cuid())
+  dealRoomId    String
+  userId        String
+  accessTier    String   @default("PUBLIC_PREVIEW")
+  ndaStatus     String   @default("NOT_REQUESTED")
+  requestedAt   DateTime?
+  approvedAt    DateTime?
+  approvedBy    String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@unique([dealRoomId, userId])
+  @@map("deal_user_access")
+  @@index([dealRoomId])
+  @@index([userId])
+}
+
+model NdaSignature {
+  id             String   @id @default(cuid())
+  dealRoomId     String
+  userId         String
+  signerName     String
+  signerEmail    String?
+  signedAt       DateTime @default(now())
+  ipAddress      String?
+  ndaVersionHash String?
+  
+  @@map("nda_signatures")
+  @@index([dealRoomId])
+  @@index([userId])
+}
+
+model DealActivityLog {
+  id            String   @id @default(cuid())
+  dealRoomId    String
+  userId        String
+  action        String
+  details       Json?
+  createdAt     DateTime @default(now())
+  
+  @@map("deal_activity_log")
+  @@index([dealRoomId])
+  @@index([userId])
+}
+
+model BuyerAssumptions {
+  id              String   @id @default(cuid())
+  dealRoomId      String
+  userId          String
+  purchasePrice   Float?
+  capExAssumption Float?
+  exitCap         Float?
+  holdPeriod      Int?
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@unique([dealRoomId, userId])
+  @@map("buyer_assumptions")
+  @@index([dealRoomId])
+  @@index([userId])
 }
 
 model BuyBox {
