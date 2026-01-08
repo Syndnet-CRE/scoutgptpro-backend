@@ -1606,7 +1606,6 @@ enum PropertyType {
 enum DealStage {
   inbound
   buy_box_match
-  initial_screen
   underwriting
   loi
   offer_submitted
