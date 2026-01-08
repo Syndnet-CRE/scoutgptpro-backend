@@ -15,6 +15,7 @@ model User {
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
   buyBoxes   BuyBox[]
+  documents  Document[]
   listings   Listing[]
   mapQueries MapQuery[]
   tasks      Task[]
@@ -40,92 +41,95 @@ model UserProfile {
 }
 
 model Property {
-  id                 String    @id @default(cuid())
-  address            String?
-  city               String?
-  state              String?
-  zip                String?
-  county             String?
-  apn                String?
-  legalDesc          String?
-  propertyType       String?
-  size               Float?
-  sizeUnit           String?
-  zoning             String?
-  yearBuilt          Int?
-  assessedValue      Float?
-  marketValue        Float?
-  ownerName          String?
-  ownerAddress       String?
-  metadata           Json?
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
-  acres              Float?
-  centroid           Json?
-  impValue           Float?
-  isAbsentee         Boolean   @default(false)
-  isTaxDelinquent    Boolean   @default(false)
-  isVacantLand       Boolean   @default(false)
-  landValue          Float?
-  latitude           Float?
-  longitude          Float?
-  mailingAddr        String?
-  mktValue           Float?
-  motivationScore    Int?
-  opportunityFlags   String[]
-  owner              String?
-  parcelId           String    @unique
-  siteAddress        String?
-  taxYear            Int?
-  totalDue           Float?
-  totalTax           Float?
-  siteCity           String?
-  siteState          String?
-  siteZip            String?
-  appraisedValue     Float?
-  block              String?
-  deedDate           String?
-  enrichedAt         DateTime?
-  enrichmentSource   String?
-  floodZone          String?
-  geoId              String?
-  landTypeDesc       String?
-  lot                String?
-  ownerFirstName     String?
-  ownerLastName      String?
-  situsNum           String?
-  situsStreet        String?
-  subdivision        String?
-  tcadAcres          Float?
-  attomId            String?   @map("attomId")
-  avmValue           Decimal?  @map("avmValue") @db.Decimal(14, 2)
-  avmMin             Decimal?  @map("avmMin") @db.Decimal(14, 2)
-  avmMax             Decimal?  @map("avmMax") @db.Decimal(14, 2)
-  avmConfidence      Int?      @map("avmConfidence")
-  avmDate            DateTime? @map("avmDate")
-  // Transaction/Deed Data (from RECORDER)
-  lastSaleDate       DateTime?
-  lastSaleAmount     Float?
-  lastSaleDocType    String?
-  grantorName        String?
-  granteeName        String?
-  granteeMailAddress String?
-  granteeMailCity    String?
-  granteeMailState   String?
-  granteeMailZip     String?
-  isInvestorOwned    Boolean   @default(false)
-  isForeclosure      Boolean   @default(false)
-  // Mortgage Data
-  mortgageAmount     Float?
-  mortgageLender     String?
-  mortgageRate       Float?
-  mortgageTerm       Int?
-  // Ownership Duration (calculated)
-  ownershipYears     Float?
-  comps              Comp[]
-  deals              Deal[]
-  listings           Listing[]
-  pins               Pin[]
+  id                    String    @id @default(cuid())
+  address               String?
+  city                  String?
+  state                 String?
+  zip                   String?
+  county                String?
+  apn                   String?
+  legalDesc             String?
+  propertyType          String?
+  size                  Float?
+  sizeUnit              String?
+  zoning                String?
+  yearBuilt             Int?
+  assessedValue         Float?
+  marketValue           Float?
+  ownerName             String?
+  ownerAddress          String?
+  metadata              Json?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  acres                 Float?
+  centroid              Json?
+  impValue              Float?
+  isAbsentee            Boolean   @default(false)
+  isTaxDelinquent       Boolean   @default(false)
+  isVacantLand          Boolean   @default(false)
+  landValue             Float?
+  latitude              Float?
+  longitude             Float?
+  mailingAddr           String?
+  mktValue              Float?
+  motivationScore       Int?
+  opportunityFlags      String[]
+  owner                 String?
+  parcelId              String    @unique
+  siteAddress           String?
+  taxYear               Int?
+  totalDue              Float?
+  totalTax              Float?
+  siteCity              String?
+  siteState             String?
+  siteZip               String?
+  appraisedValue        Float?
+  block                 String?
+  deedDate              String?
+  enrichedAt            DateTime?
+  enrichmentSource      String?
+  floodZone             String?
+  geoId                 String?
+  landTypeDesc          String?
+  lot                   String?
+  ownerFirstName        String?
+  ownerLastName         String?
+  situsNum              String?
+  situsStreet           String?
+  subdivision           String?
+  tcadAcres             Float?
+  attomId               String?   @map("attomId")
+  avmValue              Decimal?  @map("avmValue") @db.Decimal(14, 2)
+  avmMin                Decimal?  @map("avmMin") @db.Decimal(14, 2)
+  avmMax                Decimal?  @map("avmMax") @db.Decimal(14, 2)
+  avmConfidence         Int?      @map("avmConfidence")
+  avmDate               DateTime? @map("avmDate")
+  granteeMailAddress    String?
+  granteeMailCity       String?
+  granteeMailState      String?
+  granteeMailZip        String?
+  granteeName           String?
+  grantorName           String?
+  isForeclosure         Boolean   @default(false)
+  isInvestorOwned       Boolean   @default(false)
+  lastSaleAmount        Float?
+  lastSaleDate          DateTime?
+  lastSaleDocType       String?
+  mortgageAmount        Float?
+  mortgageLender        String?
+  mortgageRate          Float?
+  mortgageTerm          Int?
+  ownershipYears        Float?
+  asset_class           String?
+  land_use_code         String?   @db.VarChar(10)
+  general_land_use_code String?   @db.VarChar(10)
+  asset_subtype         String?   @db.VarChar(50)
+  land_use              String?   @db.VarChar(20)
+  general_land_use      String?   @db.VarChar(20)
+  comps                 Comp[]
+  deals                 Deal[]
+  listings              Listing[]
+  pins                  Pin[]
 
   @@index([propertyType])
   @@index([latitude, longitude])
@@ -136,6 +140,7 @@ model Property {
   @@index([totalTax])
   @@index([parcelId])
   @@index([attomId])
+  @@index([asset_class], map: "idx_properties_asset_class")
   @@map("properties")
 }
 
@@ -205,7 +210,7 @@ model Deal {
   userId        String
   propertyId    String?
   title         String
-  stage         DealStage  @default(PIPELINE)
+  stage         DealStage  @default(inbound)
   dealType      String?
   purchasePrice Float?
   offerPrice    Float?
@@ -266,6 +271,7 @@ model Document {
   description String?
   uploadedAt  DateTime @default(now())
   deal        Deal?    @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  users       User     @relation(fields: [userId], references: [id])
 
   @@index([userId])
   @@index([dealId])
@@ -461,6 +467,911 @@ model spatial_ref_sys {
   proj4text String? @db.VarChar(2048)
 }
 
+model Owner {
+  id                 String           @id @default(cuid())
+  ownerNameRaw       String?
+  ownerNameNorm      String?
+  mailingAddressRaw  String?
+  mailingAddressNorm String?
+  mailingState       String?
+  entityType         EntityType       @default(UNKNOWN)
+  isCorporate        Boolean          @default(false)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @default(now()) @updatedAt
+  features           OwnerFeaturesTx?
+  properties         OwnerProperty[]
+
+  @@index([entityType], map: "idx_owners_entitytype")
+  @@index([isCorporate], map: "idx_owners_iscorporate")
+  @@index([mailingState], map: "idx_owners_mailingstate")
+  @@index([ownerNameNorm], map: "idx_owners_ownernamenorm")
+  @@map("owners")
+}
+
+model OwnerProperty {
+  id        String   @id @default(cuid())
+  ownerId   String
+  parcelId  String
+  createdAt DateTime @default(now())
+  owner     Owner    @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([ownerId, parcelId])
+  @@index([ownerId], map: "idx_owner_properties_ownerid")
+  @@index([parcelId], map: "idx_owner_properties_parcelid")
+  @@map("owner_properties")
+}
+
+model OwnerFeaturesTx {
+  id                   String   @id
+  ownerId              String   @unique
+  parcelCountTx        Int      @default(0)
+  totalAssessedValueTx Decimal? @db.Decimal(15, 2)
+  assetClassMix        Json?
+  absenteeRate         Decimal? @db.Decimal(5, 4)
+  outOfState           Boolean  @default(false)
+  avgHoldYears         Decimal? @db.Decimal(5, 2)
+  updatedAt            DateTime @default(now()) @updatedAt
+  owner                Owner    @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([outOfState], map: "idx_owner_features_tx_outofstate")
+  @@index([parcelCountTx], map: "idx_owner_features_tx_parcelcounttx")
+  @@map("owner_features_tx")
+}
+
+model OwnerSegment {
+  segmentKey  String   @id
+  description String?
+  ruleJson    Json
+  version     String   @default("1.0")
+  updatedAt   DateTime @default(now()) @updatedAt
+
+  @@index([segmentKey], map: "idx_owner_segments_segmentkey")
+  @@map("owner_segments")
+}
+
+model TxEnrichmentRollup {
+  parcelId     String   @id
+  pop1mi       Decimal? @db.Decimal(10, 0)
+  medIncome1mi Decimal? @db.Decimal(10, 2)
+  poiCounts    Json?
+  nearestPoi   Json?
+  trafficIndex Decimal? @db.Decimal(5, 2)
+  floodPct     Decimal? @db.Decimal(5, 4)
+  inFloodplain Boolean  @default(false)
+  updatedAt    DateTime @default(now()) @updatedAt
+
+  @@index([parcelId], map: "idx_tx_enrichment_rollups_parcelid")
+  @@map("tx_enrichment_rollups")
+}
+
+model DiscoverRun {
+  id         String           @id @default(cuid())
+  queryText  String?
+  intentJson Json
+  createdBy  String?
+  startedAt  DateTime         @default(now())
+  endedAt    DateTime?
+  stats      Json?
+  error      String?
+  results    DiscoverResult[]
+
+  @@index([createdBy], map: "idx_discover_runs_createdby")
+  @@index([startedAt], map: "idx_discover_runs_startedat")
+  @@map("discover_runs")
+}
+
+model DiscoverResult {
+  id        String      @id @default(cuid())
+  runId     String
+  parcelId  String
+  score     Decimal     @db.Decimal(10, 6)
+  reasons   Json
+  breakdown Json
+  run       DiscoverRun @relation(fields: [runId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([parcelId], map: "idx_discover_results_parcelid")
+  @@index([runId], map: "idx_discover_results_runid")
+  @@index([score], map: "idx_discover_results_score")
+  @@map("discover_results")
+}
+
+model ScoringModel {
+  modelId    String   @id
+  assetClass String
+  version    String   @default("1.0")
+  modelJson  Json
+  updatedAt  DateTime @default(now()) @updatedAt
+
+  @@index([assetClass], map: "idx_scoring_models_assetclass")
+  @@index([version], map: "idx_scoring_models_version")
+  @@map("scoring_models")
+}
+
+model austin_land_use {
+  property_id      String  @id @db.VarChar(20)
+  land_use         String? @db.VarChar(10)
+  general_land_use String? @db.VarChar(10)
+}
+
+model buyboxes {
+  id         String   @id
+  name       String
+  intentJson Json
+  createdBy  String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
+
+  @@index([createdBy], map: "idx_buyboxes_createdby")
+}
+
+model county_config {
+  fips             String    @id
+  county_name      String
+  table_name       String
+  enrichment_table String
+  mts_tileset_id   String?
+  enabled          Boolean?  @default(true)
+  parcel_count     Int?
+  last_import      DateTime? @db.Timestamptz(6)
+  created_at       DateTime? @default(now()) @db.Timestamptz(6)
+}
+
+model land_use_codes {
+  code        String  @id @db.VarChar(20)
+  description String? @db.VarChar(100)
+  category    String? @db.VarChar(50)
+}
+
+model osm_pois_travis {
+  id          Int                      @id @default(autoincrement())
+  osm_id      BigInt                   @unique
+  name        String?
+  category    String
+  subcategory String?
+  latitude    Float
+  longitude   Float
+  address     String?
+  city        String?
+  state       String?                  @default("TX")
+  zip         String?
+  phone       String?
+  website     String?
+  tags        Json?
+  created_at  DateTime?                @default(now()) @db.Timestamp(6)
+  updated_at  DateTime?                @default(now()) @db.Timestamp(6)
+  geom        Unsupported("geometry")?
+  property_id String?
+
+  @@index([category, subcategory], map: "idx_osm_pois_travis_category")
+  @@index([geom], map: "idx_osm_pois_travis_geom", type: Gist)
+  @@index([osm_id], map: "idx_osm_pois_travis_osm_id")
+  @@index([property_id], map: "idx_osm_pois_travis_property_id")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+/// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
+model parcel_features_travis {
+  parcel_id                    String                   @id
+  county_fips                  String                   @default("48453")
+  situs_address                String?
+  mailing_address              String?
+  mail_city                    String?
+  mail_state                   String?
+  mail_zip                     String?
+  owner_name_raw               String?
+  owner_name_norm              String?
+  owner_entity_type            String?
+  owner_portfolio_count_travis Int?                     @default(0)
+  owner_segment                String?
+  acres_calc                   Decimal                  @db.Decimal
+  acres_calc_source            String                   @default("enrichment.acreage")
+  acres_calc_confidence        Decimal?                 @default(1.0) @db.Decimal
+  asset_class                  String?
+  asset_class_confidence       Decimal?                 @db.Decimal
+  year_built                   Int?
+  building_sqft                Decimal?                 @db.Decimal
+  market_value                 Decimal?                 @db.Decimal
+  assessed_total_value         Decimal?                 @db.Decimal
+  land_value                   Decimal?                 @db.Decimal
+  improvement_value            Decimal?                 @db.Decimal
+  tax_delinquent_flag          Boolean?                 @default(false)
+  homestead_exemption_flag     Boolean?                 @default(false)
+  last_sale_date               DateTime?                @db.Date
+  last_sale_price              Decimal?                 @db.Decimal
+  zoning_code                  String?
+  flood_zone                   String?
+  land_use_code                String?
+  land_use_desc                String?
+  geom_centroid                Unsupported("geometry")?
+  created_at                   DateTime                 @default(now()) @db.Timestamptz(6)
+  updated_at                   DateTime                 @default(now()) @db.Timestamptz(6)
+
+  @@index([acres_calc], map: "idx_pft_acres")
+  @@index([asset_class], map: "idx_pft_asset_class")
+  @@index([county_fips, acres_calc], map: "idx_pft_county_acres")
+  @@index([geom_centroid], map: "idx_pft_geom", type: Gist)
+  @@index([market_value], map: "idx_pft_market_value")
+  @@index([owner_entity_type], map: "idx_pft_owner_entity_type")
+  @@index([owner_segment], map: "idx_pft_owner_segment")
+}
+
+model parcels_bastrop {
+  parcel_id                  String                      @id
+  geom                       Unsupported("geometry")
+  created_at                 DateTime                    @default(now()) @db.Timestamptz(6)
+  parcels_bastrop_enrichment parcels_bastrop_enrichment?
+
+  @@index([geom], type: Gist)
+}
+
+model parcels_bastrop_enrichment {
+  parcel_id                String          @id
+  owner_name               String?
+  owner2                   String?
+  owner_type               String?
+  mail_address1            String?
+  mail_address2            String?
+  mail_city                String?
+  mail_state               String?
+  mail_zip                 String?
+  situs_address            String?
+  land_value               Decimal?        @db.Decimal
+  improvement_value        Decimal?        @db.Decimal
+  market_value             Decimal?        @db.Decimal
+  assessed_value           Decimal?        @db.Decimal
+  acres                    Decimal?        @db.Decimal
+  acreage                  Decimal?        @db.Decimal
+  year_built               Int?
+  legal_desc               String?
+  zoning_code              String?
+  flood_zone               String?
+  last_sale_date           DateTime?       @db.Date
+  last_sale_price          Decimal?        @db.Decimal
+  tax_delinquent_flag      Boolean?        @default(false)
+  homestead_exemption_flag Boolean?        @default(false)
+  created_at               DateTime?       @default(now()) @db.Timestamptz(6)
+  updated_at               DateTime?       @default(now()) @db.Timestamptz(6)
+  parcels_bastrop          parcels_bastrop @relation(fields: [parcel_id], references: [parcel_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model parcels_bell {
+  parcel_id               String                   @id
+  geom                    Unsupported("geometry")
+  created_at              DateTime                 @default(now()) @db.Timestamptz(6)
+  parcels_bell_enrichment parcels_bell_enrichment?
+
+  @@index([geom], type: Gist)
+}
+
+model parcels_bell_enrichment {
+  parcel_id                String       @id
+  owner_name               String?
+  owner2                   String?
+  owner_type               String?
+  mail_address1            String?
+  mail_address2            String?
+  mail_city                String?
+  mail_state               String?
+  mail_zip                 String?
+  situs_address            String?
+  land_value               Decimal?     @db.Decimal
+  improvement_value        Decimal?     @db.Decimal
+  market_value             Decimal?     @db.Decimal
+  assessed_value           Decimal?     @db.Decimal
+  acres                    Decimal?     @db.Decimal
+  acreage                  Decimal?     @db.Decimal
+  year_built               Int?
+  legal_desc               String?
+  zoning_code              String?
+  flood_zone               String?
+  last_sale_date           DateTime?    @db.Date
+  last_sale_price          Decimal?     @db.Decimal
+  tax_delinquent_flag      Boolean?     @default(false)
+  homestead_exemption_flag Boolean?     @default(false)
+  created_at               DateTime?    @default(now()) @db.Timestamptz(6)
+  updated_at               DateTime?    @default(now()) @db.Timestamptz(6)
+  parcels_bell             parcels_bell @relation(fields: [parcel_id], references: [parcel_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model parcels_blanco {
+  parcel_id                 String                     @id
+  geom                      Unsupported("geometry")
+  created_at                DateTime                   @default(now()) @db.Timestamptz(6)
+  parcels_blanco_enrichment parcels_blanco_enrichment?
+
+  @@index([geom], type: Gist)
+}
+
+model parcels_blanco_enrichment {
+  parcel_id                String         @id
+  owner_name               String?
+  owner2                   String?
+  owner_type               String?
+  mail_address1            String?
+  mail_address2            String?
+  mail_city                String?
+  mail_state               String?
+  mail_zip                 String?
+  situs_address            String?
+  land_value               Decimal?       @db.Decimal
+  improvement_value        Decimal?       @db.Decimal
+  market_value             Decimal?       @db.Decimal
+  assessed_value           Decimal?       @db.Decimal
+  acres                    Decimal?       @db.Decimal
+  acreage                  Decimal?       @db.Decimal
+  year_built               Int?
+  legal_desc               String?
+  zoning_code              String?
+  flood_zone               String?
+  last_sale_date           DateTime?      @db.Date
+  last_sale_price          Decimal?       @db.Decimal
+  tax_delinquent_flag      Boolean?       @default(false)
+  homestead_exemption_flag Boolean?       @default(false)
+  created_at               DateTime?      @default(now()) @db.Timestamptz(6)
+  updated_at               DateTime?      @default(now()) @db.Timestamptz(6)
+  parcels_blanco           parcels_blanco @relation(fields: [parcel_id], references: [parcel_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model parcels_burnet {
+  parcel_id                 String                     @id
+  geom                      Unsupported("geometry")
+  created_at                DateTime                   @default(now()) @db.Timestamptz(6)
+  parcels_burnet_enrichment parcels_burnet_enrichment?
+
+  @@index([geom], type: Gist)
+}
+
+model parcels_burnet_enrichment {
+  parcel_id                String         @id
+  owner_name               String?
+  owner2                   String?
+  owner_type               String?
+  mail_address1            String?
+  mail_address2            String?
+  mail_city                String?
+  mail_state               String?
+  mail_zip                 String?
+  situs_address            String?
+  land_value               Decimal?       @db.Decimal
+  improvement_value        Decimal?       @db.Decimal
+  market_value             Decimal?       @db.Decimal
+  assessed_value           Decimal?       @db.Decimal
+  acres                    Decimal?       @db.Decimal
+  acreage                  Decimal?       @db.Decimal
+  year_built               Int?
+  legal_desc               String?
+  zoning_code              String?
+  flood_zone               String?
+  last_sale_date           DateTime?      @db.Date
+  last_sale_price          Decimal?       @db.Decimal
+  tax_delinquent_flag      Boolean?       @default(false)
+  homestead_exemption_flag Boolean?       @default(false)
+  created_at               DateTime?      @default(now()) @db.Timestamptz(6)
+  updated_at               DateTime?      @default(now()) @db.Timestamptz(6)
+  parcels_burnet           parcels_burnet @relation(fields: [parcel_id], references: [parcel_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model parcels_burnet_raw {
+  gid        Int                      @id @default(autoincrement())
+  prop_id    String?                  @db.VarChar
+  geo_id     String?                  @db.VarChar
+  owner_name String?                  @db.VarChar
+  name_care  String?                  @db.VarChar
+  legal_area Float?
+  lgl_area_u String?                  @db.VarChar
+  gis_area   Float?
+  gis_area_u String?                  @db.VarChar
+  legal_desc String?                  @db.VarChar
+  stat_land_ String?                  @db.VarChar
+  loc_land_u String?                  @db.VarChar
+  land_value Float?
+  imp_value  Float?
+  mkt_value  Float?
+  situs_addr String?                  @db.VarChar
+  situs_num  String?                  @db.VarChar
+  situs_stre String?                  @db.VarChar
+  situs_st_1 String?                  @db.VarChar
+  situs_st_2 String?                  @db.VarChar
+  situs_city String?                  @db.VarChar
+  situs_stat String?                  @db.VarChar
+  situs_zip  String?                  @db.VarChar
+  mail_addr  String?                  @db.VarChar
+  mail_line1 String?                  @db.VarChar
+  mail_line2 String?                  @db.VarChar
+  mail_city  String?                  @db.VarChar
+  mail_stat  String?                  @db.VarChar
+  mail_zip   String?                  @db.VarChar
+  source     String?                  @db.VarChar
+  date_acq   BigInt?
+  fips       String?                  @db.VarChar
+  county     String?                  @db.VarChar
+  tax_year   BigInt?
+  year_built String?                  @db.VarChar
+  objectid_1 BigInt?
+  shape_leng Float?
+  shape_area Float?
+  geom       Unsupported("geometry")?
+
+  @@index([geom], map: "parcels_burnet_raw_geom_geom_idx", type: Gist)
+}
+
+model parcels_caldwell {
+  parcel_id                   String                       @id
+  geom                        Unsupported("geometry")
+  created_at                  DateTime                     @default(now()) @db.Timestamptz(6)
+  parcels_caldwell_enrichment parcels_caldwell_enrichment?
+
+  @@index([geom], type: Gist)
+}
+
+model parcels_caldwell_enrichment {
+  parcel_id                String           @id
+  owner_name               String?
+  owner2                   String?
+  owner_type               String?
+  mail_address1            String?
+  mail_address2            String?
+  mail_city                String?
+  mail_state               String?
+  mail_zip                 String?
+  situs_address            String?
+  land_value               Decimal?         @db.Decimal
+  improvement_value        Decimal?         @db.Decimal
+  market_value             Decimal?         @db.Decimal
+  assessed_value           Decimal?         @db.Decimal
+  acres                    Decimal?         @db.Decimal
+  acreage                  Decimal?         @db.Decimal
+  year_built               Int?
+  legal_desc               String?
+  zoning_code              String?
+  flood_zone               String?
+  last_sale_date           DateTime?        @db.Date
+  last_sale_price          Decimal?         @db.Decimal
+  tax_delinquent_flag      Boolean?         @default(false)
+  homestead_exemption_flag Boolean?         @default(false)
+  created_at               DateTime?        @default(now()) @db.Timestamptz(6)
+  updated_at               DateTime?        @default(now()) @db.Timestamptz(6)
+  parcels_caldwell         parcels_caldwell @relation(fields: [parcel_id], references: [parcel_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model parcels_comal {
+  parcel_id                String                    @id
+  geom                     Unsupported("geometry")
+  created_at               DateTime                  @default(now()) @db.Timestamptz(6)
+  parcels_comal_enrichment parcels_comal_enrichment?
+
+  @@index([geom], type: Gist)
+}
+
+model parcels_comal_enrichment {
+  parcel_id                String        @id
+  owner_name               String?
+  owner2                   String?
+  owner_type               String?
+  mail_address1            String?
+  mail_address2            String?
+  mail_city                String?
+  mail_state               String?
+  mail_zip                 String?
+  situs_address            String?
+  land_value               Decimal?      @db.Decimal
+  improvement_value        Decimal?      @db.Decimal
+  market_value             Decimal?      @db.Decimal
+  assessed_value           Decimal?      @db.Decimal
+  acres                    Decimal?      @db.Decimal
+  acreage                  Decimal?      @db.Decimal
+  year_built               Int?
+  legal_desc               String?
+  zoning_code              String?
+  flood_zone               String?
+  last_sale_date           DateTime?     @db.Date
+  last_sale_price          Decimal?      @db.Decimal
+  tax_delinquent_flag      Boolean?      @default(false)
+  homestead_exemption_flag Boolean?      @default(false)
+  created_at               DateTime?     @default(now()) @db.Timestamptz(6)
+  updated_at               DateTime?     @default(now()) @db.Timestamptz(6)
+  parcels_comal            parcels_comal @relation(fields: [parcel_id], references: [parcel_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model parcels_hays {
+  parcel_id               String                   @id
+  geom                    Unsupported("geometry")
+  created_at              DateTime                 @default(now()) @db.Timestamptz(6)
+  parcels_hays_enrichment parcels_hays_enrichment?
+
+  @@index([geom], type: Gist)
+}
+
+model parcels_hays_enrichment {
+  parcel_id                String       @id
+  owner_name               String?
+  owner2                   String?
+  owner_type               String?
+  mail_address1            String?
+  mail_address2            String?
+  mail_city                String?
+  mail_state               String?
+  mail_zip                 String?
+  situs_address            String?
+  land_value               Decimal?     @db.Decimal
+  improvement_value        Decimal?     @db.Decimal
+  market_value             Decimal?     @db.Decimal
+  assessed_value           Decimal?     @db.Decimal
+  acres                    Decimal?     @db.Decimal
+  acreage                  Decimal?     @db.Decimal
+  year_built               Int?
+  legal_desc               String?
+  zoning_code              String?
+  flood_zone               String?
+  last_sale_date           DateTime?    @db.Date
+  last_sale_price          Decimal?     @db.Decimal
+  tax_delinquent_flag      Boolean?     @default(false)
+  homestead_exemption_flag Boolean?     @default(false)
+  created_at               DateTime?    @default(now()) @db.Timestamptz(6)
+  updated_at               DateTime?    @default(now()) @db.Timestamptz(6)
+  parcels_hays             parcels_hays @relation(fields: [parcel_id], references: [parcel_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model parcels_kendall {
+  parcel_id                  String                      @id
+  geom                       Unsupported("geometry")
+  created_at                 DateTime                    @default(now()) @db.Timestamptz(6)
+  parcels_kendall_enrichment parcels_kendall_enrichment?
+
+  @@index([geom], type: Gist)
+}
+
+model parcels_kendall_enrichment {
+  parcel_id                String          @id
+  owner_name               String?
+  owner2                   String?
+  owner_type               String?
+  mail_address1            String?
+  mail_address2            String?
+  mail_city                String?
+  mail_state               String?
+  mail_zip                 String?
+  situs_address            String?
+  land_value               Decimal?        @db.Decimal
+  improvement_value        Decimal?        @db.Decimal
+  market_value             Decimal?        @db.Decimal
+  assessed_value           Decimal?        @db.Decimal
+  acres                    Decimal?        @db.Decimal
+  acreage                  Decimal?        @db.Decimal
+  year_built               Int?
+  legal_desc               String?
+  zoning_code              String?
+  flood_zone               String?
+  last_sale_date           DateTime?       @db.Date
+  last_sale_price          Decimal?        @db.Decimal
+  tax_delinquent_flag      Boolean?        @default(false)
+  homestead_exemption_flag Boolean?        @default(false)
+  created_at               DateTime?       @default(now()) @db.Timestamptz(6)
+  updated_at               DateTime?       @default(now()) @db.Timestamptz(6)
+  parcels_kendall          parcels_kendall @relation(fields: [parcel_id], references: [parcel_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model parcels_lee {
+  parcel_id              String                  @id
+  geom                   Unsupported("geometry")
+  created_at             DateTime                @default(now()) @db.Timestamptz(6)
+  parcels_lee_enrichment parcels_lee_enrichment?
+
+  @@index([geom], type: Gist)
+}
+
+model parcels_lee_enrichment {
+  parcel_id                String      @id
+  owner_name               String?
+  owner2                   String?
+  owner_type               String?
+  mail_address1            String?
+  mail_address2            String?
+  mail_city                String?
+  mail_state               String?
+  mail_zip                 String?
+  situs_address            String?
+  land_value               Decimal?    @db.Decimal
+  improvement_value        Decimal?    @db.Decimal
+  market_value             Decimal?    @db.Decimal
+  assessed_value           Decimal?    @db.Decimal
+  acres                    Decimal?    @db.Decimal
+  acreage                  Decimal?    @db.Decimal
+  year_built               Int?
+  legal_desc               String?
+  zoning_code              String?
+  flood_zone               String?
+  last_sale_date           DateTime?   @db.Date
+  last_sale_price          Decimal?    @db.Decimal
+  tax_delinquent_flag      Boolean?    @default(false)
+  homestead_exemption_flag Boolean?    @default(false)
+  created_at               DateTime?   @default(now()) @db.Timestamptz(6)
+  updated_at               DateTime?   @default(now()) @db.Timestamptz(6)
+  parcels_lee              parcels_lee @relation(fields: [parcel_id], references: [parcel_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model parcels_llano {
+  parcel_id                String                    @id
+  geom                     Unsupported("geometry")
+  created_at               DateTime                  @default(now()) @db.Timestamptz(6)
+  parcels_llano_enrichment parcels_llano_enrichment?
+
+  @@index([geom], type: Gist)
+}
+
+model parcels_llano_enrichment {
+  parcel_id                String        @id
+  owner_name               String?
+  owner2                   String?
+  owner_type               String?
+  mail_address1            String?
+  mail_address2            String?
+  mail_city                String?
+  mail_state               String?
+  mail_zip                 String?
+  situs_address            String?
+  land_value               Decimal?      @db.Decimal
+  improvement_value        Decimal?      @db.Decimal
+  market_value             Decimal?      @db.Decimal
+  assessed_value           Decimal?      @db.Decimal
+  acres                    Decimal?      @db.Decimal
+  acreage                  Decimal?      @db.Decimal
+  year_built               Int?
+  legal_desc               String?
+  zoning_code              String?
+  flood_zone               String?
+  last_sale_date           DateTime?     @db.Date
+  last_sale_price          Decimal?      @db.Decimal
+  tax_delinquent_flag      Boolean?      @default(false)
+  homestead_exemption_flag Boolean?      @default(false)
+  created_at               DateTime?     @default(now()) @db.Timestamptz(6)
+  updated_at               DateTime?     @default(now()) @db.Timestamptz(6)
+  parcels_llano            parcels_llano @relation(fields: [parcel_id], references: [parcel_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model parcels_travis {
+  parcel_id                 String                     @id
+  geom                      Unsupported("geometry")
+  created_at                DateTime                   @default(now()) @db.Timestamptz(6)
+  parcels_travis_enrichment parcels_travis_enrichment?
+
+  @@index([geom], type: Gist)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model parcels_travis_centroids {
+  parcel_id String?
+  centroid  Unsupported("geography")?
+
+  @@index([centroid], map: "idx_travis_centroids", type: Gist)
+  @@ignore
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model parcels_travis_enrichment {
+  parcel_id                  String         @id
+  owner_name                 String?
+  owner2                     String?
+  mail_address1              String?
+  mail_address2              String?
+  mail_city                  String?
+  mail_state                 String?
+  mail_zip                   String?
+  situs_address              String?
+  land_use                   String?
+  land_use_desc              String?
+  legal_desc                 String?
+  year_built                 Int?
+  acres                      Decimal?       @db.Decimal
+  land_value                 Decimal?       @db.Decimal
+  improvement_value          Decimal?       @db.Decimal
+  market_value               Decimal?       @db.Decimal
+  assessed_value             Decimal?       @db.Decimal
+  last_update                DateTime?      @db.Date
+  source_layer               String?
+  raw                        Json?
+  updated_at                 DateTime       @default(now()) @db.Timestamptz(6)
+  ingested_at                DateTime?      @db.Timestamptz(6)
+  owner_type                 String?
+  mailing_address            String?
+  land_use_code              String?
+  land_use_description       String?
+  assessed_land_value        Decimal?       @db.Decimal
+  assessed_improvement_value Decimal?       @db.Decimal
+  assessed_total_value       Decimal?       @db.Decimal
+  acreage                    Decimal?       @db.Decimal
+  zoning_code                String?
+  flood_zone                 String?
+  tax_delinquent_flag        Boolean?
+  last_sale_date             DateTime?      @db.Date
+  last_sale_price            Decimal?       @db.Decimal
+  homestead_exemption_flag   Boolean?
+  parcels_travis             parcels_travis @relation(fields: [parcel_id], references: [parcel_id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([land_use])
+  @@index([market_value])
+  @@index([owner_name])
+  @@index([year_built])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model parcels_travis_enrichment_stage {
+  id          BigInt   @id @default(autoincrement())
+  raw         Json
+  detected_id String?
+  ingested_at DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([detected_id])
+}
+
+/// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
+model parcels_travis_txgio_stage {
+  ogc_fid    Int                      @id @default(autoincrement())
+  prop_id    String?                  @db.VarChar(50)
+  geo_id     String?                  @db.VarChar(50)
+  owner_name String?                  @db.VarChar(254)
+  name_care  String?                  @db.VarChar(254)
+  legal_area String?                  @db.VarChar(20)
+  lgl_area_u String?                  @db.VarChar(8)
+  gis_area   Decimal?                 @db.Decimal(18, 8)
+  gis_area_u String?                  @db.VarChar(8)
+  legal_desc String?                  @db.VarChar(254)
+  stat_land_ String?                  @db.VarChar(5)
+  loc_land_u String?                  @db.VarChar(5)
+  land_value Decimal?                 @db.Decimal(18, 8)
+  imp_value  Decimal?                 @db.Decimal(18, 8)
+  mkt_value  Decimal?                 @db.Decimal(18, 8)
+  situs_addr String?                  @db.VarChar(254)
+  situs_num  String?                  @db.VarChar(15)
+  situs_stre String?                  @db.VarChar(10)
+  situs_st_1 String?                  @db.VarChar(60)
+  situs_st_2 String?                  @db.VarChar(60)
+  situs_city String?                  @db.VarChar(60)
+  situs_stat String?                  @db.VarChar(2)
+  situs_zip  String?                  @db.VarChar(5)
+  mail_addr  String?                  @db.VarChar(254)
+  mail_line1 String?                  @db.VarChar(60)
+  mail_line2 String?                  @db.VarChar(60)
+  mail_city  String?                  @db.VarChar(60)
+  mail_stat  String?                  @db.VarChar(2)
+  mail_zip   String?                  @db.VarChar(5)
+  source     String?                  @db.VarChar(100)
+  date_acq   Decimal?                 @db.Decimal(10, 0)
+  fips       String?                  @db.VarChar(5)
+  county     String?                  @db.VarChar(60)
+  tax_year   Decimal?                 @db.Decimal(10, 0)
+  year_built String?                  @db.VarChar(60)
+  geom       Unsupported("geometry")?
+
+  @@index([geom], map: "parcels_travis_txgio_stage_geom_geom_idx", type: Gist)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model parcels_tx {
+  parcel_uid   String                  @id
+  geom         Unsupported("geometry")
+  state_fips   String
+  county_fips  String
+  prop_id      String?
+  geo_id       String?
+  source_layer String?
+  ingested_at  DateTime                @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime                @default(now()) @db.Timestamptz(6)
+
+  @@index([county_fips])
+  @@index([county_fips, state_fips], map: "parcels_tx_county_state_idx")
+  @@index([geom], type: Gist)
+  @@index([state_fips])
+}
+
+model parcels_williamson {
+  parcel_id                     String                         @id
+  geom                          Unsupported("geometry")
+  created_at                    DateTime                       @default(now()) @db.Timestamptz(6)
+  parcels_williamson_enrichment parcels_williamson_enrichment?
+
+  @@index([geom], type: Gist)
+}
+
+model parcels_williamson_enrichment {
+  parcel_id                String             @id
+  owner_name               String?
+  owner2                   String?
+  owner_type               String?
+  mail_address1            String?
+  mail_address2            String?
+  mail_city                String?
+  mail_state               String?
+  mail_zip                 String?
+  situs_address            String?
+  land_value               Decimal?           @db.Decimal
+  improvement_value        Decimal?           @db.Decimal
+  market_value             Decimal?           @db.Decimal
+  assessed_value           Decimal?           @db.Decimal
+  acres                    Decimal?           @db.Decimal
+  acreage                  Decimal?           @db.Decimal
+  year_built               Int?
+  legal_desc               String?
+  zoning_code              String?
+  flood_zone               String?
+  last_sale_date           DateTime?          @db.Date
+  last_sale_price          Decimal?           @db.Decimal
+  tax_delinquent_flag      Boolean?           @default(false)
+  homestead_exemption_flag Boolean?           @default(false)
+  created_at               DateTime?          @default(now()) @db.Timestamptz(6)
+  updated_at               DateTime?          @default(now()) @db.Timestamptz(6)
+  parcels_williamson       parcels_williamson @relation(fields: [parcel_id], references: [parcel_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model stg_attom_property_boundary_travis {
+  id          BigInt   @id @default(autoincrement())
+  parcel_id   String
+  attom_id    String
+  county      String?
+  source_file String?
+  ingested_at DateTime @default(now()) @db.Timestamptz(6)
+  raw         Json?
+
+  @@index([attom_id])
+  @@index([parcel_id, attom_id], map: "stg_attom_property_boundary_travis_parcel_attom_idx")
+  @@index([parcel_id])
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model txgio_centroids {
+  prop_id    String?                   @db.VarChar(50)
+  owner_name String?                   @db.VarChar(254)
+  situs_addr String?                   @db.VarChar(254)
+  mkt_value  Decimal?                  @db.Decimal(18, 8)
+  land_value Decimal?                  @db.Decimal(18, 8)
+  imp_value  Decimal?                  @db.Decimal(18, 8)
+  gis_area   Decimal?                  @db.Decimal(18, 8)
+  legal_desc String?                   @db.VarChar(254)
+  centroid   Unsupported("geography")?
+
+  @@index([centroid], map: "idx_txgio_centroids", type: Gist)
+  @@ignore
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model xref_parcel_property_travis {
+  parcel_id  String
+  attom_id   String
+  source     String   @default("attom_property_boundary_match")
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+
+  @@id([parcel_id, attom_id])
+  @@index([attom_id])
+  @@index([parcel_id])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model xref_parcel_property_travis_conflicts {
+  parcel_id      String   @id
+  attom_ids      String[]
+  attom_id_count Int
+  sample_rows    Json?
+  created_at     DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([attom_id_count(sort: Desc)])
+}
+
+model zoning_districts {
+  id             Int                      @id @default(autoincrement())
+  zoning_code    String?                  @db.VarChar(50)
+  zoning_desc    String?                  @db.VarChar(255)
+  overlay        String?                  @db.VarChar(50)
+  geometry       Unsupported("geometry")?
+  raw_attributes Json?
+  created_at     DateTime?                @default(now()) @db.Timestamp(6)
+
+  @@index([zoning_code], map: "idx_zoning_districts_code")
+  @@index([geometry], map: "idx_zoning_districts_geom", type: Gist)
+  @@index([overlay], map: "idx_zoning_districts_overlay")
+}
+
 enum UserRole {
   AGENT
   BROKER
@@ -492,12 +1403,15 @@ enum PropertyType {
 }
 
 enum DealStage {
-  PIPELINE
-  ACTIVE
-  UNDERWRITING
-  PENDING
-  CLOSED
-  HOLD
+  inbound
+  buy_box_match
+  initial_screen
+  underwriting
+  loi
+  offer_submitted
+  under_contract
+  closed
+  terminated
 }
 
 enum Priority {
@@ -523,135 +1437,11 @@ enum EntityType {
   UNKNOWN
 }
 
-// Owner entity
-model Owner {
-  id                 String     @id @default(cuid())
-  ownerNameRaw       String?    @db.Text
-  ownerNameNorm      String?    @db.Text
-  mailingAddressRaw  String?    @db.Text
-  mailingAddressNorm String?    @db.Text
-  mailingState       String?
-  entityType         EntityType @default(UNKNOWN)
-  isCorporate        Boolean    @default(false)
-  createdAt          DateTime   @default(now())
-  updatedAt          DateTime   @updatedAt
-
-  properties OwnerProperty[]
-  features   OwnerFeaturesTx?
-
-  @@index([ownerNameNorm])
-  @@index([mailingState])
-  @@index([entityType])
-  @@index([isCorporate])
-  @@map("owners")
-}
-
-// Owner-Property relationship
-model OwnerProperty {
-  id        String   @id @default(cuid())
-  ownerId   String
-  parcelId  String
-  createdAt DateTime @default(now())
-
-  owner Owner @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-
-  @@unique([ownerId, parcelId])
-  @@index([parcelId])
-  @@index([ownerId])
-  @@map("owner_properties")
-}
-
-// Owner features aggregated for Texas
-model OwnerFeaturesTx {
-  id                   String   @id
-  ownerId              String   @unique
-  parcelCountTx        Int      @default(0)
-  totalAssessedValueTx Decimal? @db.Decimal(15, 2)
-  assetClassMix        Json?
-  absenteeRate         Decimal? @db.Decimal(5, 4)
-  outOfState           Boolean  @default(false)
-  avgHoldYears         Decimal? @db.Decimal(5, 2)
-  updatedAt            DateTime @updatedAt
-
-  owner Owner @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-
-  @@index([parcelCountTx])
-  @@index([outOfState])
-  @@map("owner_features_tx")
-}
-
-// Owner segment definitions
-model OwnerSegment {
-  segmentKey  String   @id
-  description String?  @db.Text
-  ruleJson    Json
-  version     String   @default("1.0")
-  updatedAt   DateTime @updatedAt
-
-  @@index([segmentKey])
-  @@map("owner_segments")
-}
-
-// Texas enrichment rollups
-model TxEnrichmentRollup {
-  parcelId     String   @id
-  pop1mi       Decimal? @db.Decimal(10, 0)
-  medIncome1mi Decimal? @db.Decimal(10, 2)
-  poiCounts    Json?
-  nearestPoi   Json?
-  trafficIndex Decimal? @db.Decimal(5, 2)
-  floodPct     Decimal? @db.Decimal(5, 4)
-  inFloodplain Boolean  @default(false)
-  updatedAt    DateTime @updatedAt
-
-  @@index([parcelId])
-  @@map("tx_enrichment_rollups")
-}
-
-// Discovery run tracking
-model DiscoverRun {
-  id         String    @id @default(cuid())
-  queryText  String?   @db.Text
-  intentJson Json
-  createdBy  String?
-  startedAt  DateTime  @default(now())
-  endedAt    DateTime?
-  stats      Json?
-  error      String?   @db.Text
-
-  results DiscoverResult[]
-
-  @@index([createdBy])
-  @@index([startedAt])
-  @@map("discover_runs")
-}
-
-// Discovery results
-model DiscoverResult {
-  id        String  @id @default(cuid())
-  runId     String
-  parcelId  String
-  score     Decimal @db.Decimal(10, 6)
-  reasons   Json
-  breakdown Json
-
-  run DiscoverRun @relation(fields: [runId], references: [id], onDelete: Cascade)
-
-  @@index([runId])
-  @@index([parcelId])
-  @@index([score])
-  @@map("discover_results")
-}
-
-// Scoring models
-model ScoringModel {
-  modelId    String   @id
-  assetClass String
-  version    String   @default("1.0")
-  modelJson  Json
-  updatedAt  DateTime @updatedAt
-
-  @@index([assetClass])
-  @@index([version])
-  @@map("scoring_models")
+enum entity_type {
+  PERSON
+  LLC
+  INC
+  LP
+  TRUST
+  UNKNOWN
 }
