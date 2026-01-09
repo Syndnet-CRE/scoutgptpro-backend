@@ -234,158 +234,127 @@ model Deal {
 }
 
 model DealRoom {
-  id          String   @id @default(cuid())
-  ownerId     String
-  title       String
-  status      String   @default("inbound")
-  assetType   String?
-  location    String?
-  
-  // Inputs
-  purchasePrice    Float?
-  capEx            Float?
-  targetCapRate    Float?
-  notes            String?
-  
-  // JSON fields
-  characteristics  Json?
-  outputs          Json?
-  mapState         Json?
-  
-  // Linked properties (array of property/parcel IDs)
-  propertyIds      String[]  @default([])
-  
-  // Primary property (main subject property)
-  primaryPropertyId String?
-  
-  // Property Overview (extended)
-  description         String?
-  highlights          String[]  @default([])
-  offeringType        String?   // Sale, Lease, JV, Ground Lease, Note, Distressed, Development
-  locationVisibility  String    @default("exact")  // exact, approximate, hidden
-
-  // Key Facts
-  askingPrice         Float?
-  noi                 Float?
-  capRate             Float?
-  units               Int?
-  squareFeet          Float?
+  id                  String   @id @default(cuid())
+  ownerId             String
+  title               String
+  status              String   @default("inbound")
+  assetType           String?
+  location            String?
+  purchasePrice       Float?
+  capEx               Float?
+  targetCapRate       Float?
+  notes               String?
+  characteristics     Json?
+  outputs             Json?
+  mapState            Json?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  primaryPropertyId   String?
+  propertyIds         String[] @default([])
+  accessTier          String   @default("PUBLIC_PREVIEW")
   acres               Float?
-  yearBuilt           Int?
-  zoning              String?
-
-  // Property Details
-  assetClass          String?
-  propertyType        String?
   address             String?
   addressMasked       String?
-  parcelIds           String[]  @default([])
-  submarket           String?
-  county              String?
-  legalDescription    String?
-
-  // Physical Attributes (JSON for flexibility across asset classes)
-  physicalAttributes  Json?
-
-  // Zoning & Entitlements
-  zoningJurisdiction  String?
-  zoningCodes         String[]  @default([])
-  allowedUses         String[]  @default([])
-  far                 Float?
-  maxHeight           Float?
-  setbacks            Json?
-  entitlementStatus   String?   // none, in_progress, approved
-  knownConstraints    String?
-  requiredStudies     String[]  @default([])
-  developmentNotes    String?
-
-  // Environmental & Risk
-  phaseIStatus        String?
-  phaseIIStatus       String?
-  floodZone           String?
-  wetlandsPresent     String?   // yes, no, unknown
-  soilNotes           String?
-  environmentalIssues String?
-
-  // Utilities & Infrastructure
-  waterProvider       String?
-  sewerProvider       String?
-  electricProvider    String?
-  gasProvider         String?
-  fiberAvailable      Boolean?
+  allowedUses         String[] @default([])
+  askingPrice         Float?
+  assetClass          String?
+  capRate             Float?
   capacityNotes       String?
-  easementsNotes      String?
-
-  // Financials (Seller)
-  t12Income           Float?
-  t12Expenses         Float?
-  occupancy           Float?
-
-  // Tenancy
-  topTenantSummary    String?
-
-  // Contacts (JSON)
   contacts            Json?
+  county              String?
+  description         String?
+  developmentNotes    String?
+  easementsNotes      String?
+  electricProvider    String?
+  entitlementStatus   String?
+  environmentalIssues String?
+  far                 Float?
+  fiberAvailable      Boolean?
+  floodZone           String?
+  gasProvider         String?
+  highlights          String[] @default([])
+  knownConstraints    String?
+  legalDescription    String?
+  locationVisibility  String   @default("exact")
+  maxHeight           Float?
+  ndaRequired         Boolean  @default(false)
+  noi                 Float?
+  occupancy           Float?
+  offeringType        String?
+  parcelIds           String[] @default([])
+  phaseIIStatus       String?
+  phaseIStatus        String?
+  physicalAttributes  Json?
+  propertyType        String?
+  requiredStudies     String[] @default([])
+  setbacks            Json?
+  sewerProvider       String?
+  soilNotes           String?
+  squareFeet          Float?
+  submarket           String?
+  t12Expenses         Float?
+  t12Income           Float?
+  topTenantSummary    String?
+  units               Int?
+  waterProvider       String?
+  wetlandsPresent     String?
+  yearBuilt           Int?
+  zoning              String?
+  zoningCodes         String[] @default([])
+  zoningJurisdiction  String?
 
-  // Access Control
-  accessTier          String    @default("PUBLIC_PREVIEW")  // PUBLIC_PREVIEW, REGISTERED, NDA_REQUIRED, VERIFIED, INVITE_ONLY
-  ndaRequired         Boolean   @default(false)
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  @@map("deal_rooms")
   @@index([ownerId])
+  @@map("deal_rooms")
 }
 
 model DealDocument {
-  id            String   @id @default(cuid())
-  dealRoomId    String
-  folder        String
-  name          String
-  fileUrl       String
-  fileType      String?
-  fileSize      Int?
-  accessTier    String   @default("REGISTERED")
-  canDownload   Boolean  @default(true)
-  uploadedBy    String
-  createdAt     DateTime @default(now())
-  
-  @@map("deal_documents")
+  id          String   @id @default(cuid())
+  dealRoomId  String
+  folder      String
+  name        String
+  fileUrl     String
+  fileType    String?
+  fileSize    Int?
+  accessTier  String   @default("REGISTERED")
+  canDownload Boolean  @default(true)
+  uploadedBy  String
+  createdAt   DateTime @default(now())
+
   @@index([dealRoomId])
+  @@map("deal_documents")
 }
 
 model DealMedia {
-  id            String   @id @default(cuid())
-  dealRoomId    String
-  mediaType     String
-  tag           String?
-  name          String?
-  url           String
-  thumbnailUrl  String?
-  uploadedBy    String
-  createdAt     DateTime @default(now())
-  
-  @@map("deal_media")
+  id           String   @id @default(cuid())
+  dealRoomId   String
+  mediaType    String
+  tag          String?
+  name         String?
+  url          String
+  thumbnailUrl String?
+  uploadedBy   String
+  createdAt    DateTime @default(now())
+
   @@index([dealRoomId])
+  @@map("deal_media")
 }
 
 model DealUserAccess {
-  id            String   @id @default(cuid())
-  dealRoomId    String
-  userId        String
-  accessTier    String   @default("PUBLIC_PREVIEW")
-  ndaStatus     String   @default("NOT_REQUESTED")
-  requestedAt   DateTime?
-  approvedAt    DateTime?
-  approvedBy    String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  
+  id          String    @id @default(cuid())
+  dealRoomId  String
+  userId      String
+  accessTier  String    @default("PUBLIC_PREVIEW")
+  ndaStatus   String    @default("NOT_REQUESTED")
+  requestedAt DateTime?
+  approvedAt  DateTime?
+  approvedBy  String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
   @@unique([dealRoomId, userId])
-  @@map("deal_user_access")
   @@index([dealRoomId])
   @@index([userId])
+  @@map("deal_user_access")
 }
 
 model NdaSignature {
@@ -397,23 +366,23 @@ model NdaSignature {
   signedAt       DateTime @default(now())
   ipAddress      String?
   ndaVersionHash String?
-  
-  @@map("nda_signatures")
+
   @@index([dealRoomId])
   @@index([userId])
+  @@map("nda_signatures")
 }
 
 model DealActivityLog {
-  id            String   @id @default(cuid())
-  dealRoomId    String
-  userId        String
-  action        String
-  details       Json?
-  createdAt     DateTime @default(now())
-  
-  @@map("deal_activity_log")
+  id         String   @id @default(cuid())
+  dealRoomId String
+  userId     String
+  action     String
+  details    Json?
+  createdAt  DateTime @default(now())
+
   @@index([dealRoomId])
   @@index([userId])
+  @@map("deal_activity_log")
 }
 
 model BuyerAssumptions {
@@ -427,11 +396,11 @@ model BuyerAssumptions {
   notes           String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  
+
   @@unique([dealRoomId, userId])
-  @@map("buyer_assumptions")
   @@index([dealRoomId])
   @@index([userId])
+  @@map("buyer_assumptions")
 }
 
 model BuyBox {
@@ -886,6 +855,8 @@ model parcel_features_travis {
   geom_centroid                Unsupported("geometry")?
   created_at                   DateTime                 @default(now()) @db.Timestamptz(6)
   updated_at                   DateTime                 @default(now()) @db.Timestamptz(6)
+  opportunities                opportunities?
+  signals                      signals[]
 
   @@index([acres_calc], map: "idx_pft_acres")
   @@index([asset_class], map: "idx_pft_asset_class")
@@ -1571,6 +1542,76 @@ model zoning_districts {
   @@index([zoning_code], map: "idx_zoning_districts_code")
   @@index([geometry], map: "idx_zoning_districts_geom", type: Gist)
   @@index([overlay], map: "idx_zoning_districts_overlay")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model opportunities {
+  id                     String                 @id @default(dbgenerated("(gen_random_uuid())::text"))
+  parcel_id              String                 @unique
+  county_fips            String                 @default("48453")
+  opportunity_score      Decimal?               @default(0) @db.Decimal(5, 2)
+  distress_score         Decimal?               @default(0) @db.Decimal(5, 2)
+  offmarket_score        Decimal?               @default(0) @db.Decimal(5, 2)
+  value_score            Decimal?               @default(0) @db.Decimal(5, 2)
+  distress_breakdown     Json?
+  offmarket_breakdown    Json?
+  value_breakdown        Json?
+  tags                   String[]               @default([])
+  reasons_json           Json?
+  model_version          String?                @default("1.0")
+  scored_at              DateTime?              @default(now()) @db.Timestamptz(6)
+  signal_count           Int?                   @default(0)
+  acres_calc             Decimal?               @db.Decimal
+  market_value           Decimal?               @db.Decimal
+  asset_class            String?
+  owner_entity_type      String?
+  is_absentee            Boolean?               @default(false)
+  situs_city             String?
+  situs_zip              String?
+  created_at             DateTime?              @default(now()) @db.Timestamptz(6)
+  updated_at             DateTime?              @default(now()) @db.Timestamptz(6)
+  parcel_features_travis parcel_features_travis @relation(fields: [parcel_id], references: [parcel_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_opportunities_parcel")
+
+  @@index([asset_class], map: "idx_opportunities_asset_class")
+  @@index([county_fips], map: "idx_opportunities_county_fips")
+  @@index([distress_score(sort: Desc)], map: "idx_opportunities_distress_score")
+  @@index([model_version], map: "idx_opportunities_model_version")
+  @@index([offmarket_score(sort: Desc)], map: "idx_opportunities_offmarket_score")
+  @@index([opportunity_score(sort: Desc)], map: "idx_opportunities_opportunity_score")
+  @@index([parcel_id], map: "idx_opportunities_parcel_id")
+  @@index([opportunity_score(sort: Desc), county_fips], map: "idx_opportunities_score_county")
+  @@index([tags], map: "idx_opportunities_tags", type: Gin)
+  @@index([value_score(sort: Desc)], map: "idx_opportunities_value_score")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model signals {
+  id                     String                 @id @default(dbgenerated("(gen_random_uuid())::text"))
+  parcel_id              String
+  county_fips            String                 @default("48453")
+  signal_type            String
+  signal_subtype         String?
+  signal_date            DateTime?              @db.Date
+  signal_value           Decimal?               @db.Decimal
+  signal_years           Int?
+  signal_severity        String?
+  source_system          String
+  source_id              String?
+  source_url             String?
+  raw_data               Json?
+  is_active              Boolean?               @default(true)
+  expires_at             DateTime?              @db.Timestamptz(6)
+  created_at             DateTime?              @default(now()) @db.Timestamptz(6)
+  updated_at             DateTime?              @default(now()) @db.Timestamptz(6)
+  parcel_features_travis parcel_features_travis @relation(fields: [parcel_id], references: [parcel_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_signals_parcel")
+
+  @@index([county_fips], map: "idx_signals_county_fips")
+  @@index([is_active], map: "idx_signals_is_active")
+  @@index([parcel_id], map: "idx_signals_parcel_id")
+  @@index([signal_date], map: "idx_signals_signal_date")
+  @@index([signal_severity], map: "idx_signals_signal_severity")
+  @@index([signal_type], map: "idx_signals_signal_type")
 }
 
 enum UserRole {
