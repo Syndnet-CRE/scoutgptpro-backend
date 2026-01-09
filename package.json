@@ -41,7 +41,8 @@
     "pg": "^8.16.3",
     "prisma": "^6.1.0",
     "proj4": "^2.20.2",
-    "shapefile": "^0.6.6"
+    "shapefile": "^0.6.6",
+    "zod": "^4.3.5"
   },
   "devDependencies": {
     "csv-parser": "^3.2.0",

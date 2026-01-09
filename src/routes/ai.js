@@ -4,6 +4,10 @@ import { searchMapServers } from '../services/mapserver-service.js';
 import { extractCategories } from '../services/category-mapper.js';
 import { queryProperties, needsPropertyData } from '../services/property-service.js';
 import { rateLimiter } from '../middleware/rateLimiter.js';
+import { preprocessToolInput, isValidBbox } from '../services/zipCodeResolver.js';
+import { validateIntent } from '../validators/intentSchema.js';
+import { assertAcresFilter, assertAssetClassFilter, assertOwnerSegmentFilter, assertMarketValueFilter, assertOwnerEntityTypeFilter, assertTaxDelinquentFilter } from '../utils/filterAssertions.js';
+import { queryLogger } from '../middleware/queryLogger.js';
 
 const router = express.Router();
 const anthropic = new Anthropic({ 
@@ -154,10 +158,16 @@ async function getDbPool() {
 async function executeSearchProperties(input, pool) {
   console.log('🔧 Executing search_properties:', input);
   
-  const intent = {
+  // Preprocess tool input to resolve ZIP codes in bbox field
+  const processedInput = preprocessToolInput(input);
+  if (processedInput._bboxResolvedFrom) {
+    console.log(`[AI Query] Resolved bbox from: ${processedInput._bboxResolvedFrom}`);
+  }
+  
+  const rawIntent = {
     geo: {
-      county_fips: input.county_fips || null,
-      bbox: input.bbox || null
+      county_fips: processedInput.county_fips || null,
+      bbox: processedInput.bbox || null
     },
     filters: {
       acres_min: input.acres_min ?? null,
@@ -172,6 +182,13 @@ async function executeSearchProperties(input, pool) {
     limit: Math.min(Math.max(input.limit || 50, 1), 200)
   };
   
+  // Validate intent
+  const { valid, errors, sanitized } = validateIntent(rawIntent);
+  if (!valid) {
+    console.warn('[AI Query] Intent validation errors:', errors);
+  }
+  const intent = sanitized;
+  
   // Use existing buildParcelQuery function
   const { query: sqlQuery, values } = buildParcelQuery(intent);
   
@@ -182,6 +199,7 @@ async function executeSearchProperties(input, pool) {
       situs_address: row.situs_address,
       owner_name_raw: row.owner_name_raw,
       owner_entity_type: row.owner_entity_type,
+      owner_segment: row.owner_segment,
       acres_calc: parseFloat(row.acres_calc),
       asset_class: row.asset_class,
       market_value: row.market_value ? parseFloat(row.market_value) : null,
@@ -189,11 +207,33 @@ async function executeSearchProperties(input, pool) {
       geom: row.geom  // Already JSON from ST_AsGeoJSON
     }));
     
+    // Run filter assertions
+    if (intent.filters?.acres_min || intent.filters?.acres_max) {
+      assertAcresFilter(properties, intent.filters.acres_min, intent.filters.acres_max);
+    }
+    if (intent.filters?.asset_class) {
+      assertAssetClassFilter(properties, intent.filters.asset_class);
+    }
+    if (intent.filters?.owner_segment) {
+      assertOwnerSegmentFilter(properties, intent.filters.owner_segment);
+    }
+    if (intent.filters?.owner_entity_type) {
+      assertOwnerEntityTypeFilter(properties, intent.filters.owner_entity_type);
+    }
+    if (intent.filters?.market_value_min || intent.filters?.market_value_max) {
+      assertMarketValueFilter(properties, intent.filters.market_value_min, intent.filters.market_value_max);
+    }
+    if (intent.filters?.tax_delinquent === true) {
+      assertTaxDelinquentFilter(properties, true);
+    }
+    
     console.log(`✅ search_properties returned ${properties.length} results`);
     return {
       success: true,
       count: properties.length,
-      properties: properties
+      properties: properties,
+      intent: intent,
+      validationErrors: errors.length > 0 ? errors : undefined
     };
   } catch (error) {
     console.error('❌ search_properties error:', error);
@@ -422,21 +462,41 @@ WHEN TO USE EACH TOOL:
 - Specific property lookup (details for parcel 123456) → use get_property
 
 GEOGRAPHY MAPPING:
-- ZIP codes (5 digits like 78759) → Pass as-is, system will resolve to bbox
+- ZIP codes (5 digits like 78759) → Use zip_code field, NOT bbox field. System will resolve to bbox automatically.
 - "Travis County" → county_fips: "48453"
-- "Northwest Austin", "Downtown", etc. → Will be resolved to bbox by system
+- "Northwest Austin", "Downtown", etc. → Use zip_code or city name, system will resolve to bbox
+- bbox field should ONLY contain [minLng, minLat, maxLng, maxLat] arrays, never ZIP codes or city names
 
-FILTER MAPPING:
-- "2 to 4 acres", "2-4 acres" → acres_min: 2, acres_max: 4
-- "at least 5 acres", "over 5 acres" → acres_min: 5
-- "under 10 acres" → acres_max: 10
+AVAILABLE FILTERS:
+- asset_class: residential, commercial, land, industrial, mixed (DO NOT use 'unknown')
+- owner_segment: mom_pop, small_operator, institutional, absentee, trust_estate
+- owner_entity_type: person, llc, corp, trust_estate
+- acres_min, acres_max: numeric values for acreage range
+- market_value_min, market_value_max: numeric values for price range
+- tax_delinquent: true/false
+- county_fips: "48453" for Travis County
+
+FILTER EXAMPLES:
+- "commercial properties" → asset_class: "commercial"
+- "vacant land" → asset_class: "land"
+- "residential properties" → asset_class: "residential"
+- "mom and pop owners" → owner_segment: "mom_pop"
 - "LLC owned" → owner_entity_type: "llc"
-- "mom and pop", "small owner" → owner_segment: "mom_pop"
-- "tax delinquent", "back taxes" → tax_delinquent: true
-- "commercial property" → asset_class: "commercial"
-- "vacant land", "land" → asset_class: "land"
+- "institutional investors" → owner_segment: "institutional"
+- "out of state owners" OR "absentee" → owner_segment: "absentee"
+- "small operators" → owner_segment: "small_operator"
+- "2-4 acres" → acres_min: 2, acres_max: 4
+- "over 5 acres" → acres_min: 5
+- "under 10 acres" → acres_max: 10
 - "under $500k" → market_value_max: 500000
 - "over $1M" → market_value_min: 1000000
+- "tax delinquent" → tax_delinquent: true
+
+IMPORTANT: 
+- Always use snake_case for filter names
+- Don't make up filter values - only use the ones listed above
+- If unsure about a filter, omit it rather than guessing
+- For combined queries (e.g., "commercial properties over 2 acres"), apply all relevant filters
 
 Always use the appropriate tool to fulfill the user's request. If multiple tools are needed (e.g., "show zoning and find properties"), call each tool.`;
 
@@ -636,6 +696,7 @@ function buildParcelQuery(intent) {
       situs_address,
       owner_name_raw,
       owner_entity_type,
+      owner_segment,
       acres_calc,
       asset_class,
       market_value,
@@ -1031,7 +1092,7 @@ function buildUserPrompt(query, subject, mapData, propertyResults = []) {
 // ============================================================================
 
 // POST /api/ai/query - Rate limited to 30 calls per 15 minutes
-router.post('/query', rateLimiter({ max: 30, windowMs: 15 * 60 * 1000 }), async (req, res) => {
+router.post('/query', rateLimiter({ max: 30, windowMs: 15 * 60 * 1000 }), queryLogger, async (req, res) => {
   try {
     const { mode, query, bounds, subject } = req.body;
     const debug = req.query.debug === '1';
@@ -1112,6 +1173,25 @@ router.post('/query', rateLimiter({ max: 30, windowMs: 15 * 60 * 1000 }), async 
           propertyCount: processed.properties.length
         }
       };
+      
+      // If no results found, provide helpful message
+      if (processed.properties.length === 0 && processed.type === 'PROPERTY_SEARCH') {
+        const filtersApplied = [];
+        const searchToolCall = processed.toolCalls.find(tc => tc.tool === 'search_properties');
+        if (searchToolCall && searchToolCall.input) {
+          const input = searchToolCall.input;
+          if (input.acres_min || input.acres_max) filtersApplied.push('acreage');
+          if (input.asset_class) filtersApplied.push('property type');
+          if (input.owner_segment) filtersApplied.push('owner type');
+          if (input.owner_entity_type) filtersApplied.push('entity type');
+          if (input.market_value_min || input.market_value_max) filtersApplied.push('price');
+          if (input.tax_delinquent) filtersApplied.push('tax status');
+        }
+        
+        apiResponse.message = `No properties found matching your criteria. Try broadening your search${filtersApplied.length > 0 ? ` (filters applied: ${filtersApplied.join(', ')})` : ''}.`;
+        apiResponse.intent = searchToolCall?.input;
+        apiResponse.debug.filtersApplied = filtersApplied;
+      }
       
       // Add debug info if requested
       if (debug) {

@@ -1,0 +1,93 @@
+================================================================================
+PARCEL_FEATURES_TRAVIS DATA REALITY AUDIT
+================================================================================
+
+TOTAL PARCELS: 369813
+
+--- ASSET_CLASS VALUES ---
+  unknown: 369813
+
+--- OWNER_ENTITY_TYPE VALUES ---
+  person: 317468
+  llc: 25087
+  trust_estate: 17794
+  corp: 9464
+
+--- OWNER_SEGMENT VALUES ---
+  unknown: 369813
+
+--- TAX_DELINQUENT_FLAG VALUES ---
+  false: 368688
+  true: 1125
+
+--- ACRES_CALC DISTRIBUTION ---
+  Min: 0.00989838
+  Max: 43970.37929678
+  Avg: 15.12
+  Median: 2.23308321
+  Buckets:
+    Under 0.5 acres: 3423
+    0.5-1 acres: 7558
+    1-2 acres: 140798
+    2-5 acres: 148447
+    5-10 acres: 22264
+    10-50 acres: 33191
+    50+ acres: 14132
+
+--- MARKET_VALUE DISTRIBUTION ---
+  Min: $1.00000000
+  Max: $214748364.00000000
+  Avg: $101632
+  Median: $46823
+
+--- LAND_USE_CODE VALUES (top 20) ---
+
+--- ZONING_CODE VALUES (top 20) ---
+  SF-3-NP: 44239
+  SF-2: 41968
+  SF-3: 19679
+  PUD: 16886
+  SF-2-NP: 11828
+  I-SF-2: 8044
+  SF-4A: 6556
+  SF-1: 6030
+  I-SF-4A: 5474
+  SF-4A-CO: 2275
+  SF-2-CO: 2023
+  LA: 1428
+  SF-6: 1269
+  SF-3-NCCD-NP: 1183
+  LI-PDA-NP: 1108
+  RR: 1090
+  SF-3-CO-NP: 1085
+  SF-6-CO: 1001
+  I-RR: 964
+  PUD-NP: 920
+
+--- SAMPLE QUERY TESTS ---
+  Commercial + LLC: 0
+  Commercial + LLC + Tax Delinquent: 0
+  Asset class = 'land': 0
+  Land + LLC: 0
+  Land + LLC + Tax Delinquent: 0
+  Tax Delinquent (any): 1125
+  2-4 acres: 135125
+
+--- NULL VALUE COUNTS ---
+  asset_class NULL: 0
+  owner_entity_type NULL: 0
+  owner_segment NULL: 0
+  tax_delinquent_flag NULL: 0
+  acres_calc NULL: 0
+  market_value NULL: 27546
+  geom_centroid NULL: 0
+
+--- SAMPLE: Commercial + LLC + Tax Delinquent ---
+  No results found!
+
+--- SAMPLE: Land + LLC + Tax Delinquent ---
+  No results found!
+
+================================================================================
+END OF AUDIT
+================================================================================

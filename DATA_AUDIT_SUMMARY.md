@@ -1,149 +1,128 @@
-# Comprehensive Data Audit Summary
+# Data Audit Summary - Phase 0
 
-## 1. EXTRACTED SHAPEFILE DATA
-
-**File:** `/tmp/travis_shapefile_extract/shp/stratmap25-landparcels_48453_travis_202508.dbf`
-- **Size:** 1.7 GB
-- **Records:** 834,936 Travis County parcels
-- **Source:** TXGIO (Texas Geographic Information Office)
-
-### Columns (34 total):
-1. Prop_ID
-2. GEO_ID
-3. OWNER_NAME
-4. NAME_CARE
-5. LEGAL_AREA
-6. LGL_AREA_U
-7. GIS_AREA
-8. GIS_AREA_U
-9. LEGAL_DESC
-10. STAT_LAND_ (⚠️ EMPTY)
-11. LOC_LAND_U (⚠️ EMPTY)
-12. LAND_VALUE
-13. IMP_VALUE
-14. MKT_VALUE
-15. SITUS_ADDR
-16. SITUS_NUM
-17. SITUS_STRE
-18. SITUS_ST_1
-19. SITUS_ST_2
-20. SITUS_CITY
-21. SITUS_STAT
-22. SITUS_ZIP
-23. MAIL_ADDR
-24. MAIL_LINE1
-25. MAIL_LINE2
-26. MAIL_CITY
-27. MAIL_STAT
-28. MAIL_ZIP
-29. SOURCE
-30. DATE_ACQ
-31. FIPS
-32. COUNTY
-33. TAX_YEAR
-34. YEAR_BUILT
-
-### Sample Data:
-- **Prop_ID:** 0100050259
-- **OWNER_NAME:** KINNEY AVENUE BAPTIST CHURCH
-- **LEGAL_DESC:** LOT A RESUB OF LOTS 6-8 WENDLANDT
-- **MKT_VALUE:** 738824
-- **GIS_AREA:** 31.58 acres
-- **LOC_LAND_U:** NULL (empty)
-- **STAT_LAND_:** NULL (empty)
+**Date:** January 9, 2025  
+**Purpose:** Understand actual data availability for populating `asset_class` and `owner_segment`
 
 ---
 
-## 2. DATABASE TABLES
+## Key Findings
 
-### A. properties (Main Property Table)
-- **Rows:** 372,000+
-- **Key Columns:** parcelId, owner, ownerName, address, propertyType, asset_class, mktValue, landValue, acres, yearBuilt, latitude, longitude
+### ✅ What We CAN Use
 
-### B. parcels_travis_enrichment_stage
-- **Rows:** 834,936
-- **Columns:** id, raw (JSONB), detected_id, ingested_at
-- **Contains:** All shapefile data in raw JSON format
+1. **properties.asset_class** - 349,642 parcels (94.5% of total)
+   - Values: residential, commercial, land, multifamily, retail, office, industrial, etc.
+   - **PRIMARY SOURCE** for asset_class population
 
-### C. parcels_travis_enrichment
-- **Rows:** 27,546
-- **Columns:** 37 columns including owner_name, legal_desc, land_value, market_value, acres, land_use_code, land_use_description, zoning_code, flood_zone
-- **Status:** Partially populated, many fields empty
+2. **parcels_travis_enrichment.raw->>'MAIL_STAT'** - Available for absentee detection
+   - Contains mailing state information
+   - Can identify out-of-state owners
 
-### D. owners / owner_properties / owner_features_tx
-- **owners:** 85,579 unique owners
-- **owner_properties:** 100,000 owner-property relationships
-- **owner_features_tx:** 85,579 owner feature records
+3. **owner_entity_type** - 369,813 parcels (100%)
+   - Values: person, llc, corp, trust_estate
+   - Can use for basic segmentation
 
-### E. parcels_travis
-- **Rows:** 372,826
-- **Columns:** parcel_id, geom, created_at
-- **Contains:** Parcel geometries only
+4. **improvement_value** - 342,267 parcels (92.5%)
+   - Can identify land (improvement_value = 0)
+   - Most values are 0, indicating vacant land
 
-### F. xref_parcel_property_travis
-- **Rows:** 401,851
-- **Links:** parcels_travis.parcel_id ↔ properties (via attom_id)
+5. **owner_name_raw** - Available for pattern matching
+   - Can detect institutional owners (REIT, Holdings, Fund, etc.)
 
----
+### ❌ What We CANNOT Use
 
-## 3. ENRICHMENT OPPORTUNITIES
-
-### ✅ Available Data Sources:
-
-1. **Shapefile (834,936 records)**
-   - Owner names (OWNER_NAME)
-   - Legal descriptions (LEGAL_DESC)
-   - Market values (MKT_VALUE)
-   - Land values (LAND_VALUE)
-   - Improvement values (IMP_VALUE)
-   - Acreage (GIS_AREA)
-   - Site addresses (SITUS_*)
-   - Mailing addresses (MAIL_*)
-
-2. **Database Tables**
-   - properties (372K+ rows) - Main property data
-   - parcels_travis_enrichment_stage (834K+ rows) - Raw shapefile data
-   - owners/owner_features_tx - Owner analysis data
-
-### ❌ Missing Data:
-
-1. **LOC_LAND_U** - Land use codes (empty in shapefile)
-2. **STAT_LAND_** - State land use codes (empty in shapefile)
-3. **Zoning codes** - Not in shapefile
-4. **Property use codes** - Need TCAD API or other source
-
-### 🔄 Enrichment Actions:
-
-1. **Match shapefile data to properties table:**
-   - Prop_ID → parcelId
-   - OWNER_NAME → owner/ownerName
-   - MKT_VALUE → mktValue
-   - GIS_AREA → acres
-   - LEGAL_DESC → property descriptions
-
-2. **Populate enrichment table:**
-   - Extract from parcels_travis_enrichment_stage.raw JSONB
-   - Map to parcels_travis_enrichment columns
-   - Update owner names, addresses, values
-
-3. **Asset class mapping:**
-   - ✅ Already done using owner name keywords
-   - Can improve with LEGAL_DESC analysis
+1. **land_use_code** - 100% NULL (0 parcels)
+2. **land_use_desc** - 100% NULL (0 parcels)
+3. **building_sqft** - 100% NULL (0 parcels)
+4. **year_built** - 100% NULL (0 parcels)
+5. **mail_state** in `parcel_features_travis` - 100% NULL (but available in enrichment table)
+6. **owner_portfolio_count_travis** - All 0 (not useful for segmentation)
 
 ---
 
-## 4. NEXT STEPS
+## Population Strategy
 
-1. **Extract shapefile data to enrichment table**
-   - Process parcels_travis_enrichment_stage.raw
-   - Populate parcels_travis_enrichment with actual values
+### asset_class
 
-2. **Match shapefile to properties**
-   - Join on Prop_ID → parcelId
-   - Update owner names, values, acreage
+**Primary Source:** `properties.asset_class` (349,642 parcels)
 
-3. **Find alternative sources for land use codes**
-   - TCAD API
-   - Other appraisal district APIs
-   - Property descriptions analysis
+**Mapping:**
+- `residential`, `multifamily`, `mobile_home_park` → `residential`
+- `commercial`, `retail`, `office`, `industrial`, `hospitality`, `self_storage` → `commercial`
+- `land` → `land`
+- `other`, `infrastructure`, `civic` → `unknown`
 
+**Fallback:** For parcels not in `properties` table:
+- `improvement_value = 0 or NULL` → `land`
+- `improvement_value > 0` → `unknown` (can't determine type without more data)
+
+### owner_segment
+
+**Strategy (in order):**
+
+1. **Absentee Detection:** `parcels_travis_enrichment.raw->>'MAIL_STAT' != 'TX'` → `absentee`
+2. **Institutional Detection:** Owner name patterns (REIT, Holdings, Fund, etc.) → `institutional`
+3. **Entity Type Mapping:**
+   - `llc`, `corp`, `inc`, `lp` → `small_operator`
+   - `person` → `mom_pop`
+   - `trust_estate` → `local_owner`
+4. **Default:** `local_owner` (safer than `unknown`)
+
+---
+
+## Files Created
+
+1. **DATA_AUDIT_REPORT.md** - Full audit report with all findings
+2. **scripts/populate-asset-class-v2.sql** - Corrected ETL script for asset_class
+3. **scripts/populate-owner-segment-v2.sql** - Corrected ETL script for owner_segment
+4. **scripts/verify-etl.sql** - Verification queries
+5. **scripts/run-etl.sh** - Shell script to run ETL in order
+
+---
+
+## Next Steps
+
+1. **Review** the audit report: `DATA_AUDIT_REPORT.md`
+2. **Run ETL scripts:**
+   ```bash
+   cd ~/scoutgptpro-backend
+   ./scripts/run-etl.sh
+   ```
+3. **Verify results:**
+   ```bash
+   psql $DATABASE_URL -f scripts/verify-etl.sql
+   ```
+4. **Update Claude prompts** to reflect actual data availability
+5. **Test queries** to ensure filtering works correctly
+
+---
+
+## Expected Results
+
+After running ETL:
+
+**asset_class distribution:**
+- `residential`: ~X% (from properties table)
+- `commercial`: ~X% (from properties table)
+- `land`: ~X% (from properties table + improvement_value = 0)
+- `unknown`: ~X% (parcels with improvements but no classification)
+
+**owner_segment distribution:**
+- `absentee`: ~X% (from mail_state != 'TX')
+- `institutional`: ~X% (from name patterns)
+- `small_operator`: ~X% (LLC/Corp entities)
+- `mom_pop`: ~X% (Person entities)
+- `local_owner`: ~X% (Trust/Estate, TX residents, default)
+
+---
+
+## Important Notes
+
+1. **land_use_code is empty** - Previous ETL attempts failed because they relied on this field
+2. **properties table is the key** - 94.5% of parcels have asset_class in properties table
+3. **mail_state requires join** - Must use `parcels_travis_enrichment` table, not `parcel_features_travis`
+4. **owner_portfolio_count is useless** - All values are 0, cannot use for institutional detection
+5. **Name pattern matching** - Only way to detect institutional owners without portfolio count
+
+---
+
+**Audit Complete** ✅
