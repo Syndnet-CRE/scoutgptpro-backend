@@ -11,8 +11,434 @@ const anthropic = new Anthropic({
 });
 
 // ============================================================================
+// Tool Definitions for Claude
+// ============================================================================
+
+const AI_TOOLS = [
+  {
+    name: 'search_properties',
+    description: 'Search for properties in the database based on filters. Use this to find properties matching criteria like acreage, asset class, owner type, price range, tax status, etc.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        county_fips: {
+          type: 'string',
+          description: 'County FIPS code. Use "48453" for Travis County.'
+        },
+        bbox: {
+          type: 'array',
+          items: { type: 'number' },
+          description: 'Bounding box [minLng, minLat, maxLng, maxLat] for spatial filtering'
+        },
+        acres_min: {
+          type: 'number',
+          description: 'Minimum acreage'
+        },
+        acres_max: {
+          type: 'number',
+          description: 'Maximum acreage'
+        },
+        asset_class: {
+          type: 'string',
+          enum: ['residential', 'commercial', 'land', 'industrial', 'mixed'],
+          description: 'Property asset classification'
+        },
+        owner_entity_type: {
+          type: 'string',
+          enum: ['person', 'llc', 'corp', 'trust_estate'],
+          description: 'Type of owner entity'
+        },
+        owner_segment: {
+          type: 'string',
+          enum: ['mom_pop', 'small_operator', 'institutional', 'local_owner', 'absentee'],
+          description: 'Owner segment classification'
+        },
+        tax_delinquent: {
+          type: 'boolean',
+          description: 'Filter for tax delinquent properties'
+        },
+        market_value_min: {
+          type: 'number',
+          description: 'Minimum market value in dollars'
+        },
+        market_value_max: {
+          type: 'number',
+          description: 'Maximum market value in dollars'
+        },
+        limit: {
+          type: 'integer',
+          description: 'Maximum number of results (default 50, max 200)'
+        }
+      },
+      required: []
+    }
+  },
+  {
+    name: 'toggle_gis_layer',
+    description: 'Toggle visibility of a GIS map layer. Use this when user wants to show, hide, or toggle map layers like zoning, flood zones, parcels, utilities, etc.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        layer: {
+          type: 'string',
+          enum: ['zoning_districts', 'fema_flood_zones', 'parcel_boundaries', 'sewer_mains', 'sewer_manholes', 'water_mains', 'fire_hydrants', 'water_meters', 'wetland_types', 'building_permits', 'gas_mains'],
+          description: 'The GIS layer to toggle'
+        },
+        action: {
+          type: 'string',
+          enum: ['show', 'hide', 'toggle'],
+          description: 'Action to perform on the layer'
+        }
+      },
+      required: ['layer', 'action']
+    }
+  },
+  {
+    name: 'search_pois',
+    description: 'Search for points of interest (POIs) like self storage facilities, truck stops, RV parks, mobile home parks.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        category: {
+          type: 'string',
+          enum: ['self_storage', 'truck_stop', 'rv_park', 'mobile_home_park'],
+          description: 'POI category to search'
+        },
+        bbox: {
+          type: 'array',
+          items: { type: 'number' },
+          description: 'Bounding box [minLng, minLat, maxLng, maxLat] for spatial filtering'
+        },
+        limit: {
+          type: 'integer',
+          description: 'Maximum number of results (default 100)'
+        }
+      },
+      required: ['category']
+    }
+  },
+  {
+    name: 'get_property',
+    description: 'Get detailed information about a specific property by parcel ID.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        parcel_id: {
+          type: 'string',
+          description: 'The parcel ID to look up'
+        }
+      },
+      required: ['parcel_id']
+    }
+  }
+];
+
+// ============================================================================
+// Tool Execution Functions
+// ============================================================================
+
+/**
+ * Get a database pool connection
+ */
+async function getDbPool() {
+  const pg = await import('pg');
+  return new pg.default.Pool({
+    connectionString: process.env.DATABASE_URL,
+    max: 5
+  });
+}
+
+/**
+ * Execute search_properties tool
+ */
+async function executeSearchProperties(input, pool) {
+  console.log('🔧 Executing search_properties:', input);
+  
+  const intent = {
+    geo: {
+      county_fips: input.county_fips || null,
+      bbox: input.bbox || null
+    },
+    filters: {
+      acres_min: input.acres_min ?? null,
+      acres_max: input.acres_max ?? null,
+      asset_class: input.asset_class || null,
+      owner_entity_type: input.owner_entity_type || null,
+      owner_segment: input.owner_segment || null,
+      tax_delinquent: input.tax_delinquent ?? null,
+      market_value_min: input.market_value_min ?? null,
+      market_value_max: input.market_value_max ?? null
+    },
+    limit: Math.min(Math.max(input.limit || 50, 1), 200)
+  };
+  
+  // Use existing buildParcelQuery function
+  const { query: sqlQuery, values } = buildParcelQuery(intent);
+  
+  try {
+    const result = await pool.query(sqlQuery, values);
+    const properties = result.rows.map(row => ({
+      parcel_id: row.parcel_id,
+      situs_address: row.situs_address,
+      owner_name_raw: row.owner_name_raw,
+      owner_entity_type: row.owner_entity_type,
+      acres_calc: parseFloat(row.acres_calc),
+      asset_class: row.asset_class,
+      market_value: row.market_value ? parseFloat(row.market_value) : null,
+      tax_delinquent_flag: row.tax_delinquent_flag === true,
+      geom: row.geom  // Already JSON from ST_AsGeoJSON
+    }));
+    
+    console.log(`✅ search_properties returned ${properties.length} results`);
+    return {
+      success: true,
+      count: properties.length,
+      properties: properties
+    };
+  } catch (error) {
+    console.error('❌ search_properties error:', error);
+    return {
+      success: false,
+      error: error.message,
+      properties: []
+    };
+  }
+}
+
+/**
+ * Execute toggle_gis_layer tool
+ */
+function executeToggleGisLayer(input) {
+  console.log('🔧 Executing toggle_gis_layer:', input);
+  
+  // Return layer toggle command for frontend to execute
+  return {
+    success: true,
+    type: 'GIS_LAYER_TOGGLE',
+    layer: input.layer,
+    action: input.action
+  };
+}
+
+/**
+ * Execute search_pois tool
+ */
+async function executeSearchPois(input, pool) {
+  console.log('🔧 Executing search_pois:', input);
+  
+  const { category, bbox, limit = 100 } = input;
+  
+  try {
+    let sql = `
+      SELECT id, osm_id, name, category, subcategory, 
+             latitude, longitude, address, city, state, zip
+      FROM osm_pois 
+      WHERE category = $1
+    `;
+    const values = [category];
+    let paramIndex = 2;
+    
+    if (bbox && Array.isArray(bbox) && bbox.length === 4) {
+      sql += ` AND longitude >= $${paramIndex} AND latitude >= $${paramIndex + 1} 
+               AND longitude <= $${paramIndex + 2} AND latitude <= $${paramIndex + 3}`;
+      values.push(bbox[0], bbox[1], bbox[2], bbox[3]);
+      paramIndex += 4;
+    }
+    
+    sql += ` LIMIT $${paramIndex}`;
+    values.push(limit);
+    
+    const result = await pool.query(sql, values);
+    console.log(`✅ search_pois returned ${result.rows.length} results`);
+    
+    return {
+      success: true,
+      count: result.rows.length,
+      pois: result.rows
+    };
+  } catch (error) {
+    console.error('❌ search_pois error:', error);
+    return {
+      success: false,
+      error: error.message,
+      pois: []
+    };
+  }
+}
+
+/**
+ * Execute get_property tool
+ */
+async function executeGetProperty(input, pool) {
+  console.log('🔧 Executing get_property:', input);
+  
+  const { parcel_id } = input;
+  
+  try {
+    const sql = `
+      SELECT 
+        parcel_id,
+        situs_address,
+        owner_name_raw,
+        owner_entity_type,
+        acres_calc,
+        asset_class,
+        market_value,
+        tax_delinquent_flag,
+        ST_AsGeoJSON(geom_centroid)::json as geom
+      FROM parcel_features_travis 
+      WHERE parcel_id = $1
+      LIMIT 1
+    `;
+    const result = await pool.query(sql, [parcel_id]);
+    
+    if (result.rows.length === 0) {
+      return {
+        success: false,
+        error: `Property not found: ${parcel_id}`,
+        property: null
+      };
+    }
+    
+    const property = {
+      parcel_id: result.rows[0].parcel_id,
+      situs_address: result.rows[0].situs_address,
+      owner_name_raw: result.rows[0].owner_name_raw,
+      owner_entity_type: result.rows[0].owner_entity_type,
+      acres_calc: parseFloat(result.rows[0].acres_calc),
+      asset_class: result.rows[0].asset_class,
+      market_value: result.rows[0].market_value ? parseFloat(result.rows[0].market_value) : null,
+      tax_delinquent_flag: result.rows[0].tax_delinquent_flag === true,
+      geom: result.rows[0].geom
+    };
+    
+    console.log(`✅ get_property found parcel ${parcel_id}`);
+    return {
+      success: true,
+      property: property
+    };
+  } catch (error) {
+    console.error('❌ get_property error:', error);
+    return {
+      success: false,
+      error: error.message,
+      property: null
+    };
+  }
+}
+
+/**
+ * Execute a tool by name
+ */
+async function executeTool(toolName, toolInput, pool) {
+  switch (toolName) {
+    case 'search_properties':
+      return await executeSearchProperties(toolInput, pool);
+    case 'toggle_gis_layer':
+      return executeToggleGisLayer(toolInput);
+    case 'search_pois':
+      return await executeSearchPois(toolInput, pool);
+    case 'get_property':
+      return await executeGetProperty(toolInput, pool);
+    default:
+      console.error(`❌ Unknown tool: ${toolName}`);
+      return { success: false, error: `Unknown tool: ${toolName}` };
+  }
+}
+
+/**
+ * Process Claude response with potential tool calls
+ */
+async function processClaudeResponse(response, pool) {
+  const results = {
+    type: null,
+    toolCalls: [],
+    textResponse: null,
+    properties: [],
+    layers: [],
+    pois: [],
+    insights: null
+  };
+  
+  // Process each content block
+  for (const block of response.content) {
+    if (block.type === 'text') {
+      results.textResponse = block.text;
+      results.insights = block.text;
+    } else if (block.type === 'tool_use') {
+      console.log(`🔧 Claude called tool: ${block.name}`);
+      
+      const toolResult = await executeTool(block.name, block.input, pool);
+      results.toolCalls.push({
+        tool: block.name,
+        input: block.input,
+        result: toolResult
+      });
+      
+      // Aggregate results by type
+      if (block.name === 'search_properties' && toolResult.properties) {
+        results.type = 'PROPERTY_SEARCH';
+        results.properties.push(...toolResult.properties);
+      } else if (block.name === 'toggle_gis_layer') {
+        results.type = results.type || 'GIS_LAYER_TOGGLE';
+        results.layers.push({
+          layer: block.input.layer,
+          action: block.input.action
+        });
+      } else if (block.name === 'search_pois' && toolResult.pois) {
+        results.type = results.type || 'POI_SEARCH';
+        results.pois.push(...toolResult.pois);
+      } else if (block.name === 'get_property' && toolResult.property) {
+        results.type = results.type || 'PROPERTY_DETAIL';
+        results.properties.push(toolResult.property);
+      }
+    }
+  }
+  
+  // If no tools called, it might be a conversational response
+  if (results.toolCalls.length === 0 && results.textResponse) {
+    results.type = 'CONVERSATIONAL';
+  }
+  
+  return results;
+}
+
+// ============================================================================
 // NEW: Intent Extraction System
 // ============================================================================
+
+const UNIFIED_SYSTEM_PROMPT = `You are a real estate AI assistant. Your job is to help users find properties, analyze data, and interact with map layers.
+
+You have access to these tools:
+1. search_properties - Search for properties with filters (acres, asset class, owner type, price, tax status)
+2. toggle_gis_layer - Show/hide map layers (zoning, flood zones, parcels, utilities)
+3. search_pois - Find points of interest (self storage, truck stops, RV parks, mobile home parks)
+4. get_property - Get details for a specific parcel by ID
+
+WHEN TO USE EACH TOOL:
+- Property searches (find, show me, search for properties, parcels, land) → use search_properties
+- Layer commands (show zoning, hide flood, toggle parcels) → use toggle_gis_layer
+- POI searches (find self storage, show truck stops) → use search_pois
+- Specific property lookup (details for parcel 123456) → use get_property
+
+GEOGRAPHY MAPPING:
+- ZIP codes (5 digits like 78759) → Pass as-is, system will resolve to bbox
+- "Travis County" → county_fips: "48453"
+- "Northwest Austin", "Downtown", etc. → Will be resolved to bbox by system
+
+FILTER MAPPING:
+- "2 to 4 acres", "2-4 acres" → acres_min: 2, acres_max: 4
+- "at least 5 acres", "over 5 acres" → acres_min: 5
+- "under 10 acres" → acres_max: 10
+- "LLC owned" → owner_entity_type: "llc"
+- "mom and pop", "small owner" → owner_segment: "mom_pop"
+- "tax delinquent", "back taxes" → tax_delinquent: true
+- "commercial property" → asset_class: "commercial"
+- "vacant land", "land" → asset_class: "land"
+- "under $500k" → market_value_max: 500000
+- "over $1M" → market_value_min: 1000000
+
+Always use the appropriate tool to fulfill the user's request. If multiple tools are needed (e.g., "show zoning and find properties"), call each tool.`;
 
 const INTENT_EXTRACTION_SYSTEM_PROMPT = `You are a real estate query intent extractor. Extract structured filters from natural language property search queries.
 
@@ -66,8 +492,9 @@ async function extractIntentFromQuery(query, bounds) {
     
     const response = await anthropic.messages.create({
       model: 'claude-sonnet-4-20250514',
-      max_tokens: 1024,
-      system: INTENT_EXTRACTION_SYSTEM_PROMPT,
+      max_tokens: 4096,
+      system: UNIFIED_SYSTEM_PROMPT,
+      tools: AI_TOOLS,
       messages: [{
         role: 'user',
         content: userPrompt
@@ -615,105 +1042,88 @@ router.post('/query', rateLimiter({ max: 30, windowMs: 15 * 60 * 1000 }), async 
     
     console.log(`🤖 AI Query [${mode}]: "${query}"`);
     
-    // STEP 1: Extract intent from query using Claude
-    let intent;
-    try {
-      intent = await extractIntentFromQuery(query, bounds);
-    } catch (error) {
-      console.error('❌ Intent extraction failed:', error);
-      return res.status(500).json({ 
-        error: 'Intent extraction failed',
-        message: error.message 
-      });
+    // Build user prompt
+    let userPrompt = query;
+    if (bounds) {
+      userPrompt += `\n\nBounds: ${JSON.stringify(bounds)}`;
+    }
+    if (subject) {
+      userPrompt += `\n\nSubject Property: ${JSON.stringify(subject)}`;
     }
     
-    // STEP 2: Build deterministic SQL query
-    const { query: sqlQuery, values, sql: sqlDebug } = buildParcelQuery(intent);
-    console.log('📝 Generated SQL:', sqlDebug);
-    
-    // STEP 3: Execute query against parcel_features_travis
-    const pg = await import('pg');
-    const pool = new pg.default.Pool({
-      connectionString: process.env.DATABASE_URL,
-      max: 5
+    // Call Claude with tools enabled
+    const response = await anthropic.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 4096,
+      system: UNIFIED_SYSTEM_PROMPT,
+      tools: AI_TOOLS,
+      messages: [{
+        role: 'user',
+        content: userPrompt
+      }]
     });
     
-    let results = [];
+    console.log('🤖 Claude response stop_reason:', response.stop_reason);
+    
+    // Get database pool
+    const pool = await getDbPool();
+    
     try {
-      const result = await pool.query(sqlQuery, values);
-      results = result.rows.map(row => ({
-        parcel_id: row.parcel_id,
-        situs_address: row.situs_address,
-        owner_name_raw: row.owner_name_raw,
-        owner_entity_type: row.owner_entity_type,
-        acres_calc: parseFloat(row.acres_calc),
-        asset_class: row.asset_class,
-        market_value: row.market_value ? parseFloat(row.market_value) : null,
-        tax_delinquent_flag: row.tax_delinquent_flag === true,
-        geom: row.geom  // Already JSON from ST_AsGeoJSON
-      }));
+      // Process the response (handles both tool_use and text responses)
+      const processed = await processClaudeResponse(response, pool);
       
-      console.log(`✅ Query returned ${results.length} results`);
-    } catch (dbError) {
-      console.error('❌ Database query failed:', dbError);
-      await pool.end();
-      return res.status(500).json({ 
-        error: 'Database query failed',
-        message: dbError.message 
-      });
+      console.log('📊 Processed response type:', processed.type);
+      console.log('📊 Tool calls:', processed.toolCalls.length);
+      console.log('📊 Properties:', processed.properties.length);
+      
+      // Build standardized response
+      const apiResponse = {
+        success: true,
+        type: processed.type,
+        properties: processed.properties,
+        layers: processed.layers,
+        pois: processed.pois,
+        insights: processed.insights,
+        toolCalls: processed.toolCalls.map(tc => ({
+          tool: tc.tool,
+          input: tc.input
+        })),
+        // Backward compatibility fields
+        messages: processed.insights ? [{ 
+          role: 'assistant', 
+          text: processed.insights
+        }] : [],
+        results: processed.properties,
+        count: processed.properties.length,
+        totalCount: processed.properties.length,
+        overlays: [],
+        pins: processed.properties.slice(0, 25).map(prop => ({
+          id: prop.parcel_id,
+          parcelId: prop.parcel_id,
+          lat: prop.geom?.coordinates?.[1] || null,
+          lng: prop.geom?.coordinates?.[0] || null,
+          address: prop.situs_address,
+          propertyType: prop.asset_class || 'unknown',
+          motivationScore: prop.tax_delinquent_flag ? 80 : 50
+        })),
+        debug: {
+          stopReason: response.stop_reason,
+          toolCallCount: processed.toolCalls.length,
+          propertyCount: processed.properties.length
+        }
+      };
+      
+      // Add debug info if requested
+      if (debug) {
+        apiResponse.debug.claudeResponse = response;
+        apiResponse.debug.processed = processed;
+      }
+      
+      console.log(`✅ Response ready (${apiResponse.count} results)`);
+      res.json(apiResponse);
     } finally {
       await pool.end();
     }
-    
-    // STEP 4: Verify filter correctness
-    try {
-      verifyFilterCorrectness(intent, results);
-    } catch (verifyError) {
-      console.error('❌ Filter verification failed:', verifyError);
-      // Continue anyway, but log the error
-    }
-    
-    // STEP 5: Generate summary message
-    const summaryText = generateSummaryMessage(intent, results.length);
-    
-    // STEP 6: Build response with both old and new fields
-    const response = {
-      success: true,
-      // NEW fields
-      intent: intent,
-      results: results,
-      count: results.length,
-      // OLD fields (for backward compatibility)
-      messages: [{ 
-        role: 'assistant', 
-        text: summaryText
-      }],
-      properties: results,  // alias to results
-      totalCount: results.length,
-      overlays: [],
-      pins: results.slice(0, 25).map(row => ({
-        id: row.parcel_id,
-        parcelId: row.parcel_id,
-        lat: row.geom?.coordinates?.[1] || null,
-        lng: row.geom?.coordinates?.[0] || null,
-        address: row.situs_address,
-        propertyType: row.asset_class || 'unknown',
-        motivationScore: row.tax_delinquent_flag ? 80 : 50
-      })),
-      insights: results.length > 0 ? [
-        `Found ${results.length} parcels`,
-        `Average acres: ${results.length > 0 ? (results.reduce((a, b) => a + b.acres_calc, 0) / results.length).toFixed(2) : 0}`,
-        `Asset classes: ${[...new Set(results.map(r => r.asset_class).filter(Boolean))].join(', ') || 'N/A'}`
-      ] : []
-    };
-    
-    // Add query_sql only if debug=1
-    if (debug) {
-      response.query_sql = sqlDebug;
-    }
-    
-    console.log(`✅ Response ready (${response.count} results)`);
-    res.json(response);
     
   } catch (error) {
     console.error('❌ AI query error:', error);
