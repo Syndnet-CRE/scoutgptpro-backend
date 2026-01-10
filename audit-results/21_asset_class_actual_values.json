@@ -1,0 +1,14 @@
+[
+  {
+    "asset_class": "commercial"
+  },
+  {
+    "asset_class": "land"
+  },
+  {
+    "asset_class": "residential"
+  },
+  {
+    "asset_class": "unknown"
+  }
+]

@@ -1,0 +1,187 @@
+[
+  {
+    "column_name": "parcel_id",
+    "data_type": "text",
+    "is_nullable": "NO"
+  },
+  {
+    "column_name": "owner_name",
+    "data_type": "text",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "owner2",
+    "data_type": "text",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "mail_address1",
+    "data_type": "text",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "mail_address2",
+    "data_type": "text",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "mail_city",
+    "data_type": "text",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "mail_state",
+    "data_type": "text",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "mail_zip",
+    "data_type": "text",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "situs_address",
+    "data_type": "text",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "land_use",
+    "data_type": "text",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "land_use_desc",
+    "data_type": "text",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "legal_desc",
+    "data_type": "text",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "year_built",
+    "data_type": "integer",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "acres",
+    "data_type": "numeric",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "land_value",
+    "data_type": "numeric",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "improvement_value",
+    "data_type": "numeric",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "market_value",
+    "data_type": "numeric",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "assessed_value",
+    "data_type": "numeric",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "last_update",
+    "data_type": "date",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "source_layer",
+    "data_type": "text",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "raw",
+    "data_type": "jsonb",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "updated_at",
+    "data_type": "timestamp with time zone",
+    "is_nullable": "NO"
+  },
+  {
+    "column_name": "ingested_at",
+    "data_type": "timestamp with time zone",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "owner_type",
+    "data_type": "text",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "mailing_address",
+    "data_type": "text",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "land_use_code",
+    "data_type": "text",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "land_use_description",
+    "data_type": "text",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "assessed_land_value",
+    "data_type": "numeric",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "assessed_improvement_value",
+    "data_type": "numeric",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "assessed_total_value",
+    "data_type": "numeric",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "acreage",
+    "data_type": "numeric",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "zoning_code",
+    "data_type": "text",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "flood_zone",
+    "data_type": "text",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "tax_delinquent_flag",
+    "data_type": "boolean",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "last_sale_date",
+    "data_type": "date",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "last_sale_price",
+    "data_type": "numeric",
+    "is_nullable": "YES"
+  },
+  {
+    "column_name": "homestead_exemption_flag",
+    "data_type": "boolean",
+    "is_nullable": "YES"
+  }
+]

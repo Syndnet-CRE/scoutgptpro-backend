@@ -1,0 +1,34 @@
+[
+  {
+    "acreage_bucket": "< 0.25 acres",
+    "count": "944"
+  },
+  {
+    "acreage_bucket": "0.25-1 acres",
+    "count": "10037"
+  },
+  {
+    "acreage_bucket": "1-2 acres",
+    "count": "140798"
+  },
+  {
+    "acreage_bucket": "2-5 acres",
+    "count": "148447"
+  },
+  {
+    "acreage_bucket": "5-10 acres",
+    "count": "22264"
+  },
+  {
+    "acreage_bucket": "10-20 acres",
+    "count": "19701"
+  },
+  {
+    "acreage_bucket": "20-50 acres",
+    "count": "13490"
+  },
+  {
+    "acreage_bucket": "50+ acres",
+    "count": "14132"
+  }
+]

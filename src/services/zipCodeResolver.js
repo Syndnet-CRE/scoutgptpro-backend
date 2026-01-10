@@ -54,7 +54,7 @@ export const TRAVIS_ZIP_BBOXES = {
   '78754': [-97.7000, 30.3400, -97.6700, 30.3700], // Northeast
   '78756': [-97.7400, 30.3000, -97.7100, 30.3300], // North Central
   '78757': [-97.7400, 30.3400, -97.7100, 30.3700], // North Central
-  '78758': [-97.7000, 30.3700, -97.6700, 30.4000], // Northeast
+  '78758': [-98.0514, 30.1880, -97.7078, 30.4927], // Northeast (corrected from actual data)
   '78759': [-97.7700, 30.3300, -97.7400, 30.3600], // Northwest (Research Blvd area)
   
   // Surrounding areas
@@ -152,8 +152,22 @@ export function preprocessToolInput(toolInput) {
   
   const processed = { ...toolInput };
   
-  // Check if bbox is a ZIP code string
-  if (toolInput.bbox) {
+  // FIRST: Check for zip_code field (highest priority)
+  if (toolInput.zip_code && !processed.bbox) {
+    const zipStr = String(toolInput.zip_code).trim();
+    const resolvedBbox = resolveZipToBbox(zipStr);
+    if (resolvedBbox) {
+      processed.bbox = resolvedBbox;
+      processed._bboxResolvedFrom = `ZIP ${zipStr}`;
+      // Remove zip_code from processed input (we've converted it to bbox)
+      delete processed.zip_code;
+    } else {
+      console.warn(`[zipCodeResolver] Could not resolve zip_code: ${zipStr}`);
+    }
+  }
+  
+  // SECOND: Check if bbox is a ZIP code string (fallback)
+  if (toolInput.bbox && !processed.bbox) {
     // If bbox is a string, try to resolve as ZIP code
     if (typeof toolInput.bbox === 'string') {
       const resolvedBbox = resolveZipToBbox(toolInput.bbox);
@@ -179,15 +193,6 @@ export function preprocessToolInput(toolInput) {
         console.warn(`[zipCodeResolver] Invalid bbox array: ${JSON.stringify(toolInput.bbox)}`);
         delete processed.bbox;
       }
-    }
-  }
-  
-  // Also check for zip_code field (if added to tool schema)
-  if (toolInput.zip_code && !toolInput.bbox) {
-    const resolvedBbox = resolveZipToBbox(toolInput.zip_code);
-    if (resolvedBbox) {
-      processed.bbox = resolvedBbox;
-      processed._bboxResolvedFrom = `ZIP ${toolInput.zip_code}`;
     }
   }
   

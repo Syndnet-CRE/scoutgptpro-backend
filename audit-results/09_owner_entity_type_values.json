@@ -1,0 +1,18 @@
+[
+  {
+    "owner_entity_type": "person",
+    "count": "317468"
+  },
+  {
+    "owner_entity_type": "llc",
+    "count": "25087"
+  },
+  {
+    "owner_entity_type": "trust_estate",
+    "count": "17794"
+  },
+  {
+    "owner_entity_type": "corp",
+    "count": "9464"
+  }
+]

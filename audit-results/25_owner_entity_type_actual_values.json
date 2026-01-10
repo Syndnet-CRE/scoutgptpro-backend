@@ -1,0 +1,14 @@
+[
+  {
+    "owner_entity_type": "corp"
+  },
+  {
+    "owner_entity_type": "llc"
+  },
+  {
+    "owner_entity_type": "person"
+  },
+  {
+    "owner_entity_type": "trust_estate"
+  }
+]

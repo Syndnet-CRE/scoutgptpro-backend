@@ -1,0 +1,217 @@
+[
+  {
+    "tablename": "osm_pois_travis",
+    "indexname": "idx_osm_pois_travis_category",
+    "indexdef": "CREATE INDEX idx_osm_pois_travis_category ON public.osm_pois_travis USING btree (category, subcategory)"
+  },
+  {
+    "tablename": "osm_pois_travis",
+    "indexname": "idx_osm_pois_travis_geom",
+    "indexdef": "CREATE INDEX idx_osm_pois_travis_geom ON public.osm_pois_travis USING gist (geom)"
+  },
+  {
+    "tablename": "osm_pois_travis",
+    "indexname": "idx_osm_pois_travis_osm_id",
+    "indexdef": "CREATE INDEX idx_osm_pois_travis_osm_id ON public.osm_pois_travis USING btree (osm_id)"
+  },
+  {
+    "tablename": "osm_pois_travis",
+    "indexname": "idx_osm_pois_travis_property_id",
+    "indexdef": "CREATE INDEX idx_osm_pois_travis_property_id ON public.osm_pois_travis USING btree (property_id)"
+  },
+  {
+    "tablename": "osm_pois_travis",
+    "indexname": "osm_pois_travis_osm_id_key",
+    "indexdef": "CREATE UNIQUE INDEX osm_pois_travis_osm_id_key ON public.osm_pois_travis USING btree (osm_id)"
+  },
+  {
+    "tablename": "osm_pois_travis",
+    "indexname": "osm_pois_travis_pkey",
+    "indexdef": "CREATE UNIQUE INDEX osm_pois_travis_pkey ON public.osm_pois_travis USING btree (id)"
+  },
+  {
+    "tablename": "parcel_features_travis",
+    "indexname": "idx_pft_acres",
+    "indexdef": "CREATE INDEX idx_pft_acres ON public.parcel_features_travis USING btree (acres_calc)"
+  },
+  {
+    "tablename": "parcel_features_travis",
+    "indexname": "idx_pft_asset_class",
+    "indexdef": "CREATE INDEX idx_pft_asset_class ON public.parcel_features_travis USING btree (asset_class)"
+  },
+  {
+    "tablename": "parcel_features_travis",
+    "indexname": "idx_pft_county_acres",
+    "indexdef": "CREATE INDEX idx_pft_county_acres ON public.parcel_features_travis USING btree (county_fips, acres_calc)"
+  },
+  {
+    "tablename": "parcel_features_travis",
+    "indexname": "idx_pft_geom",
+    "indexdef": "CREATE INDEX idx_pft_geom ON public.parcel_features_travis USING gist (geom_centroid)"
+  },
+  {
+    "tablename": "parcel_features_travis",
+    "indexname": "idx_pft_market_value",
+    "indexdef": "CREATE INDEX idx_pft_market_value ON public.parcel_features_travis USING btree (market_value)"
+  },
+  {
+    "tablename": "parcel_features_travis",
+    "indexname": "idx_pft_owner_entity_type",
+    "indexdef": "CREATE INDEX idx_pft_owner_entity_type ON public.parcel_features_travis USING btree (owner_entity_type)"
+  },
+  {
+    "tablename": "parcel_features_travis",
+    "indexname": "idx_pft_owner_name",
+    "indexdef": "CREATE INDEX idx_pft_owner_name ON public.parcel_features_travis USING gin (to_tsvector('english'::regconfig, owner_name_raw))"
+  },
+  {
+    "tablename": "parcel_features_travis",
+    "indexname": "idx_pft_owner_segment",
+    "indexdef": "CREATE INDEX idx_pft_owner_segment ON public.parcel_features_travis USING btree (owner_segment)"
+  },
+  {
+    "tablename": "parcel_features_travis",
+    "indexname": "idx_pft_tax_delinquent",
+    "indexdef": "CREATE INDEX idx_pft_tax_delinquent ON public.parcel_features_travis USING btree (tax_delinquent_flag) WHERE (tax_delinquent_flag = true)"
+  },
+  {
+    "tablename": "parcel_features_travis",
+    "indexname": "parcel_features_travis_pkey",
+    "indexdef": "CREATE UNIQUE INDEX parcel_features_travis_pkey ON public.parcel_features_travis USING btree (parcel_id)"
+  },
+  {
+    "tablename": "parcels_travis",
+    "indexname": "parcels_travis_geom_idx",
+    "indexdef": "CREATE INDEX parcels_travis_geom_idx ON public.parcels_travis USING gist (geom)"
+  },
+  {
+    "tablename": "parcels_travis",
+    "indexname": "parcels_travis_pkey",
+    "indexdef": "CREATE UNIQUE INDEX parcels_travis_pkey ON public.parcels_travis USING btree (parcel_id)"
+  },
+  {
+    "tablename": "parcels_travis_centroids",
+    "indexname": "idx_travis_centroids",
+    "indexdef": "CREATE INDEX idx_travis_centroids ON public.parcels_travis_centroids USING gist (centroid)"
+  },
+  {
+    "tablename": "parcels_travis_enrichment",
+    "indexname": "parcels_travis_enrichment_acreage_idx",
+    "indexdef": "CREATE INDEX parcels_travis_enrichment_acreage_idx ON public.parcels_travis_enrichment USING btree (acreage) WHERE (acreage IS NOT NULL)"
+  },
+  {
+    "tablename": "parcels_travis_enrichment",
+    "indexname": "parcels_travis_enrichment_assessed_total_value_idx",
+    "indexdef": "CREATE INDEX parcels_travis_enrichment_assessed_total_value_idx ON public.parcels_travis_enrichment USING btree (assessed_total_value) WHERE (assessed_total_value IS NOT NULL)"
+  },
+  {
+    "tablename": "parcels_travis_enrichment",
+    "indexname": "parcels_travis_enrichment_flood_zone_idx",
+    "indexdef": "CREATE INDEX parcels_travis_enrichment_flood_zone_idx ON public.parcels_travis_enrichment USING btree (flood_zone) WHERE (flood_zone IS NOT NULL)"
+  },
+  {
+    "tablename": "parcels_travis_enrichment",
+    "indexname": "parcels_travis_enrichment_land_use_code_idx",
+    "indexdef": "CREATE INDEX parcels_travis_enrichment_land_use_code_idx ON public.parcels_travis_enrichment USING btree (land_use_code) WHERE (land_use_code IS NOT NULL)"
+  },
+  {
+    "tablename": "parcels_travis_enrichment",
+    "indexname": "parcels_travis_enrichment_land_use_idx",
+    "indexdef": "CREATE INDEX parcels_travis_enrichment_land_use_idx ON public.parcels_travis_enrichment USING btree (land_use)"
+  },
+  {
+    "tablename": "parcels_travis_enrichment",
+    "indexname": "parcels_travis_enrichment_market_value_idx",
+    "indexdef": "CREATE INDEX parcels_travis_enrichment_market_value_idx ON public.parcels_travis_enrichment USING btree (market_value)"
+  },
+  {
+    "tablename": "parcels_travis_enrichment",
+    "indexname": "parcels_travis_enrichment_owner_name_idx",
+    "indexdef": "CREATE INDEX parcels_travis_enrichment_owner_name_idx ON public.parcels_travis_enrichment USING btree (owner_name)"
+  },
+  {
+    "tablename": "parcels_travis_enrichment",
+    "indexname": "parcels_travis_enrichment_pkey",
+    "indexdef": "CREATE UNIQUE INDEX parcels_travis_enrichment_pkey ON public.parcels_travis_enrichment USING btree (parcel_id)"
+  },
+  {
+    "tablename": "parcels_travis_enrichment",
+    "indexname": "parcels_travis_enrichment_year_built_idx",
+    "indexdef": "CREATE INDEX parcels_travis_enrichment_year_built_idx ON public.parcels_travis_enrichment USING btree (year_built)"
+  },
+  {
+    "tablename": "parcels_travis_enrichment",
+    "indexname": "parcels_travis_enrichment_zoning_code_idx",
+    "indexdef": "CREATE INDEX parcels_travis_enrichment_zoning_code_idx ON public.parcels_travis_enrichment USING btree (zoning_code) WHERE (zoning_code IS NOT NULL)"
+  },
+  {
+    "tablename": "parcels_travis_enrichment_stage",
+    "indexname": "parcels_travis_enrichment_stage_detected_id_idx",
+    "indexdef": "CREATE INDEX parcels_travis_enrichment_stage_detected_id_idx ON public.parcels_travis_enrichment_stage USING btree (detected_id)"
+  },
+  {
+    "tablename": "parcels_travis_enrichment_stage",
+    "indexname": "parcels_travis_enrichment_stage_pkey",
+    "indexdef": "CREATE UNIQUE INDEX parcels_travis_enrichment_stage_pkey ON public.parcels_travis_enrichment_stage USING btree (id)"
+  },
+  {
+    "tablename": "parcels_travis_txgio_stage",
+    "indexname": "idx_txgio_stage_centroid",
+    "indexdef": "CREATE INDEX idx_txgio_stage_centroid ON public.parcels_travis_txgio_stage USING gist (st_centroid(geom))"
+  },
+  {
+    "tablename": "parcels_travis_txgio_stage",
+    "indexname": "parcels_travis_txgio_stage_geom_geom_idx",
+    "indexdef": "CREATE INDEX parcels_travis_txgio_stage_geom_geom_idx ON public.parcels_travis_txgio_stage USING gist (geom)"
+  },
+  {
+    "tablename": "parcels_travis_txgio_stage",
+    "indexname": "parcels_travis_txgio_stage_pkey",
+    "indexdef": "CREATE UNIQUE INDEX parcels_travis_txgio_stage_pkey ON public.parcels_travis_txgio_stage USING btree (ogc_fid)"
+  },
+  {
+    "tablename": "stg_attom_property_boundary_travis",
+    "indexname": "stg_attom_property_boundary_travis_attom_id_idx",
+    "indexdef": "CREATE INDEX stg_attom_property_boundary_travis_attom_id_idx ON public.stg_attom_property_boundary_travis USING btree (attom_id)"
+  },
+  {
+    "tablename": "stg_attom_property_boundary_travis",
+    "indexname": "stg_attom_property_boundary_travis_parcel_attom_idx",
+    "indexdef": "CREATE INDEX stg_attom_property_boundary_travis_parcel_attom_idx ON public.stg_attom_property_boundary_travis USING btree (parcel_id, attom_id)"
+  },
+  {
+    "tablename": "stg_attom_property_boundary_travis",
+    "indexname": "stg_attom_property_boundary_travis_parcel_id_idx",
+    "indexdef": "CREATE INDEX stg_attom_property_boundary_travis_parcel_id_idx ON public.stg_attom_property_boundary_travis USING btree (parcel_id)"
+  },
+  {
+    "tablename": "stg_attom_property_boundary_travis",
+    "indexname": "stg_attom_property_boundary_travis_pkey",
+    "indexdef": "CREATE UNIQUE INDEX stg_attom_property_boundary_travis_pkey ON public.stg_attom_property_boundary_travis USING btree (id)"
+  },
+  {
+    "tablename": "xref_parcel_property_travis",
+    "indexname": "xref_parcel_property_travis_attom_id_idx",
+    "indexdef": "CREATE INDEX xref_parcel_property_travis_attom_id_idx ON public.xref_parcel_property_travis USING btree (attom_id)"
+  },
+  {
+    "tablename": "xref_parcel_property_travis",
+    "indexname": "xref_parcel_property_travis_parcel_id_idx",
+    "indexdef": "CREATE INDEX xref_parcel_property_travis_parcel_id_idx ON public.xref_parcel_property_travis USING btree (parcel_id)"
+  },
+  {
+    "tablename": "xref_parcel_property_travis",
+    "indexname": "xref_parcel_property_travis_pkey",
+    "indexdef": "CREATE UNIQUE INDEX xref_parcel_property_travis_pkey ON public.xref_parcel_property_travis USING btree (parcel_id, attom_id)"
+  },
+  {
+    "tablename": "xref_parcel_property_travis_conflicts",
+    "indexname": "xref_parcel_property_travis_conflicts_attom_id_count_idx",
+    "indexdef": "CREATE INDEX xref_parcel_property_travis_conflicts_attom_id_count_idx ON public.xref_parcel_property_travis_conflicts USING btree (attom_id_count DESC)"
+  },
+  {
+    "tablename": "xref_parcel_property_travis_conflicts",
+    "indexname": "xref_parcel_property_travis_conflicts_pkey",
+    "indexdef": "CREATE UNIQUE INDEX xref_parcel_property_travis_conflicts_pkey ON public.xref_parcel_property_travis_conflicts USING btree (parcel_id)"
+  }
+]

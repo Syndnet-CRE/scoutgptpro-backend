@@ -32,7 +32,11 @@ const AI_TOOLS = [
         bbox: {
           type: 'array',
           items: { type: 'number' },
-          description: 'Bounding box [minLng, minLat, maxLng, maxLat] for spatial filtering'
+          description: 'Bounding box [minLng, minLat, maxLng, maxLat] for spatial filtering. Do NOT pass ZIP codes here - use zip_code field instead.'
+        },
+        zip_code: {
+          type: ['string', 'number'],
+          description: '5-digit ZIP code (e.g., "78758" or 78758). System will resolve to bounding box automatically. PREFERRED over bbox for ZIP codes.'
         },
         acres_min: {
           type: 'number',
@@ -44,8 +48,8 @@ const AI_TOOLS = [
         },
         asset_class: {
           type: 'string',
-          enum: ['residential', 'commercial', 'land', 'industrial', 'mixed'],
-          description: 'Property asset classification'
+          enum: ['residential', 'commercial', 'land', 'unknown'],
+          description: 'Property type. MUST be lowercase. Options: residential, commercial, land, unknown. Note: industrial/mixed not available.'
         },
         owner_entity_type: {
           type: 'string',
@@ -54,7 +58,7 @@ const AI_TOOLS = [
         },
         owner_segment: {
           type: 'string',
-          enum: ['mom_pop', 'small_operator', 'institutional', 'local_owner', 'absentee'],
+          enum: ['mom_pop', 'small_operator', 'institutional', 'trust_estate', 'absentee'],
           description: 'Owner segment classification'
         },
         tax_delinquent: {
@@ -192,8 +196,16 @@ async function executeSearchProperties(input, pool) {
   // Use existing buildParcelQuery function
   const { query: sqlQuery, values } = buildParcelQuery(intent);
   
+  // Debug logging
+  console.log('[executeSearchProperties] Intent:', JSON.stringify(intent, null, 2));
+  console.log('[executeSearchProperties] SQL Query:', sqlQuery.replace(/\$\d+/g, (match) => {
+    const idx = parseInt(match.substring(1)) - 1;
+    return JSON.stringify(values[idx]);
+  }));
+  
   try {
     const result = await pool.query(sqlQuery, values);
+    console.log('[executeSearchProperties] Query returned', result.rows.length, 'rows');
     const properties = result.rows.map(row => ({
       parcel_id: row.parcel_id,
       situs_address: row.situs_address,
@@ -204,6 +216,7 @@ async function executeSearchProperties(input, pool) {
       asset_class: row.asset_class,
       market_value: row.market_value ? parseFloat(row.market_value) : null,
       tax_delinquent_flag: row.tax_delinquent_flag === true,
+      county_fips: row.county_fips,
       geom: row.geom  // Already JSON from ST_AsGeoJSON
     }));
     
@@ -407,6 +420,7 @@ async function processClaudeResponse(response, pool) {
       results.insights = block.text;
     } else if (block.type === 'tool_use') {
       console.log(`🔧 Claude called tool: ${block.name}`);
+      console.log('CLAUDE_TOOL_OUTPUT:', JSON.stringify(block.input, null, 2));
       
       const toolResult = await executeTool(block.name, block.input, pool);
       results.toolCalls.push({
@@ -467,9 +481,19 @@ GEOGRAPHY MAPPING:
 - "Northwest Austin", "Downtown", etc. → Use zip_code or city name, system will resolve to bbox
 - bbox field should ONLY contain [minLng, minLat, maxLng, maxLat] arrays, never ZIP codes or city names
 
+CRITICAL: All filter values MUST be lowercase.
+- asset_class: use "commercial" not "Commercial"  
+- owner_entity_type: use "llc" not "LLC"
+- owner_segment: use "trust_estate" not "Trust_Estate"
+
+AVAILABLE VALUES:
+- asset_class: residential, commercial, land, unknown
+- owner_entity_type: person, llc, corp, trust_estate
+- owner_segment: mom_pop, small_operator, institutional, trust_estate, absentee
+
 AVAILABLE FILTERS:
-- asset_class: residential, commercial, land, industrial, mixed (DO NOT use 'unknown')
-- owner_segment: mom_pop, small_operator, institutional, absentee, trust_estate
+- asset_class: residential, commercial, land, unknown
+- owner_segment: mom_pop, small_operator, institutional, trust_estate, absentee
 - owner_entity_type: person, llc, corp, trust_estate
 - acres_min, acres_max: numeric values for acreage range
 - market_value_min, market_value_max: numeric values for price range
@@ -494,6 +518,7 @@ FILTER EXAMPLES:
 
 IMPORTANT: 
 - Always use snake_case for filter names
+- Always use lowercase for filter values (commercial, not Commercial)
 - Don't make up filter values - only use the ones listed above
 - If unsure about a filter, omit it rather than guessing
 - For combined queries (e.g., "commercial properties over 2 acres"), apply all relevant filters
@@ -607,6 +632,17 @@ async function extractIntentFromQuery(query, bounds) {
  * Build deterministic SQL query against parcel_features_travis
  */
 function buildParcelQuery(intent) {
+  // CASE NORMALIZATION - Database requires lowercase
+  if (intent.filters?.asset_class) {
+    intent.filters.asset_class = intent.filters.asset_class.toLowerCase();
+  }
+  if (intent.filters?.owner_entity_type) {
+    intent.filters.owner_entity_type = intent.filters.owner_entity_type.toLowerCase();
+  }
+  if (intent.filters?.owner_segment) {
+    intent.filters.owner_segment = intent.filters.owner_segment.toLowerCase();
+  }
+  
   const conditions = [];
   const values = [];
   let paramIndex = 1;
@@ -701,6 +737,7 @@ function buildParcelQuery(intent) {
       asset_class,
       market_value,
       tax_delinquent_flag,
+      county_fips,
       ST_AsGeoJSON(geom_centroid)::json as geom
     FROM parcel_features_travis
     ${whereClause}

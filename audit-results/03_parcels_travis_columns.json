@@ -1,0 +1,17 @@
+[
+  {
+    "column_name": "parcel_id",
+    "data_type": "text",
+    "is_nullable": "NO"
+  },
+  {
+    "column_name": "geom",
+    "data_type": "USER-DEFINED",
+    "is_nullable": "NO"
+  },
+  {
+    "column_name": "created_at",
+    "data_type": "timestamp with time zone",
+    "is_nullable": "NO"
+  }
+]

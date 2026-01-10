@@ -1,0 +1,206 @@
+[
+  {
+    "column_name": "owner_segment",
+    "total": "369813",
+    "non_null": "369813",
+    "null_count": "0"
+  },
+  {
+    "column_name": "owner_entity_type",
+    "total": "369813",
+    "non_null": "369813",
+    "null_count": "0"
+  },
+  {
+    "column_name": "asset_class",
+    "total": "369813",
+    "non_null": "369813",
+    "null_count": "0"
+  },
+  {
+    "column_name": "parcel_id",
+    "total": "369813",
+    "non_null": "369813",
+    "null_count": "0"
+  },
+  {
+    "column_name": "updated_at",
+    "total": "369813",
+    "non_null": "369813",
+    "null_count": "0"
+  },
+  {
+    "column_name": "created_at",
+    "total": "369813",
+    "non_null": "369813",
+    "null_count": "0"
+  },
+  {
+    "column_name": "geom_centroid",
+    "total": "369813",
+    "non_null": "369813",
+    "null_count": "0"
+  },
+  {
+    "column_name": "land_use_desc",
+    "total": "369813",
+    "non_null": "0",
+    "null_count": "369813"
+  },
+  {
+    "column_name": "land_use_code",
+    "total": "369813",
+    "non_null": "0",
+    "null_count": "369813"
+  },
+  {
+    "column_name": "flood_zone",
+    "total": "369813",
+    "non_null": "0",
+    "null_count": "369813"
+  },
+  {
+    "column_name": "zoning_code",
+    "total": "369813",
+    "non_null": "197693",
+    "null_count": "172120"
+  },
+  {
+    "column_name": "last_sale_price",
+    "total": "369813",
+    "non_null": "6535",
+    "null_count": "363278"
+  },
+  {
+    "column_name": "situs_address",
+    "total": "369813",
+    "non_null": "369813",
+    "null_count": "0"
+  },
+  {
+    "column_name": "mailing_address",
+    "total": "369813",
+    "non_null": "369813",
+    "null_count": "0"
+  },
+  {
+    "column_name": "mail_zip",
+    "total": "369813",
+    "non_null": "0",
+    "null_count": "369813"
+  },
+  {
+    "column_name": "owner_name_norm",
+    "total": "369813",
+    "non_null": "363875",
+    "null_count": "5938"
+  },
+  {
+    "column_name": "acres_calc",
+    "total": "369813",
+    "non_null": "369813",
+    "null_count": "0"
+  },
+  {
+    "column_name": "acres_calc_confidence",
+    "total": "369813",
+    "non_null": "369813",
+    "null_count": "0"
+  },
+  {
+    "column_name": "year_built",
+    "total": "369813",
+    "non_null": "0",
+    "null_count": "369813"
+  },
+  {
+    "column_name": "building_sqft",
+    "total": "369813",
+    "non_null": "0",
+    "null_count": "369813"
+  },
+  {
+    "column_name": "assessed_total_value",
+    "total": "369813",
+    "non_null": "263365",
+    "null_count": "106448"
+  },
+  {
+    "column_name": "improvement_value",
+    "total": "369813",
+    "non_null": "369813",
+    "null_count": "0"
+  },
+  {
+    "column_name": "homestead_exemption_flag",
+    "total": "369813",
+    "non_null": "369813",
+    "null_count": "0"
+  },
+  {
+    "column_name": "county_fips",
+    "total": "369813",
+    "non_null": "369813",
+    "null_count": "0"
+  },
+  {
+    "column_name": "mail_city",
+    "total": "369813",
+    "non_null": "0",
+    "null_count": "369813"
+  },
+  {
+    "column_name": "mail_state",
+    "total": "369813",
+    "non_null": "27190",
+    "null_count": "342623"
+  },
+  {
+    "column_name": "owner_name_raw",
+    "total": "369813",
+    "non_null": "363875",
+    "null_count": "5938"
+  },
+  {
+    "column_name": "owner_portfolio_count_travis",
+    "total": "369813",
+    "non_null": "369813",
+    "null_count": "0"
+  },
+  {
+    "column_name": "acres_calc_source",
+    "total": "369813",
+    "non_null": "369813",
+    "null_count": "0"
+  },
+  {
+    "column_name": "asset_class_confidence",
+    "total": "369813",
+    "non_null": "0",
+    "null_count": "369813"
+  },
+  {
+    "column_name": "market_value",
+    "total": "369813",
+    "non_null": "342267",
+    "null_count": "27546"
+  },
+  {
+    "column_name": "land_value",
+    "total": "369813",
+    "non_null": "342267",
+    "null_count": "27546"
+  },
+  {
+    "column_name": "tax_delinquent_flag",
+    "total": "369813",
+    "non_null": "369813",
+    "null_count": "0"
+  },
+  {
+    "column_name": "last_sale_date",
+    "total": "369813",
+    "non_null": "6535",
+    "null_count": "363278"
+  }
+]

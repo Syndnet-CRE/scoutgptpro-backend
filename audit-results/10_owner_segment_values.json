@@ -1,0 +1,22 @@
+[
+  {
+    "owner_segment": "mom_pop",
+    "count": "315963"
+  },
+  {
+    "owner_segment": "small_operator",
+    "count": "32047"
+  },
+  {
+    "owner_segment": "trust_estate",
+    "count": "17587"
+  },
+  {
+    "owner_segment": "institutional",
+    "count": "2733"
+  },
+  {
+    "owner_segment": "absentee",
+    "count": "1483"
+  }
+]

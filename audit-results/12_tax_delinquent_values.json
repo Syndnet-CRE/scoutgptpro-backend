@@ -1,0 +1,10 @@
+[
+  {
+    "tax_delinquent_flag": false,
+    "count": "368688"
+  },
+  {
+    "tax_delinquent_flag": true,
+    "count": "1125"
+  }
+]

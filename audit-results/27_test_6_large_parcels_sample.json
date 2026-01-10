@@ -1,0 +1,142 @@
+[
+  {
+    "parcel_id": "126443",
+    "situs_address": ", TX 78746",
+    "acres_calc": "19.99891434",
+    "asset_class": "residential",
+    "year_built": null
+  },
+  {
+    "parcel_id": "960744",
+    "situs_address": "W         STATE HY 71, TX 78669",
+    "acres_calc": "19.99888634",
+    "asset_class": "land",
+    "year_built": null
+  },
+  {
+    "parcel_id": "495282",
+    "situs_address": ", TX 78733",
+    "acres_calc": "19.99841085",
+    "asset_class": "residential",
+    "year_built": null
+  },
+  {
+    "parcel_id": "291832",
+    "situs_address": ", TX 78744",
+    "acres_calc": "19.99765055",
+    "asset_class": "land",
+    "year_built": null
+  },
+  {
+    "parcel_id": "294996",
+    "situs_address": ", TX 78744",
+    "acres_calc": "19.99618885",
+    "asset_class": "unknown",
+    "year_built": null
+  },
+  {
+    "parcel_id": "309536",
+    "situs_address": ", TX 78736",
+    "acres_calc": "19.99431441",
+    "asset_class": "residential",
+    "year_built": null
+  },
+  {
+    "parcel_id": "565941",
+    "situs_address": ", TX 78645",
+    "acres_calc": "19.99398422",
+    "asset_class": "land",
+    "year_built": null
+  },
+  {
+    "parcel_id": "312271",
+    "situs_address": ", TX 78736",
+    "acres_calc": "19.99359852",
+    "asset_class": "land",
+    "year_built": null
+  },
+  {
+    "parcel_id": "348717",
+    "situs_address": ", TX 78748",
+    "acres_calc": "19.99344791",
+    "asset_class": "residential",
+    "year_built": null
+  },
+  {
+    "parcel_id": "747865",
+    "situs_address": ", TX 78660",
+    "acres_calc": "19.99135334",
+    "asset_class": "land",
+    "year_built": null
+  },
+  {
+    "parcel_id": "500133",
+    "situs_address": "HIGH HORSE, TX 78641",
+    "acres_calc": "19.98909755",
+    "asset_class": "residential",
+    "year_built": null
+  },
+  {
+    "parcel_id": "770690",
+    "situs_address": ", TX 78641",
+    "acres_calc": "19.98909755",
+    "asset_class": "unknown",
+    "year_built": null
+  },
+  {
+    "parcel_id": "309551",
+    "situs_address": ", TX 78736",
+    "acres_calc": "19.98880018",
+    "asset_class": "residential",
+    "year_built": null
+  },
+  {
+    "parcel_id": "172979",
+    "situs_address": ", TX",
+    "acres_calc": "19.98491035",
+    "asset_class": "land",
+    "year_built": null
+  },
+  {
+    "parcel_id": "836226",
+    "situs_address": ", TX 78734",
+    "acres_calc": "19.98479353",
+    "asset_class": "land",
+    "year_built": null
+  },
+  {
+    "parcel_id": "315456",
+    "situs_address": ", TX 78737",
+    "acres_calc": "19.98459802",
+    "asset_class": "residential",
+    "year_built": null
+  },
+  {
+    "parcel_id": "541822",
+    "situs_address": ", TX",
+    "acres_calc": "19.98452851",
+    "asset_class": "land",
+    "year_built": null
+  },
+  {
+    "parcel_id": "441651",
+    "situs_address": ", TX 78641",
+    "acres_calc": "19.98152545",
+    "asset_class": "unknown",
+    "year_built": null
+  },
+  {
+    "parcel_id": "142163",
+    "situs_address": ", TX 78730",
+    "acres_calc": "19.98149407",
+    "asset_class": "residential",
+    "year_built": null
+  },
+  {
+    "parcel_id": "121875",
+    "situs_address": ", TX 78746",
+    "acres_calc": "19.98016849",
+    "asset_class": "commercial",
+    "year_built": null
+  }
+]

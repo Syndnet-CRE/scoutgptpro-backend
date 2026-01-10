@@ -1,0 +1,314 @@
+[
+  {
+    "table_name": "_prisma_migrations",
+    "column_count": "8"
+  },
+  {
+    "table_name": "activities",
+    "column_count": "7"
+  },
+  {
+    "table_name": "austin_land_use",
+    "column_count": "3"
+  },
+  {
+    "table_name": "buy_boxes",
+    "column_count": "19"
+  },
+  {
+    "table_name": "buyboxes",
+    "column_count": "6"
+  },
+  {
+    "table_name": "buyer_assumptions",
+    "column_count": "10"
+  },
+  {
+    "table_name": "comps",
+    "column_count": "18"
+  },
+  {
+    "table_name": "county_config",
+    "column_count": "9"
+  },
+  {
+    "table_name": "deal_activity_log",
+    "column_count": "6"
+  },
+  {
+    "table_name": "deal_documents",
+    "column_count": "11"
+  },
+  {
+    "table_name": "deal_media",
+    "column_count": "9"
+  },
+  {
+    "table_name": "deal_rooms",
+    "column_count": "68"
+  },
+  {
+    "table_name": "deal_user_access",
+    "column_count": "10"
+  },
+  {
+    "table_name": "deals",
+    "column_count": "17"
+  },
+  {
+    "table_name": "discover_results",
+    "column_count": "6"
+  },
+  {
+    "table_name": "discover_runs",
+    "column_count": "8"
+  },
+  {
+    "table_name": "documents",
+    "column_count": "10"
+  },
+  {
+    "table_name": "geography_columns",
+    "column_count": "7"
+  },
+  {
+    "table_name": "geometry_columns",
+    "column_count": "7"
+  },
+  {
+    "table_name": "gis_layers",
+    "column_count": "12"
+  },
+  {
+    "table_name": "land_use_codes",
+    "column_count": "3"
+  },
+  {
+    "table_name": "layer_sets",
+    "column_count": "17"
+  },
+  {
+    "table_name": "listings",
+    "column_count": "50"
+  },
+  {
+    "table_name": "map_queries",
+    "column_count": "7"
+  },
+  {
+    "table_name": "map_server_registry",
+    "column_count": "16"
+  },
+  {
+    "table_name": "nda_signatures",
+    "column_count": "8"
+  },
+  {
+    "table_name": "opportunities",
+    "column_count": "24"
+  },
+  {
+    "table_name": "osm_pois_travis",
+    "column_count": "18"
+  },
+  {
+    "table_name": "owner_features_tx",
+    "column_count": "9"
+  },
+  {
+    "table_name": "owner_properties",
+    "column_count": "4"
+  },
+  {
+    "table_name": "owner_segments",
+    "column_count": "5"
+  },
+  {
+    "table_name": "owners",
+    "column_count": "10"
+  },
+  {
+    "table_name": "parcel_features_travis",
+    "column_count": "34"
+  },
+  {
+    "table_name": "parcels_bastrop",
+    "column_count": "3"
+  },
+  {
+    "table_name": "parcels_bastrop_enrichment",
+    "column_count": "26"
+  },
+  {
+    "table_name": "parcels_bell",
+    "column_count": "3"
+  },
+  {
+    "table_name": "parcels_bell_enrichment",
+    "column_count": "26"
+  },
+  {
+    "table_name": "parcels_blanco",
+    "column_count": "3"
+  },
+  {
+    "table_name": "parcels_blanco_enrichment",
+    "column_count": "26"
+  },
+  {
+    "table_name": "parcels_burnet",
+    "column_count": "3"
+  },
+  {
+    "table_name": "parcels_burnet_enrichment",
+    "column_count": "26"
+  },
+  {
+    "table_name": "parcels_burnet_raw",
+    "column_count": "39"
+  },
+  {
+    "table_name": "parcels_caldwell",
+    "column_count": "3"
+  },
+  {
+    "table_name": "parcels_caldwell_enrichment",
+    "column_count": "26"
+  },
+  {
+    "table_name": "parcels_comal",
+    "column_count": "3"
+  },
+  {
+    "table_name": "parcels_comal_enrichment",
+    "column_count": "26"
+  },
+  {
+    "table_name": "parcels_hays",
+    "column_count": "3"
+  },
+  {
+    "table_name": "parcels_hays_enrichment",
+    "column_count": "26"
+  },
+  {
+    "table_name": "parcels_kendall",
+    "column_count": "3"
+  },
+  {
+    "table_name": "parcels_kendall_enrichment",
+    "column_count": "26"
+  },
+  {
+    "table_name": "parcels_lee",
+    "column_count": "3"
+  },
+  {
+    "table_name": "parcels_lee_enrichment",
+    "column_count": "26"
+  },
+  {
+    "table_name": "parcels_llano",
+    "column_count": "3"
+  },
+  {
+    "table_name": "parcels_llano_enrichment",
+    "column_count": "26"
+  },
+  {
+    "table_name": "parcels_travis",
+    "column_count": "3"
+  },
+  {
+    "table_name": "parcels_travis_centroids",
+    "column_count": "2"
+  },
+  {
+    "table_name": "parcels_travis_enrichment",
+    "column_count": "37"
+  },
+  {
+    "table_name": "parcels_travis_enrichment_stage",
+    "column_count": "4"
+  },
+  {
+    "table_name": "parcels_travis_txgio_stage",
+    "column_count": "36"
+  },
+  {
+    "table_name": "parcels_tx",
+    "column_count": "9"
+  },
+  {
+    "table_name": "parcels_williamson",
+    "column_count": "3"
+  },
+  {
+    "table_name": "parcels_williamson_enrichment",
+    "column_count": "26"
+  },
+  {
+    "table_name": "pins",
+    "column_count": "10"
+  },
+  {
+    "table_name": "polygon_searches",
+    "column_count": "14"
+  },
+  {
+    "table_name": "properties",
+    "column_count": "85"
+  },
+  {
+    "table_name": "scoring_models",
+    "column_count": "5"
+  },
+  {
+    "table_name": "signals",
+    "column_count": "17"
+  },
+  {
+    "table_name": "spatial_ref_sys",
+    "column_count": "5"
+  },
+  {
+    "table_name": "stg_attom_property_boundary_travis",
+    "column_count": "7"
+  },
+  {
+    "table_name": "tasks",
+    "column_count": "11"
+  },
+  {
+    "table_name": "tx_enrichment_rollups",
+    "column_count": "9"
+  },
+  {
+    "table_name": "txgio_centroids",
+    "column_count": "9"
+  },
+  {
+    "table_name": "user_profiles",
+    "column_count": "10"
+  },
+  {
+    "table_name": "users",
+    "column_count": "6"
+  },
+  {
+    "table_name": "v_travis_enrichment_latest",
+    "column_count": "3"
+  },
+  {
+    "table_name": "xref_parcel_property_travis",
+    "column_count": "4"
+  },
+  {
+    "table_name": "xref_parcel_property_travis_conflicts",
+    "column_count": "5"
+  },
+  {
+    "table_name": "zoning_districts",
+    "column_count": "7"
+  }
+]

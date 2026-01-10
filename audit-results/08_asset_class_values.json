@@ -1,0 +1,18 @@
+[
+  {
+    "asset_class": "residential",
+    "count": "222729"
+  },
+  {
+    "asset_class": "unknown",
+    "count": "72286"
+  },
+  {
+    "asset_class": "land",
+    "count": "64709"
+  },
+  {
+    "asset_class": "commercial",
+    "count": "10089"
+  }
+]
