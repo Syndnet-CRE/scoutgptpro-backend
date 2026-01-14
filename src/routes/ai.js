@@ -8,7 +8,6 @@ import { preprocessToolInput, isValidBbox } from '../services/zipCodeResolver.js
 import { validateIntent } from '../validators/intentSchema.js';
 import { assertAcresFilter, assertAssetClassFilter, assertOwnerSegmentFilter, assertMarketValueFilter, assertOwnerEntityTypeFilter, assertTaxDelinquentFilter } from '../utils/filterAssertions.js';
 import { queryLogger } from '../middleware/queryLogger.js';
-import { generateSQL, isComplexQuery } from '../services/sqlcoder.js';
 
 const router = express.Router();
 const anthropic = new Anthropic({ 
