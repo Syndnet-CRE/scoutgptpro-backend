@@ -8,6 +8,7 @@ import { preprocessToolInput, isValidBbox } from '../services/zipCodeResolver.js
 import { validateIntent } from '../validators/intentSchema.js';
 import { assertAcresFilter, assertAssetClassFilter, assertOwnerSegmentFilter, assertMarketValueFilter, assertOwnerEntityTypeFilter, assertTaxDelinquentFilter } from '../utils/filterAssertions.js';
 import { queryLogger } from '../middleware/queryLogger.js';
+import { generateSQL, isComplexQuery } from '../services/sqlcoder.js';
 
 const router = express.Router();
 const anthropic = new Anthropic({ 
@@ -72,6 +73,32 @@ const AI_TOOLS = [
         market_value_max: {
           type: 'number',
           description: 'Maximum market value in dollars'
+        },
+        aggregation: {
+          type: 'object',
+          description: 'For queries asking for counts, averages, totals, or groupings',
+          properties: {
+            group_by: {
+              type: 'array',
+              items: { 
+                type: 'string',
+                enum: ['mail_zip', 'asset_class', 'owner_entity_type', 'owner_segment', 'tax_delinquent_flag', 'homestead_exemption_flag']
+              },
+              description: 'Columns to group results by'
+            },
+            metrics: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  type: { type: 'string', enum: ['count', 'sum', 'avg', 'min', 'max'] },
+                  field: { type: 'string', enum: ['market_value', 'acres_calc', 'building_sqft', 'land_value'] },
+                  alias: { type: 'string' }
+                },
+                required: ['type']
+              }
+            }
+          }
         },
         limit: {
           type: 'integer',
@@ -192,6 +219,24 @@ async function executeSearchProperties(input, pool) {
     console.warn('[AI Query] Intent validation errors:', errors);
   }
   const intent = sanitized;
+  
+  // Check for aggregation query
+  if (input.aggregation && (input.aggregation.group_by?.length > 0 || input.aggregation.metrics?.length > 0)) {
+    console.log('📊 Building aggregation query');
+    // Add aggregation to intent
+    intent.aggregation = input.aggregation;
+    const queryResult = buildAggregationQuery(intent);
+    console.log('SQL:', queryResult.query);
+    const result = await pool.query(queryResult.query, queryResult.values);
+    
+    return {
+      type: 'AGGREGATION',
+      data: result.rows,
+      count: result.rowCount,
+      groupBy: queryResult.groupBy,
+      metrics: queryResult.metrics
+    };
+  }
   
   // Use existing buildParcelQuery function
   const { query: sqlQuery, values } = buildParcelQuery(intent);
@@ -410,6 +455,9 @@ async function processClaudeResponse(response, pool) {
     properties: [],
     layers: [],
     pois: [],
+    aggregation: null,
+    groupBy: null,
+    metrics: null,
     insights: null
   };
   
@@ -430,7 +478,12 @@ async function processClaudeResponse(response, pool) {
       });
       
       // Aggregate results by type
-      if (block.name === 'search_properties' && toolResult.properties) {
+      if (block.name === 'search_properties' && toolResult.type === 'AGGREGATION') {
+        results.type = 'AGGREGATION';
+        results.aggregation = toolResult.data;
+        results.groupBy = toolResult.groupBy;
+        results.metrics = toolResult.metrics;
+      } else if (block.name === 'search_properties' && toolResult.properties) {
         results.type = 'PROPERTY_SEARCH';
         results.properties.push(...toolResult.properties);
       } else if (block.name === 'toggle_gis_layer') {
@@ -522,6 +575,22 @@ IMPORTANT:
 - Don't make up filter values - only use the ones listed above
 - If unsure about a filter, omit it rather than guessing
 - For combined queries (e.g., "commercial properties over 2 acres"), apply all relevant filters
+
+AGGREGATION QUERIES:
+When users ask for counts, totals, averages, or distributions, use the aggregation field:
+
+- "how many properties by ZIP code" → aggregation: { group_by: ['mail_zip'], metrics: [{ type: 'count' }] }
+- "count by asset class" → aggregation: { group_by: ['asset_class'], metrics: [{ type: 'count' }] }
+- "average value by owner type" → aggregation: { group_by: ['owner_entity_type'], metrics: [{ type: 'avg', field: 'market_value' }] }
+- "total commercial value" → filters: { asset_class: 'commercial' }, aggregation: { metrics: [{ type: 'sum', field: 'market_value' }] }
+- "property statistics" → aggregation: { metrics: [{ type: 'count' }, { type: 'avg', field: 'market_value' }, { type: 'min', field: 'market_value' }, { type: 'max', field: 'market_value' }] }
+
+IMPORTANT: 
+- "how many" or "count" → use aggregation with type: 'count'
+- "average" → use aggregation with type: 'avg'  
+- "total" or "sum" → use aggregation with type: 'sum'
+- "by ZIP" or "by owner type" → use group_by
+- Filters still apply to aggregations (e.g., "average commercial value" uses both)
 
 Always use the appropriate tool to fulfill the user's request. If multiple tools are needed (e.g., "show zoning and find properties"), call each tool.`;
 
@@ -755,6 +824,210 @@ function buildParcelQuery(intent) {
     query: sql,
     values: values,
     sql: sqlDebug
+  };
+}
+
+/**
+ * Build SQL query for aggregation (GROUP BY) queries
+ */
+function buildAggregationQuery(intent) {
+  const conditions = [];
+  const values = [];
+  let paramIndex = 1;
+
+  if (intent.geo?.county_fips) {
+    conditions.push(`county_fips = $${paramIndex++}`);
+    values.push(intent.geo.county_fips);
+  }
+  if (intent.geo?.bbox && Array.isArray(intent.geo.bbox)) {
+    conditions.push(`ST_Intersects(geom_centroid, ST_MakeEnvelope($${paramIndex}, $${paramIndex + 1}, $${paramIndex + 2}, $${paramIndex + 3}, 4326))`);
+    values.push(...intent.geo.bbox);
+    paramIndex += 4;
+  }
+  if (intent.filters?.acres_min) {
+    conditions.push(`acres_calc >= $${paramIndex++}`);
+    values.push(intent.filters.acres_min);
+  }
+  if (intent.filters?.acres_max) {
+    conditions.push(`acres_calc <= $${paramIndex++}`);
+    values.push(intent.filters.acres_max);
+  }
+  if (intent.filters?.asset_class) {
+    conditions.push(`asset_class = $${paramIndex++}`);
+    values.push(intent.filters.asset_class.toLowerCase());
+  }
+  if (intent.filters?.owner_entity_type) {
+    conditions.push(`owner_entity_type = $${paramIndex++}`);
+    values.push(intent.filters.owner_entity_type);
+  }
+  if (intent.filters?.owner_segment) {
+    conditions.push(`owner_segment = $${paramIndex++}`);
+    values.push(intent.filters.owner_segment);
+  }
+  if (intent.filters?.tax_delinquent !== undefined) {
+    conditions.push(`tax_delinquent_flag = $${paramIndex++}`);
+    values.push(intent.filters.tax_delinquent);
+  }
+  if (intent.filters?.market_value_min) {
+    conditions.push(`market_value >= $${paramIndex++}`);
+    values.push(intent.filters.market_value_min);
+  }
+  if (intent.filters?.market_value_max) {
+    conditions.push(`market_value <= $${paramIndex++}`);
+    values.push(intent.filters.market_value_max);
+  }
+
+  const agg = intent.aggregation;
+  const groupBy = agg.group_by || [];
+  const metrics = agg.metrics || [{ type: 'count' }];
+
+  const allowedGroupBy = ['mail_zip', 'asset_class', 'owner_entity_type', 'owner_segment', 'tax_delinquent_flag', 'homestead_exemption_flag'];
+  const allowedFields = ['market_value', 'acres_calc', 'building_sqft', 'land_value'];
+
+  const selectCols = [];
+  
+  groupBy.forEach(col => {
+    if (allowedGroupBy.includes(col)) selectCols.push(col);
+  });
+
+  metrics.forEach((metric, idx) => {
+    const alias = metric.alias || `metric_${idx}`;
+    switch (metric.type) {
+      case 'count':
+        selectCols.push(`COUNT(*) as ${alias}`);
+        break;
+      case 'sum':
+        if (allowedFields.includes(metric.field)) {
+          selectCols.push(`SUM(${metric.field}) as ${alias}`);
+        }
+        break;
+      case 'avg':
+        if (allowedFields.includes(metric.field)) {
+          selectCols.push(`ROUND(AVG(${metric.field})::numeric, 2) as ${alias}`);
+        }
+        break;
+      case 'min':
+        if (allowedFields.includes(metric.field)) {
+          selectCols.push(`MIN(${metric.field}) as ${alias}`);
+        }
+        break;
+      case 'max':
+        if (allowedFields.includes(metric.field)) {
+          selectCols.push(`MAX(${metric.field}) as ${alias}`);
+        }
+        break;
+    }
+  });
+
+  const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+  const groupByClause = groupBy.length > 0 ? `GROUP BY ${groupBy.join(', ')}` : '';
+  const orderByClause = groupBy.length > 0 ? `ORDER BY ${metrics[0]?.alias || 'metric_0'} DESC` : '';
+
+  const sqlQuery = `SELECT ${selectCols.join(', ')} FROM parcel_features_travis ${whereClause} ${groupByClause} ${orderByClause} LIMIT 100`.trim();
+
+  return { query: sqlQuery, values, isAggregate: true, groupBy, metrics };
+}
+
+/**
+ * Execute SQL generated by SQLCoder with safety checks
+ * 
+ * @param {string} sql - The SQL query to execute
+ * @param {object} pool - Database connection pool
+ * @returns {Promise<{success: boolean, rows: array, error?: string}>}
+ */
+async function executeSQLCoderQuery(sql, pool) {
+  console.log('[executeSQLCoderQuery] Executing:', sql);
+  
+  // Safety checks
+  const upperSQL = sql.toUpperCase();
+  
+  // Block dangerous operations
+  const blocked = ['DROP', 'DELETE', 'UPDATE', 'INSERT', 'ALTER', 'TRUNCATE', 'CREATE', 'GRANT', 'REVOKE'];
+  for (const keyword of blocked) {
+    if (upperSQL.includes(keyword)) {
+      console.error(`[executeSQLCoderQuery] Blocked dangerous keyword: ${keyword}`);
+      return {
+        success: false,
+        rows: [],
+        error: `Blocked: ${keyword} operations not allowed`,
+      };
+    }
+  }
+  
+  // Must be a SELECT query
+  if (!upperSQL.trim().startsWith('SELECT')) {
+    console.error('[executeSQLCoderQuery] Only SELECT queries allowed');
+    return {
+      success: false,
+      rows: [],
+      error: 'Only SELECT queries are allowed',
+    };
+  }
+  
+  // Add LIMIT if not present (safety)
+  if (!upperSQL.includes('LIMIT')) {
+    sql = sql.replace(/;?\s*$/, ' LIMIT 500;');
+  }
+  
+  try {
+    const result = await pool.query(sql);
+    console.log(`[executeSQLCoderQuery] Success: ${result.rows.length} rows`);
+    return {
+      success: true,
+      rows: result.rows,
+    };
+  } catch (error) {
+    console.error('[executeSQLCoderQuery] Query error:', error.message);
+    return {
+      success: false,
+      rows: [],
+      error: error.message,
+    };
+  }
+}
+
+/**
+ * Handle complex queries using SQLCoder
+ * 
+ * @param {string} query - Natural language query
+ * @param {object} pool - Database connection pool
+ * @returns {Promise<object>} - Response object
+ */
+async function handleComplexQuery(query, pool) {
+  console.log('[handleComplexQuery] Processing complex query:', query);
+  
+  // Generate SQL using SQLCoder
+  const sqlResult = await generateSQL(query);
+  
+  if (!sqlResult.success) {
+    return {
+      success: false,
+      type: 'COMPLEX_QUERY',
+      error: `SQLCoder error: ${sqlResult.error}`,
+      properties: [],
+    };
+  }
+  
+  // Execute the generated SQL
+  const execResult = await executeSQLCoderQuery(sqlResult.sql, pool);
+  
+  if (!execResult.success) {
+    return {
+      success: false,
+      type: 'COMPLEX_QUERY',
+      error: `Query execution error: ${execResult.error}`,
+      generatedSQL: sqlResult.sql,
+      properties: [],
+    };
+  }
+  
+  return {
+    success: true,
+    type: 'COMPLEX_QUERY',
+    generatedSQL: sqlResult.sql,
+    results: execResult.rows,
+    count: execResult.rows.length,
+    insights: `Found ${execResult.rows.length} results using advanced SQL analysis.`,
   };
 }
 
@@ -1140,39 +1413,64 @@ router.post('/query', rateLimiter({ max: 30, windowMs: 15 * 60 * 1000 }), queryL
     
     console.log(`🤖 AI Query [${mode}]: "${query}"`);
     
-    // Build user prompt
-    let userPrompt = query;
-    if (bounds) {
-      userPrompt += `\n\nBounds: ${JSON.stringify(bounds)}`;
-    }
-    if (subject) {
-      userPrompt += `\n\nSubject Property: ${JSON.stringify(subject)}`;
-    }
-    
-    // Call Claude with tools enabled
-    const response = await anthropic.messages.create({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 4096,
-      system: UNIFIED_SYSTEM_PROMPT,
-      tools: AI_TOOLS,
-      messages: [{
-        role: 'user',
-        content: userPrompt
-      }]
-    });
-    
-    console.log('🤖 Claude response stop_reason:', response.stop_reason);
-    
-    // Get database pool
+    // Get database pool early (needed for SQLCoder)
     const pool = await getDbPool();
     
     try {
+      // Check if this is a complex query that should use SQLCoder
+      if (isComplexQuery(query)) {
+        console.log('[/api/ai/query] Detected complex query, routing to SQLCoder');
+        const complexResult = await handleComplexQuery(query, pool);
+        await pool.end();
+        return res.json(complexResult);
+      }
+      
+      // Build user prompt
+      let userPrompt = query;
+      if (bounds) {
+        userPrompt += `\n\nBounds: ${JSON.stringify(bounds)}`;
+      }
+      if (subject) {
+        userPrompt += `\n\nSubject Property: ${JSON.stringify(subject)}`;
+      }
+      
+      // Call Claude with tools enabled
+      const response = await anthropic.messages.create({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4096,
+        system: UNIFIED_SYSTEM_PROMPT,
+        tools: AI_TOOLS,
+        messages: [{
+          role: 'user',
+          content: userPrompt
+        }]
+      });
+      
+      console.log('🤖 Claude response stop_reason:', response.stop_reason);
+      
       // Process the response (handles both tool_use and text responses)
+      // Pool already created above for SQLCoder check
       const processed = await processClaudeResponse(response, pool);
       
       console.log('📊 Processed response type:', processed.type);
       console.log('📊 Tool calls:', processed.toolCalls.length);
       console.log('📊 Properties:', processed.properties.length);
+      
+      // Handle aggregation results
+      if (processed.type === 'AGGREGATION') {
+        return res.json({
+          type: 'AGGREGATION',
+          data: processed.aggregation,
+          count: processed.aggregation?.length || 0,
+          groupBy: processed.groupBy,
+          metrics: processed.metrics,
+          insights: [`Showing ${processed.aggregation?.length || 0} groups`],
+          toolCalls: processed.toolCalls.map(tc => ({
+            tool: tc.tool,
+            input: tc.input
+          }))
+        });
+      }
       
       // Build standardized response
       const apiResponse = {
@@ -1248,6 +1546,32 @@ router.post('/query', rateLimiter({ max: 30, windowMs: 15 * 60 * 1000 }), queryL
       error: 'AI query failed',
       message: error.message 
     });
+  }
+});
+
+/**
+ * POST /api/ai/sql
+ * Direct SQLCoder endpoint for complex analytical queries
+ */
+router.post('/sql', async (req, res) => {
+  const { query } = req.body;
+  
+  if (!query) {
+    return res.status(400).json({ error: 'Query is required' });
+  }
+  
+  console.log('[POST /api/ai/sql] Query:', query);
+  
+  const pool = await getDbPool();
+  
+  try {
+    const result = await handleComplexQuery(query, pool);
+    return res.json(result);
+  } catch (error) {
+    console.error('[POST /api/ai/sql] Error:', error);
+    return res.status(500).json({ error: error.message });
+  } finally {
+    await pool.end();
   }
 });
 
