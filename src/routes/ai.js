@@ -1417,12 +1417,6 @@ router.post('/query', rateLimiter({ max: 30, windowMs: 15 * 60 * 1000 }), queryL
     
     try {
       // Check if this is a complex query that should use SQLCoder
-      if (isComplexQuery(query)) {
-        console.log('[/api/ai/query] Detected complex query, routing to SQLCoder');
-        const complexResult = await handleComplexQuery(query, pool);
-        await pool.end();
-        return res.json(complexResult);
-      }
       
       // Build user prompt
       let userPrompt = query;
