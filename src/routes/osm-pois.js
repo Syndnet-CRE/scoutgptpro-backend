@@ -3,19 +3,12 @@
  */
 
 import express from 'express';
-import { Pool } from 'pg';
+import pool from '../db/pool.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 const router = express.Router();
-
-// Database pool for OSM POI queries
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false },
-  max: 10
-});
 
 /**
  * GET /api/osm-pois

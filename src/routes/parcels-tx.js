@@ -1,16 +1,10 @@
 import express from 'express';
-import { Pool } from 'pg';
+import pool from '../db/pool.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 const router = express.Router();
-
-// Initialize database pool
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  max: 5
-});
 
 /**
  * GET /api/parcels-tx/viewport?bbox=west,south,east,north&limit=5000&countyFips=48453

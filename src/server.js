@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import mapserverRoutes from './routes/mapservers.js';
 import parcelRoutes from './routes/parcels.js';
 import aiRoutes from './routes/ai.js';
@@ -11,6 +13,8 @@ import gisRoutes from './routes/gis.js';
 import propertiesRoutes from './routes/properties.js';
 import listingsRoutes from './routes/listings.js';
 import dealsRoutes from './routes/deals.js';
+import tasksRoutes from './routes/tasks.js';
+import documentsRoutes from './routes/documents.js';
 import dealRoomsRoutes from './routes/dealRooms.js';
 import dealRoomAccessRoutes from './routes/dealRoomAccess.js';
 import dealRoomDocumentsRoutes from './routes/dealRoomDocuments.js';
@@ -23,6 +27,9 @@ import discoverRoutes from './routes/discover.js';
 import osmPoisRoutes from './routes/osm-pois.js';
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -57,6 +64,9 @@ const corsOptions = isDevelopment
 app.use(cors(corsOptions));
 app.use(express.json());
 
+// Serve uploads directory statically
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
 // Request logging middleware
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} ${req.method} ${req.path}`);
@@ -84,6 +94,8 @@ app.use('/api/gis', gisRoutes);
 app.use('/api/properties', propertiesRoutes);
 app.use('/api/listings', listingsRoutes);
 app.use('/api/deals', dealsRoutes);
+app.use('/api/deals', tasksRoutes);
+app.use('/api', documentsRoutes);
 app.use('/api/deal-rooms', dealRoomAccessRoutes);
 app.use('/api/deal-rooms', dealRoomDocumentsRoutes);
 app.use('/api/deal-rooms', buyerAssumptionsRoutes);

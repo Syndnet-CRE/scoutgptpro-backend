@@ -2,7 +2,7 @@ import express from 'express';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { Pool } from 'pg';
+import pool from '../db/pool.js';
 import { PrismaClient } from '@prisma/client';
 import { resolveParcelCounty } from '../services/countyResolver.js';
 import dotenv from 'dotenv';
@@ -193,12 +193,6 @@ router.get('/parcel/:id', async (req, res) => {
   }
 });
 
-// Initialize database pool for enrichment queries
-const enrichmentPool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  max: 5
-});
-
 // Initialize Prisma for county resolver
 const prisma = new PrismaClient();
 
@@ -228,7 +222,7 @@ router.get('/:parcelId/enrichment', async (req, res) => {
     console.log(`[Parcels Enrichment] Resolved parcel ${parcelIdStr} to ${county.name} County (${county.fips})`);
     
     // Check if parcel has geometry using county-specific table
-    const geomCheck = await enrichmentPool.query(
+    const geomCheck = await pool.query(
       `SELECT 1 FROM ${county.table} WHERE parcel_id = $1`,
       [parcelIdStr]
     );
@@ -236,7 +230,7 @@ router.get('/:parcelId/enrichment', async (req, res) => {
     const hasGeometry = geomCheck.rows.length > 0;
     
     // Get enrichment data from county-specific enrichment table
-    const enrichmentResult = await enrichmentPool.query(
+    const enrichmentResult = await pool.query(
       `SELECT 
         parcel_id, owner_name, owner2, mail_address1, mail_address2,
         mail_city, mail_state, mail_zip, situs_address, land_use,
@@ -249,7 +243,7 @@ router.get('/:parcelId/enrichment', async (req, res) => {
     );
     
     // Optionally get property data
-    const propertyResult = await enrichmentPool.query(
+    const propertyResult = await pool.query(
       'SELECT id, address, city, state, zip, propertyType, mktValue FROM properties WHERE "parcelId" = $1 LIMIT 1',
       [parcelIdStr]
     );

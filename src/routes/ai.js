@@ -6,6 +6,8 @@ import { queryProperties, needsPropertyData } from '../services/property-service
 import { rateLimiter } from '../middleware/rateLimiter.js';
 import { preprocessToolInput, isValidBbox } from '../services/zipCodeResolver.js';
 import { validateIntent } from '../validators/intentSchema.js';
+import { validateAiQueryRequest } from '../validators/aiQuerySchema.js';
+import { sendError } from '../utils/apiResponse.js';
 import { assertAcresFilter, assertAssetClassFilter, assertOwnerSegmentFilter, assertMarketValueFilter, assertOwnerEntityTypeFilter, assertTaxDelinquentFilter } from '../utils/filterAssertions.js';
 import { queryLogger } from '../middleware/queryLogger.js';
 
@@ -666,7 +668,14 @@ async function extractIntentFromQuery(query, bounds) {
     }
     
     // Parse JSON
-    const intent = JSON.parse(jsonText);
+    let intent;
+    try {
+      intent = JSON.parse(jsonText);
+    } catch (parseError) {
+      console.error('Failed to parse Claude intent response:', parseError.message);
+      console.error('Raw response (truncated):', jsonText.substring(0, 500));
+      throw new Error('Intent extraction failed: Invalid JSON response from Claude');
+    }
     
     // Validate and normalize
     const normalized = {
@@ -684,7 +693,7 @@ async function extractIntentFromQuery(query, bounds) {
         market_value_min: intent.filters?.market_value_min ?? null,
         market_value_max: intent.filters?.market_value_max ?? null
       },
-      limit: Math.min(Math.max(intent.limit || 50, 1), 200)
+      limit: Math.min(intent.limit || 100, 500)
     };
     
     console.log('✅ Extracted intent:', JSON.stringify(normalized, null, 2));
@@ -786,8 +795,8 @@ function buildParcelQuery(intent) {
     paramIndex++;
   }
   
-  // Limit
-  const limit = Math.min(Math.max(intent.limit || 50, 1), 200);
+  // Limit (default 100, max 500)
+  const limit = Math.min(intent.limit || 100, 500);
   values.push(limit);
   
   // Build WHERE clause
@@ -922,7 +931,11 @@ function buildAggregationQuery(intent) {
   const groupByClause = groupBy.length > 0 ? `GROUP BY ${groupBy.join(', ')}` : '';
   const orderByClause = groupBy.length > 0 ? `ORDER BY ${metrics[0]?.alias || 'metric_0'} DESC` : '';
 
-  const sqlQuery = `SELECT ${selectCols.join(', ')} FROM parcel_features_travis ${whereClause} ${groupByClause} ${orderByClause} LIMIT 100`.trim();
+  // Limit for aggregation queries (default 100, max 1000)
+  const limit = Math.min(intent.limit || 100, 1000);
+  values.push(limit);
+
+  const sqlQuery = `SELECT ${selectCols.join(', ')} FROM parcel_features_travis ${whereClause} ${groupByClause} ${orderByClause} LIMIT $${paramIndex}`.trim();
 
   return { query: sqlQuery, values, isAggregate: true, groupBy, metrics };
 }
@@ -1119,7 +1132,9 @@ function generateSummaryMessage(intent, count) {
  * @deprecated Use buildParcelQuery() and query parcel_features_travis instead
  */
 async function queryPropertiesDirect(params) {
-  const { county, minAcres, maxAcres, minMarketValue, limit = 25 } = params;
+  const { county, minAcres, maxAcres, minMarketValue, limit: rawLimit = 25 } = params;
+  // Cap limit at 500 for safety (deprecated function)
+  const limit = Math.min(rawLimit, 500);
   
   // Import pg pool
   const pg = await import('pg');
@@ -1403,12 +1418,14 @@ function buildUserPrompt(query, subject, mapData, propertyResults = []) {
 // POST /api/ai/query - Rate limited to 30 calls per 15 minutes
 router.post('/query', rateLimiter({ max: 30, windowMs: 15 * 60 * 1000 }), queryLogger, async (req, res) => {
   try {
-    const { mode, query, bounds, subject } = req.body;
-    const debug = req.query.debug === '1';
-    
-    if (!query) {
-      return res.status(400).json({ error: 'Query is required' });
+    // Validate request
+    const validation = validateAiQueryRequest(req.body);
+    if (!validation.valid) {
+      return sendError(res, `Invalid request: ${validation.error}`, 400);
     }
+    
+    const { mode, query, bounds, subject } = validation.data;
+    const debug = req.query.debug === '1';
     
     console.log(`🤖 AI Query [${mode}]: "${query}"`);
     
@@ -1535,10 +1552,7 @@ router.post('/query', rateLimiter({ max: 30, windowMs: 15 * 60 * 1000 }), queryL
     
   } catch (error) {
     console.error('❌ AI query error:', error);
-    res.status(500).json({ 
-      error: 'AI query failed',
-      message: error.message 
-    });
+    return sendError(res, 'AI query failed', 500, error.message);
   }
 });
 

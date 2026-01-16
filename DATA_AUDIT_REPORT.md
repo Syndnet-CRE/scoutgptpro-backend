@@ -1,6 +1,6 @@
 # Comprehensive Data Audit Report - Phase 0
 
-**Generated:** 2026-01-09T05:47:21.175Z
+**Generated:** 2026-01-09T05:31:02.712Z
 **Purpose:** Understand actual data in parcel_features_travis and related tables
 
 
@@ -330,11 +330,11 @@ This audit examines the actual data distribution in `parcel_features_travis` and
 
 | parcel_id | owner_name | owner2 | mail_address1 | mail_address2 | mail_city | mail_state | mail_zip | situs_address | land_use | land_use_desc | legal_desc | year_built | acres | land_value | improvement_value | market_value | assessed_value | last_update | source_layer | raw | updated_at | ingested_at | owner_type | mailing_address | land_use_code | land_use_description | assessed_land_value | assessed_improvement_value | assessed_total_value | acreage | zoning_code | flood_zone | tax_delinquent_flag | last_sale_date | last_sale_price | homestead_exemption_flag |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 100748 | FMAC PROPERTIES LP | NULL | NULL | NULL | NULL | NULL | NULL | FORSYTHE DR, TX 78759 | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | {"FIPS":"48453","COUNTY":"TRAVIS","GEO_ID":"262100748","SOURCE":"TRAVIS APPRAISAL DISTRICT","Prop_ID | "2025-12-30T17:12:41.641Z" | "2025-12-30T08:00:25.666Z" | NULL | 3903 EDGEROCK DR, AUSTIN, TX 78731 | NULL | NULL | 0 | 0 | 49805 | 3.13576005 | NULL | NULL | NULL | NULL | NULL | NULL |
-| 100804 | BAILEY JENNIFER | NULL | NULL | NULL | NULL | NULL | NULL | BARRICKS CV, TX 78727 | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | 826200.00 | NULL | NULL | {"FIPS":"48453","COUNTY":"TRAVIS","GEO_ID":"264100804","SOURCE":"TRAVIS APPRAISAL DISTRICT","Prop_ID | "2025-12-30T17:12:41.641Z" | "2025-12-30T08:00:25.666Z" | NULL | 12603 BARRICKS CV, AUSTIN, TX 78727 | NULL | NULL | 0 | 0 | 45660 | 2.38299159 | SF-3 | NULL | false | NULL | NULL | NULL |
-| 100823 | REED RYLAN | NULL | NULL | NULL | NULL | NULL | NULL | CEDARVIEW DR, TX 78704 | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | 887900.00 | NULL | NULL | {"FIPS":"48453","COUNTY":"TRAVIS","GEO_ID":"400100823","SOURCE":"TRAVIS APPRAISAL DISTRICT","Prop_ID | "2025-12-30T17:12:41.641Z" | "2025-12-30T08:00:25.666Z" | NULL | 2503 CEDARVIEW DR, AUSTIN, TX 78704 | NULL | NULL | 0 | 0 | 166197 | 2.95573753 | SF-3 | NULL | false | NULL | NULL | NULL |
-| 100911 | TEMPLO BETHEL PENTECOSTES OF AUSTIN INC | NULL | NULL | NULL | NULL | NULL | NULL | SANTA ROSA ST, TX 78702 | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | 799031.00 | NULL | NULL | {"FIPS":"48453","COUNTY":"TRAVIS","GEO_ID":"202100911","SOURCE":"TRAVIS APPRAISAL DISTRICT","Prop_ID | "2025-12-30T17:12:41.641Z" | "2025-12-30T08:00:25.666Z" | NULL | 2320 SANTA MARIA ST, AUSTIN, TX 78702 | NULL | NULL | 0 | 0 | 26361 | 0.92461932 | SF-3-NP | NULL | false | NULL | NULL | NULL |
-| 100908 | WILCHER AUSTIN J | NULL | NULL | NULL | NULL | NULL | NULL | CHRYSLER BND, TX 78744 | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | 1305682.00 | NULL | NULL | {"FIPS":"48453","COUNTY":"TRAVIS","GEO_ID":"336100908","SOURCE":"TRAVIS APPRAISAL DISTRICT","Prop_ID | "2025-12-30T17:12:41.641Z" | "2025-12-30T08:00:25.666Z" | NULL | 7804 CHRYSLER BND, AUSTIN, TX 78744 | NULL | NULL | 0 | 0 | 60462 | 2.71770006 | SF-3-NP | NULL | false | NULL | NULL | NULL |
+| 100108 | PANTOJA ISMAEL C & JUANITA E | NULL | NULL | NULL | NULL | NULL | NULL | COLTON-BLUFF SPRG RD, TX 78744 | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | {"FIPS":"48453","COUNTY":"TRAVIS","GEO_ID":"336100108","SOURCE":"TRAVIS APPRAISAL DISTRICT","Prop_ID | "2025-12-30T17:12:41.641Z" | "2025-12-30T08:00:25.666Z" | NULL | 5003 BRUSHY RIDGE DR, AUSTIN, TX 78744 | NULL | NULL | 0 | 0 | 8671 | 14.14860115 | NULL | NULL | NULL | NULL | NULL | NULL |
+| 100162 | CAMPBELL GRANT | NULL | NULL | NULL | NULL | NULL | NULL | GILLIS ST, TX 78745 | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | 759199.00 | NULL | NULL | {"FIPS":"48453","COUNTY":"TRAVIS","GEO_ID":"409100162","SOURCE":"TRAVIS APPRAISAL DISTRICT","Prop_ID | "2025-12-30T17:12:41.641Z" | "2025-12-30T08:00:25.666Z" | NULL | 7305 TRENTON DR, AUSTIN, TX 78736 | NULL | NULL | 0 | 0 | 53676 | 2.67651741 | SF-3-NP | NULL | false | NULL | NULL | NULL |
+| 100232 | MENDEZ MOISES | NULL | NULL | NULL | NULL | NULL | NULL | BRADSHER DR, TX 78745 | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | {"FIPS":"48453","COUNTY":"TRAVIS","GEO_ID":"418100232","SOURCE":"TRAVIS APPRAISAL DISTRICT","Prop_ID | "2025-12-30T17:12:41.641Z" | "2025-12-30T08:00:25.666Z" | NULL | 6401 BRADSHER DR, AUSTIN, TX 78745 | NULL | NULL | 0 | 0 | 51762 | 2.28779678 | NULL | NULL | NULL | NULL | NULL | NULL |
+| 100244 | WHITE A J PROPERTIES LTD | NULL | NULL | NULL | NULL | NULL | NULL | VALLEY VIEW RD, TX 78704 | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | {"FIPS":"48453","COUNTY":"TRAVIS","GEO_ID":"406100244","SOURCE":"TRAVIS APPRAISAL DISTRICT","Prop_ID | "2025-12-30T17:12:41.641Z" | "2025-12-30T08:00:25.666Z" | NULL | PO BOX 160581, AUSTIN, TX 78716 | NULL | NULL | 0 | 0 | 64588 | 4.35012107 | NULL | NULL | NULL | NULL | NULL | NULL |
+| 100257 | BLACKSHEAR NEIGHBORHOOD DEVELOPMENT CORP | NULL | NULL | NULL | NULL | NULL | NULL | HARVARD ST, TX 78702 | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | {"FIPS":"48453","COUNTY":"TRAVIS","GEO_ID":"206100257","SOURCE":"TRAVIS APPRAISAL DISTRICT","Prop_ID | "2025-12-30T17:12:41.641Z" | "2025-12-30T08:00:25.666Z" | NULL | PO BOX 19536, AUSTIN, TX 78760 | NULL | NULL | 0 | 0 | 65323 | 0.88420518 | NULL | NULL | NULL | NULL | NULL | NULL |
 
 **Keys in `raw` JSONB column:**
 
@@ -379,36 +379,36 @@ This audit examines the actual data distribution in `parcel_features_travis` and
 {
   "FIPS": "48453",
   "COUNTY": "TRAVIS",
-  "GEO_ID": "241101058",
+  "GEO_ID": "338100524",
   "SOURCE": "TRAVIS APPRAISAL DISTRICT",
-  "Prop_ID": "0241101058",
+  "Prop_ID": "0338100524",
   "DATE_ACQ": 20250801,
-  "GIS_AREA": 1.89484985,
-  "MAIL_ZIP": "78708",
+  "GIS_AREA": 1.87375021,
+  "MAIL_ZIP": "77094",
   "TAX_YEAR": 2025,
   "IMP_VALUE": 0,
-  "MAIL_ADDR": "PO BOX 82203, AUSTIN, TX 78708",
-  "MAIL_CITY": "AUSTIN",
+  "MAIL_ADDR": "19506 CARDIFF PARK LN, HOUSTON, TX 77094",
+  "MAIL_CITY": "HOUSTON",
   "MAIL_STAT": "TX",
-  "MKT_VALUE": 39390,
+  "MKT_VALUE": 51792,
   "NAME_CARE": null,
   "SITUS_NUM": null,
-  "SITUS_ZIP": "78757",
+  "SITUS_ZIP": null,
   "GIS_AREA_U": "Acres",
   "LAND_VALUE": 0,
   "LEGAL_AREA": null,
-  "LEGAL_DESC": "LOT 6 BLK B WOOTEN TERRACE SEC 1-A",
+  "LEGAL_DESC": "K 8 EASTON PARK SEC 2B PHS 2",
   "LGL_AREA_U": "Acres",
   "LOC_LAND_U": null,
-  "MAIL_LINE1": "PO BOX 82203",
+  "MAIL_LINE1": "19506 CARDIFF PARK LN",
   "MAIL_LINE2": null,
-  "OWNER_NAME": "MDTT LLC",
-  "SITUS_ADDR": ", TX 78757",
+  "OWNER_NAME": "NGUYEN ANTHONY TUAN & LENA MAI TRAN",
+  "SITUS_ADDR": ", TX",
   "SITUS_CITY": null,
   "SITUS_STAT": "TX",
   "SITUS_STRE": null,
-  "SITUS_ST_1": "SPEARMAN",
-  "SITUS_ST_2": "DR",
+  "SITUS_ST_1": "PETRONAS",
+  "SITUS_ST_2": "PASS",
   "STAT_LAND_": null,
   "YEAR_BUILT": null
 }
@@ -418,36 +418,36 @@ This audit examines the actual data distribution in `parcel_features_travis` and
 {
   "FIPS": "48453",
   "COUNTY": "TRAVIS",
-  "GEO_ID": "241101060",
+  "GEO_ID": "213100628",
   "SOURCE": "TRAVIS APPRAISAL DISTRICT",
-  "Prop_ID": "0241101060",
+  "Prop_ID": "0213100628",
   "DATE_ACQ": 20250801,
-  "GIS_AREA": 1.67151633,
-  "MAIL_ZIP": "78633",
+  "GIS_AREA": 2.24651904,
+  "MAIL_ZIP": "78722",
   "TAX_YEAR": 2025,
   "IMP_VALUE": 0,
-  "MAIL_ADDR": "7009 N INTERSTATE 35, GEORGETOWN, TX 78633",
-  "MAIL_CITY": "GEORGETOWN",
+  "MAIL_ADDR": "3006 BREEZE TER, AUSTIN, TX 78722",
+  "MAIL_CITY": "AUSTIN",
   "MAIL_STAT": "TX",
-  "MKT_VALUE": 39338,
+  "MKT_VALUE": 73411,
   "NAME_CARE": null,
   "SITUS_NUM": null,
-  "SITUS_ZIP": "78757",
+  "SITUS_ZIP": "78722",
   "GIS_AREA_U": "Acres",
   "LAND_VALUE": 0,
   "LEGAL_AREA": null,
-  "LEGAL_DESC": "LOT 8 BLK B WOOTEN TERRACE SEC 1-A",
+  "LEGAL_DESC": "LOT 44 BLK 7 OLT 31 DIV C FOREST HILLS RESUB",
   "LGL_AREA_U": "Acres",
   "LOC_LAND_U": null,
-  "MAIL_LINE1": "7009 N INTERSTATE 35",
+  "MAIL_LINE1": "3006 BREEZE TER",
   "MAIL_LINE2": null,
-  "OWNER_NAME": "GOTTSCHALK TRUST",
-  "SITUS_ADDR": ", TX 78757",
+  "OWNER_NAME": "LIPPS TAYLOR M & JORDAN S SMITH",
+  "SITUS_ADDR": ", TX 78722",
   "SITUS_CITY": null,
   "SITUS_STAT": "TX",
   "SITUS_STRE": null,
-  "SITUS_ST_1": "SPEARMAN",
-  "SITUS_ST_2": "DR",
+  "SITUS_ST_1": "BREEZE",
+  "SITUS_ST_2": "TER",
   "STAT_LAND_": null,
   "YEAR_BUILT": null
 }
@@ -457,35 +457,35 @@ This audit examines the actual data distribution in `parcel_features_travis` and
 {
   "FIPS": "48453",
   "COUNTY": "TRAVIS",
-  "GEO_ID": "241101069",
+  "GEO_ID": "400100712",
   "SOURCE": "TRAVIS APPRAISAL DISTRICT",
-  "Prop_ID": "0241101069",
+  "Prop_ID": "0400100712",
   "DATE_ACQ": 20250801,
-  "GIS_AREA": 1.78094395,
-  "MAIL_ZIP": "78757",
+  "GIS_AREA": 1.91978671,
+  "MAIL_ZIP": "78704",
   "TAX_YEAR": 2025,
   "IMP_VALUE": 0,
-  "MAIL_ADDR": "8525 PUTNAM DR, AUSTIN, TX 78757",
+  "MAIL_ADDR": "KAILEA BROWNING, AUSTIN, TX 78704",
   "MAIL_CITY": "AUSTIN",
   "MAIL_STAT": "TX",
-  "MKT_VALUE": 58023,
+  "MKT_VALUE": 124497,
   "NAME_CARE": null,
   "SITUS_NUM": null,
-  "SITUS_ZIP": "78757",
+  "SITUS_ZIP": "78704",
   "GIS_AREA_U": "Acres",
   "LAND_VALUE": 0,
   "LEGAL_AREA": null,
-  "LEGAL_DESC": "LOT 5 BLK C WOOTEN TERRACE SEC 2",
+  "LEGAL_DESC": "LOT 12 BLK G BARTON HILLS SEC 1",
   "LGL_AREA_U": "Acres",
   "LOC_LAND_U": null,
-  "MAIL_LINE1": "8525 PUTNAM DR",
+  "MAIL_LINE1": "KAILEA BROWNING",
   "MAIL_LINE2": null,
-  "OWNER_NAME": "FRENCH MICHAEL & EMILY",
-  "SITUS_ADDR": ", TX 78757",
+  "OWNER_NAME": "CARBONE JOSHUA JOHN &",
+  "SITUS_ADDR": "2411 ELMGLEN DR , TX 78704",
   "SITUS_CITY": null,
   "SITUS_STAT": "TX",
   "SITUS_STRE": null,
-  "SITUS_ST_1": "PUTNAM",
+  "SITUS_ST_1": "ELMGLEN",
   "SITUS_ST_2": "DR",
   "STAT_LAND_": null,
   "YEAR_BUILT": null
@@ -639,3 +639,83 @@ This audit examines the actual data distribution in `parcel_features_travis` and
 
 ✅ **RECOMMENDATION:** Use owner_entity_type for mom_pop vs small_operator
 
+---
+
+## 5. Corrected ETL Scripts
+
+Based on the audit findings, corrected ETL scripts have been created:
+
+### 5.1 populate-asset-class-v2.sql
+
+**Strategy:**
+1. **Primary source:** `properties.asset_class` (349,642 parcels have this)
+   - Map: residential/multifamily → 'residential'
+   - Map: commercial/retail/office/industrial → 'commercial'
+   - Map: land → 'land'
+2. **Fallback:** Derive from `improvement_value`
+   - improvement_value = 0 or NULL → 'land'
+   - improvement_value > 0 → 'unknown' (can't determine type)
+
+**Key Finding:** `land_use_code` and `land_use_desc` are 100% NULL, so we cannot use them.
+
+### 5.2 populate-owner-segment-v2.sql
+
+**Strategy:**
+1. **Absentee detection:** Use `parcels_travis_enrichment.raw->>'MAIL_STAT'`
+   - mail_state != 'TX' → 'absentee'
+2. **Institutional detection:** Use owner name patterns
+   - REIT, Holdings, Fund, etc. → 'institutional'
+3. **Entity type mapping:**
+   - LLC/Corp → 'small_operator'
+   - Person → 'mom_pop'
+   - Trust/Estate → 'local_owner'
+4. **Default:** 'local_owner' (safer than 'unknown')
+
+**Key Finding:** 
+- `owner_portfolio_count_travis` is all 0 (not useful)
+- `mail_state` in `parcel_features_travis` is NULL, but available in `parcels_travis_enrichment.raw`
+
+### 5.3 Usage
+
+```bash
+# Run ETL scripts
+./scripts/run-etl.sh# Verify results
+psql $DATABASE_URL -f scripts/verify-etl.sql
+```
+
+### 5.4 Expected Results
+
+**asset_class distribution:**
+- residential: ~X% (from properties table)
+- commercial: ~X% (from properties table)
+- land: ~X% (from properties table + improvement_value = 0)
+- unknown: ~X% (parcels with improvements but no classification)
+
+**owner_segment distribution:**
+- absentee: ~X% (from mail_state != 'TX')
+- institutional: ~X% (from name patterns)
+- small_operator: ~X% (LLC/Corp entities)
+- mom_pop: ~X% (Person entities)
+- local_owner: ~X% (Trust/Estate, TX residents, default)
+
+---
+
+## 6. Fields We Cannot Populate
+
+These fields are missing entirely and would require external data sources:
+
+1. **building_sqft** - 100% NULL
+2. **year_built** - 100% NULL
+3. **land_use_code** - 100% NULL
+4. **land_use_desc** - 100% NULL
+5. **mail_state** in `parcel_features_travis` - 100% NULL (but available in `parcels_travis_enrichment.raw`)
+6. **owner_portfolio_count_travis** - All 0 (not useful for segmentation)
+
+---
+
+## 7. Next Steps
+
+1. **Run ETL scripts** using `scripts/run-etl.sh`
+2. **Verify results** using `scripts/verify-etl.sql`
+3. **Update Claude prompts** to reflect actual data availability
+4. **Consider enrichment** for missing fields if needed for specific use cases

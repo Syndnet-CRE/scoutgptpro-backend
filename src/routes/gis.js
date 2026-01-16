@@ -1,8 +1,16 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
+import pg from 'pg';
 
 const router = express.Router();
 const prisma = new PrismaClient();
+const { Pool } = pg;
+
+// Database pool for spatial queries
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+});
 
 // GET /api/gis/layers?name=Zoning
 router.get('/layers', async (req, res) => {
@@ -205,6 +213,130 @@ router.get('/layers/:id/query', async (req, res) => {
   } catch (error) {
     console.error('Error querying layer:', error);
     res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// GET /api/gis/local/:layerName/geojson - Query imported GIS layers
+router.get('/local/:layerName/geojson', async (req, res) => {
+  try {
+    const { layerName } = req.params;
+    const { bbox, limit = 1000 } = req.query;
+    
+    // Whitelist of valid table names (prevent SQL injection)
+    const validLayers = {
+      'water_ccn': 'gis_water_ccn',
+      'sewer_ccn': 'gis_sewer_ccn',
+      'water_districts': 'gis_water_districts',
+      'floodplain_austin': 'gis_floodplain_austin',
+      'wetlands_cef': 'gis_wetlands_cef',
+      'cef_buffers': 'gis_cef_buffers',
+      'contours_austin': 'gis_contours_austin'
+    };
+    
+    const tableName = validLayers[layerName];
+    if (!tableName) {
+      return res.status(400).json({ 
+        success: false,
+        error: `Invalid layer name: ${layerName}. Valid layers: ${Object.keys(validLayers).join(', ')}` 
+      });
+    }
+    
+    // Build query
+    let query = `
+      SELECT 
+        id,
+        ST_AsGeoJSON(geometry)::jsonb as geometry,
+        raw_attributes
+    `;
+    
+    // Add specific fields based on table (for better property extraction)
+    if (tableName === 'gis_water_ccn' || tableName === 'gis_sewer_ccn') {
+      query += `, ccn_no, utility, county, type`;
+    } else if (tableName === 'gis_water_districts') {
+      query += `, district_name, district_type`;
+    } else if (tableName === 'gis_floodplain_austin') {
+      query += `, zone_code, zone_desc`;
+    } else if (tableName === 'gis_wetlands_cef') {
+      query += `, wetland_type`;
+    } else if (tableName === 'gis_cef_buffers') {
+      query += `, buffer_type, buffer_distance`;
+    } else if (tableName === 'gis_contours_austin') {
+      query += `, elevation, contour_type`;
+    }
+    
+    query += ` FROM ${tableName}`;
+    const params = [];
+    
+    // Add bbox filter if provided
+    if (bbox) {
+      const bboxParts = bbox.split(',').map(Number);
+      if (bboxParts.length === 4 && bboxParts.every(n => !isNaN(n))) {
+        const [west, south, east, north] = bboxParts;
+        query += ` WHERE ST_Intersects(geometry, ST_MakeEnvelope($${params.length + 1}, $${params.length + 2}, $${params.length + 3}, $${params.length + 4}, 4326))`;
+        params.push(west, south, east, north);
+      } else {
+        return res.status(400).json({ 
+          success: false,
+          error: 'Invalid bbox format. Use: west,south,east,north' 
+        });
+      }
+    }
+    
+    // Add limit
+    const limitNum = parseInt(limit, 10);
+    if (isNaN(limitNum) || limitNum < 1 || limitNum > 10000) {
+      return res.status(400).json({ 
+        success: false,
+        error: 'Invalid limit. Must be between 1 and 10000' 
+      });
+    }
+    query += ` LIMIT $${params.length + 1}`;
+    params.push(limitNum);
+    
+    console.log(`[GIS Local] Querying ${tableName}${bbox ? ` with bbox` : ''} (limit: ${limitNum})`);
+    
+    const result = await pool.query(query, params);
+    
+    // Transform to GeoJSON FeatureCollection
+    const geojson = {
+      type: 'FeatureCollection',
+      features: result.rows.map(row => {
+        const properties = { ...(row.raw_attributes || {}) };
+        
+        // Add specific fields to properties
+        if (row.ccn_no) properties.ccn_no = row.ccn_no;
+        if (row.utility) properties.utility = row.utility;
+        if (row.county) properties.county = row.county;
+        if (row.type) properties.type = row.type;
+        if (row.district_name) properties.district_name = row.district_name;
+        if (row.district_type) properties.district_type = row.district_type;
+        if (row.zone_code) properties.zone_code = row.zone_code;
+        if (row.zone_desc) properties.zone_desc = row.zone_desc;
+        if (row.wetland_type) properties.wetland_type = row.wetland_type;
+        if (row.buffer_type) properties.buffer_type = row.buffer_type;
+        if (row.buffer_distance !== null) properties.buffer_distance = row.buffer_distance;
+        if (row.elevation !== null) properties.elevation = row.elevation;
+        if (row.contour_type) properties.contour_type = row.contour_type;
+        
+        return {
+          type: 'Feature',
+          id: row.id,
+          geometry: row.geometry,
+          properties
+        };
+      })
+    };
+    
+    console.log(`[GIS Local] Returning ${geojson.features.length} features`);
+    
+    res.json(geojson);
+    
+  } catch (error) {
+    console.error('[GIS Local] Error:', error);
+    res.status(500).json({ 
+      success: false,
+      error: error.message 
+    });
   }
 });
 

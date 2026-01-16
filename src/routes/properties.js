@@ -1,6 +1,6 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
-import { Pool } from 'pg';
+import pool from '../db/pool.js';
 import { attachAttomGeoIdsToProperties, getAttomGeoIdByParcelId } from '../services/attom-resolver-service.js';
 import { resolveParcelCounty } from '../services/countyResolver.js';
 import dotenv from 'dotenv';
@@ -9,12 +9,6 @@ dotenv.config();
 
 const router = express.Router();
 const prisma = new PrismaClient();
-
-// Database pool for enrichment queries
-const enrichmentPool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  max: 10  // Increased from 5 to 10 for better concurrency
-});
 
 // Unreliable fields (0% coverage in enrichment table)
 const UNRELIABLE_FIELDS = [
