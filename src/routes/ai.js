@@ -49,19 +49,55 @@ const AI_TOOLS = [
           description: 'Maximum acreage'
         },
         asset_class: {
-          type: 'string',
-          enum: ['residential', 'commercial', 'land', 'unknown'],
-          description: 'Property type. MUST be lowercase. Options: residential, commercial, land, unknown. Note: industrial/mixed not available.'
+          oneOf: [
+            { 
+              type: 'string', 
+              enum: ['residential', 'commercial', 'land', 'industrial', 'mixed', 'unknown'] 
+            },
+            { 
+              type: 'array', 
+              items: { 
+                type: 'string', 
+                enum: ['residential', 'commercial', 'land', 'industrial', 'mixed', 'unknown'] 
+              },
+              description: 'Multiple values for OR condition'
+            }
+          ],
+          description: 'Property type filter. Single value or array for OR condition (e.g., ["residential", "commercial"]). MUST be lowercase.'
         },
         owner_entity_type: {
-          type: 'string',
-          enum: ['person', 'llc', 'corp', 'trust_estate'],
-          description: 'Type of owner entity'
+          oneOf: [
+            { 
+              type: 'string', 
+              enum: ['person', 'llc', 'corp', 'trust_estate', 'unknown'] 
+            },
+            { 
+              type: 'array', 
+              items: { 
+                type: 'string', 
+                enum: ['person', 'llc', 'corp', 'trust_estate', 'unknown'] 
+              },
+              description: 'Multiple values for OR condition'
+            }
+          ],
+          description: 'Owner entity type filter. Single value or array for OR condition'
         },
         owner_segment: {
-          type: 'string',
-          enum: ['mom_pop', 'small_operator', 'institutional', 'trust_estate', 'absentee'],
-          description: 'Owner segment classification'
+          oneOf: [
+            { 
+              type: 'string', 
+              enum: ['mom_pop', 'small_operator', 'institutional', 'local_owner', 'absentee', 'unknown'] 
+            },
+            { 
+              type: 'array', 
+              items: { 
+                type: 'string', 
+                enum: ['mom_pop', 'small_operator', 'institutional', 'local_owner', 'absentee', 'unknown'] 
+              },
+              description: 'Multiple values for OR condition'
+            }
+          ],
+          description: 'Owner segment filter. Single value or array for OR condition'
         },
         tax_delinquent: {
           type: 'boolean',
@@ -74,6 +110,14 @@ const AI_TOOLS = [
         market_value_max: {
           type: 'number',
           description: 'Maximum market value in dollars'
+        },
+        owner_name_search: {
+          type: 'string',
+          description: 'Search owner names containing this text (case-insensitive partial match). Example: "Smith" finds "SMITH JOHN", "Blacksmith LLC", etc.'
+        },
+        address_search: {
+          type: 'string',
+          description: 'Search property addresses containing this text (case-insensitive partial match). Example: "Congress" finds "100 CONGRESS AVE", "Congress St", etc.'
         },
         aggregation: {
           type: 'object',
@@ -204,12 +248,14 @@ async function executeSearchProperties(input, pool) {
     filters: {
       acres_min: input.acres_min ?? null,
       acres_max: input.acres_max ?? null,
-      asset_class: input.asset_class || null,
-      owner_entity_type: input.owner_entity_type || null,
-      owner_segment: input.owner_segment || null,
+      asset_class: input.asset_class ?? null,  // Can be string or array
+      owner_entity_type: input.owner_entity_type ?? null,  // Can be string or array
+      owner_segment: input.owner_segment ?? null,  // Can be string or array
       tax_delinquent: input.tax_delinquent ?? null,
       market_value_min: input.market_value_min ?? null,
-      market_value_max: input.market_value_max ?? null
+      market_value_max: input.market_value_max ?? null,
+      owner_name_search: input.owner_name_search ?? null,
+      address_search: input.address_search ?? null
     },
     limit: Math.min(Math.max(input.limit || 50, 1), 200)
   };
@@ -606,12 +652,14 @@ OUTPUT FORMAT (JSON only, no markdown, no explanation):
   "filters": {
     "acres_min": number | null,
     "acres_max": number | null,
-    "asset_class": "residential" | "commercial" | "land" | "industrial" | "mixed" | null,
-    "owner_entity_type": "person" | "llc" | "corp" | "trust_estate" | null,
-    "owner_segment": "mom_pop" | "small_operator" | "institutional" | "local_owner" | "absentee" | null,
+    "asset_class": string | string[] | null,  // Single value or array for OR (e.g., ["residential", "commercial"])
+    "owner_entity_type": string | string[] | null,  // Single value or array for OR
+    "owner_segment": string | string[] | null,  // Single value or array for OR
     "tax_delinquent": true | false | null,
     "market_value_min": number | null,
-    "market_value_max": number | null
+    "market_value_max": number | null,
+    "owner_name_search": string | null,  // Partial match on owner name
+    "address_search": string | null  // Partial match on address
   },
   "limit": number  // default 50, max 200
 }
@@ -628,6 +676,21 @@ MAPPING RULES:
 - "vacant land", "land" → asset_class: "land"
 - "under $500k", "below $500000" → market_value_max: 500000
 - "over $1M", "above $1000000" → market_value_min: 1000000
+
+OR CONDITIONS:
+- "residential or commercial" → asset_class: ["residential", "commercial"]
+- "LLC or corporation" → owner_entity_type: ["llc", "corp"]
+- "mom and pop or small operators" → owner_segment: ["mom_pop", "small_operator"]
+- "residential and commercial properties" → asset_class: ["residential", "commercial"]
+- "LLCs and corporations" → owner_entity_type: ["llc", "corp"]
+
+TEXT SEARCH:
+- "owned by Smith" → owner_name_search: "Smith"
+- "properties owned by Blackstone" → owner_name_search: "Blackstone"
+- "on Congress Ave" → address_search: "Congress"
+- "address contains Main Street" → address_search: "Main Street"
+- "owner name includes Johnson" → owner_name_search: "Johnson"
+- "properties on Congress" → address_search: "Congress"
 
 Return ONLY valid JSON. No markdown code blocks, no explanations.`;
 
@@ -711,13 +774,25 @@ async function extractIntentFromQuery(query, bounds) {
 function buildParcelQuery(intent) {
   // CASE NORMALIZATION - Database requires lowercase
   if (intent.filters?.asset_class) {
-    intent.filters.asset_class = intent.filters.asset_class.toLowerCase();
+    if (Array.isArray(intent.filters.asset_class)) {
+      intent.filters.asset_class = intent.filters.asset_class.map(v => v.toLowerCase());
+    } else {
+      intent.filters.asset_class = intent.filters.asset_class.toLowerCase();
+    }
   }
   if (intent.filters?.owner_entity_type) {
-    intent.filters.owner_entity_type = intent.filters.owner_entity_type.toLowerCase();
+    if (Array.isArray(intent.filters.owner_entity_type)) {
+      intent.filters.owner_entity_type = intent.filters.owner_entity_type.map(v => v.toLowerCase());
+    } else {
+      intent.filters.owner_entity_type = intent.filters.owner_entity_type.toLowerCase();
+    }
   }
   if (intent.filters?.owner_segment) {
-    intent.filters.owner_segment = intent.filters.owner_segment.toLowerCase();
+    if (Array.isArray(intent.filters.owner_segment)) {
+      intent.filters.owner_segment = intent.filters.owner_segment.map(v => v.toLowerCase());
+    } else {
+      intent.filters.owner_segment = intent.filters.owner_segment.toLowerCase();
+    }
   }
   
   const conditions = [];
@@ -753,25 +828,52 @@ function buildParcelQuery(intent) {
     paramIndex++;
   }
   
-  // Filter: asset_class
+  // Filter: asset_class - supports single value or array (OR)
   if (intent.filters?.asset_class) {
-    conditions.push(`asset_class = $${paramIndex}`);
-    values.push(intent.filters.asset_class);
-    paramIndex++;
+    if (Array.isArray(intent.filters.asset_class)) {
+      // OR condition: asset_class IN ('residential', 'commercial')
+      const placeholders = intent.filters.asset_class.map((_, i) => `$${paramIndex + i}`).join(', ');
+      conditions.push(`asset_class IN (${placeholders})`);
+      values.push(...intent.filters.asset_class);
+      paramIndex += intent.filters.asset_class.length;
+    } else {
+      // Single value: asset_class = 'commercial'
+      conditions.push(`asset_class = $${paramIndex}`);
+      values.push(intent.filters.asset_class);
+      paramIndex++;
+    }
   }
   
-  // Filter: owner_entity_type
+  // Filter: owner_entity_type - supports single value or array (OR)
   if (intent.filters?.owner_entity_type) {
-    conditions.push(`owner_entity_type = $${paramIndex}`);
-    values.push(intent.filters.owner_entity_type);
-    paramIndex++;
+    if (Array.isArray(intent.filters.owner_entity_type)) {
+      // OR condition: owner_entity_type IN ('llc', 'corp')
+      const placeholders = intent.filters.owner_entity_type.map((_, i) => `$${paramIndex + i}`).join(', ');
+      conditions.push(`owner_entity_type IN (${placeholders})`);
+      values.push(...intent.filters.owner_entity_type);
+      paramIndex += intent.filters.owner_entity_type.length;
+    } else {
+      // Single value: owner_entity_type = 'llc'
+      conditions.push(`owner_entity_type = $${paramIndex}`);
+      values.push(intent.filters.owner_entity_type);
+      paramIndex++;
+    }
   }
   
-  // Filter: owner_segment
+  // Filter: owner_segment - supports single value or array (OR)
   if (intent.filters?.owner_segment) {
-    conditions.push(`owner_segment = $${paramIndex}`);
-    values.push(intent.filters.owner_segment);
-    paramIndex++;
+    if (Array.isArray(intent.filters.owner_segment)) {
+      // OR condition: owner_segment IN ('mom_pop', 'small_operator')
+      const placeholders = intent.filters.owner_segment.map((_, i) => `$${paramIndex + i}`).join(', ');
+      conditions.push(`owner_segment IN (${placeholders})`);
+      values.push(...intent.filters.owner_segment);
+      paramIndex += intent.filters.owner_segment.length;
+    } else {
+      // Single value: owner_segment = 'mom_pop'
+      conditions.push(`owner_segment = $${paramIndex}`);
+      values.push(intent.filters.owner_segment);
+      paramIndex++;
+    }
   }
   
   // Filter: tax_delinquent
@@ -792,6 +894,20 @@ function buildParcelQuery(intent) {
   if (intent.filters?.market_value_max !== null && intent.filters?.market_value_max !== undefined) {
     conditions.push(`market_value <= $${paramIndex}`);
     values.push(intent.filters.market_value_max);
+    paramIndex++;
+  }
+  
+  // Text search: owner name (ILIKE for case-insensitive partial match)
+  if (intent.filters?.owner_name_search) {
+    conditions.push(`owner_name_raw ILIKE $${paramIndex}`);
+    values.push(`%${intent.filters.owner_name_search}%`);
+    paramIndex++;
+  }
+  
+  // Text search: address (ILIKE for case-insensitive partial match)
+  if (intent.filters?.address_search) {
+    conditions.push(`situs_address ILIKE $${paramIndex}`);
+    values.push(`%${intent.filters.address_search}%`);
     paramIndex++;
   }
   
@@ -860,17 +976,44 @@ function buildAggregationQuery(intent) {
     conditions.push(`acres_calc <= $${paramIndex++}`);
     values.push(intent.filters.acres_max);
   }
+  // Filter: asset_class - supports single value or array (OR)
   if (intent.filters?.asset_class) {
-    conditions.push(`asset_class = $${paramIndex++}`);
-    values.push(intent.filters.asset_class.toLowerCase());
+    if (Array.isArray(intent.filters.asset_class)) {
+      const normalized = intent.filters.asset_class.map(v => v.toLowerCase());
+      const placeholders = normalized.map((_, i) => `$${paramIndex + i}`).join(', ');
+      conditions.push(`asset_class IN (${placeholders})`);
+      values.push(...normalized);
+      paramIndex += normalized.length;
+    } else {
+      conditions.push(`asset_class = $${paramIndex++}`);
+      values.push(intent.filters.asset_class.toLowerCase());
+    }
   }
+  // Filter: owner_entity_type - supports single value or array (OR)
   if (intent.filters?.owner_entity_type) {
-    conditions.push(`owner_entity_type = $${paramIndex++}`);
-    values.push(intent.filters.owner_entity_type);
+    if (Array.isArray(intent.filters.owner_entity_type)) {
+      const normalized = intent.filters.owner_entity_type.map(v => v.toLowerCase());
+      const placeholders = normalized.map((_, i) => `$${paramIndex + i}`).join(', ');
+      conditions.push(`owner_entity_type IN (${placeholders})`);
+      values.push(...normalized);
+      paramIndex += normalized.length;
+    } else {
+      conditions.push(`owner_entity_type = $${paramIndex++}`);
+      values.push(intent.filters.owner_entity_type.toLowerCase());
+    }
   }
+  // Filter: owner_segment - supports single value or array (OR)
   if (intent.filters?.owner_segment) {
-    conditions.push(`owner_segment = $${paramIndex++}`);
-    values.push(intent.filters.owner_segment);
+    if (Array.isArray(intent.filters.owner_segment)) {
+      const normalized = intent.filters.owner_segment.map(v => v.toLowerCase());
+      const placeholders = normalized.map((_, i) => `$${paramIndex + i}`).join(', ');
+      conditions.push(`owner_segment IN (${placeholders})`);
+      values.push(...normalized);
+      paramIndex += normalized.length;
+    } else {
+      conditions.push(`owner_segment = $${paramIndex++}`);
+      values.push(intent.filters.owner_segment.toLowerCase());
+    }
   }
   if (intent.filters?.tax_delinquent !== undefined) {
     conditions.push(`tax_delinquent_flag = $${paramIndex++}`);
@@ -883,6 +1026,16 @@ function buildAggregationQuery(intent) {
   if (intent.filters?.market_value_max) {
     conditions.push(`market_value <= $${paramIndex++}`);
     values.push(intent.filters.market_value_max);
+  }
+  // Text search: owner name (ILIKE for case-insensitive partial match)
+  if (intent.filters?.owner_name_search) {
+    conditions.push(`owner_name_raw ILIKE $${paramIndex++}`);
+    values.push(`%${intent.filters.owner_name_search}%`);
+  }
+  // Text search: address (ILIKE for case-insensitive partial match)
+  if (intent.filters?.address_search) {
+    conditions.push(`situs_address ILIKE $${paramIndex++}`);
+    values.push(`%${intent.filters.address_search}%`);
   }
 
   const agg = intent.aggregation;

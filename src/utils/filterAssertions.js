@@ -57,17 +57,18 @@ export function assertAcresFilter(results, min, max) {
  * Assert asset_class filter correctness
  * 
  * @param {Array} results - Property results
- * @param {string} assetClass - Expected asset class
+ * @param {string|string[]} assetClass - Expected asset class(es) - string for single value, array for OR condition
  */
 export function assertAssetClassFilter(results, assetClass) {
   if (!results || results.length === 0) return;
   if (!assetClass) return;
   
-  const violations = results.filter(prop => prop.asset_class !== assetClass);
+  const expectedValues = Array.isArray(assetClass) ? assetClass : [assetClass];
+  const violations = results.filter(prop => !expectedValues.includes(prop.asset_class));
   
   if (violations.length > 0) {
     console.warn(`[Filter Assertion] Asset class filter violation: ${violations.length} of ${results.length} results failed`);
-    console.warn(`  Expected: ${assetClass}`);
+    console.warn(`  Expected: ${Array.isArray(assetClass) ? assetClass.join(' OR ') : assetClass}`);
     console.warn(`  Sample violations:`, violations.slice(0, 3).map(p => ({
       parcel_id: p.parcel_id,
       asset_class: p.asset_class
@@ -79,17 +80,18 @@ export function assertAssetClassFilter(results, assetClass) {
  * Assert owner_segment filter correctness
  * 
  * @param {Array} results - Property results
- * @param {string} segment - Expected owner segment
+ * @param {string|string[]} segment - Expected owner segment(s) - string for single value, array for OR condition
  */
 export function assertOwnerSegmentFilter(results, segment) {
   if (!results || results.length === 0) return;
   if (!segment) return;
   
-  const violations = results.filter(prop => prop.owner_segment !== segment);
+  const expectedValues = Array.isArray(segment) ? segment : [segment];
+  const violations = results.filter(prop => !expectedValues.includes(prop.owner_segment));
   
   if (violations.length > 0) {
     console.warn(`[Filter Assertion] Owner segment filter violation: ${violations.length} of ${results.length} results failed`);
-    console.warn(`  Expected: ${segment}`);
+    console.warn(`  Expected: ${Array.isArray(segment) ? segment.join(' OR ') : segment}`);
     console.warn(`  Sample violations:`, violations.slice(0, 3).map(p => ({
       parcel_id: p.parcel_id,
       owner_segment: p.owner_segment
@@ -145,17 +147,18 @@ export function assertMarketValueFilter(results, min, max) {
  * Assert owner_entity_type filter correctness
  * 
  * @param {Array} results - Property results
- * @param {string} entityType - Expected entity type
+ * @param {string|string[]} entityType - Expected entity type(s) - string for single value, array for OR condition
  */
 export function assertOwnerEntityTypeFilter(results, entityType) {
   if (!results || results.length === 0) return;
   if (!entityType) return;
   
-  const violations = results.filter(prop => prop.owner_entity_type !== entityType);
+  const expectedValues = Array.isArray(entityType) ? entityType : [entityType];
+  const violations = results.filter(prop => !expectedValues.includes(prop.owner_entity_type));
   
   if (violations.length > 0) {
     console.warn(`[Filter Assertion] Owner entity type filter violation: ${violations.length} of ${results.length} results failed`);
-    console.warn(`  Expected: ${entityType}`);
+    console.warn(`  Expected: ${Array.isArray(entityType) ? entityType.join(' OR ') : entityType}`);
     console.warn(`  Sample violations:`, violations.slice(0, 3).map(p => ({
       parcel_id: p.parcel_id,
       owner_entity_type: p.owner_entity_type
