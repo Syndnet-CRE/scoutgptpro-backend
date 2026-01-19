@@ -11,6 +11,9 @@ import { sendError } from '../utils/apiResponse.js';
 import { assertAcresFilter, assertAssetClassFilter, assertOwnerSegmentFilter, assertMarketValueFilter, assertOwnerEntityTypeFilter, assertTaxDelinquentFilter } from '../utils/filterAssertions.js';
 import { queryLogger } from '../middleware/queryLogger.js';
 
+// Import Boris's 12-step pipeline
+import { executeQuery as executePipelineQuery, continueWithClarification } from '../services/pipeline/index.js';
+
 const router = express.Router();
 const anthropic = new Anthropic({ 
   apiKey: process.env.CLAUDE_API_KEY 
@@ -103,6 +106,10 @@ const AI_TOOLS = [
           type: 'boolean',
           description: 'Filter for tax delinquent properties'
         },
+        homestead_exemption: {
+          type: 'boolean',
+          description: 'Filter by homestead exemption status. true = owner-occupied, false = investment/rental property'
+        },
         market_value_min: {
           type: 'number',
           description: 'Minimum market value in dollars'
@@ -118,6 +125,10 @@ const AI_TOOLS = [
         address_search: {
           type: 'string',
           description: 'Search property addresses containing this text (case-insensitive partial match). Example: "Congress" finds "100 CONGRESS AVE", "Congress St", etc.'
+        },
+        in_opportunity_zone: {
+          type: 'boolean',
+          description: 'Filter for properties located in Qualified Opportunity Zones (QOZ). Set to true to find only properties in opportunity zones.'
         },
         aggregation: {
           type: 'object',
@@ -210,6 +221,53 @@ const AI_TOOLS = [
       },
       required: ['parcel_id']
     }
+  },
+  {
+    name: 'search_near_reference',
+    description: 'Search properties within a distance of a highway, boundary, or landmark. Use this when users say "near I-35", "along US-183", "within X miles of [reference]".',
+    input_schema: {
+      type: 'object',
+      properties: {
+        reference_name: {
+          type: 'string',
+          description: 'Name of the reference feature (e.g., "I-35", "US-183", "Travis County boundary", "Downtown Austin")'
+        },
+        distance_miles: {
+          type: 'number',
+          description: 'Distance in miles from the reference feature. Default 1 mile if not specified.'
+        },
+        acres_min: { type: 'number', description: 'Minimum acreage' },
+        acres_max: { type: 'number', description: 'Maximum acreage' },
+        asset_class: {
+          oneOf: [
+            { type: 'string', enum: ['residential', 'commercial', 'land', 'industrial', 'mixed', 'unknown'] },
+            { type: 'array', items: { type: 'string', enum: ['residential', 'commercial', 'land', 'industrial', 'mixed', 'unknown'] } }
+          ],
+          description: 'Property type filter'
+        },
+        owner_entity_type: {
+          oneOf: [
+            { type: 'string', enum: ['person', 'llc', 'corp', 'trust_estate', 'unknown'] },
+            { type: 'array', items: { type: 'string', enum: ['person', 'llc', 'corp', 'trust_estate', 'unknown'] } }
+          ],
+          description: 'Owner entity type filter'
+        },
+        owner_segment: {
+          oneOf: [
+            { type: 'string', enum: ['mom_pop', 'small_operator', 'institutional', 'local_owner', 'absentee', 'unknown'] },
+            { type: 'array', items: { type: 'string', enum: ['mom_pop', 'small_operator', 'institutional', 'local_owner', 'absentee', 'unknown'] } }
+          ],
+          description: 'Owner segment filter'
+        },
+        tax_delinquent: { type: 'boolean', description: 'Filter for tax delinquent properties' },
+        homestead_exemption: { type: 'boolean', description: 'Filter by homestead exemption status' },
+        market_value_min: { type: 'number', description: 'Minimum market value in dollars' },
+        market_value_max: { type: 'number', description: 'Maximum market value in dollars' },
+        in_opportunity_zone: { type: 'boolean', description: 'Filter for properties in Qualified Opportunity Zones' },
+        limit: { type: 'integer', description: 'Maximum number of results (default 50)', default: 50 }
+      },
+      required: ['reference_name']
+    }
   }
 ];
 
@@ -252,11 +310,13 @@ async function executeSearchProperties(input, pool) {
       owner_entity_type: input.owner_entity_type ?? null,  // Can be string or array
       owner_segment: input.owner_segment ?? null,  // Can be string or array
       tax_delinquent: input.tax_delinquent ?? null,
+      homestead_exemption: input.homestead_exemption ?? null,
       market_value_min: input.market_value_min ?? null,
       market_value_max: input.market_value_max ?? null,
       owner_name_search: input.owner_name_search ?? null,
       address_search: input.address_search ?? null
     },
+    in_opportunity_zone: input.in_opportunity_zone ?? null,
     limit: Math.min(Math.max(input.limit || 50, 1), 200)
   };
   
@@ -473,12 +533,92 @@ async function executeGetProperty(input, pool) {
 }
 
 /**
+ * Execute search_near_reference tool
+ * Searches for properties within a distance of a spatial reference (highway, boundary, etc.)
+ */
+async function executeSearchNearReference(toolInput, pool) {
+  console.log('🔧 Executing search_near_reference:', toolInput);
+
+  const {
+    reference_name,
+    distance_miles = 1,
+    ...propertyFilters
+  } = toolInput;
+
+  // Build intent object that buildParcelQuery understands
+  const intent = {
+    geo: {
+      county_fips: null,
+      bbox: null
+    },
+    filters: {
+      acres_min: propertyFilters.acres_min ?? null,
+      acres_max: propertyFilters.acres_max ?? null,
+      asset_class: propertyFilters.asset_class ?? null,
+      owner_entity_type: propertyFilters.owner_entity_type ?? null,
+      owner_segment: propertyFilters.owner_segment ?? null,
+      tax_delinquent: propertyFilters.tax_delinquent ?? null,
+      homestead_exemption: propertyFilters.homestead_exemption ?? null,
+      market_value_min: propertyFilters.market_value_min ?? null,
+      market_value_max: propertyFilters.market_value_max ?? null
+    },
+    near_reference: {
+      reference_name,
+      distance_miles
+    },
+    in_opportunity_zone: propertyFilters.in_opportunity_zone ?? null,
+    limit: Math.min(propertyFilters.limit || 50, 200)
+  };
+
+  // Use existing buildParcelQuery - DO NOT DUPLICATE LOGIC
+  const { query, values } = buildParcelQuery(intent);
+
+  try {
+    const result = await pool.query(query, values);
+
+    const properties = result.rows.map(row => ({
+      parcel_id: row.parcel_id,
+      situs_address: row.situs_address,
+      owner_name_raw: row.owner_name_raw,
+      owner_entity_type: row.owner_entity_type,
+      owner_segment: row.owner_segment,
+      acres_calc: parseFloat(row.acres_calc),
+      asset_class: row.asset_class,
+      market_value: row.market_value ? parseFloat(row.market_value) : null,
+      tax_delinquent_flag: row.tax_delinquent_flag,
+      county_fips: row.county_fips,
+      geom: row.geom
+    }));
+
+    console.log(`✅ search_near_reference returned ${properties.length} results near ${reference_name}`);
+    return {
+      success: true,
+      type: 'PROPERTY_SEARCH',
+      count: properties.length,
+      properties: properties,
+      reference_used: reference_name,
+      distance_miles
+    };
+  } catch (error) {
+    console.error('❌ search_near_reference error:', error);
+    return {
+      success: false,
+      error: error.message,
+      reference_name,
+      properties: []
+    };
+  }
+}
+
+/**
  * Execute a tool by name
  */
 async function executeTool(toolName, toolInput, pool) {
   switch (toolName) {
     case 'search_properties':
       return await executeSearchProperties(toolInput, pool);
+    case 'search_near_reference':
+      return await executeSearchNearReference(toolInput, pool);
     case 'toggle_gis_layer':
       return executeToggleGisLayer(toolInput);
     case 'search_pois':
@@ -582,22 +722,23 @@ GEOGRAPHY MAPPING:
 - bbox field should ONLY contain [minLng, minLat, maxLng, maxLat] arrays, never ZIP codes or city names
 
 CRITICAL: All filter values MUST be lowercase.
-- asset_class: use "commercial" not "Commercial"  
+- asset_class: use "commercial" not "Commercial"
 - owner_entity_type: use "llc" not "LLC"
-- owner_segment: use "trust_estate" not "Trust_Estate"
+- owner_segment: use "local_owner" not "Local_Owner"
 
 AVAILABLE VALUES:
-- asset_class: residential, commercial, land, unknown
-- owner_entity_type: person, llc, corp, trust_estate
-- owner_segment: mom_pop, small_operator, institutional, trust_estate, absentee
+- asset_class: residential, commercial, land, industrial, mixed, unknown
+- owner_entity_type: person, llc, corp, trust_estate, unknown
+- owner_segment: mom_pop, small_operator, institutional, local_owner, absentee, unknown
 
 AVAILABLE FILTERS:
-- asset_class: residential, commercial, land, unknown
-- owner_segment: mom_pop, small_operator, institutional, trust_estate, absentee
-- owner_entity_type: person, llc, corp, trust_estate
+- asset_class: residential, commercial, land, industrial, mixed, unknown
+- owner_segment: mom_pop, small_operator, institutional, local_owner, absentee, unknown
+- owner_entity_type: person, llc, corp, trust_estate, unknown
 - acres_min, acres_max: numeric values for acreage range
 - market_value_min, market_value_max: numeric values for price range
 - tax_delinquent: true/false
+- homestead_exemption: true (owner-occupied) / false (investment property)
 - county_fips: "48453" for Travis County
 
 FILTER EXAMPLES:
@@ -608,6 +749,7 @@ FILTER EXAMPLES:
 - "LLC owned" → owner_entity_type: "llc"
 - "institutional investors" → owner_segment: "institutional"
 - "out of state owners" OR "absentee" → owner_segment: "absentee"
+- "local owners" OR "in-state owners" → owner_segment: "local_owner"
 - "small operators" → owner_segment: "small_operator"
 - "2-4 acres" → acres_min: 2, acres_max: 4
 - "over 5 acres" → acres_min: 5
@@ -615,6 +757,8 @@ FILTER EXAMPLES:
 - "under $500k" → market_value_max: 500000
 - "over $1M" → market_value_min: 1000000
 - "tax delinquent" → tax_delinquent: true
+- "investment properties" OR "non-homestead" → homestead_exemption: false
+- "owner occupied" OR "homestead" → homestead_exemption: true
 
 IMPORTANT: 
 - Always use snake_case for filter names
@@ -639,6 +783,18 @@ IMPORTANT:
 - "by ZIP" or "by owner type" → use group_by
 - Filters still apply to aggregations (e.g., "average commercial value" uses both)
 
+SPATIAL REFERENCE QUERIES:
+- When users ask about properties "near", "along", "within X miles of" a highway, road, or boundary, use search_near_reference
+- Reference names include: I-35, US-183, US-290, SH-130, SH-45, Loop 1 (Mopac), Travis County boundary
+- Default distance is 1 mile if not specified
+- Example: "vacant land near I-35" → search_near_reference with reference_name="I-35", asset_class=["land"]
+- Example: "commercial within 2 miles of US-183" → search_near_reference with reference_name="US-183", distance_miles=2, asset_class=["commercial"]
+
+OPPORTUNITY ZONE QUERIES:
+- When users ask about "opportunity zones", "QOZ", "qualified opportunity zones", add in_opportunity_zone=true to the filters
+- Can combine with other filters: "tax delinquent land in opportunity zones"
+- Example: "properties in opportunity zones" → search_near_reference with in_opportunity_zone=true (or search_properties with in_opportunity_zone if no reference needed)
+
 Always use the appropriate tool to fulfill the user's request. If multiple tools are needed (e.g., "show zoning and find properties"), call each tool.`;
 
 const INTENT_EXTRACTION_SYSTEM_PROMPT = `You are a real estate query intent extractor. Extract structured filters from natural language property search queries.
@@ -656,6 +812,7 @@ OUTPUT FORMAT (JSON only, no markdown, no explanation):
     "owner_entity_type": string | string[] | null,  // Single value or array for OR
     "owner_segment": string | string[] | null,  // Single value or array for OR
     "tax_delinquent": true | false | null,
+    "homestead_exemption": true | false | null,  // true = owner-occupied, false = investment
     "market_value_min": number | null,
     "market_value_max": number | null,
     "owner_name_search": string | null,  // Partial match on owner name
@@ -670,8 +827,11 @@ MAPPING RULES:
 - "under 10 acres", "less than 10 acres" → acres_max: 10
 - "Travis County", "in Travis" → county_fips: "48453"
 - "tax delinquent", "back taxes", "tax lien" → tax_delinquent: true
+- "investment property", "non-homestead", "rental property" → homestead_exemption: false
+- "owner occupied", "homestead", "primary residence" → homestead_exemption: true
 - "LLC owned", "owned by LLC" → owner_entity_type: "llc"
 - "mom and pop", "mom & pop", "small owner" → owner_segment: "mom_pop"
+- "local owners", "in-state owners", "local investors" → owner_segment: "local_owner"
 - "commercial property" → asset_class: "commercial"
 - "vacant land", "land" → asset_class: "land"
 - "under $500k", "below $500000" → market_value_max: 500000
@@ -882,7 +1042,14 @@ function buildParcelQuery(intent) {
     values.push(true);
     paramIndex++;
   }
-  
+
+  // Filter: homestead_exemption (true = owner-occupied, false = investment property)
+  if (intent.filters?.homestead_exemption !== null && intent.filters?.homestead_exemption !== undefined) {
+    conditions.push(`homestead_exemption_flag = $${paramIndex}`);
+    values.push(intent.filters.homestead_exemption);
+    paramIndex++;
+  }
+
   // Filter: market_value_min
   if (intent.filters?.market_value_min !== null && intent.filters?.market_value_min !== undefined) {
     conditions.push(`market_value >= $${paramIndex}`);
@@ -910,7 +1077,50 @@ function buildParcelQuery(intent) {
     values.push(`%${intent.filters.address_search}%`);
     paramIndex++;
   }
-  
+
+  // NEW: Spatial reference filter (near highway, boundary, etc.)
+  if (intent.near_reference) {
+    const { reference_name, distance_miles } = intent.near_reference;
+    const distanceMeters = distance_miles * 1609.34;
+
+    // Subquery to get reference geometry and filter parcels within distance
+    conditions.push(`
+      ST_DWithin(
+        geom_centroid::geography,
+        (SELECT geometry::geography FROM reference_geometries
+         WHERE name ILIKE $${paramIndex}
+            OR $${paramIndex} = ANY(aliases)
+         LIMIT 1),
+        $${paramIndex + 1}
+      )
+    `);
+    values.push(`%${reference_name}%`, distanceMeters);
+    paramIndex += 2;
+  }
+
+  // NEW: Opportunity zone filter
+  if (intent.in_opportunity_zone === true) {
+    conditions.push(`
+      EXISTS (
+        SELECT 1 FROM opportunity_zones oz
+        WHERE ST_Intersects(geom_centroid, oz.geometry)
+      )
+    `);
+  }
+
+  // NEW: Census tract filter
+  if (intent.census_tract) {
+    conditions.push(`
+      EXISTS (
+        SELECT 1 FROM census_tracts ct
+        WHERE ct.geoid = $${paramIndex}
+          AND ST_Intersects(geom_centroid, ct.geometry)
+      )
+    `);
+    values.push(intent.census_tract);
+    paramIndex++;
+  }
+
   // Limit (default 100, max 500)
   const limit = Math.min(intent.limit || 100, 500);
   values.push(limit);
@@ -920,7 +1130,7 @@ function buildParcelQuery(intent) {
   
   // Build SQL
   const sql = `
-    SELECT 
+    SELECT
       parcel_id,
       situs_address,
       owner_name_raw,
@@ -930,6 +1140,8 @@ function buildParcelQuery(intent) {
       asset_class,
       market_value,
       tax_delinquent_flag,
+      homestead_exemption_flag,
+      mail_zip,
       county_fips,
       ST_AsGeoJSON(geom_centroid)::json as geom
     FROM parcel_features_travis
@@ -1706,6 +1918,143 @@ router.post('/query', rateLimiter({ max: 30, windowMs: 15 * 60 * 1000 }), queryL
   } catch (error) {
     console.error('❌ AI query error:', error);
     return sendError(res, 'AI query failed', 500, error.message);
+  }
+});
+
+// ============================================================================
+// NEW: Pipeline-Based Query Endpoint (Boris's 12-Step Architecture)
+// ============================================================================
+
+/**
+ * POST /api/ai/pipeline
+ * Execute natural language query through the 12-step pipeline
+ *
+ * This endpoint uses Boris's architecture for:
+ * - Session state management
+ * - Intent extraction with confidence scoring
+ * - Clarification handling
+ * - Deterministic SQL generation
+ * - Result formatting
+ */
+router.post('/pipeline', rateLimiter({ max: 60, windowMs: 15 * 60 * 1000 }), queryLogger, async (req, res) => {
+  try {
+    const { query, sessionId, context = {} } = req.body;
+
+    if (!query) {
+      return sendError(res, 'Query is required', 400);
+    }
+
+    if (!sessionId) {
+      return sendError(res, 'Session ID is required', 400);
+    }
+
+    console.log(`🔄 [Pipeline] Query: "${query.substring(0, 50)}..." (session: ${sessionId})`);
+
+    // Execute through the 12-step pipeline
+    const response = await executePipelineQuery(query, sessionId, context);
+
+    // Transform pipeline response to match frontend expectations
+    const apiResponse = {
+      success: response.success,
+      type: response.type,
+      message: response.message || response.summary,
+
+      // Map results if present
+      properties: response.mapData?.geojson?.features?.map(f => ({
+        parcel_id: f.properties.parcel_id,
+        situs_address: f.properties.address,
+        owner_name_raw: f.properties.owner,
+        owner_entity_type: f.properties.owner_type,
+        owner_segment: f.properties.owner_segment,
+        acres_calc: f.properties.acres,
+        asset_class: f.properties.asset_class,
+        market_value: f.properties.market_value,
+        tax_delinquent_flag: f.properties.tax_delinquent,
+        geom: f.geometry
+      })) || response.properties || [],
+
+      // Legacy compatibility
+      results: response.mapData?.geojson?.features?.map(f => f.properties) || [],
+      count: response.resultCount || 0,
+      totalCount: response.resultCount || 0,
+
+      // Map data for frontend
+      mapData: response.mapData,
+      pins: response.pins || [],
+
+      // Clarification handling
+      clarification: response.clarification,
+
+      // Aggregation results
+      data: response.data,
+      stats: response.stats,
+
+      // Metadata
+      metadata: response.metadata,
+
+      // Errors
+      errors: response.errors
+    };
+
+    // If clarification needed, return 200 but with clarification data
+    if (response.type === 'clarification_needed') {
+      apiResponse.requiresUserInput = true;
+    }
+
+    console.log(`✅ [Pipeline] Response: ${response.type}, ${apiResponse.count} results`);
+    res.json(apiResponse);
+
+  } catch (error) {
+    console.error('❌ [Pipeline] Error:', error);
+    return sendError(res, 'Pipeline query failed', 500, error.message);
+  }
+});
+
+/**
+ * POST /api/ai/clarification
+ * Continue a query after user provides clarification
+ */
+router.post('/clarification', rateLimiter({ max: 60, windowMs: 15 * 60 * 1000 }), async (req, res) => {
+  try {
+    const { sessionId, ruleId, response: clarificationResponse } = req.body;
+
+    if (!sessionId || !ruleId || clarificationResponse === undefined) {
+      return sendError(res, 'sessionId, ruleId, and response are required', 400);
+    }
+
+    console.log(`🔄 [Clarification] Continuing with: ${ruleId} (session: ${sessionId})`);
+
+    // Continue pipeline with clarification
+    const response = await continueWithClarification(sessionId, ruleId, clarificationResponse);
+
+    // Transform response (same as pipeline endpoint)
+    const apiResponse = {
+      success: response.success,
+      type: response.type,
+      message: response.message || response.summary,
+      properties: response.mapData?.geojson?.features?.map(f => ({
+        parcel_id: f.properties.parcel_id,
+        situs_address: f.properties.address,
+        owner_name_raw: f.properties.owner,
+        acres_calc: f.properties.acres,
+        asset_class: f.properties.asset_class,
+        market_value: f.properties.market_value,
+        tax_delinquent_flag: f.properties.tax_delinquent,
+        geom: f.geometry
+      })) || [],
+      count: response.resultCount || 0,
+      mapData: response.mapData,
+      pins: response.pins || [],
+      metadata: response.metadata,
+      errors: response.errors
+    };
+
+    console.log(`✅ [Clarification] Response: ${response.type}, ${apiResponse.count} results`);
+    res.json(apiResponse);
+
+  } catch (error) {
+    console.error('❌ [Clarification] Error:', error);
+    return sendError(res, 'Clarification failed', 500, error.message);
   }
 });
 

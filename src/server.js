@@ -26,6 +26,9 @@ import parcelsSearchRoutes from './routes/parcels-search.js';
 import discoverRoutes from './routes/discover.js';
 import osmPoisRoutes from './routes/osm-pois.js';
 import boundariesRoutes from './routes/boundaries.js';
+import exportRoutes from './routes/export.js';
+import sessionsRoutes from './routes/sessions.js';
+import artifactsRoutes from './routes/artifacts.js';
 
 dotenv.config();
 
@@ -107,6 +110,9 @@ app.use('/api/parcels-tx', parcelsTxRoutes);
 app.use('/api/discover', discoverRoutes);
 app.use('/api/osm-pois', osmPoisRoutes);
 app.use('/api/boundaries', boundariesRoutes);
+app.use('/api/export', exportRoutes);
+app.use('/api/sessions', sessionsRoutes);
+app.use('/api/artifacts', artifactsRoutes);
 
 // 404 handler
 app.use((req, res) => {

@@ -26,7 +26,7 @@ CREATE TABLE parcel_features_travis (
   -- Classification (all lowercase values)
   asset_class TEXT, -- values: 'residential', 'commercial', 'land', 'unknown'
   owner_entity_type TEXT, -- values: 'person', 'llc', 'corp', 'trust_estate'
-  owner_segment TEXT, -- values: 'mom_pop', 'small_operator', 'institutional', 'trust_estate', 'absentee'
+  owner_segment TEXT, -- values: 'mom_pop', 'small_operator', 'institutional', 'local_owner', 'absentee', 'unknown'
   
   -- Owner info
   owner_name_raw TEXT,
@@ -35,6 +35,7 @@ CREATE TABLE parcel_features_travis (
   situs_address TEXT,
   situs_city TEXT,
   situs_zip TEXT,
+  mail_zip TEXT,      -- owner mailing ZIP (useful for grouping)
   zoning_code TEXT,
   
   -- Flags
@@ -54,9 +55,9 @@ CREATE TABLE parcel_features_travis (
 -- idx_pft_market_value ON parcel_features_travis(market_value)
 
 -- Sample values for reference:
--- asset_class: 'residential' (~300k rows), 'commercial' (~10k rows), 'land' (~50k rows), 'unknown' (~10k rows)
--- owner_entity_type: 'person' (~250k rows), 'llc' (~25k rows), 'corp' (~5k rows), 'trust_estate' (~10k rows)
--- owner_segment: 'mom_pop' (~200k rows), 'small_operator' (~50k rows), 'institutional' (~5k rows), 'absentee' (~30k rows)
+-- asset_class: 'residential' (~300k rows), 'commercial' (~10k rows), 'land' (~50k rows), 'industrial' (~2k), 'mixed' (~1k), 'unknown' (~10k rows)
+-- owner_entity_type: 'person' (~250k rows), 'llc' (~25k rows), 'corp' (~5k rows), 'trust_estate' (~10k rows), 'unknown' (~5k)
+-- owner_segment: 'mom_pop' (~200k rows), 'small_operator' (~50k rows), 'institutional' (~5k rows), 'local_owner' (~80k), 'absentee' (~30k rows), 'unknown' (~10k)
 `;
 
 /**
