@@ -68,6 +68,10 @@ AGGREGATION RULES:
 - "by ZIP code" → aggregation.groupBy: ["mail_zip"]
 - "count by asset class" → aggregation.type: "count", groupBy: ["asset_class"]
 
+AMBIGUITY DETECTION:
+- If query contains "nearby", "near me", "around here", "close to" WITHOUT a specific reference point (address, highway, landmark), add "ambiguous_location" to ambiguities array
+- Do NOT assume active geography for "nearby" - always flag it as ambiguous if no explicit reference
+
 OUTPUT RULES:
 - Property search → output: "map"
 - "count" or "how many" → output: "count"

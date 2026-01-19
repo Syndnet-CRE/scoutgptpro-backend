@@ -35,6 +35,20 @@ const CLARIFICATION_RULES = [
     priority: 2
   },
   {
+    id: 'ambiguous_nearby',
+    condition: (intent) =>
+      intent.ambiguities?.includes('ambiguous_location') ||
+      intent.ambiguities?.some(a => a.includes('nearby') || a.includes('location')),
+    question: "Near what location? Please specify a reference point.",
+    options: [
+      { label: "Travis County (entire county)", value: { type: 'county', value: '48453' } },
+      { label: "Specific ZIP code", value: { type: 'zip', prompt: true } },
+      { label: "Near a highway (I-35, US-183)", value: { type: 'spatial', prompt: true } },
+      { label: "Current map view", value: { type: 'viewport' } }
+    ],
+    priority: 2
+  },
+  {
     id: 'ambiguous_asset_class',
     condition: (intent) =>
       intent.ambiguities?.includes('asset_class') ||
@@ -123,6 +137,7 @@ export function applyClarification(intent, ruleId, response) {
 
   switch (ruleId) {
     case 'missing_geography':
+    case 'ambiguous_nearby':
       if (response.type === 'county' || response.type === 'zip') {
         updatedIntent.geography = {
           type: response.type,
@@ -196,7 +211,10 @@ function isAmbiguityResolved(ambiguity, ruleId) {
     'asset_class': 'ambiguous_asset_class',
     'property type': 'ambiguous_asset_class',
     'size': 'ambiguous_size',
-    'acres': 'ambiguous_size'
+    'acres': 'ambiguous_size',
+    'ambiguous_location': 'ambiguous_nearby',
+    'nearby': 'ambiguous_nearby',
+    'location': 'ambiguous_nearby'
   };
 
   return ambiguityRuleMap[ambiguity] === ruleId;

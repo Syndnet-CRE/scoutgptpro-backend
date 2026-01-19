@@ -109,7 +109,9 @@ export function validateIntent(intent) {
       }
 
       // Validate numeric values for numeric columns
-      if (mapping.column && ['acres_calc', 'market_value', 'land_value', 'improvement_value'].includes(mapping.column)) {
+      // Skip this check if the mapping has a predefined value (e.g., "vacant" has value: 0)
+      const hasPredefinedValue = mapping.value !== undefined;
+      if (!hasPredefinedValue && mapping.column && ['acres_calc', 'market_value', 'land_value', 'improvement_value'].includes(mapping.column)) {
         if (filter.operator === 'BETWEEN') {
           if (typeof filter.value[0] !== 'number' || typeof filter.value[1] !== 'number') {
             warnings.push(`Numeric range expected for ${filter.attribute}`);
