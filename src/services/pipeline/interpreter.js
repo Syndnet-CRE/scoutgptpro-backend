@@ -137,10 +137,10 @@ export async function interpretQuery(query, contextPrompt = '') {
     // Calculate confidence score
     const confidence = calculateConfidence(intent);
 
-    // Normalize intent structure
-    const normalizedIntent = normalizeIntent(intent);
+    // Normalize intent structure (pass query for post-processing)
+    const normalizedIntent = normalizeIntent(intent, query);
 
-    console.log(`[interpreter] Extracted intent with confidence ${confidence.toFixed(2)}`);
+    console.log(`[interpreter] Extracted intent with confidence ${confidence.toFixed(2)}, ambiguities: ${normalizedIntent.ambiguities.join(', ') || 'none'}`);
 
     return {
       intent: normalizedIntent,
@@ -192,8 +192,8 @@ function calculateConfidence(intent) {
 /**
  * Normalize intent structure to ensure consistent format
  */
-function normalizeIntent(intent) {
-  return {
+function normalizeIntent(intent, originalQuery = '') {
+  const normalized = {
     geography: intent.geography || null,
     spatialOperation: intent.spatialOperation || null,
     filters: Array.isArray(intent.filters) ? intent.filters : [],
@@ -203,6 +203,20 @@ function normalizeIntent(intent) {
     assumptions: intent.assumptions || [],
     ambiguities: intent.ambiguities || []
   };
+
+  // Post-processing: Force ambiguity detection for "nearby" without explicit reference
+  const query = (originalQuery || '').toLowerCase();
+  const nearbyPatterns = ['nearby', 'near me', 'around here', 'close to', 'close by', 'in the area'];
+  const hasNearbyWithoutRef = nearbyPatterns.some(p => query.includes(p)) &&
+    !normalized.spatialOperation?.reference &&
+    !normalized.geography?.type;
+
+  if (hasNearbyWithoutRef && !normalized.ambiguities.includes('ambiguous_location')) {
+    console.log('[interpreter] Post-processing: Detected "nearby" without reference, adding ambiguity');
+    normalized.ambiguities.push('ambiguous_location');
+  }
+
+  return normalized;
 }
 
 export default {
