@@ -3,6 +3,8 @@
 
 import pg from 'pg';
 import { generateCSV } from './csvGenerator.js';
+import { generateAcquisitionReport, generateSiteAnalysis } from './pdfGenerator.js';
+import { generateUnderwritingModel, generateCompAnalysis } from './xlsxGenerator.js';
 import { saveArtifactFile, getArtifactStream, deleteArtifactFile } from './storage.js';
 import crypto from 'crypto';
 
@@ -10,17 +12,23 @@ import crypto from 'crypto';
  * Available artifact generators
  */
 const GENERATORS = {
-  'csv_export': generateCSV
-  // Future: 'comp_report': generateCompReport,
-  // Future: 'site_analysis': generateSiteAnalysis,
-  // Future: 'feasibility': generateFeasibility,
-  // Future: 'investment_report': generateInvestmentReport
+  'csv_export': generateCSV,
+  'acquisition_report': generateAcquisitionReport,
+  'site_analysis': generateSiteAnalysis,
+  'underwriting_model': generateUnderwritingModel,
+  'comp_analysis': generateCompAnalysis
 };
 
 /**
  * Valid artifact types
  */
-export const VALID_TYPES = ['csv_export', 'comp_report', 'site_analysis', 'feasibility', 'investment_report'];
+export const VALID_TYPES = [
+  'csv_export',
+  'acquisition_report',
+  'site_analysis',
+  'underwriting_model',
+  'comp_analysis'
+];
 
 /**
  * Get database pool
@@ -383,6 +391,30 @@ export async function deleteArtifact(artifactId) {
   }
 }
 
+/**
+ * Quick artifact generation without database storage
+ * Useful for on-demand report generation
+ *
+ * @param {string} type - Artifact type
+ * @param {object|array} propertyData - Property data (single object or array)
+ * @param {object} options - Generation options
+ * @returns {Promise<{ content: Buffer, format: string, metadata: object }>}
+ */
+export async function generateArtifact(type, propertyData, options = {}) {
+  const generator = GENERATORS[type];
+  if (!generator) {
+    throw new Error(`Generator not implemented for type: ${type}. Available: ${Object.keys(GENERATORS).join(', ')}`);
+  }
+
+  // Normalize to single property for single-property generators
+  const data = Array.isArray(propertyData) ? propertyData[0] : propertyData;
+
+  return generator(data, options);
+}
+
+// Re-export storage functions for convenience
+export { saveArtifactFile as saveArtifact, deleteArtifactFile } from './storage.js';
+
 export default {
   createArtifact,
   getArtifact,
@@ -390,5 +422,7 @@ export default {
   regenerateArtifact,
   listArtifacts,
   deleteArtifact,
-  VALID_TYPES
+  generateArtifact,
+  VALID_TYPES,
+  GENERATORS
 };
