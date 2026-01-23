@@ -75,6 +75,11 @@ router.get('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Deal room not found' });
     }
     
+    // Note: Properties are fetched separately via /api/properties/:id
+    // which already returns normalized field names (camelCase).
+    // If properties are ever included directly in dealRoom response,
+    // they should be normalized here using the same normalizer as staging.
+    
     res.json(dealRoom);
   } catch (error) {
     console.error('[DealRooms] Get error:', error);

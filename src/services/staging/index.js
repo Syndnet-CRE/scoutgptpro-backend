@@ -2,6 +2,7 @@
 // CRM Staging service - manages properties before promoting to Deal Rooms
 
 import pool from '../../db/pool.js';
+import { normalizeProperty } from '../../utils/normalizeProperty.js';
 
 /**
  * Add a single property to staging
@@ -132,7 +133,11 @@ export async function getStaged({ userId, sessionId, status = 'staged', limit = 
     LIMIT $${paramIndex}
   `, values);
 
-  return result.rows;
+  // Normalize property_data from snake_case to camelCase for frontend consistency
+  return result.rows.map(row => ({
+    ...row,
+    property_data: row.property_data ? normalizeProperty(row.property_data) : null
+  }));
 }
 
 /**

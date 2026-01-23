@@ -1,6 +1,8 @@
 // src/services/pipeline/responseBuilder.js
 // Step 12: Build final API response
 
+import { normalizeProperties } from '../../utils/normalizeProperty.js';
+
 /**
  * Build API response from pipeline results
  *
@@ -116,17 +118,22 @@ function buildMapResponse(base, data, metadata) {
       bounds: mapData?.bounds,
       layerId: `query-results-${Date.now()}`
     },
-    // Legacy compatibility
-    properties: mapData?.features?.map(f => ({
+    // Legacy compatibility - normalize to camelCase for frontend
+    properties: normalizeProperties(mapData?.features?.map(f => ({
       parcel_id: f.properties.parcel_id,
-      situs_address: f.properties.address,
-      owner_name_raw: f.properties.owner,
-      acres_calc: f.properties.acres,
+      situs_address: f.properties.address || f.properties.situs_address,
+      owner_name_raw: f.properties.owner || f.properties.owner_name_raw,
+      owner_entity_type: f.properties.owner_type || f.properties.owner_entity_type,
+      owner_segment: f.properties.owner_segment,
+      acres_calc: f.properties.acres || f.properties.acres_calc,
       asset_class: f.properties.asset_class,
       market_value: f.properties.market_value,
+      land_value: f.properties.land_value,
+      improvement_value: f.properties.improvement_value,
       tax_delinquent_flag: f.properties.tax_delinquent,
+      homestead_exemption_flag: f.properties.homestead,
       geom: f.geometry
-    })) || [],
+    })) || []),
     pins: mapData?.features?.slice(0, 100).map(f => ({
       id: f.properties.parcel_id,
       parcelId: f.properties.parcel_id,

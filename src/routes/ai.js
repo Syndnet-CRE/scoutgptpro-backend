@@ -10,6 +10,7 @@ import { validateAiQueryRequest } from '../validators/aiQuerySchema.js';
 import { sendError } from '../utils/apiResponse.js';
 import { assertAcresFilter, assertAssetClassFilter, assertOwnerSegmentFilter, assertMarketValueFilter, assertOwnerEntityTypeFilter, assertTaxDelinquentFilter } from '../utils/filterAssertions.js';
 import { queryLogger } from '../middleware/queryLogger.js';
+import { normalizeProperty, normalizeProperties } from '../utils/normalizeProperty.js';
 
 // Import Boris's 12-step pipeline
 import { executeQuery as executePipelineQuery, continueWithClarification } from '../services/pipeline/index.js';
@@ -358,7 +359,8 @@ async function executeSearchProperties(input, pool) {
   try {
     const result = await pool.query(sqlQuery, values);
     console.log('[executeSearchProperties] Query returned', result.rows.length, 'rows');
-    const properties = result.rows.map(row => ({
+    // Normalize properties to camelCase for frontend consistency
+    const properties = normalizeProperties(result.rows.map(row => ({
       parcel_id: row.parcel_id,
       situs_address: row.situs_address,
       owner_name_raw: row.owner_name_raw,
@@ -367,10 +369,13 @@ async function executeSearchProperties(input, pool) {
       acres_calc: parseFloat(row.acres_calc),
       asset_class: row.asset_class,
       market_value: row.market_value ? parseFloat(row.market_value) : null,
+      land_value: row.land_value ? parseFloat(row.land_value) : null,
+      improvement_value: row.improvement_value ? parseFloat(row.improvement_value) : null,
       tax_delinquent_flag: row.tax_delinquent_flag === true,
+      homestead_exemption_flag: row.homestead_exemption_flag === true,
       county_fips: row.county_fips,
       geom: row.geom  // Already JSON from ST_AsGeoJSON
-    }));
+    })));
     
     // Run filter assertions
     if (intent.filters?.acres_min || intent.filters?.acres_max) {
@@ -505,7 +510,8 @@ async function executeGetProperty(input, pool) {
       };
     }
     
-    const property = {
+    // Normalize property to camelCase for frontend consistency
+    const rawProperty = {
       parcel_id: result.rows[0].parcel_id,
       situs_address: result.rows[0].situs_address,
       owner_name_raw: result.rows[0].owner_name_raw,
@@ -516,6 +522,7 @@ async function executeGetProperty(input, pool) {
       tax_delinquent_flag: result.rows[0].tax_delinquent_flag === true,
       geom: result.rows[0].geom
     };
+    const property = normalizeProperty(rawProperty);
     
     console.log(`✅ get_property found parcel ${parcel_id}`);
     return {
@@ -576,7 +583,8 @@ async function executeSearchNearReference(toolInput, pool) {
   try {
     const result = await pool.query(query, values);
 
-    const properties = result.rows.map(row => ({
+    // Normalize properties to camelCase for frontend consistency
+    const properties = normalizeProperties(result.rows.map(row => ({
       parcel_id: row.parcel_id,
       situs_address: row.situs_address,
       owner_name_raw: row.owner_name_raw,
@@ -585,10 +593,13 @@ async function executeSearchNearReference(toolInput, pool) {
       acres_calc: parseFloat(row.acres_calc),
       asset_class: row.asset_class,
       market_value: row.market_value ? parseFloat(row.market_value) : null,
+      land_value: row.land_value ? parseFloat(row.land_value) : null,
+      improvement_value: row.improvement_value ? parseFloat(row.improvement_value) : null,
       tax_delinquent_flag: row.tax_delinquent_flag,
+      homestead_exemption_flag: row.homestead_exemption_flag,
       county_fips: row.county_fips,
       geom: row.geom
-    }));
+    })));
 
     console.log(`✅ search_near_reference returned ${properties.length} results near ${reference_name}`);
     return {
@@ -1959,19 +1970,22 @@ router.post('/pipeline', rateLimiter({ max: 60, windowMs: 15 * 60 * 1000 }), que
       type: response.type,
       message: response.message || response.summary,
 
-      // Map results if present
-      properties: response.mapData?.geojson?.features?.map(f => ({
+      // Map results if present - normalize to camelCase for frontend
+      properties: normalizeProperties(response.mapData?.geojson?.features?.map(f => ({
         parcel_id: f.properties.parcel_id,
-        situs_address: f.properties.address,
-        owner_name_raw: f.properties.owner,
-        owner_entity_type: f.properties.owner_type,
+        situs_address: f.properties.address || f.properties.situs_address,
+        owner_name_raw: f.properties.owner || f.properties.owner_name_raw,
+        owner_entity_type: f.properties.owner_type || f.properties.owner_entity_type,
         owner_segment: f.properties.owner_segment,
-        acres_calc: f.properties.acres,
+        acres_calc: f.properties.acres || f.properties.acres_calc,
         asset_class: f.properties.asset_class,
         market_value: f.properties.market_value,
+        land_value: f.properties.land_value,
+        improvement_value: f.properties.improvement_value,
         tax_delinquent_flag: f.properties.tax_delinquent,
+        homestead_exemption_flag: f.properties.homestead,
         geom: f.geometry
-      })) || response.properties || [],
+      })) || response.properties || []),
 
       // Legacy compatibility
       results: response.mapData?.geojson?.features?.map(f => f.properties) || [],

@@ -656,9 +656,7 @@ Based on the audit findings, corrected ETL scripts have been created:
    - improvement_value = 0 or NULL → 'land'
    - improvement_value > 0 → 'unknown' (can't determine type)
 
-**Key Finding:** `land_use_code` and `land_use_desc` are 100% NULL, so we cannot use them.
-
-### 5.2 populate-owner-segment-v2.sql**Strategy:**
+**Key Finding:** `land_use_code` and `land_use_desc` are 100% NULL, so we cannot use them.### 5.2 populate-owner-segment-v2.sql**Strategy:**
 1. **Absentee detection:** Use `parcels_travis_enrichment.raw->>'MAIL_STAT'`
    - mail_state != 'TX' → 'absentee'
 2. **Institutional detection:** Use owner name patterns
