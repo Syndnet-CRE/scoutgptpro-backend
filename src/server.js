@@ -29,6 +29,9 @@ import boundariesRoutes from './routes/boundaries.js';
 import exportRoutes from './routes/export.js';
 import sessionsRoutes from './routes/sessions.js';
 import artifactsRoutes from './routes/artifacts.js';
+import stagingRoutes from './routes/staging.js';
+import dealroomsV2Routes from './routes/dealroomsV2.js';
+import artifactsV2Routes from './routes/artifactsV2.js';
 
 dotenv.config();
 
@@ -113,6 +116,9 @@ app.use('/api/boundaries', boundariesRoutes);
 app.use('/api/export', exportRoutes);
 app.use('/api/sessions', sessionsRoutes);
 app.use('/api/artifacts', artifactsRoutes);
+app.use('/api/staging', stagingRoutes);
+app.use('/api/v2/deal-rooms', dealroomsV2Routes);
+app.use('/api/v2/artifacts', artifactsV2Routes);
 
 // 404 handler
 app.use((req, res) => {
