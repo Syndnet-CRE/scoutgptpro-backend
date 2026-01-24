@@ -10,6 +10,7 @@ import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { spawn } from 'child_process';
 import pg from 'pg';
+import { interpretZoning, getParcelConstraints } from './zoning/interpreter.js';
 
 // MCP Server Configuration
 const MCP_SERVERS = {
@@ -113,6 +114,8 @@ class MCPClientManager {
         return this.bufferGeometry(pool, args);
       case 'gis:get_zoning':
         return this.getZoning(pool, args);
+      case 'gis:interpret_zoning':
+        return this.interpretZoning(pool, args);
       case 'gis:get_layer_features':
         return this.getLayerFeatures(pool, args);
       case 'gis:resolve_geography':
@@ -371,6 +374,16 @@ class MCPClientManager {
       found: result.rows.length > 0,
       zoning: result.rows[0] || null
     };
+  }
+
+  async interpretZoning(pool, { zoningCode, parcelId }) {
+    if (parcelId) {
+      return getParcelConstraints(parcelId, pool);
+    }
+    if (zoningCode) {
+      return interpretZoning(zoningCode);
+    }
+    throw new Error('Either zoningCode or parcelId required');
   }
 
   async getLayerFeatures(pool, { layer, bbox, limit }) {

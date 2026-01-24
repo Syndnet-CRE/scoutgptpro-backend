@@ -5,6 +5,7 @@ import pg from 'pg';
 import { generateCSV } from './csvGenerator.js';
 import { generateAcquisitionReport, generateSiteAnalysis } from './pdfGenerator.js';
 import { generateUnderwritingModel, generateCompAnalysis } from './xlsxGenerator.js';
+import { generateDevelopmentAnalysis } from './generators/developmentAnalysis.js';
 import { saveArtifactFile, getArtifactStream, deleteArtifactFile } from './storage.js';
 import crypto from 'crypto';
 
@@ -16,7 +17,8 @@ const GENERATORS = {
   'acquisition_report': generateAcquisitionReport,
   'site_analysis': generateSiteAnalysis,
   'underwriting_model': generateUnderwritingModel,
-  'comp_analysis': generateCompAnalysis
+  'comp_analysis': generateCompAnalysis,
+  'development_analysis': generateDevelopmentAnalysis
 };
 
 /**
@@ -27,7 +29,8 @@ export const VALID_TYPES = [
   'acquisition_report',
   'site_analysis',
   'underwriting_model',
-  'comp_analysis'
+  'comp_analysis',
+  'development_analysis'
 ];
 
 /**

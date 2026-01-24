@@ -14,6 +14,7 @@ const INTENT_EXTRACTION_PROMPT = `You are a real estate query intent extractor. 
 
 OUTPUT FORMAT (JSON only, no markdown, no explanation):
 {
+  "intentType": null | "analyze_constraints" | "analyze_feasibility" | "compare_properties",
   "geography": {
     "type": "zip" | "county" | "city" | "buffer" | "bbox" | null,
     "value": "<value>",
@@ -77,6 +78,18 @@ OUTPUT RULES:
 - "count" or "how many" → output: "count"
 - "list" or "show me" → output: "list"
 - Statistics request → output: "stats"
+
+INTENT TYPE RULES:
+- "What are the development constraints?" → intentType: "analyze_constraints"
+- "What constraints exist?" → intentType: "analyze_constraints"
+- "Is this land developable?" → intentType: "analyze_feasibility"
+- "Can this be developed?" → intentType: "analyze_feasibility"
+- "Development feasibility" → intentType: "analyze_feasibility"
+- "Compare these properties" → intentType: "compare_properties"
+- "Compare properties" → intentType: "compare_properties"
+- "How do these compare?" → intentType: "compare_properties"
+- For analysis queries, still include geography/filters to find relevant properties, but set intentType appropriately
+- If intentType is set, output should still be "map" to show properties on map
 
 Return ONLY valid JSON. No markdown, no explanation.`;
 
@@ -194,6 +207,7 @@ function calculateConfidence(intent) {
  */
 function normalizeIntent(intent, originalQuery = '') {
   const normalized = {
+    intentType: intent.intentType || null,
     geography: intent.geography || null,
     spatialOperation: intent.spatialOperation || null,
     filters: Array.isArray(intent.filters) ? intent.filters : [],

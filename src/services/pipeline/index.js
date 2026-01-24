@@ -82,7 +82,7 @@ export async function executeQuery(rawQuery, sessionId, context = {}) {
         resultCount: 0
       });
 
-      return buildResponse({
+      return await buildResponse({
         type: 'error',
         errors: validation.errors,
         metadata: buildMetadata({
@@ -113,7 +113,7 @@ export async function executeQuery(rawQuery, sessionId, context = {}) {
         );
         await saveSession(sessionId, updatedState);
 
-        return buildResponse({
+        return await buildResponse({
           type: 'clarification_needed',
           clarification: clarificationResult.clarification,
           metadata: buildMetadata({
@@ -144,7 +144,7 @@ export async function executeQuery(rawQuery, sessionId, context = {}) {
       validatedIntent.spatialOperation = await resolveSpatialReference(validatedIntent.spatialOperation);
 
       if (validatedIntent.spatialOperation.error) {
-        return buildResponse({
+        return await buildResponse({
           type: 'error',
           errors: [`Could not find reference: "${validatedIntent.spatialOperation.reference}"`],
           metadata: buildMetadata({
@@ -212,8 +212,12 @@ export async function executeQuery(rawQuery, sessionId, context = {}) {
     // ========================================
     // Step 12: BUILD RESPONSE
     // ========================================
-    const response = buildResponse({
+    const response = await buildResponse({
       ...formatted,
+      intent: validatedIntent,
+      sessionId,
+      parcelIds,
+      rawQuery,
       metadata: buildMetadata({
         intentId,
         executedAt: new Date().toISOString(),
@@ -242,7 +246,7 @@ export async function executeQuery(rawQuery, sessionId, context = {}) {
       });
     }
 
-    return buildResponse({
+    return await buildResponse({
       type: 'error',
       errors: [error.message],
       metadata: buildMetadata({
@@ -265,7 +269,7 @@ export async function continueWithClarification(sessionId, ruleId, response) {
   const session = await getSession(sessionId);
 
   if (!session?.state?.pendingClarification) {
-    return buildResponse({
+    return await buildResponse({
       type: 'error',
       errors: ['No pending clarification found']
     });

@@ -2003,6 +2003,9 @@ router.post('/pipeline', rateLimiter({ max: 60, windowMs: 15 * 60 * 1000 }), que
       data: response.data,
       stats: response.stats,
 
+      // Analysis artifact (if present)
+      artifact: response.artifact,
+
       // Metadata
       metadata: response.metadata,
 
