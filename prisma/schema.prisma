@@ -1686,3 +1686,140 @@ enum entity_type {
   TRUST
   UNKNOWN
 }
+
+model Session {
+  id            String   @id @default(dbgenerated("gen_random_uuid()::text"))
+  sessionId     String   @unique @map("session_id")
+  userId        String?  @map("user_id")
+  state         Json?    @default("{}")
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  lastActiveAt  DateTime @default(now()) @map("last_active_at") @db.Timestamptz(6)
+  expiresAt     DateTime? @map("expires_at") @db.Timestamptz(6)
+
+  @@index([sessionId], map: "idx_sessions_session_id")
+  @@index([userId], map: "idx_sessions_user_id")
+  @@index([lastActiveAt], map: "idx_sessions_last_active")
+  @@map("sessions")
+}
+
+model ClaudeSession {
+  id            String   @id @default(dbgenerated("gen_random_uuid()::text"))
+  sessionId     String?  @map("session_id")
+  userId        String?  @map("user_id")
+  model         String   @default("claude-sonnet-4-20250514")
+  systemPrompt  String?  @map("system_prompt") @db.Text
+  startedAt     DateTime @default(now()) @map("started_at") @db.Timestamptz(6)
+  endedAt       DateTime? @map("ended_at") @db.Timestamptz(6)
+  messageCount  Int      @default(0) @map("message_count")
+  toolUseCount  Int      @default(0) @map("tool_use_count")
+  totalTokens   Int      @default(0) @map("total_tokens")
+  metadata      Json?
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  
+  messages      ClaudeMessage[]
+  enrichments   ParcelEnrichment[]
+  artifacts     Artifact[]
+
+  @@index([sessionId], map: "idx_claude_sessions_session_id")
+  @@index([userId], map: "idx_claude_sessions_user_id")
+  @@index([startedAt], map: "idx_claude_sessions_started_at")
+  @@map("claude_sessions")
+}
+
+model ClaudeMessage {
+  id              String   @id @default(dbgenerated("gen_random_uuid()::text"))
+  claudeSessionId String   @map("claude_session_id")
+  messageIndex    Int      @map("message_index")
+  role            String   // 'user' | 'assistant' | 'system'
+  content         String   @db.Text
+  toolUses        Json?    @map("tool_uses")
+  toolResults     Json?    @map("tool_results")
+  inputTokens     Int?     @map("input_tokens")
+  outputTokens    Int?     @map("output_tokens")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  
+  session         ClaudeSession @relation(fields: [claudeSessionId], references: [id], onDelete: Cascade)
+
+  @@unique([claudeSessionId, messageIndex])
+  @@index([claudeSessionId], map: "idx_claude_messages_session_id")
+  @@index([role], map: "idx_claude_messages_role")
+  @@index([createdAt], map: "idx_claude_messages_created_at")
+  @@map("claude_messages")
+}
+
+model ParcelEnrichment {
+  id              String   @id @default(dbgenerated("gen_random_uuid()::text"))
+  parcelId        String   @map("parcel_id")
+  claudeSessionId String?  @map("claude_session_id")
+  enrichmentType  String   @map("enrichment_type")
+  enrichmentData  Json     @map("enrichment_data")
+  confidenceScore Decimal? @map("confidence_score") @db.Decimal(3, 2)
+  sourceTool      String?  @map("source_tool")
+  verified        Boolean  @default(false)
+  verifiedBy      String?  @map("verified_by")
+  verifiedAt      DateTime? @map("verified_at") @db.Timestamptz(6)
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  
+  session         ClaudeSession? @relation(fields: [claudeSessionId], references: [id], onDelete: SetNull)
+
+  @@index([parcelId], map: "idx_parcel_enrichments_parcel_id")
+  @@index([claudeSessionId], map: "idx_parcel_enrichments_session_id")
+  @@index([enrichmentType], map: "idx_parcel_enrichments_type")
+  @@index([verified], map: "idx_parcel_enrichments_verified")
+  @@map("parcel_enrichments")
+}
+
+model TrainingExportLog {
+  id              String   @id @default(dbgenerated("gen_random_uuid()::text"))
+  exportType      String   @map("export_type") // 'conversation' | 'enrichments' | 'full'
+  sessionIds      String[] @map("session_ids")
+  dateRangeStart  DateTime? @map("date_range_start") @db.Timestamptz(6)
+  dateRangeEnd    DateTime? @map("date_range_end") @db.Timestamptz(6)
+  messageCount    Int?     @map("message_count")
+  enrichmentCount Int?     @map("enrichment_count")
+  filePath        String?  @map("file_path")
+  fileSizeBytes   BigInt?  @map("file_size_bytes")
+  checksum        String?  // SHA-256 of exported file
+  exportedAt      DateTime @default(now()) @map("exported_at") @db.Timestamptz(6)
+  exportedBy      String?  @map("exported_by")
+  metadata        Json?
+
+  @@index([exportedAt], map: "idx_training_export_log_exported_at")
+  @@index([exportType], map: "idx_training_export_log_type")
+  @@map("training_export_log")
+}
+
+model Artifact {
+  artifactId          String   @id @map("artifact_id") @default(dbgenerated("gen_random_uuid()::text"))
+  artifactType        String   @map("artifact_type")
+  createdBySession    String?  @map("created_by_session")
+  createdByUser       String?  @map("created_by_user")
+  queryInput          Json?    @map("query_input")
+  queryIntent         Json?    @map("query_intent")
+  resultParcelIds     String[] @map("result_parcel_ids")
+  dataRetrievalTimestamp DateTime? @map("data_retrieval_timestamp") @db.Timestamptz(6)
+  filePath            String?  @map("file_path")
+  fileFormat          String?  @map("file_format")
+  fileSizeBytes       BigInt?  @map("file_size_bytes")
+  fileChecksum        String?  @map("file_checksum")
+  templateVersion     String?  @map("template_version")
+  status              String?  @default("completed")
+  downloadCount       Int      @default(0) @map("download_count")
+  regeneratedFrom     String?  @map("regenerated_from")
+  claudeSessionId     String?  @map("claude_session_id")
+  generatedByTool     String?  @map("generated_by_tool")
+  generationPrompt    String?  @map("generation_prompt") @db.Text
+  claudeMetadata      Json?    @map("claude_metadata")
+  createdAt           DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  
+  claudeSession       ClaudeSession? @relation(fields: [claudeSessionId], references: [id], onDelete: SetNull)
+
+  @@index([createdBySession], map: "idx_artifacts_session_id")
+  @@index([claudeSessionId], map: "idx_artifacts_claude_session_id")
+  @@index([artifactType], map: "idx_artifacts_type")
+  @@index([status], map: "idx_artifacts_status")
+  @@map("artifacts")
+}

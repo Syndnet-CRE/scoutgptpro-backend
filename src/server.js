@@ -32,6 +32,10 @@ import artifactsRoutes from './routes/artifacts.js';
 import stagingRoutes from './routes/staging.js';
 import dealroomsV2Routes from './routes/dealroomsV2.js';
 import artifactsV2Routes from './routes/artifactsV2.js';
+import chatRoutes from './routes/chat.js';
+import trainingRoutes from './routes/training.js';
+import mcpRoutes from './routes/mcp.js';
+import mcpManager from './services/mcp/server-manager.js';
 
 dotenv.config();
 
@@ -80,6 +84,12 @@ app.use((req, res, next) => {
   next();
 });
 
+// Initialize MCP servers (non-blocking)
+mcpManager.initialize().catch(error => {
+  console.error('[Server] MCP initialization failed:', error);
+  console.log('[Server] Continuing with fallback mode');
+});
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({ 
@@ -119,6 +129,9 @@ app.use('/api/artifacts', artifactsRoutes);
 app.use('/api/staging', stagingRoutes);
 app.use('/api/v2/deal-rooms', dealroomsV2Routes);
 app.use('/api/v2/artifacts', artifactsV2Routes);
+app.use('/api/chat', chatRoutes);
+app.use('/api/training', trainingRoutes);
+app.use('/api/mcp', mcpRoutes);
 
 // 404 handler
 app.use((req, res) => {
@@ -135,4 +148,17 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 ScoutGPT Backend running on http://localhost:${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🗺️  MapServer API ready`);
+});
+
+// Graceful shutdown
+process.on('SIGTERM', async () => {
+  console.log('[Server] SIGTERM received, shutting down...');
+  await mcpManager.shutdown();
+  process.exit(0);
+});
+
+process.on('SIGINT', async () => {
+  console.log('[Server] SIGINT received, shutting down...');
+  await mcpManager.shutdown();
+  process.exit(0);
 });
