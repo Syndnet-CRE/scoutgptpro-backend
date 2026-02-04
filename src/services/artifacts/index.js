@@ -3,9 +3,10 @@
 
 import pg from 'pg';
 import { generateCSV } from './csvGenerator.js';
-import { generateAcquisitionReport, generateSiteAnalysis } from './pdfGenerator.js';
+import { generateSiteAnalysis } from './pdfGenerator.js';
 import { generateUnderwritingModel, generateCompAnalysis } from './xlsxGenerator.js';
 import { generateDevelopmentAnalysis } from './generators/developmentAnalysis.js';
+import { generateAcquisitionReport } from './generators/acquisitionReport.js';
 import { saveArtifactFile, getArtifactStream, deleteArtifactFile } from './storage.js';
 import crypto from 'crypto';
 

@@ -2,8 +2,65 @@
 // Tool definitions for Claude Anthropic API
 
 import { executeTool } from './handlers.js';
+import { getSchemaPromptSection } from '../services/query-orchestrator/index.js';
 
 export const TOOLS = [
+  {
+    name: 'intelligent_property_search',
+    description: `Search properties with intelligent query understanding and enriched results.
+
+Handles:
+- Natural language location ("downtown Austin", "near I-35", "in 78702")
+- Relative size terms ("large", "small", "over 5 acres")  
+- Property types ("commercial", "developable land")
+- Investment criteria ("distressed", "tax delinquent")
+
+Returns enriched GeoJSON with:
+- Core property data (address, owner, acreage, values)
+- Zoning interpretation (what uses are allowed)
+- Value metrics ($/acre, improvement ratio)
+- Opportunity flags (tax_delinquent, underimproved, development_potential)
+
+Use this for ALL property searches - it provides better results than search_properties.`,
+
+    input_schema: {
+      type: 'object',
+      properties: {
+        query: {
+          type: 'string',
+          description: 'Natural language description of desired properties'
+        },
+        filters: {
+          type: 'object',
+          description: 'Explicit structured filters',
+          properties: {
+            asset_class: { type: 'string', enum: ['residential', 'commercial', 'industrial', 'land', 'agricultural'] },
+            min_acres: { type: 'number' },
+            max_acres: { type: 'number' },
+            min_value: { type: 'number' },
+            max_value: { type: 'number' },
+            zoning_code: { type: 'string' },
+            owner_type: { type: 'string', enum: ['individual', 'llc', 'corporation', 'trust', 'government'] },
+            tax_delinquent: { type: 'boolean' },
+            exclude_flood_zone: { type: 'boolean' },
+            zip_code: { type: 'string' },
+            city: { type: 'string' }
+          }
+        },
+        location: {
+          type: 'object',
+          properties: {
+            reference: { type: 'string', description: 'Location: "downtown Austin", "78702", address' },
+            distance_meters: { type: 'number', description: 'Search radius (default 5000)' },
+            bbox: { type: 'array', items: { type: 'number' }, description: '[minLng, minLat, maxLng, maxLat]' }
+          }
+        },
+        sort_by: { type: 'string', enum: ['value_per_acre', 'market_value', 'acres_calc', 'year_built'] },
+        limit: { type: 'number', default: 25, maximum: 100 }
+      },
+      required: ['query']
+    }
+  },
   {
     name: 'search_properties',
     description: 'Search Travis County property database. Returns GeoJSON for map display. Use this whenever the user asks to find, show, or search for properties.',
@@ -165,7 +222,7 @@ export const TOOLS = [
   },
   {
     name: 'get_gis_layers',
-    description: 'Get GIS layer data (zoning, flood zones, utilities, parcels, buildings, wetlands, permits) for a bounding box or specific parcel.',
+    description: 'Get GIS layer data for a bounding box or specific parcel. Available layers: zoning_districts (zoning boundaries), census_tracts (census tract boundaries), parcels_boundaries (parcel boundaries). Note: Flood zones, utilities, building footprints, wetlands, and permits are not yet available.',
     input_schema: {
       type: 'object',
       properties: {
@@ -173,15 +230,10 @@ export const TOOLS = [
           type: 'string',
           enum: [
             'zoning_districts',
-            'flood_fema_zones',
-            'sewer_mains',
-            'water_mains',
-            'parcels_boundaries',
-            'building_footprints',
-            'wetlands_boundaries',
-            'permits_building'
+            'census_tracts',
+            'parcels_boundaries'
           ],
-          description: 'The GIS layer to retrieve'
+          description: 'The GIS layer to retrieve. Available: zoning_districts, census_tracts, parcels_boundaries'
         },
         bbox: {
           type: 'array',
@@ -223,8 +275,26 @@ export const TOOLS = [
       },
       required: ['type', 'parcel_ids']
     }
+  },
+  {
+    name: 'get_census_data',
+    description: 'Get demographic data from the US Census Bureau for a location. Returns population, median income, median age, housing statistics, vacancy rates, and rent data for the census tract containing the given coordinates.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        latitude: {
+          type: 'number',
+          description: 'Latitude of the location'
+        },
+        longitude: {
+          type: 'number',
+          description: 'Longitude of the location'
+        }
+      },
+      required: ['latitude', 'longitude']
+    }
   }
 ];
 
-export { executeTool };
+export { executeTool, getSchemaPromptSection };
 export default TOOLS;

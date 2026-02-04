@@ -30,6 +30,7 @@ const TOOL_SERVER_MAP = {
   'get_layer_features': 'gis',
   
   // Tools that use fallback (no MCP server)
+  'intelligent_property_search': null,  // Uses local handler, not MCP
   'analyze_property': null,  // Uses orchestrator service
   'web_search': null,        // Uses Brave API directly
   'get_osm_nearby': null,    // Uses direct DB query

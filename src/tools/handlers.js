@@ -5,6 +5,8 @@ import { PrismaClient } from '@prisma/client';
 import { analyzeDevelopmentFeasibility } from '../services/enrichment/orchestrator.js';
 import { webSearch } from '../services/webSearch/index.js';
 import { createArtifact } from '../services/artifacts/index.js';
+import { intelligentPropertySearch } from '../services/query-orchestrator/index.js';
+import { getDemographicsForLocation } from '../services/census/index.js';
 
 const prisma = new PrismaClient();
 
@@ -18,6 +20,8 @@ export async function executeTool(toolName, toolInput) {
   console.log(`[Tool] Executing: ${toolName}`, JSON.stringify(toolInput).slice(0, 200));
   
   switch (toolName) {
+    case 'intelligent_property_search':
+      return await handleIntelligentSearch(toolInput);
     case 'search_properties':
       return await searchProperties(toolInput);
     case 'get_property':
@@ -32,6 +36,8 @@ export async function executeTool(toolName, toolInput) {
       return await getGisLayers(toolInput);
     case 'generate_artifact':
       return await generateArtifact(toolInput);
+    case 'get_census_data':
+      return await getCensusData(toolInput);
     default:
       throw new Error(`Unknown tool: ${toolName}`);
   }
@@ -147,6 +153,8 @@ async function getProperty({ parcel_id }) {
   const result = await prisma.$queryRawUnsafe(`
     SELECT 
       pf.*,
+      ST_Y(pf.geom_centroid) as latitude,
+      ST_X(pf.geom_centroid) as longitude,
       ST_AsGeoJSON(pf.geom_centroid)::json as centroid_geom,
       ST_AsGeoJSON(pt.geom)::json as parcel_geom
     FROM parcel_features_travis pf
@@ -178,6 +186,8 @@ async function getProperty({ parcel_id }) {
     land_use: row.land_use_desc,
     last_sale_date: row.last_sale_date,
     last_sale_price: row.last_sale_price,
+    latitude: row.latitude,
+    longitude: row.longitude,
     geometry: row.parcel_geom || row.centroid_geom
   };
 }
@@ -302,26 +312,51 @@ async function getOsmNearby({ lat, lng, radius_meters = 500, categories }) {
 async function getGisLayers({ layer_id, bbox, parcel_id }) {
   console.log('[get_gis_layers] Called with:', { layer_id, bbox, parcel_id });
   
-  // Map layer_id to actual MapServer/table
-  // Note: Only tables that exist in the database are included
+  /**
+   * Map layer_id to actual database table
+   * 
+   * VERIFIED EXISTING TABLES (as of 2026-01-27):
+   * - zoning_districts: ✅ EXISTS (22,488 rows) - geometry column: 'geometry'
+   * - census_tracts: ✅ EXISTS (0 rows) - geometry column: 'geometry'
+   * - parcels_travis: ✅ EXISTS (parcel boundaries) - geometry column: 'geom'
+   * 
+   * MISSING TABLES (not yet imported):
+   * - flood_zones: ❌ Does not exist
+   * - utility_sewer: ❌ Does not exist
+   * - utility_water: ❌ Does not exist
+   * - building_footprints: ❌ Does not exist
+   * - wetlands: ❌ Does not exist
+   * - building_permits: ❌ Does not exist
+   * 
+   * See GIS_TABLES_STATUS.md for full status report
+   */
   const layerMap = {
-    'zoning_districts': { table: 'zoning_districts', geomCol: 'geometry' }, // Note: column is 'geometry' not 'geom'
-    'flood_fema_zones': { table: 'flood_zones', geomCol: 'geom' },
-    'sewer_mains': { table: 'utility_sewer', geomCol: 'geom' },
-    'water_mains': { table: 'utility_water', geomCol: 'geom' },
-    'parcels_boundaries': { table: 'parcels_travis', geomCol: 'geom' },
-    'building_footprints': { table: 'building_footprints', geomCol: 'geom' },
-    'wetlands_boundaries': { table: 'wetlands', geomCol: 'geom' },
-    'permits_building': { table: 'building_permits', geomCol: 'geom' }
+    // Available layers
+    'zoning_districts': { table: 'zoning_districts', geomCol: 'geometry', available: true },
+    'census_tracts': { table: 'census_tracts', geomCol: 'geometry', available: true },
+    'parcels_boundaries': { table: 'parcels_travis', geomCol: 'geom', available: true },
+    
+    // Unavailable layers (commented out but kept for reference)
+    // 'flood_fema_zones': { table: 'flood_zones', geomCol: 'geom', available: false },
+    // 'sewer_mains': { table: 'utility_sewer', geomCol: 'geom', available: false },
+    // 'water_mains': { table: 'utility_water', geomCol: 'geom', available: false },
+    // 'building_footprints': { table: 'building_footprints', geomCol: 'geom', available: false },
+    // 'wetlands_boundaries': { table: 'wetlands', geomCol: 'geom', available: false },
+    // 'permits_building': { table: 'building_permits', geomCol: 'geom', available: false }
   };
 
   const layer = layerMap[layer_id];
   if (!layer) {
+    const availableLayers = Object.keys(layerMap).filter(id => layerMap[id].available);
     console.error('[get_gis_layers] Unknown layer_id:', layer_id);
-    return { error: `Unknown layer: ${layer_id}. Available layers: ${Object.keys(layerMap).join(', ')}` };
+    return { 
+      error: `Unknown layer: ${layer_id}. Available layers: ${availableLayers.join(', ')}`,
+      available_layers: availableLayers,
+      layer_id
+    };
   }
 
-  // Check if table exists
+  // Verify table still exists (defensive check)
   try {
     const tableCheck = await prisma.$queryRawUnsafe(`
       SELECT EXISTS (
@@ -333,10 +368,13 @@ async function getGisLayers({ layer_id, bbox, parcel_id }) {
     
     if (!tableCheck[0].exists) {
       console.error(`[get_gis_layers] Table does not exist: ${layer.table}`);
+      const availableLayers = Object.keys(layerMap).filter(id => layerMap[id].available);
       return { 
         error: `GIS layer "${layer_id}" is not available. The table "${layer.table}" does not exist in the database.`,
         layer_id,
-        table: layer.table
+        table: layer.table,
+        available_layers: availableLayers,
+        note: 'This layer was marked as available but the table is missing. Please check GIS_TABLES_STATUS.md for current status.'
       };
     }
   } catch (checkErr) {
@@ -505,6 +543,37 @@ async function generateArtifact({ type, parcel_ids, title }) {
     artifact_id: artifactId,
     downloadUrl
   };
+}
+
+async function handleIntelligentSearch(params) {
+  console.log('[IntelligentSearch] Called with:', JSON.stringify(params, null, 2));
+  try {
+    const result = await intelligentPropertySearch(params);
+    console.log(`[IntelligentSearch] Returning ${result.features?.length || 0} results`);
+    return result;
+  } catch (error) {
+    console.error('[IntelligentSearch] Error:', error);
+    return {
+      type: 'FeatureCollection',
+      query_summary: { error: error.message },
+      features: [],
+      summary: `Search failed: ${error.message}`
+    };
+  }
+}
+
+async function getCensusData({ latitude, longitude }) {
+  if (!latitude || !longitude) {
+    return { error: 'latitude and longitude are required' };
+  }
+
+  try {
+    const result = await getDemographicsForLocation(latitude, longitude);
+    return result;
+  } catch (error) {
+    console.error('[Census Tool] Error:', error);
+    return { error: error.message };
+  }
 }
 
 function generateSummary(analysis) {
