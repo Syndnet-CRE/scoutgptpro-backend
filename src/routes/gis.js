@@ -12,15 +12,202 @@ const pool = new Pool({
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
 
+// ============ LAYER CONFIGURATION ============
+// Master layer catalog with local DB + external ArcGIS fallbacks
+const LAYER_CATALOG = {
+  // LOCAL DATA AVAILABLE (query local DB first)
+  'zoning_districts': {
+    displayName: 'Zoning Districts',
+    category: 'Zoning',
+    source: 'local',
+    localTable: 'zoning_districts',
+    geometryColumn: 'geometry',
+    geometryType: 'Polygon',
+    fallbackArcgis: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_1/MapServer/0'
+  },
+
+  // EXTERNAL ARCGIS ONLY (no local data)
+  'fema_flood_zones': {
+    displayName: 'FEMA Flood Zones',
+    category: 'Floodplain',
+    source: 'arcgis',
+    arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Environmental_2/MapServer/1',
+    geometryType: 'Polygon'
+  },
+  'floodplain': {
+    displayName: 'Floodplain',
+    category: 'Floodplain',
+    source: 'arcgis',
+    arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Floodplain/MapServer/0',
+    geometryType: 'Polygon'
+  },
+  'water_mains': {
+    displayName: 'Water Mains',
+    category: 'Water Utilities',
+    source: 'arcgis',
+    arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Water/MapServer/0',
+    geometryType: 'LineString'
+  },
+  'fire_hydrants': {
+    displayName: 'Fire Hydrants',
+    category: 'Water Utilities',
+    source: 'arcgis',
+    arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Water/MapServer/1',
+    geometryType: 'Point'
+  },
+  'water_meters': {
+    displayName: 'Water Meters',
+    category: 'Water Utilities',
+    source: 'arcgis',
+    arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Water/MapServer/2',
+    geometryType: 'Point'
+  },
+  'sewer_mains': {
+    displayName: 'Sewer Mains',
+    category: 'Sewer Utilities',
+    source: 'arcgis',
+    arcgisUrl: 'https://maps.pape-dawson.com/server1/rest/services/LandDevelopment/LANDDEVELOPMENT__Chesmar_SiteSelection/MapServer/55',
+    geometryType: 'LineString'
+  },
+  'sewer_manholes': {
+    displayName: 'Sewer Manholes',
+    category: 'Sewer Utilities',
+    source: 'arcgis',
+    arcgisUrl: 'https://gis.horrocks.com/arcgis/rest/services/TX_9706_24_General/MapServer/22',
+    geometryType: 'Point'
+  },
+  'wetlands': {
+    displayName: 'Wetlands',
+    category: 'Wetlands',
+    source: 'arcgis',
+    arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Environmental_2/MapServer/0',
+    geometryType: 'Polygon'
+  },
+  'building_permits': {
+    displayName: 'Building Permits',
+    category: 'Permits',
+    source: 'arcgis',
+    arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Permits/MapServer/0',
+    geometryType: 'Point'
+  },
+  'parcel_boundaries': {
+    displayName: 'Parcel Boundaries',
+    category: 'Parcels',
+    source: 'arcgis',
+    arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Parcels/MapServer/0',
+    geometryType: 'Polygon'
+  },
+  'gas_mains': {
+    displayName: 'Gas Mains',
+    category: 'Gas Utilities',
+    source: 'arcgis',
+    arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Gas/MapServer/0',
+    geometryType: 'LineString'
+  },
+  'buildings': {
+    displayName: 'Building Footprints',
+    category: 'Buildings',
+    source: 'arcgis',
+    arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Buildings/MapServer/0',
+    geometryType: 'Polygon'
+  },
+  'transit_routes': {
+    displayName: 'Transit Routes',
+    category: 'Transportation',
+    source: 'arcgis',
+    arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Transit/MapServer/0',
+    geometryType: 'LineString'
+  }
+};
+
+// GET /api/gis/catalog - List all available layers with metadata
+router.get('/catalog', async (req, res) => {
+  try {
+    const catalog = [];
+
+    // Check local data availability for each layer
+    for (const [layerId, config] of Object.entries(LAYER_CATALOG)) {
+      let localCount = 0;
+      let localAvailable = false;
+
+      if (config.source === 'local' && config.localTable) {
+        try {
+          const result = await pool.query(`SELECT COUNT(*) as count FROM ${config.localTable}`);
+          localCount = parseInt(result.rows[0].count);
+          localAvailable = localCount > 0;
+        } catch (e) {
+          // Table doesn't exist or error
+        }
+      }
+
+      catalog.push({
+        id: layerId,
+        displayName: config.displayName,
+        category: config.category,
+        geometryType: config.geometryType,
+        source: localAvailable ? 'local' : 'arcgis',
+        localAvailable,
+        localCount,
+        arcgisUrl: config.arcgisUrl || config.fallbackArcgis || null
+      });
+    }
+
+    // Group by category
+    const byCategory = {};
+    for (const layer of catalog) {
+      if (!byCategory[layer.category]) byCategory[layer.category] = [];
+      byCategory[layer.category].push(layer);
+    }
+
+    res.json({
+      success: true,
+      catalog,
+      byCategory,
+      totalLayers: catalog.length,
+      localLayers: catalog.filter(l => l.localAvailable).length,
+      arcgisLayers: catalog.filter(l => !l.localAvailable).length
+    });
+  } catch (error) {
+    console.error('GIS catalog error:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 // GET /api/gis/layers?name=Zoning
 router.get('/layers', async (req, res) => {
   try {
     const { name } = req.query;
-    
+
     console.log('GIS layers request:', { name });
-    
+
     if (name) {
-      // Simple query - find all matching layers
+      // First check LAYER_CATALOG for curated layers
+      const catalogMatch = Object.entries(LAYER_CATALOG).find(([id, config]) =>
+        id.toLowerCase().includes(name.toLowerCase()) ||
+        config.displayName.toLowerCase().includes(name.toLowerCase()) ||
+        config.category.toLowerCase().includes(name.toLowerCase())
+      );
+
+      if (catalogMatch) {
+        const [layerId, config] = catalogMatch;
+        const arcgisUrl = config.arcgisUrl || config.fallbackArcgis;
+
+        return res.json({
+          success: true,
+          layer: {
+            id: layerId,
+            name: config.displayName,
+            displayName: config.displayName,
+            endpoint: arcgisUrl,
+            category: config.category,
+            geometryType: config.geometryType,
+            source: config.source,
+            localTable: config.localTable || null
+          }
+        });
+      }
+
+      // Fallback: query map_server_registry for additional layers
       const allMatching = await prisma.mapServerRegistry.findMany({
         where: {
           AND: [
@@ -35,21 +222,21 @@ router.get('/layers', async (req, res) => {
         },
         take: 20
       });
-      
+
       console.log(`Found ${allMatching.length} matching layers for "${name}"`);
-      
+
       // Prefer Austin/Texas layers
-      let layer = allMatching.find(l => 
+      let layer = allMatching.find(l =>
         l.url?.toLowerCase().includes('austin') ||
         l.url?.toLowerCase().includes('texas') ||
         l.url?.toLowerCase().includes('travis')
       );
-      
+
       // Fallback to first match
       if (!layer && allMatching.length > 0) {
         layer = allMatching[0];
       }
-      
+
       if (layer) {
         // Build endpoint URL
         let endpoint = layer.url;
@@ -59,9 +246,9 @@ router.get('/layers', async (req, res) => {
           // If URL doesn't end with a number, assume layer 0
           endpoint = `${endpoint.replace(/\/$/, '')}/0`;
         }
-        
+
         console.log(`Returning: ${layer.serviceName} -> ${endpoint}`);
-        
+
         return res.json({
           success: true,
           layer: {
@@ -70,23 +257,37 @@ router.get('/layers', async (req, res) => {
             displayName: layer.serviceName,
             endpoint: endpoint,
             category: layer.category,
-            url: layer.url
+            url: layer.url,
+            source: 'registry'
           }
         });
       }
-      
+
       console.log(`No layer found for "${name}"`);
       return res.json({ success: false, error: 'Layer not found' });
     }
-    
-    // Return all active layers
-    const layers = await prisma.mapServerRegistry.findMany({
+
+    // Return curated catalog + registry layers
+    const catalogLayers = Object.entries(LAYER_CATALOG).map(([id, config]) => ({
+      id,
+      name: config.displayName,
+      category: config.category,
+      geometryType: config.geometryType,
+      source: config.source
+    }));
+
+    const registryLayers = await prisma.mapServerRegistry.findMany({
       where: { isActive: true },
       take: 100
     });
-    
-    res.json({ success: true, layers, count: layers.length });
-    
+
+    res.json({
+      success: true,
+      catalogLayers,
+      registryLayers,
+      count: catalogLayers.length + registryLayers.length
+    });
+
   } catch (error) {
     console.error('GIS layers error:', error.message, error.stack);
     res.status(500).json({ success: false, error: error.message });
@@ -97,93 +298,157 @@ router.get('/layers', async (req, res) => {
 router.post('/layers', async (req, res) => {
   try {
     const { action, layer, bbox, opacity = 0.7 } = req.body;
-    
+
     console.log('🗺️ GIS layer action:', { action, layer, bbox });
-    
+
     if (!layer) {
       return res.status(400).json({ success: false, error: 'layer is required' });
     }
-    
-    // Hardcoded canonical map - no DB dependency
-    const CANONICAL = {
-      'zoning_districts': {
-        arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_1/MapServer/0',
-        geometryType: 'Polygon'
-      },
-      'fema_flood_zones': {
-        arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Environmental_2/MapServer/1',
-        geometryType: 'Polygon'
-      },
-      'sewer_mains': {
-        arcgisUrl: 'https://maps.pape-dawson.com/server1/rest/services/LandDevelopment/LANDDEVELOPMENT__Chesmar_SiteSelection/MapServer/55',
-        geometryType: 'LineString'
-      },
-      'sewer_manholes': {
-        arcgisUrl: 'https://gis.horrocks.com/arcgis/rest/services/TX_9706_24_General/MapServer/22',
-        geometryType: 'Point'
-      },
-      'water_mains': {
-        arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Water/MapServer/0',
-        geometryType: 'LineString'
-      },
-      'fire_hydrants': {
-        arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Water/MapServer/1',
-        geometryType: 'Point'
-      },
-      'water_meters': {
-        arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Water/MapServer/2',
-        geometryType: 'Point'
-      },
-      'wetland_types': {
-        arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Environmental_2/MapServer/0',
-        geometryType: 'Polygon'
-      },
-      'building_permits': {
-        arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Permits/MapServer/0',
-        geometryType: 'Point'
-      },
-      'parcel_boundaries': {
-        arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Parcels/MapServer/0',
-        geometryType: 'Polygon'
-      },
-      'gas_mains': {
-        arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Gas/MapServer/0',
-        geometryType: 'LineString'
-      }
-    };
-    
-    // Validate canonical key exists
-    if (!CANONICAL[layer]) {
-      return res.status(400).json({ 
-        success: false, 
-        error: `Unknown canonical layer key: ${layer}. Valid keys: ${Object.keys(CANONICAL).join(', ')}` 
+
+    // Check LAYER_CATALOG first
+    const layerConfig = LAYER_CATALOG[layer];
+
+    if (!layerConfig) {
+      return res.status(400).json({
+        success: false,
+        error: `Unknown layer: ${layer}. Valid layers: ${Object.keys(LAYER_CATALOG).join(', ')}`
       });
     }
-    
-    const layerConfig = CANONICAL[layer];
-    
-    console.log(`[GIS] resolved ${layer} -> ${layerConfig.arcgisUrl}`);
-    
+
+    // Determine data source
+    let useLocal = false;
+    let localCount = 0;
+
+    if (layerConfig.source === 'local' && layerConfig.localTable) {
+      try {
+        const result = await pool.query(`SELECT COUNT(*) as count FROM ${layerConfig.localTable}`);
+        localCount = parseInt(result.rows[0].count);
+        useLocal = localCount > 0;
+      } catch (e) {
+        console.log(`[GIS] Local table ${layerConfig.localTable} not available, using ArcGIS`);
+      }
+    }
+
+    const arcgisUrl = layerConfig.arcgisUrl || layerConfig.fallbackArcgis;
+
+    console.log(`[GIS] ${layer} -> ${useLocal ? 'LOCAL (' + localCount + ' rows)' : 'ArcGIS: ' + arcgisUrl}`);
+
     res.json({
       success: true,
       ok: true,
       action,
       layer,
-      serviceName: layer.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-      arcgisUrl: layerConfig.arcgisUrl,
-      endpoint: layerConfig.arcgisUrl, // Keep for backward compatibility
+      serviceName: layerConfig.displayName,
+      category: layerConfig.category,
       geometryType: layerConfig.geometryType,
+      source: useLocal ? 'local' : 'arcgis',
+      localTable: useLocal ? layerConfig.localTable : null,
+      localCount: useLocal ? localCount : null,
+      arcgisUrl: arcgisUrl,
+      endpoint: arcgisUrl, // Backward compatibility
       bbox,
       opacity
     });
-    
+
   } catch (error) {
     console.error('❌ GIS layer action error:', error);
     res.status(500).json({ success: false, error: error.message });
   }
 });
 
-// GET /api/gis/layers/:id/query - Query specific layer by bbox or geometry
+// GET /api/gis/layers/:layerId/features - Query layer features (local or proxy to ArcGIS)
+router.get('/layers/:layerId/features', async (req, res) => {
+  try {
+    const { layerId } = req.params;
+    const { bbox, lat, lng, radius = 500, limit = 500 } = req.query;
+
+    const layerConfig = LAYER_CATALOG[layerId];
+    if (!layerConfig) {
+      return res.status(404).json({
+        success: false,
+        error: `Unknown layer: ${layerId}`,
+        availableLayers: Object.keys(LAYER_CATALOG)
+      });
+    }
+
+    // Check if local data is available
+    let useLocal = false;
+    if (layerConfig.source === 'local' && layerConfig.localTable) {
+      try {
+        const countResult = await pool.query(`SELECT COUNT(*) FROM ${layerConfig.localTable}`);
+        useLocal = parseInt(countResult.rows[0].count) > 0;
+      } catch (e) {
+        // Table doesn't exist
+      }
+    }
+
+    if (useLocal) {
+      // Query local database
+      let query = `
+        SELECT
+          id,
+          zoning_code,
+          zoning_desc,
+          overlay,
+          ST_AsGeoJSON(${layerConfig.geometryColumn})::json as geometry
+        FROM ${layerConfig.localTable}
+      `;
+      const params = [];
+
+      if (bbox) {
+        const bboxParts = bbox.split(',').map(Number);
+        if (bboxParts.length === 4) {
+          const [west, south, east, north] = bboxParts;
+          query += ` WHERE ST_Intersects(${layerConfig.geometryColumn}, ST_MakeEnvelope($1, $2, $3, $4, 4326))`;
+          params.push(west, south, east, north);
+        }
+      } else if (lat && lng) {
+        query += ` WHERE ST_DWithin(${layerConfig.geometryColumn}::geography, ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography, $3)`;
+        params.push(parseFloat(lng), parseFloat(lat), parseFloat(radius));
+      }
+
+      query += ` LIMIT $${params.length + 1}`;
+      params.push(parseInt(limit));
+
+      console.log(`[GIS] Querying LOCAL ${layerConfig.localTable}`);
+      const result = await pool.query(query, params);
+
+      return res.json({
+        type: 'FeatureCollection',
+        source: 'local',
+        layer: layerId,
+        features: result.rows.map(row => ({
+          type: 'Feature',
+          geometry: row.geometry,
+          properties: {
+            id: row.id,
+            zoning_code: row.zoning_code,
+            zoning_desc: row.zoning_desc,
+            overlay: row.overlay
+          }
+        })),
+        count: result.rows.length
+      });
+    }
+
+    // Return ArcGIS endpoint for client to query directly
+    const arcgisUrl = layerConfig.arcgisUrl || layerConfig.fallbackArcgis;
+    return res.json({
+      success: true,
+      source: 'arcgis',
+      layer: layerId,
+      arcgisUrl,
+      message: 'Query ArcGIS endpoint directly',
+      queryParams: { bbox, lat, lng, radius, limit }
+    });
+
+  } catch (error) {
+    console.error('Error querying layer features:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// GET /api/gis/layers/:id/query - Legacy endpoint (backward compatibility)
 router.get('/layers/:id/query', async (req, res) => {
   try {
     const { id } = req.params;
@@ -224,6 +489,7 @@ router.get('/local/:layerName/geojson', async (req, res) => {
     
     // Whitelist of valid table names (prevent SQL injection)
     const validLayers = {
+      'zoning_districts': 'zoning_districts',  // 22,488 rows - LOCAL DATA
       'water_ccn': 'gis_water_ccn',
       'sewer_ccn': 'gis_sewer_ccn',
       'water_districts': 'gis_water_districts',
@@ -250,7 +516,9 @@ router.get('/local/:layerName/geojson', async (req, res) => {
     `;
     
     // Add specific fields based on table (for better property extraction)
-    if (tableName === 'gis_water_ccn' || tableName === 'gis_sewer_ccn') {
+    if (tableName === 'zoning_districts') {
+      query += `, zoning_code, zoning_desc, overlay`;
+    } else if (tableName === 'gis_water_ccn' || tableName === 'gis_sewer_ccn') {
       query += `, ccn_no, utility, county, type`;
     } else if (tableName === 'gis_water_districts') {
       query += `, district_name, district_type`;
@@ -304,6 +572,9 @@ router.get('/local/:layerName/geojson', async (req, res) => {
         const properties = { ...(row.raw_attributes || {}) };
         
         // Add specific fields to properties
+        if (row.zoning_code) properties.zoning_code = row.zoning_code;
+        if (row.zoning_desc) properties.zoning_desc = row.zoning_desc;
+        if (row.overlay) properties.overlay = row.overlay;
         if (row.ccn_no) properties.ccn_no = row.ccn_no;
         if (row.utility) properties.utility = row.utility;
         if (row.county) properties.county = row.county;

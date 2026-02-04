@@ -311,75 +311,136 @@ async function getOsmNearby({ lat, lng, radius_meters = 500, categories }) {
 
 async function getGisLayers({ layer_id, bbox, parcel_id }) {
   console.log('[get_gis_layers] Called with:', { layer_id, bbox, parcel_id });
-  
+
   /**
    * Map layer_id to actual database table
-   * 
-   * VERIFIED EXISTING TABLES (as of 2026-01-27):
-   * - zoning_districts: ✅ EXISTS (22,488 rows) - geometry column: 'geometry'
-   * - census_tracts: ✅ EXISTS (0 rows) - geometry column: 'geometry'
-   * - parcels_travis: ✅ EXISTS (parcel boundaries) - geometry column: 'geom'
-   * 
-   * MISSING TABLES (not yet imported):
-   * - flood_zones: ❌ Does not exist
-   * - utility_sewer: ❌ Does not exist
-   * - utility_water: ❌ Does not exist
-   * - building_footprints: ❌ Does not exist
-   * - wetlands: ❌ Does not exist
-   * - building_permits: ❌ Does not exist
-   * 
-   * See GIS_TABLES_STATUS.md for full status report
+   *
+   * LOCAL DATA AVAILABLE:
+   * - zoning_districts: ✅ 22,488 rows - geometry column: 'geometry'
+   * - parcels_travis: ✅ parcel boundaries - geometry column: 'geom'
+   *
+   * EXTERNAL ARCGIS ONLY (no local data):
+   * - fema_flood_zones → https://maps.austintexas.gov/arcgis/.../Environmental_2/MapServer/1
+   * - water_mains → https://maps.austintexas.gov/arcgis/.../Water/MapServer/0
+   * - sewer_mains → external ArcGIS
+   * - wetlands → external ArcGIS
+   * - building_permits → external ArcGIS
    */
   const layerMap = {
-    // Available layers
-    'zoning_districts': { table: 'zoning_districts', geomCol: 'geometry', available: true },
-    'census_tracts': { table: 'census_tracts', geomCol: 'geometry', available: true },
-    'parcels_boundaries': { table: 'parcels_travis', geomCol: 'geom', available: true },
-    
-    // Unavailable layers (commented out but kept for reference)
-    // 'flood_fema_zones': { table: 'flood_zones', geomCol: 'geom', available: false },
-    // 'sewer_mains': { table: 'utility_sewer', geomCol: 'geom', available: false },
-    // 'water_mains': { table: 'utility_water', geomCol: 'geom', available: false },
-    // 'building_footprints': { table: 'building_footprints', geomCol: 'geom', available: false },
-    // 'wetlands_boundaries': { table: 'wetlands', geomCol: 'geom', available: false },
-    // 'permits_building': { table: 'building_permits', geomCol: 'geom', available: false }
+    // LOCAL DATA LAYERS
+    'zoning_districts': {
+      table: 'zoning_districts',
+      geomCol: 'geometry',
+      available: true,
+      source: 'local',
+      fallbackArcgis: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_1/MapServer/0'
+    },
+    'parcels_boundaries': {
+      table: 'parcels_travis',
+      geomCol: 'geom',
+      available: true,
+      source: 'local'
+    },
+
+    // EXTERNAL ARCGIS LAYERS (return URL for client-side fetch)
+    'fema_flood_zones': {
+      available: true,
+      source: 'arcgis',
+      arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Environmental_2/MapServer/1'
+    },
+    'floodplain': {
+      available: true,
+      source: 'arcgis',
+      arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Floodplain/MapServer/0'
+    },
+    'water_mains': {
+      available: true,
+      source: 'arcgis',
+      arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Water/MapServer/0'
+    },
+    'sewer_mains': {
+      available: true,
+      source: 'arcgis',
+      arcgisUrl: 'https://maps.pape-dawson.com/server1/rest/services/LandDevelopment/LANDDEVELOPMENT__Chesmar_SiteSelection/MapServer/55'
+    },
+    'wetlands': {
+      available: true,
+      source: 'arcgis',
+      arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Environmental_2/MapServer/0'
+    },
+    'building_permits': {
+      available: true,
+      source: 'arcgis',
+      arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Permits/MapServer/0'
+    },
+    'gas_mains': {
+      available: true,
+      source: 'arcgis',
+      arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Gas/MapServer/0'
+    }
   };
 
   const layer = layerMap[layer_id];
   if (!layer) {
     const availableLayers = Object.keys(layerMap).filter(id => layerMap[id].available);
     console.error('[get_gis_layers] Unknown layer_id:', layer_id);
-    return { 
+    return {
       error: `Unknown layer: ${layer_id}. Available layers: ${availableLayers.join(', ')}`,
       available_layers: availableLayers,
       layer_id
     };
   }
 
-  // Verify table still exists (defensive check)
+  // Handle external ArcGIS layers - return URL for client
+  if (layer.source === 'arcgis') {
+    console.log(`[get_gis_layers] External layer ${layer_id} -> ${layer.arcgisUrl}`);
+    return {
+      layer_id,
+      source: 'arcgis',
+      arcgisUrl: layer.arcgisUrl,
+      message: 'Query this ArcGIS endpoint directly with bbox or geometry',
+      queryHint: `${layer.arcgisUrl}/query?where=1=1&geometry=${JSON.stringify(bbox)}&geometryType=esriGeometryEnvelope&outFields=*&f=geojson`
+    };
+  }
+
+  // LOCAL DATABASE QUERY
+  // Verify table still exists
   try {
     const tableCheck = await prisma.$queryRawUnsafe(`
       SELECT EXISTS (
-        SELECT FROM information_schema.tables 
-        WHERE table_schema = 'public' 
+        SELECT FROM information_schema.tables
+        WHERE table_schema = 'public'
         AND table_name = $1
       ) as exists
     `, layer.table);
-    
+
     if (!tableCheck[0].exists) {
-      console.error(`[get_gis_layers] Table does not exist: ${layer.table}`);
-      const availableLayers = Object.keys(layerMap).filter(id => layerMap[id].available);
-      return { 
-        error: `GIS layer "${layer_id}" is not available. The table "${layer.table}" does not exist in the database.`,
-        layer_id,
-        table: layer.table,
-        available_layers: availableLayers,
-        note: 'This layer was marked as available but the table is missing. Please check GIS_TABLES_STATUS.md for current status.'
+      // Fallback to ArcGIS if available
+      if (layer.fallbackArcgis) {
+        console.log(`[get_gis_layers] Local table missing, using fallback: ${layer.fallbackArcgis}`);
+        return {
+          layer_id,
+          source: 'arcgis_fallback',
+          arcgisUrl: layer.fallbackArcgis,
+          message: 'Local table not available, use ArcGIS endpoint'
+        };
+      }
+      return {
+        error: `GIS layer "${layer_id}" is not available`,
+        layer_id
       };
     }
   } catch (checkErr) {
-    console.error('[get_gis_layers] Error checking table existence:', checkErr.message);
-    return { error: `Failed to verify table existence: ${checkErr.message}`, layer_id };
+    console.error('[get_gis_layers] Error checking table:', checkErr.message);
+    if (layer.fallbackArcgis) {
+      return {
+        layer_id,
+        source: 'arcgis_fallback',
+        arcgisUrl: layer.fallbackArcgis,
+        message: 'Local query failed, use ArcGIS endpoint'
+      };
+    }
+    return { error: `Failed to verify table: ${checkErr.message}`, layer_id };
   }
 
   // Validate required parameters
@@ -398,9 +459,8 @@ async function getGisLayers({ layer_id, bbox, parcel_id }) {
 
   try {
     if (parcel_id) {
-      // Get layers intersecting a specific parcel
       query = `
-        SELECT 
+        SELECT
           l.*,
           ST_AsGeoJSON(l.${layer.geomCol})::json as geometry
         FROM ${layer.table} l
@@ -409,10 +469,10 @@ async function getGisLayers({ layer_id, bbox, parcel_id }) {
         LIMIT 100
       `;
       values = [parcel_id];
-      console.log('[get_gis_layers] Querying by parcel_id:', parcel_id);
+      console.log('[get_gis_layers] Querying LOCAL by parcel_id:', parcel_id);
     } else if (bbox && bbox.length === 4) {
       query = `
-        SELECT 
+        SELECT
           *,
           ST_AsGeoJSON(${layer.geomCol})::json as geometry
         FROM ${layer.table}
@@ -420,15 +480,16 @@ async function getGisLayers({ layer_id, bbox, parcel_id }) {
         LIMIT 500
       `;
       values = bbox;
-      console.log('[get_gis_layers] Querying by bbox:', bbox);
+      console.log('[get_gis_layers] Querying LOCAL by bbox:', bbox);
     }
 
     const result = await prisma.$queryRawUnsafe(query, ...values);
-    console.log(`[get_gis_layers] Success, returning ${result.length} features`);
-    
+    console.log(`[get_gis_layers] LOCAL query success: ${result.length} features`);
+
     return {
       type: 'FeatureCollection',
       layer_id,
+      source: 'local',
       features: result.map(row => ({
         type: 'Feature',
         geometry: row.geometry,
@@ -439,14 +500,20 @@ async function getGisLayers({ layer_id, bbox, parcel_id }) {
     };
   } catch (err) {
     console.error('[get_gis_layers] Query error:', err.message);
-    console.error('[get_gis_layers] Stack:', err.stack);
-    console.error('[get_gis_layers] Query was:', query);
-    console.error('[get_gis_layers] Values were:', values);
-    return { 
-      error: `Failed to query GIS layer: ${err.message}`, 
+    // Fallback to ArcGIS on error
+    if (layer.fallbackArcgis) {
+      return {
+        layer_id,
+        source: 'arcgis_fallback',
+        arcgisUrl: layer.fallbackArcgis,
+        message: 'Local query failed, use ArcGIS endpoint',
+        error: err.message
+      };
+    }
+    return {
+      error: `Failed to query GIS layer: ${err.message}`,
       layer_id,
-      table: layer.table,
-      details: err.message
+      table: layer.table
     };
   }
 }

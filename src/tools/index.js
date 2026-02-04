@@ -222,7 +222,22 @@ Use this for ALL property searches - it provides better results than search_prop
   },
   {
     name: 'get_gis_layers',
-    description: 'Get GIS layer data for a bounding box or specific parcel. Available layers: zoning_districts (zoning boundaries), census_tracts (census tract boundaries), parcels_boundaries (parcel boundaries). Note: Flood zones, utilities, building footprints, wetlands, and permits are not yet available.',
+    description: `Get GIS layer data for a bounding box or specific parcel.
+
+LOCAL DATA (fast, stored in database):
+- zoning_districts: 22,488 zoning polygons for Austin/Travis County
+- parcels_boundaries: Parcel boundaries from Travis CAD
+
+EXTERNAL ARCGIS (queried on-demand):
+- fema_flood_zones: FEMA flood zone boundaries
+- floodplain: Austin floodplain data
+- water_mains: Water utility lines
+- sewer_mains: Sewer utility lines
+- wetlands: Wetland boundaries
+- building_permits: Active building permits
+- gas_mains: Gas utility lines
+
+Returns GeoJSON FeatureCollection for local layers, or ArcGIS endpoint URL for external layers.`,
     input_schema: {
       type: 'object',
       properties: {
@@ -230,10 +245,16 @@ Use this for ALL property searches - it provides better results than search_prop
           type: 'string',
           enum: [
             'zoning_districts',
-            'census_tracts',
-            'parcels_boundaries'
+            'parcels_boundaries',
+            'fema_flood_zones',
+            'floodplain',
+            'water_mains',
+            'sewer_mains',
+            'wetlands',
+            'building_permits',
+            'gas_mains'
           ],
-          description: 'The GIS layer to retrieve. Available: zoning_districts, census_tracts, parcels_boundaries'
+          description: 'The GIS layer to retrieve'
         },
         bbox: {
           type: 'array',
