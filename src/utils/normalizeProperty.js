@@ -1,6 +1,25 @@
 /**
- * Normalizes database field names to frontend-expected names
- * Single source of truth for field mapping
+ * Normalizes raw database rows into a stable API contract
+ * Single source of truth for property field names
+ * 
+ * Database columns → API contract:
+ *   parcel_id → parcelId
+ *   situs_address → address  
+ *   owner_name_raw → owner
+ *   acres_calc → acres
+ *   market_value → marketValue
+ *   assessed_value/assessed_total_value → assessedValue
+ *   asset_class → assetClass
+ *   land_value → landValue
+ *   improvement_value → improvementValue
+ *   year_built → yearBuilt
+ *   building_sqft → buildingSqft
+ *   homestead_exemption_flag → hasHomestead
+ *   tax_delinquent_flag → isTaxDelinquent
+ *   owner_entity_type → ownerType
+ *   zoning_code → zoningCode (if joined)
+ *   flood_zone → floodZone (if joined)
+ *   geom_centroid → DO NOT include in normalized output
  */
 export function normalizeProperty(raw) {
   if (!raw) return null;
@@ -13,49 +32,49 @@ export function normalizeProperty(raw) {
     return null;
   };
 
+  // Get base values for computed fields
+  const acres = parseFloat(pick('acres', 'acres_calc')) || 0;
+  const marketValue = parseFloat(pick('marketValue', 'market_value')) || 0;
+  const improvementValue = parseFloat(pick('improvementValue', 'improvement_value')) || 0;
+
   return {
     // Core identifiers
-    id: pick('parcelId', 'parcel_id', 'id'),
-    parcelId: pick('parcelId', 'parcel_id', 'id'),
+    parcelId: pick('parcelId', 'parcel_id', 'id') || '',
     
     // Display fields
     address: pick('address', 'situs_address') || '',
     owner: pick('owner', 'owner_name_raw') || '',
-    ownerType: pick('ownerType', 'owner_type', 'owner_entity_type') || '',
-    acres: parseFloat(pick('acres', 'acres_calc')) || 0,
+    acres: acres,
     assetClass: pick('assetClass', 'asset_class') || 'unknown',
     
-    // Values
-    marketValue: parseFloat(pick('marketValue', 'market_value')) || 0,
-    assessedValue: parseFloat(pick('assessedValue', 'assessed_total_value')) || 0,
-    landValue: parseFloat(pick('landValue', 'land_value')) || 0,
-    improvementValue: parseFloat(pick('improvementValue', 'improvement_value')) || 0,
-    valuePerAcre: parseFloat(pick('valuePerAcre', 'value_per_acre')) || 0,
-    valuePerSqft: parseFloat(pick('valuePerSqft', 'value_per_sqft')) || 0,
-    improvementRatio: parseFloat(pick('improvementRatio', 'improvement_ratio')) || 0,
+    // Values (always include as null if missing, don't omit)
+    marketValue: marketValue,
+    assessedValue: parseFloat(pick('assessedValue', 'assessed_value', 'assessed_total_value')) || null,
+    landValue: parseFloat(pick('landValue', 'land_value')) || null,
+    improvementValue: improvementValue,
     
-    // Flags
-    taxDelinquent: pick('taxDelinquent', 'tax_delinquent', 'tax_delinquent_flag') ?? false,
-    hasHomestead: pick('hasHomestead', 'homestead', 'homestead_exemption_flag') ?? false,
+    // Computed fields
+    valuePerAcre: (marketValue > 0 && acres > 0) ? Math.round(marketValue / acres) : null,
+    improvementRatio: (marketValue > 0 && improvementValue > 0) ? Math.round((improvementValue / marketValue) * 100) / 100 : null,
     
-    // Zoning & GIS
-    zoningCode: pick('zoningCode', 'zoning_code') || '',
-    zoningDescription: pick('zoningDescription', 'zoning_description') || '',
-    floodZone: pick('floodZone', 'flood_zone') || '',
-    
-    // Building
+    // Building details
     yearBuilt: pick('yearBuilt', 'year_built') || null,
-    buildingSqft: parseFloat(pick('buildingSqft', 'building_sqft')) || 0,
+    buildingSqft: parseFloat(pick('buildingSqft', 'building_sqft')) || null,
     
-    // Scoring
-    motivationScore: parseFloat(pick('motivationScore', 'motivation_score')) || 0,
-    motivationFactors: pick('motivationFactors', 'motivation_factors') || null,
-    opportunityFlags: pick('opportunityFlags', 'opportunity_flags') || null,
+    // Flags (use ?? to preserve false values)
+    hasHomestead: pick('hasHomestead', 'homestead', 'homestead_exemption_flag') ?? false,
+    isTaxDelinquent: pick('isTaxDelinquent', 'taxDelinquent', 'tax_delinquent', 'tax_delinquent_flag') ?? false,
     
-    // Location
-    lat: parseFloat(pick('lat')) || null,
-    lng: parseFloat(pick('lng')) || null,
-    coordinates: pick('coordinates') || null,
+    // Owner details  
+    ownerType: pick('ownerType', 'owner_type', 'owner_entity_type') || '',
+    
+    // GIS fields (if joined)
+    zoningCode: pick('zoningCode', 'zoning_code') || null,
+    floodZone: pick('floodZone', 'flood_zone') || null,
+    
+    // Location (exclude geom_centroid as requested)
+    latitude: parseFloat(pick('latitude', 'lat')) || null,
+    longitude: parseFloat(pick('longitude', 'lng')) || null,
     geometry: pick('geometry', 'geom') || null
   };
 }

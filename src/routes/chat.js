@@ -58,7 +58,68 @@ const getSystemPrompt = () => `You are ScoutGPT, an AI assistant for real estate
 - Property values are in USD, acreage is in acres
 - To find vacant land, use asset_class='land' filter. To find unimproved parcels, search for properties where improvement_value is 0 or very low
 
-${getSchemaPromptSection()}`;
+${getSchemaPromptSection()}
+
+---BEGIN SCHEMA CONTEXT---
+
+## Database Schema — What You Can Query
+
+### Primary table: parcel_features_travis (372K+ parcels in Travis County, TX)
+
+**Queryable columns:**
+| Column | Type | Notes |
+|--------|------|-------|
+| parcel_id | TEXT (PK) | 6-digit ID, e.g. "860761" |
+| county_fips | TEXT | Always "48453" for Travis |
+| situs_address | TEXT | Full address, e.g. "1234 Main St, Austin, TX 78701" |
+| owner_name_raw | TEXT | Owner name |
+| owner_entity_type | TEXT | Values: "individual", "corporate", "trust_estate", "llc_lp", "government" |
+| owner_segment | TEXT | Values: same as owner_entity_type |
+| acres_calc | NUMERIC | Lot size in acres |
+| asset_class | TEXT | Values: "land", "residential", "commercial", "industrial", "unknown" |
+| market_value | NUMERIC | Assessed market value in dollars |
+| assessed_total_value | NUMERIC | Assessed total value |
+| tax_delinquent_flag | BOOLEAN | true = delinquent on taxes |
+| homestead_exemption_flag | BOOLEAN | true = has homestead |
+| mail_zip | TEXT | Mailing ZIP code |
+| land_use_code | TEXT | Land use category code |
+| land_use_desc | TEXT | Land use description |
+| geom_centroid | GEOMETRY(Point) | Centroid for spatial queries |
+
+**Enrichment table: parcels_travis_enrichment (LEFT JOIN on parcel_id)**
+| Column | Type | Notes |
+|--------|------|-------|
+| land_value | NUMERIC | Land-only value |
+| improvement_value | NUMERIC | Improvement (building) value |
+| year_built | INTEGER | Year built (null for vacant) |
+| zoning_code | TEXT | Zoning designation |
+| flood_zone | TEXT | FEMA flood zone |
+| last_sale_date | DATE | Last recorded sale |
+| last_sale_price | NUMERIC | Last sale price |
+
+**Spatial table: parcels_travis (LEFT JOIN on parcel_id)**
+| Column | Type | Notes |
+|--------|------|-------|
+| geom | GEOMETRY(MultiPolygon) | Full parcel boundary |
+
+### How to filter:
+- ZIP code: Parse from situs_address using LIKE '%78702%'
+- City: Parse from situs_address using ILIKE '%austin%'
+- There is NO separate situs_zip or situs_city column
+- There is NO is_vacant column — infer from asset_class = 'land'
+- Use homestead_exemption_flag (not has_homestead)
+- Use tax_delinquent_flag (not is_tax_delinquent)
+
+### Derived metrics (computed by backend, not in DB):
+- valuePerAcre = market_value / acres_calc
+- valuePerSqft = market_value / (acres_calc * 43560)
+- improvementRatio = improvement_value / market_value
+
+### Geographic coverage:
+- Travis County, Texas only (county_fips = 48453)
+- Bounding box: [-98.17, 30.07, -97.37, 30.63]
+
+---END SCHEMA CONTEXT---`;
 
 /**
  * POST /api/chat
@@ -295,6 +356,7 @@ router.post('/', async (req, res) => {
       ...(claudeSessionId && { claudeSessionId }),
       ...(mapData && { mapData }),
       ...(artifact && { artifact }),
+      toolCalls: allToolUses, // List of tools Claude called
       usage: {
         inputTokens: totalInputTokens,
         outputTokens: totalOutputTokens,

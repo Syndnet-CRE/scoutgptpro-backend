@@ -251,6 +251,25 @@ class MCPServerManager {
       await this.connectServer(serverName, config);
     }
   }
+
+  /**
+   * List tools for a specific server
+   */
+  async listTools(serverName) {
+    const client = this.clients.get(serverName);
+    
+    if (!client) {
+      throw new Error(`MCP server ${serverName} not connected`);
+    }
+
+    try {
+      const result = await client.listTools();
+      return result.tools || [];
+    } catch (error) {
+      console.error(`[MCP] Failed to list tools for ${serverName}:`, error);
+      throw error;
+    }
+  }
 }
 
 // Singleton instance

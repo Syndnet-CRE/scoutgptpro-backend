@@ -7,6 +7,7 @@ import { webSearch } from '../services/webSearch/index.js';
 import { createArtifact } from '../services/artifacts/index.js';
 import { intelligentPropertySearch } from '../services/query-orchestrator/index.js';
 import { getDemographicsForLocation } from '../services/census/index.js';
+import { normalizeProperty, normalizeProperties } from '../utils/normalizeProperty.js';
 
 const prisma = new PrismaClient();
 
@@ -103,39 +104,68 @@ async function searchProperties({ filters = {}, limit = 50, bbox }) {
 
   const query = `
     SELECT 
-      parcel_id,
-      situs_address,
-      owner_name_raw,
-      acres_calc,
-      asset_class,
-      market_value,
-      tax_delinquent_flag,
-      homestead_exemption_flag,
-      mail_zip,
-      ST_AsGeoJSON(geom_centroid)::json as geometry
-    FROM parcel_features_travis
+      pft.parcel_id,
+      pft.situs_address,
+      pft.owner_name_raw,
+      pft.owner_entity_type,
+      pft.owner_segment,
+      pft.acres_calc,
+      pft.asset_class,
+      pft.market_value,
+      pft.assessed_total_value,
+      pft.tax_delinquent_flag,
+      pft.homestead_exemption_flag,
+      pft.mail_zip,
+      pft.land_use_code,
+      pft.land_use_desc,
+      -- Enrichment fields
+      e.land_value,
+      e.improvement_value,
+      e.year_built,
+      e.zoning_code,
+      e.flood_zone,
+      e.last_sale_date,
+      e.last_sale_price,
+      -- Geometry
+      ST_AsGeoJSON(pft.geom_centroid)::json as geometry
+    FROM parcel_features_travis pft
+    LEFT JOIN parcels_travis_enrichment e 
+      ON pft.parcel_id = e.parcel_id
     WHERE ${conditions.join(' AND ')}
-    ORDER BY acres_calc DESC
+    ORDER BY pft.acres_calc DESC
     LIMIT $${paramIndex}
   `;
 
   const result = await prisma.$queryRawUnsafe(query, ...values);
   
-  // Convert to GeoJSON FeatureCollection
-  const features = result.map(row => ({
+  // Compute derived metrics for each row
+  const rowsWithMetrics = result.map(row => {
+    const acres = parseFloat(row.acres_calc) || 0;
+    const marketVal = parseFloat(row.market_value) || 0;
+    const improvVal = parseFloat(row.improvement_value) || 0;
+    
+    return {
+      ...row,
+      value_per_acre: acres > 0 ? Math.round(marketVal / acres) : null,
+      value_per_sqft: acres > 0 ? Math.round(marketVal / (acres * 43560) * 100) / 100 : null,
+      improvement_ratio: marketVal > 0 ? Math.round((improvVal / marketVal) * 100) / 100 : null,
+    };
+  });
+  
+  // Convert to GeoJSON FeatureCollection with normalized properties
+  const features = rowsWithMetrics.map(row => ({
     type: 'Feature',
     geometry: row.geometry,
-    properties: {
-      parcel_id: row.parcel_id,
-      address: row.situs_address,
-      owner: row.owner_name_raw,
-      acres: row.acres_calc,
-      asset_class: row.asset_class,
-      market_value: row.market_value,
-      tax_delinquent: row.tax_delinquent_flag,
-      homestead: row.homestead_exemption_flag,
+    properties: normalizeProperty({
+      ...row,
+      // Map additional fields that might not be in normalizeProperty
+      last_sale_date: row.last_sale_date,
+      last_sale_price: row.last_sale_price,
+      land_use_code: row.land_use_code,
+      land_use_desc: row.land_use_desc,
+      owner_segment: row.owner_segment,
       zip: row.mail_zip
-    }
+    })
   }));
 
     return {
@@ -163,14 +193,39 @@ async function getProperty({ parcel_id }) {
   try {
     const result = await prisma.$queryRawUnsafe(`
     SELECT 
-      pf.*,
-      ST_Y(pf.geom_centroid) as latitude,
-      ST_X(pf.geom_centroid) as longitude,
-      ST_AsGeoJSON(pf.geom_centroid)::json as centroid_geom,
+      pft.parcel_id,
+      pft.situs_address,
+      pft.owner_name_raw,
+      pft.owner_entity_type,
+      pft.owner_segment,
+      pft.acres_calc,
+      pft.asset_class,
+      pft.market_value,
+      pft.assessed_total_value,
+      pft.tax_delinquent_flag,
+      pft.homestead_exemption_flag,
+      pft.mail_zip,
+      pft.land_use_code,
+      pft.land_use_desc,
+      -- Enrichment fields
+      e.land_value,
+      e.improvement_value,
+      e.year_built,
+      e.zoning_code,
+      e.flood_zone,
+      e.last_sale_date,
+      e.last_sale_price,
+      -- Geometry
+      ST_Y(pft.geom_centroid) as latitude,
+      ST_X(pft.geom_centroid) as longitude,
+      ST_AsGeoJSON(pft.geom_centroid)::json as centroid_geom,
       ST_AsGeoJSON(pt.geom)::json as parcel_geom
-    FROM parcel_features_travis pf
-    LEFT JOIN parcels_travis pt ON pf.parcel_id = pt.parcel_id
-    WHERE pf.parcel_id = $1
+    FROM parcel_features_travis pft
+    LEFT JOIN parcels_travis_enrichment e 
+      ON pft.parcel_id = e.parcel_id
+    LEFT JOIN parcels_travis pt 
+      ON pft.parcel_id = pt.parcel_id
+    WHERE pft.parcel_id = $1
   `, parcel_id);
 
   if (result.length === 0) {
@@ -178,29 +233,20 @@ async function getProperty({ parcel_id }) {
   }
 
   const row = result[0];
-  return {
-    parcel_id: row.parcel_id,
-    address: row.situs_address,
-    owner: row.owner_name_raw,
-    owner_type: row.owner_entity_type,
-    acres: row.acres_calc,
-    asset_class: row.asset_class,
-    year_built: row.year_built,
-    building_sqft: row.building_sqft,
-    market_value: row.market_value,
-    land_value: row.land_value,
-    improvement_value: row.improvement_value,
-    tax_delinquent: row.tax_delinquent_flag,
-    homestead: row.homestead_exemption_flag,
-    zoning_code: row.zoning_code,
-    flood_zone: row.flood_zone,
-    land_use: row.land_use_desc,
+  
+  // Return normalized property object
+  return normalizeProperty({
+    ...row,
+    // Map additional fields that might not be in normalizeProperty
     last_sale_date: row.last_sale_date,
     last_sale_price: row.last_sale_price,
+    land_use: row.land_use_desc,
+    land_use_code: row.land_use_code,
+    owner_segment: row.owner_segment,
     latitude: row.latitude,
     longitude: row.longitude,
     geometry: row.parcel_geom || row.centroid_geom
-  };
+  });
   } catch (error) {
     console.error('[getProperty] Error:', error.message);
     return { error: error.message, parcel_id };
@@ -339,91 +385,53 @@ async function getGisLayers({ layer_id, bbox, parcel_id }) {
 
   /**
    * Map layer_id to actual database table
-   *
-   * LOCAL DATA AVAILABLE (all use 'geometry' column):
-   * - zoning_districts: ✅ 22,488 rows
-   * - parcels_travis: ✅ parcel boundaries (uses 'geom' column)
-   * - gis_floodplain_austin: ✅ Austin floodplain data
-   * - gis_water_ccn: ✅ Water CCN boundaries
-   * - gis_sewer_ccn: ✅ Sewer CCN boundaries
-   * - gis_wetlands_cef: ✅ CEF wetlands
-   * - gis_contours_austin: ✅ Elevation contours
-   * - gis_cef_buffers: ✅ CEF biological buffers
-   * - gis_water_districts: ✅ Water/wastewater districts
+   * Based on task requirements - only zoning_districts and parcels_travis exist
    */
   const layerMap = {
-    // LOCAL DATA LAYERS
+    // AVAILABLE TABLES
     'zoning_districts': {
       table: 'zoning_districts',
       geomCol: 'geometry',
       available: true,
-      source: 'local',
-      fallbackArcgis: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Zoning_1/MapServer/0'
+      source: 'local'
     },
-    'parcels_boundaries': {
+    'parcels_travis': {
       table: 'parcels_travis',
       geomCol: 'geom',
       available: true,
       source: 'local'
     },
-    'floodplain': {
-      table: 'gis_floodplain_austin',
-      geomCol: 'geometry',
-      available: true,
-      source: 'local'
+
+    // TABLES THAT DO NOT EXIST (per task requirements)
+    'flood_zones': {
+      available: false,
+      source: 'not_available',
+      message: 'Layer not available'
     },
-    'water_mains': {
-      table: 'gis_water_ccn',
-      geomCol: 'geometry',
-      available: true,
-      source: 'local'
+    'utility_sewer': {
+      available: false,
+      source: 'not_available', 
+      message: 'Layer not available'
     },
-    'sewer_mains': {
-      table: 'gis_sewer_ccn',
-      geomCol: 'geometry',
-      available: true,
-      source: 'local'
+    'utility_water': {
+      available: false,
+      source: 'not_available',
+      message: 'Layer not available'
+    },
+    'building_footprints': {
+      available: false,
+      source: 'not_available',
+      message: 'Layer not available'
     },
     'wetlands': {
-      table: 'gis_wetlands_cef',
-      geomCol: 'geometry',
-      available: true,
-      source: 'local'
-    },
-    'contours': {
-      table: 'gis_contours_austin',
-      geomCol: 'geometry',
-      available: true,
-      source: 'local'
-    },
-    'cef_buffers': {
-      table: 'gis_cef_buffers',
-      geomCol: 'geometry',
-      available: true,
-      source: 'local'
-    },
-    'water_districts': {
-      table: 'gis_water_districts',
-      geomCol: 'geometry',
-      available: true,
-      source: 'local'
-    },
-
-    // NOT YET LOADED (return informative message)
-    'fema_flood_zones': {
       available: false,
-      source: 'not_loaded',
-      message: 'FEMA flood data not yet imported. Use floodplain layer for local Austin flood data.'
+      source: 'not_available',
+      message: 'Layer not available'
     },
     'building_permits': {
       available: false,
-      source: 'not_loaded',
-      message: 'Building permits not yet imported.'
-    },
-    'gas_mains': {
-      available: false,
-      source: 'not_loaded',
-      message: 'Gas infrastructure not yet imported.'
+      source: 'not_available',
+      message: 'Layer not available'
     }
   };
 
@@ -438,13 +446,11 @@ async function getGisLayers({ layer_id, bbox, parcel_id }) {
     };
   }
 
-  // Handle not-yet-loaded layers
-  if (layer.source === 'not_loaded') {
-    console.log(`[get_gis_layers] Layer not loaded: ${layer_id}`);
+  // Handle not-available layers
+  if (layer.source === 'not_available') {
+    console.log(`[get_gis_layers] Layer not available: ${layer_id}`);
     return {
-      layer_id,
-      source: 'not_loaded',
-      message: layer.message
+      error: layer.message
     };
   }
 
@@ -564,7 +570,7 @@ async function getGisLayers({ layer_id, bbox, parcel_id }) {
 }
 
 async function generateArtifact({ type, parcel_ids, title }) {
-  // Get property data for the artifact
+  // Get property data for the artifact (already normalized by getProperty)
   const properties = await Promise.all(
     parcel_ids.slice(0, 10).map(id => getProperty({ parcel_id: id }))
   );

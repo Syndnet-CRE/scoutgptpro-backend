@@ -98,7 +98,7 @@ Use this for ALL property searches - it provides better results than search_prop
             asset_class: {
               type: 'string',
               enum: ['land', 'residential', 'commercial', 'industrial'],
-              description: 'Property type: residential, commercial, land, industrial, mixed, unknown'
+              description: 'Property type. Valid values: "land", "residential", "commercial", "industrial"'
             },
             zoning_code: {
               type: 'string',
@@ -106,11 +106,11 @@ Use this for ALL property searches - it provides better results than search_prop
             },
             has_homestead: {
               type: 'boolean',
-              description: 'Filter by homestead exemption status (true = owner-occupied, false = investment property)'
+              description: 'Filter by homestead exemption status (maps to homestead_exemption_flag - true = owner-occupied, false = investment property)'
             },
             is_tax_delinquent: {
               type: 'boolean',
-              description: 'Filter for tax delinquent properties'
+              description: 'Filter for tax delinquent properties (maps to tax_delinquent_flag)'
             }
           }
         },
