@@ -665,9 +665,7 @@ Based on the audit findings, corrected ETL scripts have been created:
    - LLC/Corp → 'small_operator'
    - Person → 'mom_pop'
    - Trust/Estate → 'local_owner'
-4. **Default:** 'local_owner' (safer than 'unknown')
-
-**Key Finding:** 
+4. **Default:** 'local_owner' (safer than 'unknown')**Key Finding:** 
 - `owner_portfolio_count_travis` is all 0 (not useful)
 - `mail_state` in `parcel_features_travis` is NULL, but available in `parcels_travis_enrichment.raw`
 
