@@ -13,6 +13,8 @@ import {
   getClaudeSession
 } from '../services/claude-writeback/index.js';
 import { extractEnrichments } from '../services/claude-writeback/enrichment-extractor.js';
+import { getSchemaPromptSection } from '../services/query-orchestrator/schemaContext.js';
+import { normalizeProperty } from '../utils/normalizeProperty.js';
 
 const router = express.Router();
 
@@ -23,7 +25,7 @@ const client = new Anthropic({
 const MODEL = 'claude-sonnet-4-20250514';
 const MAX_ITERATIONS = 10;
 
-const SYSTEM_PROMPT = `You are ScoutGPT, an AI assistant for real estate investors analyzing properties in Travis County, Texas.
+const getSystemPrompt = () => `You are ScoutGPT, an AI assistant for real estate investors analyzing properties in Travis County, Texas.
 
 ## Your Data Sources
 - Property database with 372,000+ parcels (parcel_features_travis)
@@ -48,11 +50,15 @@ const SYSTEM_PROMPT = `You are ScoutGPT, an AI assistant for real estate investo
 - If a query is ambiguous, ask for clarification
 
 ## Important
-- Always use search_properties when user asks to find/show/search properties
+- Use intelligent_property_search for ALL property searches - it handles natural language, location context, and complex filters
+- Use search_properties only for simple filter-only queries with known exact values (deprecated, prefer intelligent_property_search)
 - Use analyze_property for feasibility questions
 - Use generate_artifact when user wants reports or downloadable content
 - Use web_search for market conditions or current news
-- Property values are in USD, acreage is in acres`;
+- Property values are in USD, acreage is in acres
+- To find vacant land, use asset_class='land' filter. To find unimproved parcels, search for properties where improvement_value is 0 or very low
+
+${getSchemaPromptSection()}`;
 
 /**
  * POST /api/chat
@@ -91,7 +97,7 @@ router.post('/', async (req, res) => {
         const session = await createClaudeSession({
           sessionId,
           model: MODEL,
-          systemPrompt: SYSTEM_PROMPT
+          systemPrompt: getSystemPrompt()
         });
         claudeSessionId = session.id;
         isNewSession = true;
@@ -123,7 +129,7 @@ router.post('/', async (req, res) => {
     }));
 
     // Tool-use loop
-    let mapData = null;
+    let mapDataCollections = [];
     let artifact = null;
     let iterations = 0;
     let totalInputTokens = 0;
@@ -135,7 +141,7 @@ router.post('/', async (req, res) => {
     let response = await client.messages.create({
       model: MODEL,
       max_tokens: 4096,
-      system: SYSTEM_PROMPT,
+      system: getSystemPrompt(),
       tools: TOOLS,
       messages: claudeMessages
     });
@@ -166,10 +172,11 @@ router.post('/', async (req, res) => {
           const result = await routeToolCall(toolUse.name, toolUse.input);
           
           // Capture map data and artifacts
-          if (toolUse.name === 'search_properties' || toolUse.name === 'get_gis_layers') {
-            if (result.type === 'FeatureCollection') {
-              mapData = result;
-              console.log(`[Chat] Captured mapData with ${result.features?.length || 0} features`);
+          const MAP_TOOLS = ['search_properties', 'intelligent_property_search', 'get_gis_layers'];
+          if (MAP_TOOLS.includes(toolUse.name)) {
+            if (result && result.type === 'FeatureCollection') {
+              mapDataCollections.push(result);
+              console.log(`[Chat] Captured mapData collection with ${result.features?.length || 0} features`);
             }
           }
           if (toolUse.name === 'generate_artifact') {
@@ -206,7 +213,7 @@ router.post('/', async (req, res) => {
       response = await client.messages.create({
         model: MODEL,
         max_tokens: 4096,
-        system: SYSTEM_PROMPT,
+        system: getSystemPrompt(),
         tools: TOOLS,
         messages: [
           ...claudeMessages,
@@ -254,6 +261,32 @@ router.post('/', async (req, res) => {
       }
     }
 
+    // Merge mapData collections
+    let mapData = null;
+    if (mapDataCollections.length === 1) {
+      mapData = mapDataCollections[0];
+    } else if (mapDataCollections.length > 1) {
+      mapData = {
+        type: 'FeatureCollection',
+        features: mapDataCollections.flatMap(fc => fc.features || []),
+        metadata: {
+          sources: mapDataCollections.map((fc, i) => ({
+            index: i,
+            count: (fc.features || []).length,
+            ...(fc.metadata || {})
+          }))
+        }
+      };
+    }
+
+    // Normalize feature properties to camelCase
+    if (mapData && mapData.features) {
+      mapData.features = mapData.features.map(f => ({
+        ...f,
+        properties: normalizeProperty(f.properties)
+      }));
+    }
+
     // Build response
     const chatResponse = {
       success: true,
@@ -269,7 +302,7 @@ router.post('/', async (req, res) => {
       }
     };
 
-    console.log(`[Chat] Response: ${message.slice(0, 100)}... mapData: ${!!mapData}, artifact: ${!!artifact}`);
+    console.log(`[Chat] Response: ${message.slice(0, 100)}... mapData: ${!!mapData} (${mapDataCollections.length} collections), artifact: ${!!artifact}`);
     
     res.json(chatResponse);
 

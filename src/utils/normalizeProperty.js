@@ -5,41 +5,58 @@
 export function normalizeProperty(raw) {
   if (!raw) return null;
   
-  // If already normalized (has camelCase fields), return as-is
-  if (raw.address && !raw.situs_address) return raw;
-  
+  // Helper: grab first non-null value
+  const pick = (...keys) => {
+    for (const k of keys) {
+      if (raw[k] !== undefined && raw[k] !== null) return raw[k];
+    }
+    return null;
+  };
+
   return {
     // Core identifiers
-    id: raw.parcel_id || raw.id,
-    parcelId: raw.parcel_id || raw.parcelId,
+    id: pick('parcelId', 'parcel_id', 'id'),
+    parcelId: pick('parcelId', 'parcel_id', 'id'),
     
     // Display fields
-    address: raw.situs_address || raw.address || '',
-    owner: raw.owner_name_raw || raw.owner || '',
-    acres: parseFloat(raw.acres_calc) || parseFloat(raw.acres) || 0,
-    propertyType: raw.asset_class || raw.propertyType || 'unknown',
-    assetClass: raw.asset_class || raw.assetClass || 'unknown',
+    address: pick('address', 'situs_address') || '',
+    owner: pick('owner', 'owner_name_raw') || '',
+    ownerType: pick('ownerType', 'owner_type', 'owner_entity_type') || '',
+    acres: parseFloat(pick('acres', 'acres_calc')) || 0,
+    assetClass: pick('assetClass', 'asset_class') || 'unknown',
     
     // Values
-    marketValue: parseFloat(raw.market_value) || parseFloat(raw.marketValue) || 0,
-    assessedValue: parseFloat(raw.assessed_total_value) || parseFloat(raw.assessedValue) || 0,
-    landValue: parseFloat(raw.land_value) || parseFloat(raw.landValue) || 0,
-    improvementValue: parseFloat(raw.improvement_value) || parseFloat(raw.improvementValue) || 0,
+    marketValue: parseFloat(pick('marketValue', 'market_value')) || 0,
+    assessedValue: parseFloat(pick('assessedValue', 'assessed_total_value')) || 0,
+    landValue: parseFloat(pick('landValue', 'land_value')) || 0,
+    improvementValue: parseFloat(pick('improvementValue', 'improvement_value')) || 0,
+    valuePerAcre: parseFloat(pick('valuePerAcre', 'value_per_acre')) || 0,
+    valuePerSqft: parseFloat(pick('valuePerSqft', 'value_per_sqft')) || 0,
+    improvementRatio: parseFloat(pick('improvementRatio', 'improvement_ratio')) || 0,
     
     // Flags
-    taxDelinquent: raw.tax_delinquent_flag ?? raw.taxDelinquent ?? false,
-    homesteadExemption: raw.homestead_exemption_flag ?? raw.homesteadExemption ?? false,
+    taxDelinquent: pick('taxDelinquent', 'tax_delinquent', 'tax_delinquent_flag') ?? false,
+    hasHomestead: pick('hasHomestead', 'homestead', 'homestead_exemption_flag') ?? false,
     
-    // Owner details
-    ownerEntityType: raw.owner_entity_type || raw.ownerEntityType || '',
-    ownerSegment: raw.owner_segment || raw.ownerSegment || '',
+    // Zoning & GIS
+    zoningCode: pick('zoningCode', 'zoning_code') || '',
+    zoningDescription: pick('zoningDescription', 'zoning_description') || '',
+    floodZone: pick('floodZone', 'flood_zone') || '',
+    
+    // Building
+    yearBuilt: pick('yearBuilt', 'year_built') || null,
+    buildingSqft: parseFloat(pick('buildingSqft', 'building_sqft')) || 0,
+    
+    // Scoring
+    motivationScore: parseFloat(pick('motivationScore', 'motivation_score')) || 0,
+    motivationFactors: pick('motivationFactors', 'motivation_factors') || null,
+    opportunityFlags: pick('opportunityFlags', 'opportunity_flags') || null,
     
     // Location
-    coordinates: raw.geom?.coordinates || raw.coordinates || null,
-    geometry: raw.geom || raw.geometry || null,
-    
-    // Preserve original for debugging
-    _raw: raw
+    lat: parseFloat(pick('lat')) || null,
+    lng: parseFloat(pick('lng')) || null,
+    coordinates: pick('coordinates') || null,
+    geometry: pick('geometry', 'geom') || null
   };
 }
 

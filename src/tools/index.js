@@ -104,10 +104,6 @@ Use this for ALL property searches - it provides better results than search_prop
               type: 'string',
               description: 'Zoning code (e.g., "SF-3", "GR")'
             },
-            is_vacant: {
-              type: 'boolean',
-              description: 'Filter for vacant land (asset_class contains "land" or "vacant")'
-            },
             has_homestead: {
               type: 'boolean',
               description: 'Filter by homestead exemption status (true = owner-occupied, false = investment property)'
@@ -227,17 +223,20 @@ Use this for ALL property searches - it provides better results than search_prop
 LOCAL DATA (fast, stored in database):
 - zoning_districts: 22,488 zoning polygons for Austin/Travis County
 - parcels_boundaries: Parcel boundaries from Travis CAD
+- floodplain: Austin floodplain data (gis_floodplain_austin)
+- water_mains: Water CCN boundaries (gis_water_ccn)
+- sewer_mains: Sewer CCN boundaries (gis_sewer_ccn)
+- wetlands: CEF wetlands (gis_wetlands_cef)
+- contours: Elevation contours (gis_contours_austin)
+- cef_buffers: CEF biological buffers (gis_cef_buffers)
+- water_districts: Water/wastewater districts (gis_water_districts)
 
-EXTERNAL ARCGIS (queried on-demand):
-- fema_flood_zones: FEMA flood zone boundaries
-- floodplain: Austin floodplain data
-- water_mains: Water utility lines
-- sewer_mains: Sewer utility lines
-- wetlands: Wetland boundaries
-- building_permits: Active building permits
-- gas_mains: Gas utility lines
+NOT YET LOADED:
+- fema_flood_zones: FEMA flood data (use floodplain instead)
+- building_permits: Building permits (not yet imported)
+- gas_mains: Gas infrastructure (not yet imported)
 
-Returns GeoJSON FeatureCollection for local layers, or ArcGIS endpoint URL for external layers.`,
+Returns GeoJSON FeatureCollection for local layers, or error message for unavailable layers.`,
     input_schema: {
       type: 'object',
       properties: {
@@ -246,11 +245,14 @@ Returns GeoJSON FeatureCollection for local layers, or ArcGIS endpoint URL for e
           enum: [
             'zoning_districts',
             'parcels_boundaries',
-            'fema_flood_zones',
             'floodplain',
             'water_mains',
             'sewer_mains',
             'wetlands',
+            'contours',
+            'cef_buffers',
+            'water_districts',
+            'fema_flood_zones',
             'building_permits',
             'gas_mains'
           ],

@@ -46,18 +46,20 @@ export async function executeTool(toolName, toolInput) {
 // ============ TOOL IMPLEMENTATIONS ============
 
 async function searchProperties({ filters = {}, limit = 50, bbox }) {
-  const conditions = ['1=1'];
-  const values = [];
-  let paramIndex = 1;
+  try {
+    const conditions = ['1=1'];
+    const values = [];
+    let paramIndex = 1;
 
   // Build WHERE conditions from filters
+  // Note: mail_city and mail_zip are NULL in database - use situs_address parsing instead
   if (filters.zip_code) {
-    conditions.push(`mail_zip = $${paramIndex++}`);
+    conditions.push(`situs_address LIKE '%' || $${paramIndex++} || '%'`);
     values.push(filters.zip_code);
   }
   if (filters.city) {
-    conditions.push(`mail_city ILIKE $${paramIndex++}`);
-    values.push(`%${filters.city}%`);
+    conditions.push(`situs_address ILIKE '%' || $${paramIndex++} || '%'`);
+    values.push(filters.city);
   }
   if (filters.zoning_code) {
     conditions.push(`zoning_code = $${paramIndex++}`);
@@ -82,9 +84,6 @@ async function searchProperties({ filters = {}, limit = 50, bbox }) {
   if (filters.asset_class) {
     conditions.push(`LOWER(asset_class) = LOWER($${paramIndex++})`);
     values.push(filters.asset_class);
-  }
-  if (filters.is_vacant === true) {
-    conditions.push(`(asset_class ILIKE '%land%' OR asset_class ILIKE '%vacant%')`);
   }
   if (filters.has_homestead !== undefined) {
     conditions.push(`homestead_exemption_flag = $${paramIndex++}`);
@@ -139,18 +138,30 @@ async function searchProperties({ filters = {}, limit = 50, bbox }) {
     }
   }));
 
-  return {
-    type: 'FeatureCollection',
-    features,
-    metadata: {
-      count: features.length,
-      query_filters: filters
-    }
-  };
+    return {
+      type: 'FeatureCollection',
+      features,
+      metadata: {
+        count: features.length,
+        query_filters: filters
+      }
+    };
+  } catch (error) {
+    console.error('[searchProperties] Error:', error.message);
+    return {
+      type: 'FeatureCollection',
+      features: [],
+      metadata: {
+        error: error.message,
+        count: 0
+      }
+    };
+  }
 }
 
 async function getProperty({ parcel_id }) {
-  const result = await prisma.$queryRawUnsafe(`
+  try {
+    const result = await prisma.$queryRawUnsafe(`
     SELECT 
       pf.*,
       ST_Y(pf.geom_centroid) as latitude,
@@ -190,6 +201,10 @@ async function getProperty({ parcel_id }) {
     longitude: row.longitude,
     geometry: row.parcel_geom || row.centroid_geom
   };
+  } catch (error) {
+    console.error('[getProperty] Error:', error.message);
+    return { error: error.message, parcel_id };
+  }
 }
 
 async function analyzeProperty({ parcel_ids }) {
@@ -221,92 +236,102 @@ async function webSearchTool({ query, search_type = 'general', location }) {
 }
 
 async function getOsmNearby({ lat, lng, radius_meters = 500, categories }) {
-  // Query OSM via existing endpoint logic or Overpass API
-  const categoryMap = {
-    restaurant: 'amenity=restaurant',
-    retail: 'shop',
-    transit: 'public_transport',
-    school: 'amenity=school',
-    park: 'leisure=park',
-    hospital: 'amenity=hospital',
-    bank: 'amenity=bank',
-    grocery: 'shop=supermarket'
-  };
+  try {
+    // Query OSM via existing endpoint logic or Overpass API
+    const categoryMap = {
+      restaurant: 'amenity=restaurant',
+      retail: 'shop',
+      transit: 'public_transport',
+      school: 'amenity=school',
+      park: 'leisure=park',
+      hospital: 'amenity=hospital',
+      bank: 'amenity=bank',
+      grocery: 'shop=supermarket'
+    };
 
-  // Query osm_pois_travis table
-  let query;
-  let values;
+    // Query osm_pois_travis table
+    let query;
+    let values;
 
-  if (categories && Array.isArray(categories) && categories.length > 0) {
-    query = `
-      SELECT 
-        id,
-        name,
-        category,
-        subcategory,
-        latitude,
-        longitude,
-        address,
-        ST_AsGeoJSON(geom)::json as geometry,
-        ST_Distance(
+    if (categories && Array.isArray(categories) && categories.length > 0) {
+      query = `
+        SELECT 
+          id,
+          name,
+          category,
+          subcategory,
+          latitude,
+          longitude,
+          address,
+          ST_AsGeoJSON(geom)::json as geometry,
+          ST_Distance(
+            geom::geography,
+            ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography
+          ) as distance_meters
+        FROM osm_pois_travis
+        WHERE ST_DWithin(
           geom::geography,
-          ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography
-        ) as distance_meters
-      FROM osm_pois_travis
-      WHERE ST_DWithin(
-        geom::geography,
-        ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography,
-        $3
-      )
-      AND category = ANY($4)
-      ORDER BY distance_meters
-      LIMIT 50
-    `;
-    values = [lng, lat, radius_meters, categories];
-  } else {
-    query = `
-      SELECT 
-        id,
-        name,
-        category,
-        subcategory,
-        latitude,
-        longitude,
-        address,
-        ST_AsGeoJSON(geom)::json as geometry,
-        ST_Distance(
+          ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography,
+          $3
+        )
+        AND category = ANY($4)
+        ORDER BY distance_meters
+        LIMIT 50
+      `;
+      values = [lng, lat, radius_meters, categories];
+    } else {
+      query = `
+        SELECT 
+          id,
+          name,
+          category,
+          subcategory,
+          latitude,
+          longitude,
+          address,
+          ST_AsGeoJSON(geom)::json as geometry,
+          ST_Distance(
+            geom::geography,
+            ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography
+          ) as distance_meters
+        FROM osm_pois_travis
+        WHERE ST_DWithin(
           geom::geography,
-          ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography
-        ) as distance_meters
-      FROM osm_pois_travis
-      WHERE ST_DWithin(
-        geom::geography,
-        ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography,
-        $3
-      )
-      ORDER BY distance_meters
-      LIMIT 50
-    `;
-    values = [lng, lat, radius_meters];
+          ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography,
+          $3
+        )
+        ORDER BY distance_meters
+        LIMIT 50
+      `;
+      values = [lng, lat, radius_meters];
+    }
+
+    const result = await prisma.$queryRawUnsafe(query, ...values);
+
+    return {
+      center: { lat, lng },
+      radius_meters,
+      pois: result.map(row => ({
+        id: row.id,
+        name: row.name,
+        category: row.category,
+        subcategory: row.subcategory,
+        latitude: row.latitude,
+        longitude: row.longitude,
+        address: row.address,
+        geometry: row.geometry,
+        distance_meters: row.distance_meters
+      }))
+    };
+  } catch (error) {
+    console.error('[getOsmNearby] Error:', error.message);
+    return {
+      center: { lat, lng },
+      radius_meters,
+      pois: [],
+      error: error.message
+    };
   }
-
-  const result = await prisma.$queryRawUnsafe(query, ...values);
-
-  return {
-    center: { lat, lng },
-    radius_meters,
-    pois: result.map(row => ({
-      id: row.id,
-      name: row.name,
-      category: row.category,
-      subcategory: row.subcategory,
-      latitude: row.latitude,
-      longitude: row.longitude,
-      address: row.address,
-      geometry: row.geometry,
-      distance_meters: row.distance_meters
-    }))
-  };
 }
 
 async function getGisLayers({ layer_id, bbox, parcel_id }) {
@@ -315,16 +340,16 @@ async function getGisLayers({ layer_id, bbox, parcel_id }) {
   /**
    * Map layer_id to actual database table
    *
-   * LOCAL DATA AVAILABLE:
-   * - zoning_districts: ✅ 22,488 rows - geometry column: 'geometry'
-   * - parcels_travis: ✅ parcel boundaries - geometry column: 'geom'
-   *
-   * EXTERNAL ARCGIS ONLY (no local data):
-   * - fema_flood_zones → https://maps.austintexas.gov/arcgis/.../Environmental_2/MapServer/1
-   * - water_mains → https://maps.austintexas.gov/arcgis/.../Water/MapServer/0
-   * - sewer_mains → external ArcGIS
-   * - wetlands → external ArcGIS
-   * - building_permits → external ArcGIS
+   * LOCAL DATA AVAILABLE (all use 'geometry' column):
+   * - zoning_districts: ✅ 22,488 rows
+   * - parcels_travis: ✅ parcel boundaries (uses 'geom' column)
+   * - gis_floodplain_austin: ✅ Austin floodplain data
+   * - gis_water_ccn: ✅ Water CCN boundaries
+   * - gis_sewer_ccn: ✅ Sewer CCN boundaries
+   * - gis_wetlands_cef: ✅ CEF wetlands
+   * - gis_contours_austin: ✅ Elevation contours
+   * - gis_cef_buffers: ✅ CEF biological buffers
+   * - gis_water_districts: ✅ Water/wastewater districts
    */
   const layerMap = {
     // LOCAL DATA LAYERS
@@ -341,42 +366,64 @@ async function getGisLayers({ layer_id, bbox, parcel_id }) {
       available: true,
       source: 'local'
     },
-
-    // EXTERNAL ARCGIS LAYERS (return URL for client-side fetch)
-    'fema_flood_zones': {
-      available: true,
-      source: 'arcgis',
-      arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Environmental_2/MapServer/1'
-    },
     'floodplain': {
+      table: 'gis_floodplain_austin',
+      geomCol: 'geometry',
       available: true,
-      source: 'arcgis',
-      arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Floodplain/MapServer/0'
+      source: 'local'
     },
     'water_mains': {
+      table: 'gis_water_ccn',
+      geomCol: 'geometry',
       available: true,
-      source: 'arcgis',
-      arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Water/MapServer/0'
+      source: 'local'
     },
     'sewer_mains': {
+      table: 'gis_sewer_ccn',
+      geomCol: 'geometry',
       available: true,
-      source: 'arcgis',
-      arcgisUrl: 'https://maps.pape-dawson.com/server1/rest/services/LandDevelopment/LANDDEVELOPMENT__Chesmar_SiteSelection/MapServer/55'
+      source: 'local'
     },
     'wetlands': {
+      table: 'gis_wetlands_cef',
+      geomCol: 'geometry',
       available: true,
-      source: 'arcgis',
-      arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Environmental_2/MapServer/0'
+      source: 'local'
+    },
+    'contours': {
+      table: 'gis_contours_austin',
+      geomCol: 'geometry',
+      available: true,
+      source: 'local'
+    },
+    'cef_buffers': {
+      table: 'gis_cef_buffers',
+      geomCol: 'geometry',
+      available: true,
+      source: 'local'
+    },
+    'water_districts': {
+      table: 'gis_water_districts',
+      geomCol: 'geometry',
+      available: true,
+      source: 'local'
+    },
+
+    // NOT YET LOADED (return informative message)
+    'fema_flood_zones': {
+      available: false,
+      source: 'not_loaded',
+      message: 'FEMA flood data not yet imported. Use floodplain layer for local Austin flood data.'
     },
     'building_permits': {
-      available: true,
-      source: 'arcgis',
-      arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Permits/MapServer/0'
+      available: false,
+      source: 'not_loaded',
+      message: 'Building permits not yet imported.'
     },
     'gas_mains': {
-      available: true,
-      source: 'arcgis',
-      arcgisUrl: 'https://maps.austintexas.gov/arcgis/rest/services/Shared/Gas/MapServer/0'
+      available: false,
+      source: 'not_loaded',
+      message: 'Gas infrastructure not yet imported.'
     }
   };
 
@@ -391,15 +438,13 @@ async function getGisLayers({ layer_id, bbox, parcel_id }) {
     };
   }
 
-  // Handle external ArcGIS layers - return URL for client
-  if (layer.source === 'arcgis') {
-    console.log(`[get_gis_layers] External layer ${layer_id} -> ${layer.arcgisUrl}`);
+  // Handle not-yet-loaded layers
+  if (layer.source === 'not_loaded') {
+    console.log(`[get_gis_layers] Layer not loaded: ${layer_id}`);
     return {
       layer_id,
-      source: 'arcgis',
-      arcgisUrl: layer.arcgisUrl,
-      message: 'Query this ArcGIS endpoint directly with bbox or geometry',
-      queryHint: `${layer.arcgisUrl}/query?where=1=1&geometry=${JSON.stringify(bbox)}&geometryType=esriGeometryEnvelope&outFields=*&f=geojson`
+      source: 'not_loaded',
+      message: layer.message
     };
   }
 

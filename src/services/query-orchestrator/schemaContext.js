@@ -13,9 +13,9 @@ export function getSchemaContext() {
       parcel_id: { type: 'TEXT', nullable: false, description: 'Unique parcel identifier' },
       
       // Location
-      situs_address: { type: 'TEXT', nullable: true, description: 'Full property address' },
-      mail_city: { type: 'TEXT', nullable: true, description: 'City from mailing address' },
-      mail_zip: { type: 'TEXT', nullable: true, description: 'ZIP code from mailing address' },
+      situs_address: { type: 'TEXT', nullable: true, description: 'Full property address (contains city and ZIP - use this for filtering)' },
+      mail_city: { type: 'TEXT', nullable: true, description: 'City from mailing address (NULL in database - use situs_address instead)' },
+      mail_zip: { type: 'TEXT', nullable: true, description: 'ZIP code from mailing address (NULL in database - use situs_address instead)' },
       geom_centroid: { type: 'GEOMETRY(Point, 4326)', nullable: true, description: 'PostGIS point for spatial queries' },
       county_fips: { type: 'TEXT', nullable: true, description: 'County FIPS code (48453 = Travis)' },
       
@@ -75,8 +75,8 @@ export function getSchemaContext() {
     
     // Common filter patterns
     filterPatterns: {
-      cityFilter: "mail_city ILIKE '%{city}%'",
-      zipFilter: "mail_zip = '{zip}'",
+      cityFilter: "situs_address ILIKE '%{city}%'",
+      zipFilter: "situs_address LIKE '%{zip}%'",
       vacantLand: "asset_class ILIKE '%land%' OR asset_class ILIKE '%vacant%'",
       distressed: "tax_delinquent_flag = true",
       ownerTypeFilter: "owner_entity_type = '{type}'",
@@ -133,8 +133,8 @@ ${Object.entries(schema.columns).map(([col, info]) =>
 ${schema.nonExistentColumns.map(col => `- ${col}`).join('\n')}
 
 ### Correct Filter Patterns:
-- Filter by city: Use mail_city column with ILIKE
-- Filter by ZIP: Use mail_zip column with exact match
+- Filter by city: Use situs_address ILIKE '%{city}%' (mail_city is NULL in database)
+- Filter by ZIP: Use situs_address LIKE '%{zip}%' (mail_zip is NULL in database)
 - Find vacant land: asset_class ILIKE '%land%'
 - Find distressed: tax_delinquent_flag = true
 

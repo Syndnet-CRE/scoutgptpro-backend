@@ -114,14 +114,14 @@ export function buildPropertyQuery(options = {}) {
     conditions.push(`pft.market_value <= ${addParam(filters.max_value)}`);
   }
   
-  // City (uses mail_city)
+  // City (uses situs_address - mail_city is NULL in database)
   if (filters.city) {
-    conditions.push(`pft.mail_city ILIKE ${addParam('%' + filters.city + '%')}`);
+    conditions.push(`pft.situs_address ILIKE '%' || ${addParam(filters.city)} || '%'`);
   }
   
-  // ZIP (uses mail_zip)
+  // ZIP (uses situs_address - mail_zip is NULL in database)
   if (filters.zip_code) {
-    conditions.push(`pft.mail_zip = ${addParam(filters.zip_code)}`);
+    conditions.push(`pft.situs_address LIKE '%' || ${addParam(filters.zip_code)} || '%'`);
   }
   
   // Zoning
