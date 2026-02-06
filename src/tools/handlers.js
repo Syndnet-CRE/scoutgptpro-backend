@@ -8,6 +8,7 @@ import { createArtifact } from '../services/artifacts/index.js';
 import { intelligentPropertySearch } from '../services/query-orchestrator/index.js';
 import { getDemographicsForLocation } from '../services/census/index.js';
 import { normalizeProperty, normalizeProperties } from '../utils/normalizeProperty.js';
+import { LAYER_REGISTRY } from '../config/gis-layer-registry.js';
 
 const prisma = new PrismaClient();
 
@@ -380,193 +381,49 @@ async function getOsmNearby({ lat, lng, radius_meters = 500, categories }) {
   }
 }
 
-async function getGisLayers({ layer_id, bbox, parcel_id }) {
-  console.log('[get_gis_layers] Called with:', { layer_id, bbox, parcel_id });
+async function getGisLayers({ layer_id, bbox, parcel_id, action }) {
+  console.log('[get_gis_layers] Called with:', { layer_id, bbox, parcel_id, action });
 
-  /**
-   * Map layer_id to actual database table
-   * Based on task requirements - only zoning_districts and parcels_travis exist
-   */
-  const layerMap = {
-    // AVAILABLE TABLES
-    'zoning_districts': {
-      table: 'zoning_districts',
-      geomCol: 'geometry',
-      available: true,
-      source: 'local'
-    },
-    'parcels_travis': {
-      table: 'parcels_travis',
-      geomCol: 'geom',
-      available: true,
-      source: 'local'
-    },
-
-    // TABLES THAT DO NOT EXIST (per task requirements)
-    'flood_zones': {
-      available: false,
-      source: 'not_available',
-      message: 'Layer not available'
-    },
-    'utility_sewer': {
-      available: false,
-      source: 'not_available', 
-      message: 'Layer not available'
-    },
-    'utility_water': {
-      available: false,
-      source: 'not_available',
-      message: 'Layer not available'
-    },
-    'building_footprints': {
-      available: false,
-      source: 'not_available',
-      message: 'Layer not available'
-    },
-    'wetlands': {
-      available: false,
-      source: 'not_available',
-      message: 'Layer not available'
-    },
-    'building_permits': {
-      available: false,
-      source: 'not_available',
-      message: 'Layer not available'
-    }
-  };
-
-  const layer = layerMap[layer_id];
+  // Look up layer in registry
+  const layer = LAYER_REGISTRY[layer_id];
   if (!layer) {
-    const availableLayers = Object.keys(layerMap).filter(id => layerMap[id].available);
+    const availableLayers = Object.keys(LAYER_REGISTRY);
     console.error('[get_gis_layers] Unknown layer_id:', layer_id);
     return {
-      error: `Unknown layer: ${layer_id}. Available layers: ${availableLayers.join(', ')}`,
-      available_layers: availableLayers,
-      layer_id
+      action: 'layer_unavailable',
+      layerId: layer_id,
+      displayName: 'Unknown Layer',
+      hasData: false,
+      message: `Unknown layer: ${layer_id}. Available layers: ${availableLayers.join(', ')}`
     };
   }
 
-  // Handle not-available layers
-  if (layer.source === 'not_available') {
-    console.log(`[get_gis_layers] Layer not available: ${layer_id}`);
+  // Check if layer has data
+  if (!layer.hasData) {
+    console.log(`[get_gis_layers] Layer has no data: ${layer_id}`);
     return {
-      error: layer.message
+      action: 'layer_unavailable',
+      layerId: layer.id,
+      displayName: layer.displayName,
+      hasData: false,
+      message: `${layer.displayName} data has not been imported yet. This layer is planned for a future data sprint.`
     };
   }
 
-  // LOCAL DATABASE QUERY
-  // Verify table still exists
-  try {
-    const tableCheck = await prisma.$queryRawUnsafe(`
-      SELECT EXISTS (
-        SELECT FROM information_schema.tables
-        WHERE table_schema = 'public'
-        AND table_name = $1
-      ) as exists
-    `, layer.table);
-
-    if (!tableCheck[0].exists) {
-      // Fallback to ArcGIS if available
-      if (layer.fallbackArcgis) {
-        console.log(`[get_gis_layers] Local table missing, using fallback: ${layer.fallbackArcgis}`);
-        return {
-          layer_id,
-          source: 'arcgis_fallback',
-          arcgisUrl: layer.fallbackArcgis,
-          message: 'Local table not available, use ArcGIS endpoint'
-        };
-      }
-      return {
-        error: `GIS layer "${layer_id}" is not available`,
-        layer_id
-      };
-    }
-  } catch (checkErr) {
-    console.error('[get_gis_layers] Error checking table:', checkErr.message);
-    if (layer.fallbackArcgis) {
-      return {
-        layer_id,
-        source: 'arcgis_fallback',
-        arcgisUrl: layer.fallbackArcgis,
-        message: 'Local query failed, use ArcGIS endpoint'
-      };
-    }
-    return { error: `Failed to verify table: ${checkErr.message}`, layer_id };
-  }
-
-  // Validate required parameters
-  if (!bbox && !parcel_id) {
-    console.error('[get_gis_layers] Missing required parameter: bbox or parcel_id');
-    return { error: 'Either bbox or parcel_id required' };
-  }
-
-  if (bbox && (!Array.isArray(bbox) || bbox.length !== 4)) {
-    console.error('[get_gis_layers] Invalid bbox format:', bbox);
-    return { error: 'bbox must be an array of 4 numbers [minLng, minLat, maxLng, maxLat]' };
-  }
-
-  let query;
-  let values = [];
-
-  try {
-    if (parcel_id) {
-      query = `
-        SELECT
-          l.*,
-          ST_AsGeoJSON(l.${layer.geomCol})::json as geometry
-        FROM ${layer.table} l
-        JOIN parcels_travis p ON ST_Intersects(l.${layer.geomCol}, p.geom)
-        WHERE p.parcel_id = $1
-        LIMIT 100
-      `;
-      values = [parcel_id];
-      console.log('[get_gis_layers] Querying LOCAL by parcel_id:', parcel_id);
-    } else if (bbox && bbox.length === 4) {
-      query = `
-        SELECT
-          *,
-          ST_AsGeoJSON(${layer.geomCol})::json as geometry
-        FROM ${layer.table}
-        WHERE ST_Intersects(${layer.geomCol}, ST_MakeEnvelope($1, $2, $3, $4, 4326))
-        LIMIT 500
-      `;
-      values = bbox;
-      console.log('[get_gis_layers] Querying LOCAL by bbox:', bbox);
-    }
-
-    const result = await prisma.$queryRawUnsafe(query, ...values);
-    console.log(`[get_gis_layers] LOCAL query success: ${result.length} features`);
-
-    return {
-      type: 'FeatureCollection',
-      layer_id,
-      source: 'local',
-      features: result.map(row => ({
-        type: 'Feature',
-        geometry: row.geometry,
-        properties: Object.fromEntries(
-          Object.entries(row).filter(([k]) => k !== 'geometry' && !k.includes('geom'))
-        )
-      }))
-    };
-  } catch (err) {
-    console.error('[get_gis_layers] Query error:', err.message);
-    // Fallback to ArcGIS on error
-    if (layer.fallbackArcgis) {
-      return {
-        layer_id,
-        source: 'arcgis_fallback',
-        arcgisUrl: layer.fallbackArcgis,
-        message: 'Local query failed, use ArcGIS endpoint',
-        error: err.message
-      };
-    }
-    return {
-      error: `Failed to query GIS layer: ${err.message}`,
-      layer_id,
-      table: layer.table
-    };
-  }
+  // Return layer toggle instruction for available layers
+  const requestedAction = action || 'show';
+  console.log(`[get_gis_layers] Layer available: ${layer.displayName}, action: ${requestedAction}`);
+  
+  return {
+    action: requestedAction === 'hide' ? 'hide_layer' : 'show_layer',
+    layerId: layer.id,
+    displayName: layer.displayName,
+    hasData: true,
+    style: layer.style,
+    message: requestedAction === 'hide' 
+      ? `Hiding ${layer.displayName} from the map.`
+      : `Showing ${layer.displayName} on the map.`
+  };
 }
 
 async function generateArtifact({ type, parcel_ids, title }) {

@@ -23,13 +23,22 @@ const pool = new Pool({
 
 const BATCH_SIZE = 1000;
 
-// Layer configurations
+// Layer configurations with discovered working URLs
 const LAYER_CONFIGS = {
+  floodplain_austin: {
+    tableName: 'gis_floodplain_austin',
+    sourceType: 'arcgis',
+    url: 'https://maps.austintexas.gov/arcgis/rest/services/FloodPro/FloodPro/MapServer/8',
+    bbox: '-97.94,30.07,-97.40,30.63', // Travis County bbox
+    extractFields: (props) => ({
+      zone_code: (props.FLOOD_ZONE || props.FLD_ZONE || props.ZONE_CODE || '').toString().substring(0, 20),
+      zone_desc: (props.FLOODWAY || props.FLD_ZONE_DESC || props.DESCRIPTION || props.FIRM_PANEL || '').toString().substring(0, 255)
+    })
+  },
   water_ccn: {
     tableName: 'gis_water_ccn',
     sourceType: 'arcgis',
-    // TODO: Replace with actual FeatureServer URL after investigation
-    url: 'https://services.arcgis.com/.../FeatureServer/0',
+    url: 'https://gis.traviscountytx.gov/server1/rest/services/Boundaries_and_Jurisdictions/PUC_CCNs_in_Travis_County/MapServer/1',
     extractFields: (props) => ({
       ccn_no: props.CCN_NO || props.CCN || props.ccn_no || null,
       utility: props.UTILITY || props.UTILITY_NAME || props.utility || null,
@@ -40,8 +49,7 @@ const LAYER_CONFIGS = {
   sewer_ccn: {
     tableName: 'gis_sewer_ccn',
     sourceType: 'arcgis',
-    // TODO: Replace with actual FeatureServer URL after investigation
-    url: 'https://services.arcgis.com/.../FeatureServer/0',
+    url: 'https://gis.traviscountytx.gov/server1/rest/services/Boundaries_and_Jurisdictions/PUC_CCNs_in_Travis_County/MapServer/0',
     extractFields: (props) => ({
       ccn_no: props.CCN_NO || props.CCN || props.ccn_no || null,
       utility: props.UTILITY || props.UTILITY_NAME || props.utility || null,
@@ -49,49 +57,43 @@ const LAYER_CONFIGS = {
       type: props.TYPE || props.type || null
     })
   },
-  water_districts: {
-    tableName: 'gis_water_districts',
+  contours_austin: {
+    tableName: 'gis_contours_austin',
     sourceType: 'arcgis',
-    // TODO: Replace with actual FeatureServer URL after investigation
-    url: 'https://services.arcgis.com/.../FeatureServer/0',
+    url: 'https://maps.austintexas.gov/arcgis/rest/services/FloodPro/FloodPro/MapServer/3',
+    bbox: '-97.94,30.07,-97.40,30.63', // Travis County bbox
+    maxFeatures: 10000, // Limit contours to prevent overwhelming dataset
     extractFields: (props) => ({
-      district_name: props.NAME || props.DISTRICT_NAME || props.district_name || null,
-      district_type: props.TYPE || props.DISTRICT_TYPE || props.district_type || null
-    })
-  },
-  floodplain_austin: {
-    tableName: 'gis_floodplain_austin',
-    sourceType: 'socrata',
-    url: 'https://data.austintexas.gov/resource/2xn4-j3u2.geojson',
-    extractFields: (props) => ({
-      zone_code: props.ZONE_CODE || props.zone_code || null,
-      zone_desc: props.ZONE_DESC || props.ZONE_DESCRIPTION || props.zone_desc || null
+      elevation: props.ELEVATION || props.CONTOUR || props.ELEV || null,
+      contour_type: props.CONTOUR_TYPE || props.TYPE || 'standard'
     })
   },
   wetlands_cef: {
     tableName: 'gis_wetlands_cef',
-    sourceType: 'socrata',
-    url: 'https://data.austintexas.gov/resource/uyrh-i4dq.geojson',
+    sourceType: 'arcgis',
+    url: 'https://fwsprimary.wim.usgs.gov/server/rest/services/Test/Wetlands_gdb_split/MapServer/0',
+    bbox: '-97.94,30.07,-97.40,30.63', // Travis County bbox
+    maxFeatures: 5000, // Limit to prevent timeout
     extractFields: (props) => ({
-      wetland_type: props.WETLAND_TYPE || props.TYPE || props.wetland_type || null
+      wetland_type: props.WETLAND_TYPE || props.ATTRIBUTE || props.WETTYPE || null
+    })
+  },
+  water_districts: {
+    tableName: 'gis_water_districts',
+    sourceType: 'socrata',
+    url: 'https://data.austintexas.gov/resource/uyrh-i4dq.geojson', // Austin Open Data - water districts
+    extractFields: (props) => ({
+      district_name: props.NAME || props.DISTRICT_NAME || props.district_name || null,
+      district_type: props.TYPE || props.DISTRICT_TYPE || props.district_type || 'water_district'
     })
   },
   cef_buffers: {
     tableName: 'gis_cef_buffers',
     sourceType: 'socrata',
-    url: 'https://data.austintexas.gov/resource/n7cy-835m.geojson',
+    url: 'https://data.austintexas.gov/resource/n7cy-835m.geojson', // Austin Open Data - CEF buffers
     extractFields: (props) => ({
-      buffer_type: props.BUFFER_TYPE || props.TYPE || props.buffer_type || null,
-      buffer_distance: props.BUFFER_DISTANCE || props.DISTANCE || props.buffer_distance || null
-    })
-  },
-  contours_austin: {
-    tableName: 'gis_contours_austin',
-    sourceType: 'socrata',
-    url: 'https://data.austintexas.gov/resource/{id}.geojson', // TODO: Find actual endpoint
-    extractFields: (props) => ({
-      elevation: props.ELEVATION || props.ELEV || props.elevation || null,
-      contour_type: props.TYPE || props.CONTOUR_TYPE || props.contour_type || 'standard'
+      buffer_type: props.BUFFER_TYPE || props.TYPE || props.buffer_type || 'cef_buffer',
+      buffer_distance: parseInt(props.BUFFER_DISTANCE || props.DISTANCE || props.buffer_distance || '0')
     })
   }
 };
@@ -216,6 +218,7 @@ async function insertFeatures(features, config) {
     const values = [];
     const placeholders = [];
     let paramIndex = 1;
+    let fieldNames = []; // Declare fieldNames in the proper scope
     
     for (const feature of features) {
       const props = feature.properties || {};
@@ -231,16 +234,24 @@ async function insertFeatures(features, config) {
       
       // Build values array based on table structure
       const fieldValues = [];
-      const fieldNames = [];
       
-      // Add extracted fields
-      Object.entries(fields).forEach(([key, value]) => {
-        fieldNames.push(key);
+      // Initialize fieldNames on first iteration
+      if (fieldNames.length === 0) {
+        // Add extracted field names
+        Object.keys(fields).forEach(key => {
+          fieldNames.push(key);
+        });
+        
+        // Add geometry and raw attributes
+        fieldNames.push('geometry', 'raw_attributes');
+      }
+      
+      // Add extracted field values
+      Object.values(fields).forEach(value => {
         fieldValues.push(value);
       });
       
-      // Add geometry and raw attributes
-      fieldNames.push('geometry', 'raw_attributes');
+      // Add geometry and raw attributes values
       fieldValues.push(JSON.stringify(geom), JSON.stringify(props));
       
       // Build placeholder string
@@ -258,7 +269,7 @@ async function insertFeatures(features, config) {
       paramIndex += fieldValues.length;
     }
     
-    if (values.length > 0) {
+    if (values.length > 0 && fieldNames.length > 0) {
       const fieldNamesStr = fieldNames.join(', ');
       await client.query(`
         INSERT INTO ${config.tableName} (${fieldNamesStr})

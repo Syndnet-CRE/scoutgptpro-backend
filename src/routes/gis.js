@@ -1,6 +1,7 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
 import pg from 'pg';
+import { LAYER_REGISTRY } from '../config/gis-layer-registry.js';
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -120,52 +121,46 @@ const LAYER_CATALOG = {
   }
 };
 
-// GET /api/gis/catalog - List all available layers with metadata
+// GET /api/gis/catalog - List all available layers with metadata from registry
 router.get('/catalog', async (req, res) => {
   try {
-    const catalog = [];
+    const layers = [];
+    const categories = new Set();
 
-    // Check local data availability for each layer
-    for (const [layerId, config] of Object.entries(LAYER_CATALOG)) {
-      let localCount = 0;
-      let localAvailable = false;
-
-      if (config.source === 'local' && config.localTable) {
+    // Build catalog from registry with live feature counts
+    for (const [layerId, layer] of Object.entries(LAYER_REGISTRY)) {
+      categories.add(layer.category);
+      
+      let featureCount = 0;
+      if (layer.hasData) {
         try {
-          const result = await pool.query(`SELECT COUNT(*) as count FROM ${config.localTable}`);
-          localCount = parseInt(result.rows[0].count);
-          localAvailable = localCount > 0;
-        } catch (e) {
-          // Table doesn't exist or error
+          const countResult = await pool.query(`SELECT COUNT(*) as count FROM ${layer.table}`);
+          featureCount = parseInt(countResult.rows[0].count);
+        } catch (error) {
+          console.warn(`Failed to count features for ${layerId}:`, error.message);
         }
       }
 
-      catalog.push({
-        id: layerId,
-        displayName: config.displayName,
-        category: config.category,
-        geometryType: config.geometryType,
-        source: localAvailable ? 'local' : 'arcgis',
-        localAvailable,
-        localCount,
-        arcgisUrl: config.arcgisUrl || config.fallbackArcgis || null
+      layers.push({
+        id: layer.id,
+        displayName: layer.displayName,
+        category: layer.category,
+        geometryType: layer.geometryType,
+        hasData: layer.hasData,
+        featureCount,
+        style: layer.style,
+        keywords: layer.keywords
       });
     }
 
-    // Group by category
-    const byCategory = {};
-    for (const layer of catalog) {
-      if (!byCategory[layer.category]) byCategory[layer.category] = [];
-      byCategory[layer.category].push(layer);
-    }
+    const availableCount = layers.filter(l => l.hasData).length;
+    const totalCount = layers.length;
 
     res.json({
-      success: true,
-      catalog,
-      byCategory,
-      totalLayers: catalog.length,
-      localLayers: catalog.filter(l => l.localAvailable).length,
-      arcgisLayers: catalog.filter(l => !l.localAvailable).length
+      layers,
+      categories: Array.from(categories).sort(),
+      availableCount,
+      totalCount
     });
   } catch (error) {
     console.error('GIS catalog error:', error);
@@ -485,54 +480,52 @@ router.get('/layers/:id/query', async (req, res) => {
 router.get('/local/:layerName/geojson', async (req, res) => {
   try {
     const { layerName } = req.params;
-    const { bbox, limit = 1000 } = req.query;
+    const { bbox, limit } = req.query;
     
-    // Whitelist of valid table names (prevent SQL injection)
-    const validLayers = {
-      'zoning_districts': 'zoning_districts',  // 22,488 rows - LOCAL DATA
-      'water_ccn': 'gis_water_ccn',
-      'sewer_ccn': 'gis_sewer_ccn',
-      'water_districts': 'gis_water_districts',
-      'floodplain_austin': 'gis_floodplain_austin',
-      'wetlands_cef': 'gis_wetlands_cef',
-      'cef_buffers': 'gis_cef_buffers',
-      'contours_austin': 'gis_contours_austin'
-    };
-    
-    const tableName = validLayers[layerName];
-    if (!tableName) {
+    // Look up layer in registry
+    const layer = LAYER_REGISTRY[layerName];
+    if (!layer) {
       return res.status(400).json({ 
         success: false,
-        error: `Invalid layer name: ${layerName}. Valid layers: ${Object.keys(validLayers).join(', ')}` 
+        error: `Unknown layer: ${layerName}`,
+        available: Object.keys(LAYER_REGISTRY)
       });
     }
     
-    // Build query
+    // Check if layer has data
+    if (!layer.hasData) {
+      return res.status(404).json({ 
+        success: false,
+        error: 'Layer data not yet imported',
+        layer: layer.displayName,
+        status: 'pending'
+      });
+    }
+    
+    // Apply limit (use layer's maxFeatures or query param, whichever is lower)
+    const requestedLimit = limit ? parseInt(limit, 10) : layer.maxFeatures;
+    const safeLimit = Math.min(requestedLimit, layer.maxFeatures);
+    
+    if (isNaN(safeLimit) || safeLimit < 1) {
+      return res.status(400).json({ 
+        success: false,
+        error: `Invalid limit. Must be between 1 and ${layer.maxFeatures}` 
+      });
+    }
+    
+    // Build query with feature properties
+    const propertyColumns = layer.featureProperties.length > 0 
+      ? `, ${layer.featureProperties.join(', ')}`
+      : '';
+    
     let query = `
       SELECT 
         id,
-        ST_AsGeoJSON(geometry)::jsonb as geometry,
-        raw_attributes
+        ST_AsGeoJSON(${layer.geometryColumn})::json AS geometry
+        ${propertyColumns}
+      FROM ${layer.table}
     `;
     
-    // Add specific fields based on table (for better property extraction)
-    if (tableName === 'zoning_districts') {
-      query += `, zoning_code, zoning_desc, overlay`;
-    } else if (tableName === 'gis_water_ccn' || tableName === 'gis_sewer_ccn') {
-      query += `, ccn_no, utility, county, type`;
-    } else if (tableName === 'gis_water_districts') {
-      query += `, district_name, district_type`;
-    } else if (tableName === 'gis_floodplain_austin') {
-      query += `, zone_code, zone_desc`;
-    } else if (tableName === 'gis_wetlands_cef') {
-      query += `, wetland_type`;
-    } else if (tableName === 'gis_cef_buffers') {
-      query += `, buffer_type, buffer_distance`;
-    } else if (tableName === 'gis_contours_austin') {
-      query += `, elevation, contour_type`;
-    }
-    
-    query += ` FROM ${tableName}`;
     const params = [];
     
     // Add bbox filter if provided
@@ -540,7 +533,7 @@ router.get('/local/:layerName/geojson', async (req, res) => {
       const bboxParts = bbox.split(',').map(Number);
       if (bboxParts.length === 4 && bboxParts.every(n => !isNaN(n))) {
         const [west, south, east, north] = bboxParts;
-        query += ` WHERE ST_Intersects(geometry, ST_MakeEnvelope($${params.length + 1}, $${params.length + 2}, $${params.length + 3}, $${params.length + 4}, 4326))`;
+        query += ` WHERE ST_Intersects(${layer.geometryColumn}, ST_MakeEnvelope($1, $2, $3, $4, ${layer.srid}))`;
         params.push(west, south, east, north);
       } else {
         return res.status(400).json({ 
@@ -550,57 +543,50 @@ router.get('/local/:layerName/geojson', async (req, res) => {
       }
     }
     
-    // Add limit
-    const limitNum = parseInt(limit, 10);
-    if (isNaN(limitNum) || limitNum < 1 || limitNum > 10000) {
-      return res.status(400).json({ 
-        success: false,
-        error: 'Invalid limit. Must be between 1 and 10000' 
-      });
-    }
     query += ` LIMIT $${params.length + 1}`;
-    params.push(limitNum);
+    params.push(safeLimit);
     
-    console.log(`[GIS Local] Querying ${tableName}${bbox ? ` with bbox` : ''} (limit: ${limitNum})`);
+    console.log(`[GIS Local] Querying ${layer.table}${bbox ? ` with bbox` : ''} (limit: ${safeLimit})`);
     
     const result = await pool.query(query, params);
     
-    // Transform to GeoJSON FeatureCollection
-    const geojson = {
+    // Build properties from feature columns
+    const features = result.rows.map(row => {
+      const properties = {};
+      
+      // Include specified feature properties
+      layer.featureProperties.forEach(prop => {
+        if (row[prop] !== null && row[prop] !== undefined) {
+          properties[prop] = row[prop];
+        }
+      });
+      
+      return {
+        type: 'Feature',
+        id: row.id,
+        geometry: row.geometry,
+        properties
+      };
+    });
+    
+    // Return GeoJSON with layer metadata
+    const response = {
       type: 'FeatureCollection',
-      features: result.rows.map(row => {
-        const properties = { ...(row.raw_attributes || {}) };
-        
-        // Add specific fields to properties
-        if (row.zoning_code) properties.zoning_code = row.zoning_code;
-        if (row.zoning_desc) properties.zoning_desc = row.zoning_desc;
-        if (row.overlay) properties.overlay = row.overlay;
-        if (row.ccn_no) properties.ccn_no = row.ccn_no;
-        if (row.utility) properties.utility = row.utility;
-        if (row.county) properties.county = row.county;
-        if (row.type) properties.type = row.type;
-        if (row.district_name) properties.district_name = row.district_name;
-        if (row.district_type) properties.district_type = row.district_type;
-        if (row.zone_code) properties.zone_code = row.zone_code;
-        if (row.zone_desc) properties.zone_desc = row.zone_desc;
-        if (row.wetland_type) properties.wetland_type = row.wetland_type;
-        if (row.buffer_type) properties.buffer_type = row.buffer_type;
-        if (row.buffer_distance !== null) properties.buffer_distance = row.buffer_distance;
-        if (row.elevation !== null) properties.elevation = row.elevation;
-        if (row.contour_type) properties.contour_type = row.contour_type;
-        
-        return {
-          type: 'Feature',
-          id: row.id,
-          geometry: row.geometry,
-          properties
-        };
-      })
+      features,
+      metadata: {
+        layerId: layer.id,
+        displayName: layer.displayName,
+        geometryType: layer.geometryType,
+        category: layer.category,
+        style: layer.style,
+        featureCount: features.length,
+        hasData: layer.hasData
+      }
     };
     
-    console.log(`[GIS Local] Returning ${geojson.features.length} features`);
+    console.log(`[GIS Local] Returning ${features.length} features for ${layer.displayName}`);
     
-    res.json(geojson);
+    res.json(response);
     
   } catch (error) {
     console.error('[GIS Local] Error:', error);

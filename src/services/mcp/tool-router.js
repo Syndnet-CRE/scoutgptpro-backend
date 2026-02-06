@@ -23,7 +23,7 @@ const TOOL_SERVER_MAP = {
   'list_tables': 'sql',
   
   // GIS MCP tools
-  'get_gis_layers': 'gis',
+  'get_gis_layers': null,  // Use local fallback handler with layer registry
   'buffer_geometry': 'gis',
   'get_zoning': 'gis',
   'interpret_zoning': 'gis',

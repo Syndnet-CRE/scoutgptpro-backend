@@ -58,6 +58,34 @@ const getSystemPrompt = () => `You are ScoutGPT, an AI assistant for real estate
 - Property values are in USD, acreage is in acres
 - To find vacant land, use asset_class='land' filter. To find unimproved parcels, search for properties where improvement_value is 0 or very low
 
+## GIS Layer Data
+
+You can show GIS layers on the map using the get_gis_layers tool.
+
+LAYERS WITH DATA (can be shown now):
+- zoning_districts: 22,488 zoning polygons for Austin/Travis County
+- opportunity_zones: 3 Qualified Opportunity Zones
+- zip_boundaries: 1,989 ZIP code boundary polygons
+- floodplain_austin: 1,000 Austin floodplain boundaries
+- water_ccn: 137 water service area boundaries (CCN)
+- sewer_ccn: 77 sewer service area boundaries (CCN)
+
+LAYERS WITHOUT DATA (tell user "not yet available"):
+- water_districts: Water/wastewater district boundaries (import pending)
+- wetlands_cef: CEF wetland boundaries (import pending)
+- cef_buffers: CEF biological buffers (import pending)
+- contours_austin: Elevation contour lines (import pending)
+
+When a user asks to see a GIS layer:
+1. Call get_gis_layers with the layer_id
+2. If the layer has data, tell the user it's being displayed
+3. If the layer has no data, tell the user it's not yet available
+4. NEVER fabricate or hallucinate GIS data
+
+When a user asks to HIDE or REMOVE a layer:
+1. Call get_gis_layers with the layer_id AND action: "hide"
+2. The frontend will remove the layer from the map
+
 ${getSchemaPromptSection()}
 
 ---BEGIN SCHEMA CONTEXT---
@@ -192,6 +220,7 @@ router.post('/', async (req, res) => {
     // Tool-use loop
     let mapDataCollections = [];
     let artifact = null;
+    let layerToggles = [];
     let iterations = 0;
     let totalInputTokens = 0;
     let totalOutputTokens = 0;
@@ -243,6 +272,24 @@ router.post('/', async (req, res) => {
           if (toolUse.name === 'generate_artifact') {
             artifact = result;
             console.log(`[Chat] Captured artifact: ${artifact.type}`);
+          }
+          if (toolUse.name === 'get_gis_layers') {
+            if (result && result.action) {
+              // Handle both show and hide layer actions
+              if (result.action === 'show_layer') {
+                layerToggles.push({ 
+                  layerId: result.layerId, 
+                  action: 'show', 
+                  style: result.style 
+                });
+              } else if (result.action === 'hide_layer') {
+                layerToggles.push({ 
+                  layerId: result.layerId, 
+                  action: 'hide' 
+                });
+              }
+              console.log(`[Chat] Captured layer toggle: ${result.layerId} -> ${result.action}`);
+            }
           }
 
           // Extract enrichments from tool result
@@ -355,6 +402,7 @@ router.post('/', async (req, res) => {
       sessionId: sessionId || 'default',
       ...(claudeSessionId && { claudeSessionId }),
       ...(mapData && { mapData }),
+      ...(layerToggles.length > 0 && { layerToggles }),
       ...(artifact && { artifact }),
       toolCalls: allToolUses, // List of tools Claude called
       usage: {

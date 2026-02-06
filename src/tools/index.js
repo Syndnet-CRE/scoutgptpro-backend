@@ -218,25 +218,7 @@ Use this for ALL property searches - it provides better results than search_prop
   },
   {
     name: 'get_gis_layers',
-    description: `Get GIS layer data for a bounding box or specific parcel.
-
-LOCAL DATA (fast, stored in database):
-- zoning_districts: 22,488 zoning polygons for Austin/Travis County
-- parcels_boundaries: Parcel boundaries from Travis CAD
-- floodplain: Austin floodplain data (gis_floodplain_austin)
-- water_mains: Water CCN boundaries (gis_water_ccn)
-- sewer_mains: Sewer CCN boundaries (gis_sewer_ccn)
-- wetlands: CEF wetlands (gis_wetlands_cef)
-- contours: Elevation contours (gis_contours_austin)
-- cef_buffers: CEF biological buffers (gis_cef_buffers)
-- water_districts: Water/wastewater districts (gis_water_districts)
-
-NOT YET LOADED:
-- fema_flood_zones: FEMA flood data (use floodplain instead)
-- building_permits: Building permits (not yet imported)
-- gas_mains: Gas infrastructure (not yet imported)
-
-Returns GeoJSON FeatureCollection for local layers, or error message for unavailable layers.`,
+    description: `Get GIS layer data for map visualization. Available layers with data: zoning_districts (22,488 zoning polygons), opportunity_zones (3 zones), zip_boundaries (1,989 ZIP codes). Layers without data yet: floodplain_austin, sewer_ccn, water_ccn, water_districts, wetlands_cef, cef_buffers, contours_austin.`,
     input_schema: {
       type: 'object',
       properties: {
@@ -244,17 +226,15 @@ Returns GeoJSON FeatureCollection for local layers, or error message for unavail
           type: 'string',
           enum: [
             'zoning_districts',
-            'parcels_boundaries',
-            'floodplain',
-            'water_mains',
-            'sewer_mains',
-            'wetlands',
-            'contours',
-            'cef_buffers',
+            'floodplain_austin',
+            'sewer_ccn',
+            'water_ccn',
             'water_districts',
-            'fema_flood_zones',
-            'building_permits',
-            'gas_mains'
+            'wetlands_cef',
+            'cef_buffers',
+            'contours_austin',
+            'opportunity_zones',
+            'zip_boundaries'
           ],
           description: 'The GIS layer to retrieve'
         },
@@ -268,6 +248,12 @@ Returns GeoJSON FeatureCollection for local layers, or error message for unavail
         parcel_id: {
           type: 'string',
           description: 'Get layers intersecting a specific parcel (alternative to bbox)'
+        },
+        action: {
+          type: 'string',
+          enum: ['show', 'hide'],
+          description: 'Whether to show or hide the layer. Default: show',
+          default: 'show'
         }
       },
       required: ['layer_id']
