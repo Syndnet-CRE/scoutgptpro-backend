@@ -396,6 +396,31 @@ async function getPropertyCardsBatch(attomIds) {
 }
 
 /**
+ * Get property card by coordinates (finds nearest property)
+ */
+async function getPropertyCardByCoords(lng, lat) {
+  // Find nearest ATTOM property by coordinates
+  // Uses simple Euclidean distance on lat/lng — accurate enough
+  // within a single county for nearest-neighbor at parcel scale
+  const resolveQuery = `
+    SELECT attom_id
+    FROM attom_assessor
+    WHERE latitude IS NOT NULL
+      AND longitude IS NOT NULL
+    ORDER BY
+      ((longitude::float - $1) * (longitude::float - $1)) +
+      ((latitude::float - $2) * (latitude::float - $2))
+    LIMIT 1
+  `;
+  
+  const { rows } = await pool.query(resolveQuery, [lng, lat]);
+  
+  if (rows.length === 0) return null;
+  
+  return getPropertyCard(rows[0].attom_id);
+}
+
+/**
  * Search properties with filters — returns GeoJSON FeatureCollection
  * This is the function used by the search_properties tool handler
  */
@@ -566,6 +591,7 @@ export {
   getPropertyCard, 
   getPropertyCardsBatch, 
   getPropertyCardByApn,
+  getPropertyCardByCoords,
   searchProperties, 
   getPropertyDetail,
   normalizePropertyCard

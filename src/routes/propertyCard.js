@@ -3,9 +3,31 @@
 // Created: Feb 8, 2026
 
 import express from 'express';
-import { getPropertyCard, getPropertyCardsBatch, getPropertyCardByApn } from '../services/propertyCard.js';
+import { getPropertyCard, getPropertyCardsBatch, getPropertyCardByApn, getPropertyCardByCoords } from '../services/propertyCard.js';
 
 const router = express.Router();
+
+// GET /api/properties/nearest?lng=-97.755&lat=30.256
+router.get('/nearest', async (req, res) => {
+  try {
+    const { lng, lat } = req.query;
+    
+    if (!lng || !lat || isNaN(parseFloat(lng)) || isNaN(parseFloat(lat))) {
+      return res.status(400).json({ error: 'Valid lng and lat query params required' });
+    }
+    
+    const card = await getPropertyCardByCoords(parseFloat(lng), parseFloat(lat));
+    
+    if (!card) {
+      return res.status(404).json({ error: 'No property found near coordinates' });
+    }
+    
+    res.json(card);
+  } catch (err) {
+    console.error('Nearest property error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 // GET /api/properties/apn/:apn/card
 // Resolves APN → attom_id, then returns full property card
