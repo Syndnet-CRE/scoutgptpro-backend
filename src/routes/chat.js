@@ -13,7 +13,6 @@ import {
   getClaudeSession
 } from '../services/claude-writeback/index.js';
 import { extractEnrichments } from '../services/claude-writeback/enrichment-extractor.js';
-import { getSchemaPromptSection } from '../services/query-orchestrator/schemaContext.js';
 import { normalizeProperty } from '../utils/normalizeProperty.js';
 
 const router = express.Router();
@@ -25,129 +24,67 @@ const client = new Anthropic({
 const MODEL = 'claude-sonnet-4-20250514';
 const MAX_ITERATIONS = 10;
 
-const getSystemPrompt = () => `You are ScoutGPT, an AI assistant for real estate investors analyzing properties in Travis County, Texas.
+const SYSTEM_PROMPT = `You are ScoutGPT, an AI-powered real estate intelligence platform for investors analyzing properties in Travis County, Texas.
 
-## Your Data Sources
-- Property database with 372,000+ parcels (parcel_features_travis)
-- GIS layers: flood zones, zoning, utilities, permits
-- Web search for market news and current information
-- OpenStreetMap for nearby amenities
+## Your Data
+You have direct access to the ATTOM property database:
+- 444K assessed properties with ownership, values, zoning, and tax data
+- 428K parcel geometries (PostGIS boundaries)
+- 46K preforeclosure/distress records
+- 360K loan position records (balances, rates, LTV, equity)
+- 345K rental AVM estimates
+- 416K climate risk scores (heat, storm, wildfire, drought, flood)
+- 411K FEMA flood zone mappings
+- 3.1M building permit records
+- 1.5M transaction/recorder records
 
-## Your Capabilities
-1. Search properties by location, size, value, type, and distress signals
-2. Get detailed property information including ownership, values, and zoning
-3. Analyze development feasibility with constraints and recommendations
-4. Search the web for market news and recent activity
-5. Find nearby amenities and assess walkability
-6. Display GIS layers on the map
-7. Generate professional reports and analyses
+Plus: GIS layers (zoning, flood zones, utilities), web search, and 50K+ OpenStreetMap POIs.
+
+## Tool Selection Guide
+
+**search_properties** — For finding properties matching criteria. Returns GeoJSON for map display.
+Use when: "Find properties in 78702", "Show me commercial land over 5 acres", "Vacant lots under $500K"
+Returns: Map pins + property cards with core data (address, owner, acres, value, zoning)
+
+**get_property** — For deep dive on one property by ATTOM ID.
+Use when: User clicks a property or asks "Tell me about property 323628305"
+Returns: Full card with loans, climate risk, permits, distress, rental estimate
+
+**execute_sql** — For analytical questions requiring aggregation, comparison, or multi-table analysis.
+Use when: "What's the average cap rate in 78745?", "How many NODs filed this year?", "Compare flood risk across zip codes", "Which areas have the most permit activity?", "Find properties with high equity and distress signals"
+Returns: Query results (rows + counts). You write the SQL.
+
+**analyze_property** — For development feasibility analysis.
+Use when: "Can I build apartments on this parcel?", "What are the development constraints?"
+
+**web_search** — For current market news, recent sales activity, market trends.
+Use when: "What's happening in the Austin market?", "Recent news about 78702 development"
+
+**get_osm_nearby** — For amenities near a location.
+**get_gis_layers** — For displaying overlay layers on the map.
+**generate_artifact** — For creating downloadable reports (PDF, CSV, XLSX).
+
+## SQL Tips for execute_sql
+When writing SQL, remember:
+- Primary table: attom_assessor (a) joined to attom_parcels (p) ON p.apn = a.apn_formatted
+- Distress: LEFT JOIN attom_preforeclosure pf ON pf.attom_id = a.attom_id
+- Loans: LEFT JOIN attom_loan_model lm ON NULLIF(lm.attomid,'')::bigint = a.attom_id
+- Rentals: LEFT JOIN attom_rental_avm rv ON NULLIF(rv.attomid,'')::bigint = a.attom_id
+- Climate: LEFT JOIN attom_climate_change_risk cr ON NULLIF(cr.attomid,'')::bigint = a.attom_id
+- Permits: LEFT JOIN attom_building_permit bp ON NULLIF(bp.attomid,'')::bigint = a.attom_id
+- Recorder: LEFT JOIN attom_recorder rec ON rec.attomid::bigint = a.attom_id
+- P1 table columns are TEXT UPPERCASE — always double-quote and cast: NULLIF("OPENLOAN1AMOUNT",'')::numeric
+- Cap rate formula: (NULLIF(rv."ESTIMATEDRENTALVALUE",'')::numeric * 12 * 0.65) / NULLIF(a.market_value_total, 0)
+- Equity: a.market_value_total - NULLIF(lm."OPENLOAN1AMOUNT",'')::numeric
+- Always include LIMIT
 
 ## Response Guidelines
 - Be concise and direct
 - When showing properties, mention count and key characteristics
-- When analyzing, highlight constraints and opportunities
-- For reports, generate artifacts the user can view and download
-- If a query is ambiguous, ask for clarification
-
-## Important
-- Use intelligent_property_search for ALL property searches - it handles natural language, location context, and complex filters
-- Use search_properties only for simple filter-only queries with known exact values (deprecated, prefer intelligent_property_search)
-- Use analyze_property for feasibility questions
-- Use generate_artifact when user wants reports or downloadable content
-- Use web_search for market conditions or current news
-- Property values are in USD, acreage is in acres
-- To find vacant land, use asset_class='land' filter. To find unimproved parcels, search for properties where improvement_value is 0 or very low
-
-## GIS Layer Data
-
-You can show GIS layers on the map using the get_gis_layers tool.
-
-LAYERS WITH DATA (can be shown now):
-- zoning_districts: 22,488 zoning polygons for Austin/Travis County
-- opportunity_zones: 3 Qualified Opportunity Zones
-- zip_boundaries: 1,989 ZIP code boundary polygons
-- floodplain_austin: 1,000 Austin floodplain boundaries
-- water_ccn: 137 water service area boundaries (CCN)
-- sewer_ccn: 77 sewer service area boundaries (CCN)
-
-LAYERS WITHOUT DATA (tell user "not yet available"):
-- water_districts: Water/wastewater district boundaries (import pending)
-- wetlands_cef: CEF wetland boundaries (import pending)
-- cef_buffers: CEF biological buffers (import pending)
-- contours_austin: Elevation contour lines (import pending)
-
-When a user asks to see a GIS layer:
-1. Call get_gis_layers with the layer_id
-2. If the layer has data, tell the user it's being displayed
-3. If the layer has no data, tell the user it's not yet available
-4. NEVER fabricate or hallucinate GIS data
-
-When a user asks to HIDE or REMOVE a layer:
-1. Call get_gis_layers with the layer_id AND action: "hide"
-2. The frontend will remove the layer from the map
-
-${getSchemaPromptSection()}
-
----BEGIN SCHEMA CONTEXT---
-
-## Database Schema — What You Can Query
-
-### Primary table: parcel_features_travis (372K+ parcels in Travis County, TX)
-
-**Queryable columns:**
-| Column | Type | Notes |
-|--------|------|-------|
-| parcel_id | TEXT (PK) | 6-digit ID, e.g. "860761" |
-| county_fips | TEXT | Always "48453" for Travis |
-| situs_address | TEXT | Full address, e.g. "1234 Main St, Austin, TX 78701" |
-| owner_name_raw | TEXT | Owner name |
-| owner_entity_type | TEXT | Values: "individual", "corporate", "trust_estate", "llc_lp", "government" |
-| owner_segment | TEXT | Values: same as owner_entity_type |
-| acres_calc | NUMERIC | Lot size in acres |
-| asset_class | TEXT | Values: "land", "residential", "commercial", "industrial", "unknown" |
-| market_value | NUMERIC | Assessed market value in dollars |
-| assessed_total_value | NUMERIC | Assessed total value |
-| tax_delinquent_flag | BOOLEAN | true = delinquent on taxes |
-| homestead_exemption_flag | BOOLEAN | true = has homestead |
-| mail_zip | TEXT | Mailing ZIP code |
-| land_use_code | TEXT | Land use category code |
-| land_use_desc | TEXT | Land use description |
-| geom_centroid | GEOMETRY(Point) | Centroid for spatial queries |
-
-**Enrichment table: parcels_travis_enrichment (LEFT JOIN on parcel_id)**
-| Column | Type | Notes |
-|--------|------|-------|
-| land_value | NUMERIC | Land-only value |
-| improvement_value | NUMERIC | Improvement (building) value |
-| year_built | INTEGER | Year built (null for vacant) |
-| zoning_code | TEXT | Zoning designation |
-| flood_zone | TEXT | FEMA flood zone |
-| last_sale_date | DATE | Last recorded sale |
-| last_sale_price | NUMERIC | Last sale price |
-
-**Spatial table: parcels_travis (LEFT JOIN on parcel_id)**
-| Column | Type | Notes |
-|--------|------|-------|
-| geom | GEOMETRY(MultiPolygon) | Full parcel boundary |
-
-### How to filter:
-- ZIP code: Parse from situs_address using LIKE '%78702%'
-- City: Parse from situs_address using ILIKE '%austin%'
-- There is NO separate situs_zip or situs_city column
-- There is NO is_vacant column — infer from asset_class = 'land'
-- Use homestead_exemption_flag (not has_homestead)
-- Use tax_delinquent_flag (not is_tax_delinquent)
-
-### Derived metrics (computed by backend, not in DB):
-- valuePerAcre = market_value / acres_calc
-- valuePerSqft = market_value / (acres_calc * 43560)
-- improvementRatio = improvement_value / market_value
-
-### Geographic coverage:
-- Travis County, Texas only (county_fips = 48453)
-- Bounding box: [-98.17, 30.07, -97.37, 30.63]
-
----END SCHEMA CONTEXT---`;
+- For analytical queries, interpret the data — don't just dump numbers
+- Property IDs are ATTOM IDs (numeric strings like "323628305")
+- Values are in USD, acreage in acres
+- Highlight distress signals, opportunities, and risks proactively`;
 
 /**
  * POST /api/chat
@@ -186,7 +123,7 @@ router.post('/', async (req, res) => {
         const session = await createClaudeSession({
           sessionId,
           model: MODEL,
-          systemPrompt: getSystemPrompt()
+          systemPrompt: SYSTEM_PROMPT
         });
         claudeSessionId = session.id;
         isNewSession = true;
@@ -231,7 +168,7 @@ router.post('/', async (req, res) => {
     let response = await client.messages.create({
       model: MODEL,
       max_tokens: 4096,
-      system: getSystemPrompt(),
+      system: SYSTEM_PROMPT,
       tools: TOOLS,
       messages: claudeMessages
     });
@@ -251,15 +188,36 @@ router.post('/', async (req, res) => {
       for (const toolUse of toolUseBlocks) {
         console.log(`[Chat] Executing tool: ${toolUse.name}`);
         
-        // Track tool use
-        allToolUses.push({
-          id: toolUse.id,
-          name: toolUse.name,
-          input: toolUse.input
-        });
+        const toolStartTime = Date.now();
+        let toolDuration = null;
+        let resultCount = null;
 
         try {
           const result = await routeToolCall(toolUse.name, toolUse.input);
+          toolDuration = Date.now() - toolStartTime;
+          
+          // Derive result count from common response patterns
+          if (result?.features?.length !== undefined) {
+            resultCount = result.features.length;  // GeoJSON FeatureCollection
+          } else if (Array.isArray(result)) {
+            resultCount = result.length;           // Array results
+          } else if (result?.results?.length !== undefined) {
+            resultCount = result.results.length;   // Wrapped array results
+          } else if (result?.pois?.length !== undefined) {
+            resultCount = result.pois.length;      // OSM POI results
+          } else if (result?.analyses?.length !== undefined) {
+            resultCount = result.analyses.length;  // Analysis results
+          }
+          
+          // Track successful tool use with metadata
+          allToolUses.push({
+            id: toolUse.id,
+            name: toolUse.name,
+            input: toolUse.input,
+            duration: toolDuration,
+            resultCount: resultCount,
+            timestamp: new Date().toISOString()
+          });
           
           // Capture map data and artifacts
           const MAP_TOOLS = ['search_properties', 'intelligent_property_search', 'get_gis_layers'];
@@ -307,7 +265,21 @@ router.post('/', async (req, res) => {
             content: JSON.stringify(result)
           });
         } catch (err) {
+          toolDuration = Date.now() - toolStartTime;
+          
           console.error(`[Chat] Tool error: ${toolUse.name}`, err.message);
+          
+          // Track failed tool use with error metadata
+          allToolUses.push({
+            id: toolUse.id,
+            name: toolUse.name,
+            input: toolUse.input,
+            duration: toolDuration,
+            resultCount: null,
+            timestamp: new Date().toISOString(),
+            error: err.message
+          });
+          
           toolResults.push({
             type: 'tool_result',
             tool_use_id: toolUse.id,
@@ -321,7 +293,7 @@ router.post('/', async (req, res) => {
       response = await client.messages.create({
         model: MODEL,
         max_tokens: 4096,
-        system: getSystemPrompt(),
+        system: SYSTEM_PROMPT,
         tools: TOOLS,
         messages: [
           ...claudeMessages,

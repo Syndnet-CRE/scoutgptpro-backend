@@ -6,62 +6,6 @@ import { getSchemaPromptSection } from '../services/query-orchestrator/index.js'
 
 export const TOOLS = [
   {
-    name: 'intelligent_property_search',
-    description: `Search properties with intelligent query understanding and enriched results.
-
-Handles:
-- Natural language location ("downtown Austin", "near I-35", "in 78702")
-- Relative size terms ("large", "small", "over 5 acres")  
-- Property types ("commercial", "developable land")
-- Investment criteria ("distressed", "tax delinquent")
-
-Returns enriched GeoJSON with:
-- Core property data (address, owner, acreage, values)
-- Zoning interpretation (what uses are allowed)
-- Value metrics ($/acre, improvement ratio)
-- Opportunity flags (tax_delinquent, underimproved, development_potential)
-
-Use this for ALL property searches - it provides better results than search_properties.`,
-
-    input_schema: {
-      type: 'object',
-      properties: {
-        query: {
-          type: 'string',
-          description: 'Natural language description of desired properties'
-        },
-        filters: {
-          type: 'object',
-          description: 'Explicit structured filters',
-          properties: {
-            asset_class: { type: 'string', enum: ['residential', 'commercial', 'industrial', 'land', 'agricultural'] },
-            min_acres: { type: 'number' },
-            max_acres: { type: 'number' },
-            min_value: { type: 'number' },
-            max_value: { type: 'number' },
-            zoning_code: { type: 'string' },
-            owner_type: { type: 'string', enum: ['individual', 'llc', 'corporation', 'trust', 'government'] },
-            tax_delinquent: { type: 'boolean' },
-            exclude_flood_zone: { type: 'boolean' },
-            zip_code: { type: 'string' },
-            city: { type: 'string' }
-          }
-        },
-        location: {
-          type: 'object',
-          properties: {
-            reference: { type: 'string', description: 'Location: "downtown Austin", "78702", address' },
-            distance_meters: { type: 'number', description: 'Search radius (default 5000)' },
-            bbox: { type: 'array', items: { type: 'number' }, description: '[minLng, minLat, maxLng, maxLat]' }
-          }
-        },
-        sort_by: { type: 'string', enum: ['value_per_acre', 'market_value', 'acres_calc', 'year_built'] },
-        limit: { type: 'number', default: 25, maximum: 100 }
-      },
-      required: ['query']
-    }
-  },
-  {
     name: 'search_properties',
     description: 'Search Travis County property database. Returns GeoJSON for map display. Use this whenever the user asks to find, show, or search for properties.',
     input_schema: {
@@ -141,6 +85,88 @@ Use this for ALL property searches - it provides better results than search_prop
         }
       },
       required: ['parcel_id']
+    }
+  },
+  {
+    name: 'execute_sql',
+    description: `Execute a read-only SQL query against the ATTOM property database.
+
+Use this for complex analytical queries beyond simple property search:
+- Aggregations: average values by zip, cap rate distributions, permit volume
+- Multi-table analysis: distress + loan + climate correlations
+- Trend analysis: permit activity over time, foreclosure pipeline
+- Comparisons: zip code vs zip code, market segment analysis
+- Custom scoring: motivation signals, opportunity ranking
+- Spatial analysis: properties near a point, within a polygon
+
+AVAILABLE TABLES:
+
+1. attom_assessor (444K rows) — PRIMARY property table
+   PK: attom_id (BIGINT). Typed snake_case columns.
+   Columns: address_full, address_city, address_zip, latitude, longitude,
+   owner1_name, owner_type_desc, company_flag, owner_occupied,
+   property_use_group, zoned_code_local,
+   year_built, building_sqft, lot_acres, bedrooms_count, bath_count, units_count,
+   market_value_total, market_value_land, market_value_improve,
+   tax_billed_amount, tax_delinquent_year, homestead_exempt,
+   last_sale_date, last_sale_price, apn_formatted
+
+2. attom_parcels (428K) — Geometry. Join: apn = attom_assessor.apn_formatted
+   Columns: geom (MultiPolygon SRID 4326), latitude, longitude, apn
+
+3. attom_preforeclosure (46K) — Distress signals
+   Join: attom_id → attom_assessor.attom_id. Typed snake_case.
+   Columns: record_type, recording_date, default_amount, auction_date, lender_name
+
+4. attom_loan_model (360K) — Loan positions
+   Join: NULLIF(attomid,'')::bigint → attom_assessor.attom_id
+   ALL TEXT UPPERCASE columns: "OPENLOAN1AMOUNT", "OPENLOAN1INTERESTRATE",
+   "OPENLOAN2AMOUNT", "LTV", "AVAILABLEEQUITY", "LENDERNAMEFIRSTPOSITION"
+   Cast numerics: NULLIF("OPENLOAN1AMOUNT",'')::numeric
+
+5. attom_rental_avm (345K) — Rental estimates
+   Join: NULLIF(attomid,'')::bigint → attom_assessor.attom_id
+   ALL TEXT UPPERCASE: "ESTIMATEDRENTALVALUE", "AVMVALUE", "CONFIDENCESCORE"
+   Cast: NULLIF("ESTIMATEDRENTALVALUE",'')::numeric
+
+6. attom_climate_change_risk (416K) — Climate risk scores
+   Join: NULLIF(attomid,'')::bigint → attom_assessor.attom_id
+   ALL TEXT UPPERCASE: "HEATRISKSCORE", "STORMRISKSCORE", "WILDFIRERISKSCORE",
+   "DROUGHTRISKSCORE", "FLOODRISKSCORE", "TOTALRISK"
+
+7. attom_boundary_floodzones (411K) — FEMA flood zones
+   Join: NULLIF(attomid,'')::bigint → attom_assessor.attom_id
+   ALL TEXT UPPERCASE: "GEOID", "GEOTYPE"
+
+8. attom_building_permit (3.1M) — Building permits
+   Join: NULLIF(attomid,'')::bigint → attom_assessor.attom_id
+   ALL TEXT UPPERCASE: "PERMITNUMBER", "STATUS", "DESCRIPTION", "TYPE", "JOBVALUE", "EFFECTIVEDATE"
+
+9. attom_recorder (1.5M) — Transaction history
+   Join: attomid::bigint → attom_assessor.attom_id
+   ALL TEXT UPPERCASE: "DOCUMENTTYPE", "RECORDINGDATE", "TRANSFERAMOUNT", "MORTGAGE1AMOUNT"
+
+CRITICAL SQL RULES:
+- Tables 4-9 have ALL TEXT UPPERCASE column names. You MUST double-quote them: "OPENLOAN1AMOUNT"
+- Cast text to numeric: NULLIF("OPENLOAN1AMOUNT",'')::numeric
+- Join pattern for tables 4-8: NULLIF(t.attomid,'')::bigint = a.attom_id
+- Join for table 9 (recorder): t.attomid::bigint = a.attom_id (attomid is already numeric text)
+- Always include LIMIT
+- SELECT only — no writes`,
+
+    input_schema: {
+      type: 'object',
+      required: ['sql'],
+      properties: {
+        sql: {
+          type: 'string',
+          description: 'Read-only SQL query. Must include LIMIT. Must be SELECT/WITH/EXPLAIN only.'
+        },
+        description: {
+          type: 'string',
+          description: 'Brief description of what this query answers'
+        }
+      }
     }
   },
   {
@@ -283,24 +309,6 @@ Use this for ALL property searches - it provides better results than search_prop
         }
       },
       required: ['type', 'parcel_ids']
-    }
-  },
-  {
-    name: 'get_census_data',
-    description: 'Get demographic data from the US Census Bureau for a location. Returns population, median income, median age, housing statistics, vacancy rates, and rent data for the census tract containing the given coordinates.',
-    input_schema: {
-      type: 'object',
-      properties: {
-        latitude: {
-          type: 'number',
-          description: 'Latitude of the location'
-        },
-        longitude: {
-          type: 'number',
-          description: 'Longitude of the location'
-        }
-      },
-      required: ['latitude', 'longitude']
     }
   }
 ];

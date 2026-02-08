@@ -234,16 +234,21 @@ export async function resolveGeography(locationRef, options = {}) {
 }
 
 /**
- * Convert resolved geography to PostGIS WHERE clause
+ * Convert resolved geography to SQL WHERE conditions
+ * Updated for ATTOM: uses latitude/longitude columns instead of geometry column
+ * 
+ * @param {object} geography - Resolved geography object
+ * @param {string} latColumn - Latitude column name (default: 'latitude')
+ * @param {string} lngColumn - Longitude column name (default: 'longitude')
  */
-export function toSpatialCondition(geography, geometryColumn = 'geom_centroid') {
+export function toSpatialCondition(geography, latColumn = 'latitude', lngColumn = 'longitude') {
   if (!geography) return null;
   
   if (geography.type === 'bbox') {
     const [minLng, minLat, maxLng, maxLat] = geography.coordinates;
     return {
-      clause: `ST_Intersects(${geometryColumn}, ST_MakeEnvelope($1, $2, $3, $4, 4326))`,
-      params: [minLng, minLat, maxLng, maxLat]
+      clause: `${lngColumn} BETWEEN $1 AND $2 AND ${latColumn} BETWEEN $3 AND $4`,
+      params: [minLng, maxLng, minLat, maxLat]
     };
   }
   
@@ -251,7 +256,7 @@ export function toSpatialCondition(geography, geometryColumn = 'geom_centroid') 
     const [lng, lat] = geography.coordinates;
     const distance = geography.distance_meters || 5000;
     return {
-      clause: `ST_DWithin(${geometryColumn}::geography, ST_Point($1, $2)::geography, $3)`,
+      clause: `ST_DWithin(ST_SetSRID(ST_MakePoint(${lngColumn}, ${latColumn}), 4326)::geography, ST_Point($1, $2)::geography, $3)`,
       params: [lng, lat, distance]
     };
   }

@@ -1,46 +1,42 @@
 /**
  * Result Enrichment Service
  * Enriches query results with computed fields, rankings, and insights
+ * Updated for ATTOM columns
  */
 
-/**
- * Calculate value per acre for a property
- */
 function calculateValuePerAcre(property) {
-  if (!property.acres_calc || property.acres_calc === 0) return null;
-  if (!property.market_value) return null;
-  return property.market_value / property.acres_calc;
+  const acres = parseFloat(property.lot_acres) || 0;
+  const value = parseFloat(property.market_value_total) || 0;
+  if (acres === 0 || value === 0) return null;
+  return value / acres;
 }
 
-/**
- * Calculate motivation score for a property
- * Higher score = more motivated seller
- */
 function calculateMotivationScore(property) {
-  let score = 50; // Base score
+  let score = 50;
   const factors = [];
 
-  // Tax delinquency (strong indicator) +25
-  if (property.tax_delinquent_flag === true) {
+  // Tax delinquency +25
+  if (property.tax_delinquent_year != null) {
     score += 25;
     factors.push('tax-delinquent');
   }
 
-  // Absentee owner (mailing city != property city) +15
-  const mailCity = (property.mail_city || '').toLowerCase();
-  const propCity = (property.situs_address || '').toLowerCase();
-  if (mailCity && mailCity !== propCity && mailCity.length > 0 && !mailCity.includes('austin')) {
+  // Absentee owner +15
+  const propCity = (property.address_city || '').toLowerCase();
+  // If owner_occupied is false, they're absentee
+  if (property.owner_occupied === false) {
     score += 15;
     factors.push('absentee-owner');
   }
 
   // Vacant land (no improvements) +10
-  if (!property.improvement_value || property.improvement_value === 0) {
+  const improvementValue = parseFloat(property.market_value_improve) || 0;
+  if (improvementValue === 0) {
     score += 10;
     factors.push('vacant-land');
   }
 
-  // Low value per acre (potentially undervalued) +10
+  // Low value per acre +10
   const valuePerAcre = calculateValuePerAcre(property);
   if (valuePerAcre && valuePerAcre < 30000) {
     score += 10;
@@ -48,18 +44,24 @@ function calculateMotivationScore(property) {
   }
 
   // Large lot +5
-  if (property.acres_calc && property.acres_calc > 1) {
+  const acres = parseFloat(property.lot_acres) || 0;
+  if (acres > 1) {
     score += 5;
     factors.push('large-lot');
   }
 
-  // Corporate/trust ownership (often more motivated) +5
-  const ownerLower = (property.owner_name_raw || '').toLowerCase();
-  if (ownerLower.includes('llc') || ownerLower.includes('trust') || 
-      ownerLower.includes('corp') || ownerLower.includes('inc') || 
-      ownerLower.includes('estate')) {
+  // Corporate/trust ownership +5
+  if (property.company_flag === true) {
     score += 5;
     factors.push('entity-owned');
+  } else {
+    const ownerLower = (property.owner1_name || '').toLowerCase();
+    if (ownerLower.includes('llc') || ownerLower.includes('trust') || 
+        ownerLower.includes('corp') || ownerLower.includes('inc') || 
+        ownerLower.includes('estate')) {
+      score += 5;
+      factors.push('entity-owned');
+    }
   }
 
   return {
@@ -68,75 +70,63 @@ function calculateMotivationScore(property) {
   };
 }
 
-/**
- * Determine opportunity flags for a property
- */
 function getOpportunityFlags(property) {
   const flags = [];
 
-  // Undervalued
   const valuePerAcre = calculateValuePerAcre(property);
   if (valuePerAcre && valuePerAcre < 50000) {
     flags.push('potentially-undervalued');
   }
 
-  // Tax delinquent
-  if (property.tax_delinquent_flag === true) {
+  if (property.tax_delinquent_year != null) {
     flags.push('tax-delinquent');
   }
 
-  // Vacant land
-  if (!property.improvement_value || property.improvement_value === 0) {
+  const improvementValue = parseFloat(property.market_value_improve) || 0;
+  if (improvementValue === 0) {
     flags.push('vacant-land');
   }
 
-  // Large lot
-  if (property.acres_calc && property.acres_calc > 1) {
+  const acres = parseFloat(property.lot_acres) || 0;
+  if (acres > 1) {
     flags.push('large-lot');
   }
 
-  // Absentee owner
-  const mailCity = (property.mail_city || '').toLowerCase();
-  if (mailCity && !mailCity.includes('austin') && mailCity.length > 0) {
+  if (property.owner_occupied === false) {
     flags.push('absentee-owner');
   }
 
   return flags;
 }
 
-/**
- * Enrich a single property result
- */
 function enrichProperty(property, index, allResults) {
   const enriched = { ...property };
 
-  // Computed fields
   enriched.value_per_acre = calculateValuePerAcre(property);
   
-  // Motivation score
   const motivation = calculateMotivationScore(property);
   enriched.motivation_score = motivation.score;
   enriched.motivation_factors = motivation.factors;
   
-  // Opportunity flags
   enriched.opportunity_flags = getOpportunityFlags(property);
 
-  // Rankings (if we have all results)
   if (allResults && allResults.length > 1) {
-    // Rank by value per acre (lower is better for deals)
     const sortedByValuePerAcre = [...allResults]
       .filter(p => calculateValuePerAcre(p) !== null)
       .sort((a, b) => calculateValuePerAcre(a) - calculateValuePerAcre(b));
-    enriched.value_per_acre_rank = sortedByValuePerAcre.findIndex(p => p.parcel_id === property.parcel_id) + 1;
+    enriched.value_per_acre_rank = sortedByValuePerAcre.findIndex(p => 
+      String(p.attom_id || p.parcel_id) === String(property.attom_id || property.parcel_id)
+    ) + 1;
     enriched.value_per_acre_percentile = enriched.value_per_acre_rank 
       ? Math.round((enriched.value_per_acre_rank / sortedByValuePerAcre.length) * 100) 
       : null;
 
-    // Rank by motivation score (higher is better)
     const sortedByMotivation = [...allResults]
       .filter(p => calculateMotivationScore(p).score !== null)
       .sort((a, b) => calculateMotivationScore(b).score - calculateMotivationScore(a).score);
-    enriched.motivation_rank = sortedByMotivation.findIndex(p => p.parcel_id === property.parcel_id) + 1;
+    enriched.motivation_rank = sortedByMotivation.findIndex(p => 
+      String(p.attom_id || p.parcel_id) === String(property.attom_id || property.parcel_id)
+    ) + 1;
     enriched.motivation_percentile = enriched.motivation_rank 
       ? Math.round((enriched.motivation_rank / sortedByMotivation.length) * 100) 
       : null;
@@ -145,13 +135,8 @@ function enrichProperty(property, index, allResults) {
   return enriched;
 }
 
-/**
- * Calculate summary statistics for a result set
- */
 function calculateSummaryStats(results) {
-  if (!results || results.length === 0) {
-    return null;
-  }
+  if (!results || results.length === 0) return null;
 
   const stats = {
     total_count: results.length,
@@ -171,31 +156,25 @@ function calculateSummaryStats(results) {
   const motivationScores = [];
 
   for (const property of results) {
-    // Totals
-    if (property.acres_calc) stats.total_acres += parseFloat(property.acres_calc) || 0;
-    if (property.market_value) stats.total_value += parseFloat(property.market_value) || 0;
+    if (property.lot_acres) stats.total_acres += parseFloat(property.lot_acres) || 0;
+    if (property.market_value_total) stats.total_value += parseFloat(property.market_value_total) || 0;
 
-    // Counts
-    if (property.tax_delinquent_flag === true) stats.tax_delinquent_count++;
-    if (!property.improvement_value || property.improvement_value === 0) stats.vacant_land_count++;
+    if (property.tax_delinquent_year != null) stats.tax_delinquent_count++;
     
-    const mailCity = (property.mail_city || '').toLowerCase();
-    if (mailCity && !mailCity.includes('austin') && mailCity.length > 0) {
+    const improvementValue = parseFloat(property.market_value_improve) || 0;
+    if (improvementValue === 0) stats.vacant_land_count++;
+    
+    if (property.owner_occupied === false) {
       stats.absentee_owner_count++;
     }
 
-    // Value per acre
     const vpa = calculateValuePerAcre(property);
-    if (vpa !== null) {
-      valuePerAcreValues.push(vpa);
-    }
+    if (vpa !== null) valuePerAcreValues.push(vpa);
 
-    // Motivation score
     const motivation = calculateMotivationScore(property);
     motivationScores.push(motivation.score);
   }
 
-  // Calculate averages and medians
   if (valuePerAcreValues.length > 0) {
     valuePerAcreValues.sort((a, b) => a - b);
     stats.avg_value_per_acre = valuePerAcreValues.reduce((a, b) => a + b, 0) / valuePerAcreValues.length;
@@ -214,42 +193,26 @@ function calculateSummaryStats(results) {
   return stats;
 }
 
-/**
- * Enrich query results with computed fields, rankings, and statistics
- * 
- * @param {Array} results - Array of property objects from query
- * @param {object} options - Enrichment options
- * @returns {object} Enriched results with metadata
- */
 export function enrichResults(results, options = {}) {
-  if (!Array.isArray(results)) {
-    return { error: 'Results must be an array' };
-  }
+  if (!Array.isArray(results)) return { error: 'Results must be an array' };
 
   if (results.length === 0) {
-    return {
-      properties: [],
-      summary: null,
-      enriched_at: new Date().toISOString()
-    };
+    return { properties: [], summary: null, enriched_at: new Date().toISOString() };
   }
 
-  // Enrich each property
   const enrichedProperties = results.map((property, index) => 
     enrichProperty(property, index, results)
   );
 
-  // Calculate summary statistics
   const summary = calculateSummaryStats(enrichedProperties);
 
-  // Sort by motivation score (highest first) if requested
   if (options.sortBy === 'motivation') {
     enrichedProperties.sort((a, b) => (b.motivation_score || 0) - (a.motivation_score || 0));
   } else if (options.sortBy === 'value_per_acre') {
     enrichedProperties.sort((a, b) => {
       const aVpa = a.value_per_acre || Infinity;
       const bVpa = b.value_per_acre || Infinity;
-      return aVpa - bVpa; // Lower value per acre = better deal
+      return aVpa - bVpa;
     });
   }
 
@@ -257,31 +220,26 @@ export function enrichResults(results, options = {}) {
     properties: enrichedProperties,
     summary,
     enriched_at: new Date().toISOString(),
-    enrichment_version: '1.0'
+    enrichment_version: '2.0'
   };
 }
 
-/**
- * Get top opportunities from enriched results
- */
 export function getTopOpportunities(enrichedResults, limit = 10) {
-  if (!enrichedResults || !enrichedResults.properties) {
-    return [];
-  }
+  if (!enrichedResults || !enrichedResults.properties) return [];
 
   return enrichedResults.properties
     .filter(p => p.motivation_score && p.motivation_score >= 60)
     .sort((a, b) => (b.motivation_score || 0) - (a.motivation_score || 0))
     .slice(0, limit)
     .map(p => ({
-      parcel_id: p.parcel_id,
-      address: p.situs_address,
+      parcel_id: String(p.attom_id),
+      address: p.address_full,
       motivation_score: p.motivation_score,
       motivation_factors: p.motivation_factors,
       opportunity_flags: p.opportunity_flags,
       value_per_acre: p.value_per_acre,
-      market_value: p.market_value,
-      acres: p.acres_calc
+      market_value: parseFloat(p.market_value_total) || 0,
+      acres: parseFloat(p.lot_acres) || 0
     }));
 }
 

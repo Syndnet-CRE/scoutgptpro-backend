@@ -33,24 +33,24 @@ export function normalizeProperty(raw) {
   };
 
   // Get base values for computed fields
-  const acres = parseFloat(pick('acres', 'acres_calc')) || 0;
-  const marketValue = parseFloat(pick('marketValue', 'market_value')) || 0;
-  const improvementValue = parseFloat(pick('improvementValue', 'improvement_value')) || 0;
+  const acres = parseFloat(pick('acres', 'acres_calc', 'lot_acres')) || 0;
+  const marketValue = parseFloat(pick('marketValue', 'market_value', 'market_value_total')) || 0;
+  const improvementValue = parseFloat(pick('improvementValue', 'improvement_value', 'market_value_improve')) || 0;
 
   return {
-    // Core identifiers
-    parcelId: pick('parcelId', 'parcel_id', 'id') || '',
+    // Core identifiers — add attom_id
+    parcelId: pick('parcelId', 'parcel_id', 'attom_id', 'id') || '',
     
-    // Display fields
-    address: pick('address', 'situs_address') || '',
-    owner: pick('owner', 'owner_name_raw') || '',
+    // Display fields — add ATTOM columns
+    address: pick('address', 'situs_address', 'address_full') || '',
+    owner: pick('owner', 'owner_name_raw', 'owner1_name') || '',
     acres: acres,
-    assetClass: pick('assetClass', 'asset_class') || 'unknown',
+    assetClass: pick('assetClass', 'asset_class', 'property_use_group') || 'unknown',
     
-    // Values (always include as null if missing, don't omit)
+    // Values
     marketValue: marketValue,
     assessedValue: parseFloat(pick('assessedValue', 'assessed_value', 'assessed_total_value')) || null,
-    landValue: parseFloat(pick('landValue', 'land_value')) || null,
+    landValue: parseFloat(pick('landValue', 'land_value', 'market_value_land')) || null,
     improvementValue: improvementValue,
     
     // Computed fields
@@ -60,17 +60,37 @@ export function normalizeProperty(raw) {
     // Building details
     yearBuilt: pick('yearBuilt', 'year_built') || null,
     buildingSqft: parseFloat(pick('buildingSqft', 'building_sqft')) || null,
+    bedrooms: parseInt(pick('bedrooms', 'bedrooms_count')) || null,
+    bathrooms: parseFloat(pick('bathrooms', 'bath_count')) || null,
+    stories: parseFloat(pick('stories', 'stories_count')) || null,
     
-    // Flags (use ?? to preserve false values)
-    hasHomestead: pick('hasHomestead', 'homestead', 'homestead_exemption_flag') ?? false,
-    isTaxDelinquent: pick('isTaxDelinquent', 'taxDelinquent', 'tax_delinquent', 'tax_delinquent_flag') ?? false,
+    // Flags — add ATTOM columns
+    hasHomestead: pick('hasHomestead', 'homestead', 'homestead_exemption_flag', 'homestead_exempt') ?? false,
+    isTaxDelinquent: (() => {
+      const val = pick('isTaxDelinquent', 'taxDelinquent', 'tax_delinquent', 'tax_delinquent_flag', 'tax_delinquent_year');
+      if (typeof val === 'boolean') return val;
+      if (val !== null && val !== undefined) return true; // tax_delinquent_year is set = delinquent
+      return false;
+    })(),
+
+    // Owner details — add ATTOM columns
+    ownerType: pick('ownerType', 'owner_type', 'owner_entity_type', 'owner_type_desc') || '',
     
-    // Owner details  
-    ownerType: pick('ownerType', 'owner_type', 'owner_entity_type') || '',
-    
-    // GIS fields (if joined)
-    zoningCode: pick('zoningCode', 'zoning_code') || null,
+    // GIS fields
+    zoningCode: pick('zoningCode', 'zoning_code', 'zoned_code_local') || null,
     floodZone: pick('floodZone', 'flood_zone') || null,
+
+    // Sales data (new)
+    lastSaleDate: pick('lastSaleDate', 'last_sale_date') || null,
+    lastSalePrice: parseFloat(pick('lastSalePrice', 'last_sale_price')) || null,
+
+    // Rental data (new, from attom_rental_avm join)
+    estimatedRent: parseFloat(pick('estimatedRent', 'estimatedrentalvalue')) || null,
+
+    // Loan data (new, from attom_loan_model join)
+    loanAmount: parseFloat(pick('loanAmount', 'currentfirstpositionopenloanamount')) || null,
+    ltv: parseFloat(pick('ltv')) || null,
+    availableEquity: parseFloat(pick('availableEquity', 'availableequity')) || null,
     
     // Location (exclude geom_centroid as requested)
     latitude: parseFloat(pick('latitude', 'lat')) || null,

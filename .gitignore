@@ -29,3 +29,7 @@ zoning-districts-travis.geojson
 zoning-districts-travis.ndjson
 uploads/artifacts/
 docs/EXTERNAL_API_KEYS_AUDIT.md
+
+# ETL data files - do not commit
+scripts/etl/*.csv
+scripts/etl/__pycache__/

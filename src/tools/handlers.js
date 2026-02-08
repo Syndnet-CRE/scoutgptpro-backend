@@ -5,10 +5,10 @@ import { PrismaClient } from '@prisma/client';
 import { analyzeDevelopmentFeasibility } from '../services/enrichment/orchestrator.js';
 import { webSearch } from '../services/webSearch/index.js';
 import { createArtifact } from '../services/artifacts/index.js';
-import { intelligentPropertySearch } from '../services/query-orchestrator/index.js';
-import { getDemographicsForLocation } from '../services/census/index.js';
 import { normalizeProperty, normalizeProperties } from '../utils/normalizeProperty.js';
 import { LAYER_REGISTRY } from '../config/gis-layer-registry.js';
+import pool from '../db/pool.js';
+import { searchProperties as searchPropertiesService, getPropertyDetail } from '../services/propertyCard.js';
 
 const prisma = new PrismaClient();
 
@@ -22,12 +22,12 @@ export async function executeTool(toolName, toolInput) {
   console.log(`[Tool] Executing: ${toolName}`, JSON.stringify(toolInput).slice(0, 200));
   
   switch (toolName) {
-    case 'intelligent_property_search':
-      return await handleIntelligentSearch(toolInput);
     case 'search_properties':
       return await searchProperties(toolInput);
     case 'get_property':
       return await getProperty(toolInput);
+    case 'execute_sql':
+      return await executeSqlTool(toolInput);
     case 'analyze_property':
       return await analyzeProperty(toolInput);
     case 'web_search':
@@ -38,8 +38,6 @@ export async function executeTool(toolName, toolInput) {
       return await getGisLayers(toolInput);
     case 'generate_artifact':
       return await generateArtifact(toolInput);
-    case 'get_census_data':
-      return await getCensusData(toolInput);
     default:
       throw new Error(`Unknown tool: ${toolName}`);
   }
@@ -47,210 +45,85 @@ export async function executeTool(toolName, toolInput) {
 
 // ============ TOOL IMPLEMENTATIONS ============
 
-async function searchProperties({ filters = {}, limit = 50, bbox }) {
+async function searchProperties(input) {
   try {
-    const conditions = ['1=1'];
-    const values = [];
-    let paramIndex = 1;
-
-  // Build WHERE conditions from filters
-  // Note: mail_city and mail_zip are NULL in database - use situs_address parsing instead
-  if (filters.zip_code) {
-    conditions.push(`situs_address LIKE '%' || $${paramIndex++} || '%'`);
-    values.push(filters.zip_code);
-  }
-  if (filters.city) {
-    conditions.push(`situs_address ILIKE '%' || $${paramIndex++} || '%'`);
-    values.push(filters.city);
-  }
-  if (filters.zoning_code) {
-    conditions.push(`zoning_code = $${paramIndex++}`);
-    values.push(filters.zoning_code);
-  }
-  if (filters.min_acres !== undefined) {
-    conditions.push(`acres_calc >= $${paramIndex++}`);
-    values.push(filters.min_acres);
-  }
-  if (filters.max_acres !== undefined) {
-    conditions.push(`acres_calc <= $${paramIndex++}`);
-    values.push(filters.max_acres);
-  }
-  if (filters.min_value !== undefined) {
-    conditions.push(`market_value >= $${paramIndex++}`);
-    values.push(filters.min_value);
-  }
-  if (filters.max_value !== undefined) {
-    conditions.push(`market_value <= $${paramIndex++}`);
-    values.push(filters.max_value);
-  }
-  if (filters.asset_class) {
-    conditions.push(`LOWER(asset_class) = LOWER($${paramIndex++})`);
-    values.push(filters.asset_class);
-  }
-  if (filters.has_homestead !== undefined) {
-    conditions.push(`homestead_exemption_flag = $${paramIndex++}`);
-    values.push(filters.has_homestead);
-  }
-  if (filters.is_tax_delinquent !== undefined) {
-    conditions.push(`tax_delinquent_flag = $${paramIndex++}`);
-    values.push(filters.is_tax_delinquent);
-  }
-  if (bbox && bbox.length === 4) {
-    conditions.push(`ST_Intersects(geom_centroid, ST_MakeEnvelope($${paramIndex++}, $${paramIndex++}, $${paramIndex++}, $${paramIndex++}, 4326))`);
-    values.push(...bbox);
-  }
-
-  const safeLimit = Math.min(limit, 500);
-  values.push(safeLimit);
-
-  const query = `
-    SELECT 
-      pft.parcel_id,
-      pft.situs_address,
-      pft.owner_name_raw,
-      pft.owner_entity_type,
-      pft.owner_segment,
-      pft.acres_calc,
-      pft.asset_class,
-      pft.market_value,
-      pft.assessed_total_value,
-      pft.tax_delinquent_flag,
-      pft.homestead_exemption_flag,
-      pft.mail_zip,
-      pft.land_use_code,
-      pft.land_use_desc,
-      -- Enrichment fields
-      e.land_value,
-      e.improvement_value,
-      e.year_built,
-      e.zoning_code,
-      e.flood_zone,
-      e.last_sale_date,
-      e.last_sale_price,
-      -- Geometry
-      ST_AsGeoJSON(pft.geom_centroid)::json as geometry
-    FROM parcel_features_travis pft
-    LEFT JOIN parcels_travis_enrichment e 
-      ON pft.parcel_id = e.parcel_id
-    WHERE ${conditions.join(' AND ')}
-    ORDER BY pft.acres_calc DESC
-    LIMIT $${paramIndex}
-  `;
-
-  const result = await prisma.$queryRawUnsafe(query, ...values);
-  
-  // Compute derived metrics for each row
-  const rowsWithMetrics = result.map(row => {
-    const acres = parseFloat(row.acres_calc) || 0;
-    const marketVal = parseFloat(row.market_value) || 0;
-    const improvVal = parseFloat(row.improvement_value) || 0;
-    
-    return {
-      ...row,
-      value_per_acre: acres > 0 ? Math.round(marketVal / acres) : null,
-      value_per_sqft: acres > 0 ? Math.round(marketVal / (acres * 43560) * 100) / 100 : null,
-      improvement_ratio: marketVal > 0 ? Math.round((improvVal / marketVal) * 100) / 100 : null,
-    };
-  });
-  
-  // Convert to GeoJSON FeatureCollection with normalized properties
-  const features = rowsWithMetrics.map(row => ({
-    type: 'Feature',
-    geometry: row.geometry,
-    properties: normalizeProperty({
-      ...row,
-      // Map additional fields that might not be in normalizeProperty
-      last_sale_date: row.last_sale_date,
-      last_sale_price: row.last_sale_price,
-      land_use_code: row.land_use_code,
-      land_use_desc: row.land_use_desc,
-      owner_segment: row.owner_segment,
-      zip: row.mail_zip
-    })
-  }));
-
-    return {
-      type: 'FeatureCollection',
-      features,
-      metadata: {
-        count: features.length,
-        query_filters: filters
-      }
-    };
+    const { filters = {}, bbox, limit = 50 } = input;
+    const result = await searchPropertiesService(filters, bbox, limit);
+    return result;
   } catch (error) {
-    console.error('[searchProperties] Error:', error.message);
+    console.error('[Handler] searchProperties error:', error.message);
     return {
       type: 'FeatureCollection',
       features: [],
-      metadata: {
-        error: error.message,
-        count: 0
-      }
+      metadata: { count: 0, error: error.message }
     };
   }
 }
 
-async function getProperty({ parcel_id }) {
+async function getProperty(input) {
   try {
-    const result = await prisma.$queryRawUnsafe(`
-    SELECT 
-      pft.parcel_id,
-      pft.situs_address,
-      pft.owner_name_raw,
-      pft.owner_entity_type,
-      pft.owner_segment,
-      pft.acres_calc,
-      pft.asset_class,
-      pft.market_value,
-      pft.assessed_total_value,
-      pft.tax_delinquent_flag,
-      pft.homestead_exemption_flag,
-      pft.mail_zip,
-      pft.land_use_code,
-      pft.land_use_desc,
-      -- Enrichment fields
-      e.land_value,
-      e.improvement_value,
-      e.year_built,
-      e.zoning_code,
-      e.flood_zone,
-      e.last_sale_date,
-      e.last_sale_price,
-      -- Geometry
-      ST_Y(pft.geom_centroid) as latitude,
-      ST_X(pft.geom_centroid) as longitude,
-      ST_AsGeoJSON(pft.geom_centroid)::json as centroid_geom,
-      ST_AsGeoJSON(pt.geom)::json as parcel_geom
-    FROM parcel_features_travis pft
-    LEFT JOIN parcels_travis_enrichment e 
-      ON pft.parcel_id = e.parcel_id
-    LEFT JOIN parcels_travis pt 
-      ON pft.parcel_id = pt.parcel_id
-    WHERE pft.parcel_id = $1
-  `, parcel_id);
-
-  if (result.length === 0) {
-    return { error: 'Property not found', parcel_id };
-  }
-
-  const row = result[0];
-  
-  // Return normalized property object
-  return normalizeProperty({
-    ...row,
-    // Map additional fields that might not be in normalizeProperty
-    last_sale_date: row.last_sale_date,
-    last_sale_price: row.last_sale_price,
-    land_use: row.land_use_desc,
-    land_use_code: row.land_use_code,
-    owner_segment: row.owner_segment,
-    latitude: row.latitude,
-    longitude: row.longitude,
-    geometry: row.parcel_geom || row.centroid_geom
-  });
+    const { parcel_id } = input;
+    if (!parcel_id) return { error: 'parcel_id required' };
+    
+    const property = await getPropertyDetail(parcel_id);
+    if (!property) return { error: 'Property not found', parcel_id };
+    
+    return property;
   } catch (error) {
-    console.error('[getProperty] Error:', error.message);
-    return { error: error.message, parcel_id };
+    console.error('[Handler] getProperty error:', error.message);
+    return { error: error.message };
+  }
+}
+
+async function executeSqlTool(input) {
+  try {
+    const { sql, description } = input;
+    
+    if (!sql || typeof sql !== 'string') {
+      return { error: 'sql parameter is required and must be a string' };
+    }
+    
+    // Security: read-only enforcement
+    const normalized = sql.trim().toUpperCase();
+    const forbidden = ['INSERT ', 'UPDATE ', 'DELETE ', 'DROP ', 'ALTER ', 'CREATE ', 'TRUNCATE ', 'GRANT ', 'REVOKE '];
+    for (const keyword of forbidden) {
+      if (normalized.includes(keyword) && !normalized.startsWith('SELECT') && !normalized.startsWith('WITH')) {
+        return { error: `Query rejected: ${keyword.trim()} statements are not allowed. SELECT only.` };
+      }
+    }
+    
+    if (!normalized.startsWith('SELECT') && !normalized.startsWith('WITH') && !normalized.startsWith('EXPLAIN')) {
+      return { error: 'Only SELECT, WITH (CTE), and EXPLAIN queries are allowed.' };
+    }
+    
+    // Force LIMIT if not present
+    if (!normalized.includes('LIMIT')) {
+      return { error: 'Query must include a LIMIT clause to prevent runaway queries. Add LIMIT N.' };
+    }
+    
+    console.log(`[execute_sql] ${description || 'No description'}`);
+    console.log(`[execute_sql] Query: ${sql.slice(0, 500)}`);
+    
+    const startTime = Date.now();
+    const result = await pool.query(sql);
+    const duration = Date.now() - startTime;
+    
+    console.log(`[execute_sql] ${result.rows.length} rows in ${duration}ms`);
+    
+    return {
+      rows: result.rows,
+      rowCount: result.rows.length,
+      duration_ms: duration,
+      description: description || null
+    };
+    
+  } catch (error) {
+    console.error('[execute_sql] Error:', error.message);
+    return { 
+      error: error.message,
+      hint: error.hint || null,
+      detail: error.detail || null
+    };
   }
 }
 
@@ -520,36 +393,6 @@ async function generateArtifact({ type, parcel_ids, title }) {
   };
 }
 
-async function handleIntelligentSearch(params) {
-  console.log('[IntelligentSearch] Called with:', JSON.stringify(params, null, 2));
-  try {
-    const result = await intelligentPropertySearch(params);
-    console.log(`[IntelligentSearch] Returning ${result.features?.length || 0} results`);
-    return result;
-  } catch (error) {
-    console.error('[IntelligentSearch] Error:', error);
-    return {
-      type: 'FeatureCollection',
-      query_summary: { error: error.message },
-      features: [],
-      summary: `Search failed: ${error.message}`
-    };
-  }
-}
-
-async function getCensusData({ latitude, longitude }) {
-  if (!latitude || !longitude) {
-    return { error: 'latitude and longitude are required' };
-  }
-
-  try {
-    const result = await getDemographicsForLocation(latitude, longitude);
-    return result;
-  } catch (error) {
-    console.error('[Census Tool] Error:', error);
-    return { error: error.message };
-  }
-}
 
 function generateSummary(analysis) {
   if (!analysis || analysis.error) return 'Analysis unavailable';

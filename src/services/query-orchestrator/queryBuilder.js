@@ -1,13 +1,13 @@
 /**
  * Query Builder Service
  * Builds parameterized SQL queries for Prisma $queryRawUnsafe()
+ * Updated for ATTOM tables
  */
 
 import { toSpatialCondition } from './geographyResolver.js';
 
 /**
- * Build a compound property search query
- * Returns SQL string and params array for Prisma $queryRawUnsafe
+ * Build a compound property search query against attom_assessor
  */
 export function buildPropertyQuery(options = {}) {
   const {
@@ -29,62 +29,63 @@ export function buildPropertyQuery(options = {}) {
     return `$${paramIndex++}`;
   };
   
-  // Build SELECT
+  // Build SELECT from attom_assessor (aliased as a)
   const selectFields = [
-    'pft.parcel_id',
-    'pft.situs_address',
-    'pft.owner_name_raw',
-    'pft.owner_entity_type',
-    'pft.acres_calc',
-    'pft.asset_class',
-    'pft.zoning_code',
-    'pft.market_value',
-    'pft.land_value',
-    'pft.improvement_value',
-    'pft.assessed_total_value',
-    'pft.year_built',
-    'pft.building_sqft',
-    'pft.tax_delinquent_flag',
-    'pft.homestead_exemption_flag',
-    'pft.flood_zone',
-    'pft.mail_city',
-    'pft.mail_zip',
-    'pft.land_use_code',
-    'pft.land_use_desc',
-    'ST_Y(pft.geom_centroid) as lat',
-    'ST_X(pft.geom_centroid) as lng',
-    'ST_AsGeoJSON(pft.geom_centroid)::json as geometry'
+    'a.attom_id',
+    'a.address_full',
+    'a.address_city',
+    'a.address_zip',
+    'a.owner1_name',
+    'a.owner_type_desc',
+    'a.lot_acres',
+    'a.property_use_group',
+    'a.property_use_standard',
+    'a.zoned_code_local',
+    'a.market_value_total',
+    'a.market_value_land',
+    'a.market_value_improve',
+    'a.year_built',
+    'a.building_sqft',
+    'a.bedrooms_count',
+    'a.bath_count',
+    'a.tax_delinquent_year',
+    'a.homestead_exempt',
+    'a.company_flag',
+    'a.last_sale_date',
+    'a.last_sale_price',
+    'a.latitude as lat',
+    'a.longitude as lng',
+    'ST_AsGeoJSON(ST_SetSRID(ST_MakePoint(a.longitude, a.latitude), 4326))::json as geometry'
   ];
   
   // Computed fields
   selectFields.push(`
-    CASE WHEN pft.acres_calc > 0 
-      THEN ROUND((pft.market_value / pft.acres_calc)::numeric, 2)
+    CASE WHEN a.lot_acres > 0 
+      THEN ROUND((a.market_value_total / a.lot_acres)::numeric, 2)
       ELSE NULL END as value_per_acre
   `);
   
   selectFields.push(`
-    CASE WHEN pft.building_sqft > 0 
-      THEN ROUND((pft.market_value / pft.building_sqft)::numeric, 2)
+    CASE WHEN a.building_sqft > 0 
+      THEN ROUND((a.market_value_total / a.building_sqft)::numeric, 2)
       ELSE NULL END as value_per_sqft
   `);
   
   selectFields.push(`
-    CASE WHEN pft.market_value > 0 
-      THEN ROUND((pft.improvement_value / pft.market_value)::numeric, 3)
+    CASE WHEN a.market_value_total > 0 
+      THEN ROUND((a.market_value_improve / a.market_value_total)::numeric, 3)
       ELSE NULL END as improvement_ratio
   `);
   
   // JOINs
   const joins = [];
   
-  if (includeEnrichment) {
-    joins.push('LEFT JOIN parcels_travis_enrichment pte ON pft.parcel_id = pte.parcel_id');
-    selectFields.push('pte.last_sale_date', 'pte.last_sale_price');
-  }
+  // NOTE: includeEnrichment previously joined parcels_travis_enrichment for last_sale_date/price.
+  // attom_assessor already has last_sale_date and last_sale_price — no join needed.
   
   if (includeZoning) {
-    joins.push('LEFT JOIN zoning_districts zd ON ST_Intersects(pft.geom_centroid, zd.geometry)');
+    // Spatial join to zoning uses a point constructed from lat/lng
+    joins.push('LEFT JOIN zoning_districts zd ON ST_Intersects(ST_SetSRID(ST_MakePoint(a.longitude, a.latitude), 4326), zd.geometry)');
     selectFields.push(
       'zd.zoning_code as zoning_district_code',
       'zd.zoning_desc as zoning_description'
@@ -93,109 +94,98 @@ export function buildPropertyQuery(options = {}) {
   
   // WHERE conditions
   
-  // Asset class
+  // Asset class / property use group
   if (filters.asset_class) {
-    conditions.push(`LOWER(pft.asset_class) = LOWER(${addParam(filters.asset_class)})`);
+    conditions.push(`a.property_use_group ILIKE ${addParam('%' + filters.asset_class + '%')}`);
   }
   
   // Acreage
   if (filters.min_acres !== undefined) {
-    conditions.push(`pft.acres_calc >= ${addParam(filters.min_acres)}`);
+    conditions.push(`a.lot_acres >= ${addParam(filters.min_acres)}`);
   }
   if (filters.max_acres !== undefined) {
-    conditions.push(`pft.acres_calc <= ${addParam(filters.max_acres)}`);
+    conditions.push(`a.lot_acres <= ${addParam(filters.max_acres)}`);
   }
   
   // Value
   if (filters.min_value !== undefined) {
-    conditions.push(`pft.market_value >= ${addParam(filters.min_value)}`);
+    conditions.push(`a.market_value_total >= ${addParam(filters.min_value)}`);
   }
   if (filters.max_value !== undefined) {
-    conditions.push(`pft.market_value <= ${addParam(filters.max_value)}`);
+    conditions.push(`a.market_value_total <= ${addParam(filters.max_value)}`);
   }
   
-  // City (uses situs_address - mail_city is NULL in database)
+  // City — attom_assessor has a proper address_city column
   if (filters.city) {
-    conditions.push(`pft.situs_address ILIKE '%' || ${addParam(filters.city)} || '%'`);
+    conditions.push(`a.address_city ILIKE ${addParam('%' + filters.city + '%')}`);
   }
   
-  // ZIP (uses situs_address - mail_zip is NULL in database)
+  // ZIP — attom_assessor has address_zip
   if (filters.zip_code) {
-    conditions.push(`pft.situs_address LIKE '%' || ${addParam(filters.zip_code)} || '%'`);
+    conditions.push(`a.address_zip LIKE ${addParam(filters.zip_code + '%')}`);
   }
   
   // Zoning
   if (filters.zoning_code) {
-    conditions.push(`pft.zoning_code ILIKE ${addParam('%' + filters.zoning_code + '%')}`);
+    conditions.push(`a.zoned_code_local ILIKE ${addParam('%' + filters.zoning_code + '%')}`);
   }
   
   // Owner type
   if (filters.owner_type) {
-    const ownerTypeMap = {
-      'individual': 'individual',
-      'llc': 'llc',
-      'corporation': 'corporation',
-      'trust': 'trust_estate',
-      'government': 'government'
-    };
-    const mapped = ownerTypeMap[filters.owner_type.toLowerCase()] || filters.owner_type;
-    conditions.push(`pft.owner_entity_type = ${addParam(mapped)}`);
+    conditions.push(`a.owner_type_desc ILIKE ${addParam('%' + filters.owner_type + '%')}`);
   }
   
   // Boolean flags
   if (filters.tax_delinquent === true) {
-    conditions.push('pft.tax_delinquent_flag = true');
+    conditions.push('a.tax_delinquent_year IS NOT NULL');
   }
   if (filters.has_homestead === true) {
-    conditions.push('pft.homestead_exemption_flag = true');
+    conditions.push('a.homestead_exempt = true');
   }
   if (filters.has_homestead === false) {
-    conditions.push('(pft.homestead_exemption_flag = false OR pft.homestead_exemption_flag IS NULL)');
+    conditions.push('(a.homestead_exempt = false OR a.homestead_exempt IS NULL)');
   }
   
   // Vacant land
   if (filters.is_vacant === true) {
-    conditions.push("(pft.asset_class ILIKE '%land%' OR pft.asset_class ILIKE '%vacant%')");
+    conditions.push("(a.property_use_group ILIKE '%vacant%' OR a.property_use_group ILIKE '%land%')");
   }
   
-  // Flood zone exclusion
-  if (filters.exclude_flood_zone === true) {
-    conditions.push("(pft.flood_zone IS NULL OR pft.flood_zone = '' OR pft.flood_zone = 'X')");
-  }
+  // Flood zone exclusion — not available in attom_assessor directly
+  // Skip for now (filters.exclude_flood_zone)
   
   // Owner name
   if (filters.owner_name) {
-    conditions.push(`pft.owner_name_raw ILIKE ${addParam('%' + filters.owner_name + '%')}`);
+    conditions.push(`a.owner1_name ILIKE ${addParam('%' + filters.owner_name + '%')}`);
   }
   
   // Spatial filter
   if (spatial) {
-    const spatialCond = toSpatialCondition(spatial, 'pft.geom_centroid');
-    if (spatialCond) {
-      // Replace $1, $2, etc. with proper parameterized placeholders
-      let clause = spatialCond.clause;
-      const spatialParams = [...spatialCond.params];
-      
-      // Replace each $N with the next parameter index
-      clause = clause.replace(/\$(\d+)/g, () => {
-        return addParam(spatialParams.shift());
-      });
-      
-      conditions.push(clause);
+    if (spatial.type === 'bbox') {
+      // Use coordinate columns directly — fast
+      const [minLng, minLat, maxLng, maxLat] = spatial.coordinates;
+      conditions.push(`a.longitude BETWEEN ${addParam(minLng)} AND ${addParam(maxLng)}`);
+      conditions.push(`a.latitude BETWEEN ${addParam(minLat)} AND ${addParam(maxLat)}`);
+    } else if (spatial.type === 'point') {
+      // Use ST_DWithin with constructed point — slower but accurate for radius
+      const [lng, lat] = spatial.coordinates;
+      const distance = spatial.distance_meters || 5000;
+      conditions.push(`ST_DWithin(ST_SetSRID(ST_MakePoint(a.longitude, a.latitude), 4326)::geography, ST_Point(${addParam(lng)}, ${addParam(lat)})::geography, ${addParam(distance)})`);
     }
   }
   
-  // Ensure geometry exists
-  conditions.push('pft.geom_centroid IS NOT NULL');
+  // Ensure coordinates exist
+  conditions.push('a.latitude IS NOT NULL AND a.longitude IS NOT NULL');
   
   // ORDER BY
   const sortMap = {
     'value_per_acre': 'value_per_acre',
-    'market_value': 'pft.market_value',
-    'acres_calc': 'pft.acres_calc',
-    'year_built': 'pft.year_built'
+    'market_value': 'a.market_value_total',
+    'acres_calc': 'a.lot_acres',      // Keep old sort name working
+    'lot_acres': 'a.lot_acres',
+    'year_built': 'a.year_built'
   };
-  const sortField = sortMap[sort.field] || 'pft.market_value';
+  const sortField = sortMap[sort.field] || 'a.market_value_total';
   const sortDir = sort.direction === 'ASC' ? 'ASC' : 'DESC';
   
   // Build SQL
@@ -203,7 +193,7 @@ export function buildPropertyQuery(options = {}) {
   
   const sql = `
     SELECT ${selectFields.join(', ')}
-    FROM parcel_features_travis pft
+    FROM attom_assessor a
     ${joins.join(' ')}
     ${whereClause}
     ORDER BY ${sortField} ${sortDir} NULLS LAST

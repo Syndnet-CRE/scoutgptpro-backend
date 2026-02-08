@@ -10,17 +10,18 @@ import { executeTool as fallbackExecuteTool } from '../../tools/index.js';
  * Tool to MCP Server mapping
  */
 const TOOL_SERVER_MAP = {
-  // Property-data MCP tools
-  'search_properties': 'property-data',
-  'get_property': 'property-data',
-  'get_enrichment': 'property-data',
-  'bulk_properties': 'property-data',
+  // Property-data MCP tools → Local handlers
+  'search_properties': null,     // Local handler → propertyCard.js (ATTOM JOINs)
+  'get_property': null,           // Local handler → propertyCard.js (ATTOM detail)
+  'get_enrichment': null,         // Local handler
+  'bulk_properties': null,        // Local handler
   
-  // SQL MCP tools
-  'execute_query': 'sql',
-  'get_table_schema': 'sql',
-  'spatial_query': 'sql',
-  'list_tables': 'sql',
+  // SQL MCP tools → Local handlers  
+  'execute_query': null,          // Local handler
+  'execute_sql': null,            // Local handler (new Claude tool name)
+  'get_table_schema': null,
+  'spatial_query': null,
+  'list_tables': null,
   
   // GIS MCP tools
   'get_gis_layers': null,  // Use local fallback handler with layer registry
@@ -30,7 +31,6 @@ const TOOL_SERVER_MAP = {
   'get_layer_features': 'gis',
   
   // Tools that use fallback (no MCP server)
-  'intelligent_property_search': null,  // Uses local handler, not MCP
   'analyze_property': null,  // Uses orchestrator service
   'web_search': null,        // Uses Brave API directly
   'get_osm_nearby': null,    // Uses direct DB query
