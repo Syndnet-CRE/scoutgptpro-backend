@@ -354,6 +354,34 @@ async function getPropertyCard(attomId) {
 }
 
 /**
+ * Get property card by APN (resolves APN to ATTOM ID first)
+ */
+async function getPropertyCardByApn(apn) {
+  // First resolve APN to attom_id
+  const resolveQuery = `
+    SELECT attom_id FROM attom_assessor
+    WHERE apn_formatted = $1
+    LIMIT 1
+  `;
+  const { rows } = await pool.query(resolveQuery, [apn]);
+  
+  if (rows.length === 0) {
+    // Try matching with common variations:
+    // Some APNs have leading zeros stripped or dashes
+    const fuzzyQuery = `
+      SELECT attom_id FROM attom_assessor
+      WHERE REPLACE(REPLACE(apn_formatted, '-', ''), ' ', '') = REPLACE(REPLACE($1, '-', ''), ' ', '')
+      LIMIT 1
+    `;
+    const fuzzyResult = await pool.query(fuzzyQuery, [apn]);
+    if (fuzzyResult.rows.length === 0) return null;
+    return getPropertyCard(fuzzyResult.rows[0].attom_id);
+  }
+  
+  return getPropertyCard(rows[0].attom_id);
+}
+
+/**
  * Get property cards for multiple properties (batch)
  * Max 50 per request
  */
@@ -537,6 +565,7 @@ async function getPropertyDetail(attomId) {
 export { 
   getPropertyCard, 
   getPropertyCardsBatch, 
+  getPropertyCardByApn,
   searchProperties, 
   getPropertyDetail,
   normalizePropertyCard

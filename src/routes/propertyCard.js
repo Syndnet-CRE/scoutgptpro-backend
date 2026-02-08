@@ -3,9 +3,32 @@
 // Created: Feb 8, 2026
 
 import express from 'express';
-import { getPropertyCard, getPropertyCardsBatch } from '../services/propertyCard.js';
+import { getPropertyCard, getPropertyCardsBatch, getPropertyCardByApn } from '../services/propertyCard.js';
 
 const router = express.Router();
+
+// GET /api/properties/apn/:apn/card
+// Resolves APN → attom_id, then returns full property card
+router.get('/apn/:apn/card', async (req, res) => {
+  try {
+    const { apn } = req.params;
+    if (!apn || apn.length > 50) {
+      return res.status(400).json({ error: 'Invalid APN' });
+    }
+
+    // Resolve APN to attom_id
+    const card = await getPropertyCardByApn(apn);
+    
+    if (!card) {
+      return res.status(404).json({ error: 'Property not found for APN' });
+    }
+
+    res.json(card);
+  } catch (err) {
+    console.error('APN card lookup error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 // GET /api/properties/:attomId/card
 router.get('/:attomId/card', async (req, res) => {
