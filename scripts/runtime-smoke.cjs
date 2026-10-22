@@ -2,6 +2,10 @@ const assert = require('node:assert/strict');
 async function main() {
   assert.equal(process.version, 'v22.23.4');
   require('express'); require('pg'); require('@modelcontextprotocol/sdk/client/index.js');
+  const fs = require('node:fs'); const path = require('node:path');
+  const engineDir = path.resolve('node_modules/.prisma/client');
+  const engineFiles = fs.readdirSync(engineDir).filter(name => /^libquery_engine.*\.so\.node$/.test(name));
+  assert.equal(engineFiles.length, 1); require(path.join(engineDir, engineFiles[0]));
   const { PrismaClient } = require('@prisma/client');
   const prisma = new PrismaClient();
   await prisma.$disconnect();
