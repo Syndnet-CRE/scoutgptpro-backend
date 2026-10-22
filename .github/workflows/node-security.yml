@@ -1,0 +1,27 @@
+name: Node runtime security
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  runtime:
+    name: Node runtime compatibility
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      DATABASE_URL: postgresql://offline:offline@127.0.0.1:1/offline
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - run: npm ci --no-audit --no-fund
+      - run: node --check src/server.js
+      - name: Exercise Prisma engine and artifact dependencies offline
+        run: |
+          NODE_TEST_BIN="$(command -v node)"
+          sudo -E unshare --net "$NODE_TEST_BIN" node_modules/prisma/build/index.js migrate diff --from-empty --to-schema-datamodel prisma/schema.prisma --script > /dev/null
+          sudo -E unshare --net "$NODE_TEST_BIN" scripts/runtime-smoke.cjs
